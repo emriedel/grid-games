@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --tile-bg: #1a1a2e;
+  --tile-bg-selected: #4a4a6e;
+  --tile-border: #2d2d44;
+  --accent: #e94560;
+  --accent-secondary: #0f3460;
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-tile-bg: var(--tile-bg);
+  --color-tile-bg-selected: var(--tile-bg-selected);
+  --color-tile-border: var(--tile-border);
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Prevent text selection during drag */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent pull-to-refresh on mobile */
+html, body {
+  overscroll-behavior: none;
+}
+
+/* Touch action for game grid */
+.touch-none {
+  touch-action: none;
+}
+
+/* Smooth transitions for tiles */
+.tile-transition {
+  transition: transform 0.1s ease-out, background-color 0.15s ease-out;
+}
+
+/* Path line between tiles */
+.path-line {
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0.6;
+}

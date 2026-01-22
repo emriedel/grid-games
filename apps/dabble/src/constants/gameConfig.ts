@@ -1,0 +1,318 @@
+// Game configuration constants for Dabble
+// These can be adjusted to tune gameplay
+
+export const BOARD_SIZE = 9;
+
+// Board archetypes for variety in daily puzzles
+export const BOARD_ARCHETYPES = ['classic', 'corridor', 'islands', 'diagonal', 'scattered', 'open'] as const;
+export type BoardArchetype = typeof BOARD_ARCHETYPES[number];
+
+// Standard Scrabble letter point values
+export const LETTER_POINTS: Record<string, number> = {
+  A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4,
+  I: 1, J: 8, K: 5, L: 1, M: 3, N: 1, O: 1, P: 3,
+  Q: 10, R: 1, S: 1, T: 1, U: 1, V: 4, W: 4, X: 8,
+  Y: 4, Z: 10,
+};
+
+// Letter distribution for the pool (based on Scrabble distribution)
+// We'll draw from this pool to create each puzzle's letter set
+export const LETTER_DISTRIBUTION: Record<string, number> = {
+  A: 9, B: 2, C: 2, D: 4, E: 12, F: 2, G: 3, H: 2,
+  I: 9, J: 1, K: 1, L: 4, M: 2, N: 6, O: 8, P: 2,
+  Q: 1, R: 6, S: 4, T: 6, U: 4, V: 2, W: 2, X: 1,
+  Y: 2, Z: 1,
+};
+
+// How many letters to give the player each puzzle
+export const PUZZLE_LETTER_COUNT = 14;
+
+// Minimum number of vowels to ensure playability
+export const MIN_VOWELS = 4;
+export const VOWELS = ['A', 'E', 'I', 'O', 'U'];
+
+// Difficult letters that need special handling
+export const DIFFICULT_LETTERS = ['Q', 'X', 'Z', 'J', 'K'];
+
+// Rules for difficult letters (which letters must accompany them)
+export const DIFFICULT_LETTER_RULES: Record<string, { requires: string[] }> = {
+  Q: { requires: ['U'] },  // Q must have U to be playable
+  X: { requires: [] },
+  Z: { requires: [] },
+  J: { requires: [] },
+  K: { requires: [] },
+};
+
+// Letter constraints for playability
+export const LETTER_CONSTRAINTS = {
+  totalLetters: 14,
+  minVowels: 4,
+  maxVowels: 6,
+  minUniqueLetters: 10,       // At least 10 different letters
+  maxDuplicatesPerLetter: 2,  // No letter more than twice
+};
+
+// Common 2-letter words for playability check
+export const COMMON_2_LETTER_WORDS = [
+  'AN', 'AT', 'BE', 'DO', 'GO', 'HE', 'IF', 'IN', 'IS', 'IT',
+  'ME', 'NO', 'OF', 'ON', 'OR', 'SO', 'TO', 'UP', 'WE', 'BY',
+  'MY', 'AM', 'AS', 'AH', 'AW', 'OX', 'OH', 'OW', 'US', 'UM',
+];
+
+// Common 3-letter words for playability check
+export const COMMON_3_LETTER_WORDS = [
+  'THE', 'AND', 'FOR', 'ARE', 'BUT', 'NOT', 'ALL', 'CAN', 'HER', 'WAS',
+  'ONE', 'OUT', 'DAY', 'HAD', 'HAS', 'HOW', 'NEW', 'NOW', 'OLD', 'SEE',
+  'WAY', 'MAY', 'SAY', 'SHE', 'TWO', 'GET', 'HIM', 'HIS', 'OUR', 'TOO',
+  'ANY', 'MAN', 'BIG', 'RUN', 'SET', 'PUT', 'END', 'FAR', 'TOP', 'TEN',
+];
+
+// Common 5-7 letter words for playability validation
+// Ensures at least one longer word can be formed with drawn letters
+export const COMMON_LONG_WORDS = [
+  // 5-letter words
+  'ABOUT', 'AFTER', 'AGAIN', 'ALONG', 'AMONG', 'BEGAN', 'BEING', 'BELOW',
+  'BOARD', 'BRAIN', 'BREAD', 'BREAK', 'BRING', 'BROAD', 'BROWN', 'BUILD',
+  'CARRY', 'CATCH', 'CAUSE', 'CHAIR', 'CHEAP', 'CHECK', 'CHIEF', 'CHILD',
+  'CLAIM', 'CLEAN', 'CLEAR', 'CLIMB', 'CLOSE', 'CLOTH', 'COAST', 'COUNT',
+  'COVER', 'CRAFT', 'CREAM', 'CROWD', 'DANCE', 'DEATH', 'DOING', 'DOUBT',
+  'DRAFT', 'DRAIN', 'DREAM', 'DRESS', 'DRINK', 'DRIVE', 'DROWN', 'EARTH',
+  'EIGHT', 'EMPTY', 'ENJOY', 'ENTER', 'EQUAL', 'EVENT', 'EVERY', 'EXTRA',
+  'FAITH', 'FALSE', 'FAVOR', 'FIELD', 'FIFTY', 'FIGHT', 'FINAL', 'FIRST',
+  'FLOOR', 'FORCE', 'FORTH', 'FOUND', 'FRAME', 'FRESH', 'FRONT', 'FRUIT',
+  'GLASS', 'GRACE', 'GRAIN', 'GRAND', 'GRANT', 'GRASS', 'GREAT', 'GREEN',
+  'GROSS', 'GROUP', 'GROWN', 'GUARD', 'GUESS', 'GUIDE', 'HAPPY', 'HEARD',
+  'HEART', 'HEAVY', 'HORSE', 'HOTEL', 'HOUSE', 'HUMAN', 'IMAGE', 'INDEX',
+  'INNER', 'JUDGE', 'KNOWN', 'LABOR', 'LARGE', 'LATER', 'LAUGH', 'LAYER',
+  'LEARN', 'LEAST', 'LEAVE', 'LEVEL', 'LIGHT', 'LIMIT', 'LOCAL', 'LOOSE',
+  'LOWER', 'LUCKY', 'LUNCH', 'MAJOR', 'MARCH', 'MATCH', 'MAYBE', 'MAYOR',
+  'MEANT', 'MEDIA', 'METAL', 'MIGHT', 'MINOR', 'MODEL', 'MONEY', 'MONTH',
+  'MORAL', 'MOTOR', 'MOUNT', 'MOUTH', 'MOVIE', 'MUSIC', 'NAMED', 'NEEDS',
+  'NEVER', 'NIGHT', 'NOISE', 'NORTH', 'NOTED', 'NOVEL', 'NURSE', 'OCEAN',
+  'OFFER', 'OFTEN', 'ORDER', 'OTHER', 'OUGHT', 'PAINT', 'PAPER', 'PARTY',
+  'PEACE', 'PHONE', 'PHOTO', 'PIECE', 'PILOT', 'PITCH', 'PLACE', 'PLAIN',
+  'PLANE', 'PLANT', 'PLATE', 'PLAY', 'POINT', 'POUND', 'POWER', 'PRESS',
+  'PRICE', 'PRIDE', 'PRIME', 'PRINT', 'PRIOR', 'PRIZE', 'PROOF', 'PROUD',
+  'PROVE', 'QUICK', 'QUIET', 'QUITE', 'RADIO', 'RAISE', 'RANGE', 'RAPID',
+  'REACH', 'READY', 'REFER', 'RIGHT', 'RIVER', 'ROUGH', 'ROUND', 'ROUTE',
+  'ROYAL', 'RURAL', 'SCALE', 'SCENE', 'SCOPE', 'SCORE', 'SENSE', 'SERVE',
+  'SEVEN', 'SHALL', 'SHAPE', 'SHARE', 'SHARP', 'SHEET', 'SHELF', 'SHELL',
+  'SHIFT', 'SHINE', 'SHIRT', 'SHOCK', 'SHORE', 'SHORT', 'SHOUT', 'SHOWN',
+  'SIGHT', 'SINCE', 'SIXTH', 'SKILL', 'SLEEP', 'SLIDE', 'SLOPE', 'SMALL',
+  'SMART', 'SMELL', 'SMILE', 'SMOKE', 'SOLID', 'SOLVE', 'SORRY', 'SOUND',
+  'SOUTH', 'SPACE', 'SPARE', 'SPEAK', 'SPEND', 'SPENT', 'SPITE', 'SPLIT',
+  'SPORT', 'STAFF', 'STAGE', 'STAKE', 'STAND', 'START', 'STATE', 'STEAM',
+  'STEEL', 'STICK', 'STILL', 'STOCK', 'STONE', 'STOOD', 'STORE', 'STORM',
+  'STORY', 'STRIP', 'STUDY', 'STUFF', 'STYLE', 'SUGAR', 'SUITE', 'SUPER',
+  'SWEET', 'TABLE', 'TAKEN', 'TASTE', 'TEACH', 'TEETH', 'TERMS', 'THANK',
+  'THEME', 'THERE', 'THESE', 'THICK', 'THING', 'THINK', 'THIRD', 'THOSE',
+  'THREE', 'THROW', 'TIGHT', 'TIMES', 'TIRED', 'TITLE', 'TODAY', 'TOTAL',
+  'TOUCH', 'TOUGH', 'TOWER', 'TRACK', 'TRADE', 'TRAIN', 'TRASH', 'TREAT',
+  'TREND', 'TRIAL', 'TRIBE', 'TRICK', 'TRIED', 'TRUCK', 'TRULY', 'TRUST',
+  'TRUTH', 'TWICE', 'UNDER', 'UNION', 'UNITY', 'UNTIL', 'UPPER', 'UPSET',
+  'URBAN', 'USUAL', 'VALID', 'VALUE', 'VIDEO', 'VIRUS', 'VISIT', 'VITAL',
+  'VOICE', 'WASTE', 'WATCH', 'WATER', 'WHEEL', 'WHERE', 'WHICH', 'WHILE',
+  'WHITE', 'WHOLE', 'WHOSE', 'WOMAN', 'WOMEN', 'WORLD', 'WORRY', 'WORSE',
+  'WORST', 'WORTH', 'WOULD', 'WOUND', 'WRITE', 'WRONG', 'WROTE', 'YIELD',
+  'YOUNG', 'YOUTH',
+  // 6-letter words
+  'ACCEPT', 'ACCESS', 'ACROSS', 'ACTION', 'ACTUAL', 'ADVICE', 'AFFECT', 'AFFORD',
+  'AFRAID', 'ALMOST', 'ALWAYS', 'AMOUNT', 'ANIMAL', 'ANNUAL', 'ANSWER', 'ANYONE',
+  'APPEAR', 'ARTIST', 'ATTACK', 'ATTEND', 'AUGUST', 'AUTHOR', 'BATTLE', 'BEAUTY',
+  'BECAME', 'BECOME', 'BEFORE', 'BEHIND', 'BELIEF', 'BELONG', 'BETTER', 'BEYOND',
+  'BORDER', 'BOTHER', 'BOTTOM', 'BOUGHT', 'BRANCH', 'BRIDGE', 'BRIGHT', 'BROKEN',
+  'BUDGET', 'BURDEN', 'CANCER', 'CARBON', 'CAREER', 'CASTLE', 'CAUGHT', 'CENTER',
+  'CHANCE', 'CHANGE', 'CHARGE', 'CHOICE', 'CHOOSE', 'CHOSEN', 'CHURCH', 'CIRCLE',
+  'CLIENT', 'CLOSED', 'COFFEE', 'COLUMN', 'COMBAT', 'COMING', 'COMMON', 'CORNER',
+  'COTTON', 'COUNTY', 'COUPLE', 'COURSE', 'COVERS', 'CREATE', 'CREDIT', 'CRISIS',
+  'CUSTOM', 'DAMAGE', 'DANGER', 'DEALER', 'DEBATE', 'DECADE', 'DECIDE', 'DEFEAT',
+  'DEFEND', 'DEFINE', 'DEGREE', 'DEMAND', 'DEPEND', 'DESERT', 'DESIGN', 'DESIRE',
+  'DETAIL', 'DETECT', 'DEVICE', 'DIFFER', 'DINNER', 'DIRECT', 'DOCTOR', 'DOLLAR',
+  'DOMAIN', 'DOUBLE', 'DRIVEN', 'DRIVER', 'DURING', 'EARNED', 'EASIER', 'EATING',
+  'EDITOR', 'EFFECT', 'EFFORT', 'EIGHTH', 'EITHER', 'EMERGE', 'EMPLOY', 'ENABLE',
+  'ENDING', 'ENERGY', 'ENGAGE', 'ENGINE', 'ENOUGH', 'ENSURE', 'ENTIRE', 'ENTITY',
+  'EQUALS', 'ESCAPE', 'ESTATE', 'ETHNIC', 'EUROPE', 'EXPAND', 'EXPECT', 'EXPERT',
+  'EXPORT', 'EXTEND', 'EXTENT', 'FABRIC', 'FACING', 'FACTOR', 'FAILED', 'FAIRLY',
+  'FALLEN', 'FAMILY', 'FAMOUS', 'FARMER', 'FASTER', 'FATHER', 'FAULTS', 'FELLOW',
+  'FEMALE', 'FIGURE', 'FILLED', 'FILTER', 'FINALE', 'FINGER', 'FINISH', 'FISCAL',
+  'FLIGHT', 'FLOWER', 'FLYING', 'FOLLOW', 'FORCED', 'FOREST', 'FORGET', 'FORMAL',
+  'FORMAT', 'FORMED', 'FORMER', 'FOUGHT', 'FOURTH', 'FRAMES', 'FRENCH', 'FRIEND',
+  'FROZEN', 'FUTURE', 'GAINED', 'GARDEN', 'GATHER', 'GENDER', 'GLOBAL', 'GOLDEN',
+  'GOTTEN', 'GOVERN', 'GROUND', 'GROWTH', 'GUILTY', 'HANDLE', 'HAPPEN', 'HARDLY',
+  'HEADED', 'HEALTH', 'HEIGHT', 'HELPED', 'HIDDEN', 'HOLDER', 'HONEST', 'HOPING',
+  'IMPACT', 'IMPORT', 'INCOME', 'INDEED', 'INDIAN', 'INJURY', 'INSIDE', 'INSIST',
+  'INTEND', 'INVEST', 'ISLAND', 'ITSELF', 'JUNIOR', 'KILLED', 'KNIGHT', 'KOREAN',
+  'LATEST', 'LATTER', 'LAUNCH', 'LAWYER', 'LEADER', 'LEAGUE', 'LEAVES', 'LENGTH',
+  'LESSON', 'LETTER', 'LIGHTS', 'LIKELY', 'LIMITS', 'LINEAR', 'LIQUID', 'LISTEN',
+  'LITTLE', 'LIVING', 'LOSING', 'MAKING', 'MANAGE', 'MANNER', 'MANUAL', 'MARKED',
+  'MARKET', 'MARTIN', 'MASTER', 'MATTER', 'MATURE', 'MEDIUM', 'MEMBER', 'MEMORY',
+  'MENTAL', 'MERELY', 'METHOD', 'MIDDLE', 'MILLER', 'MINING', 'MINUTE', 'MIRROR',
+  'MOBILE', 'MODERN', 'MODEST', 'MOMENT', 'MOSTLY', 'MOTHER', 'MOTION', 'MOVING',
+  'MURDER', 'MUSEUM', 'MYSELF', 'NATION', 'NATIVE', 'NATURE', 'NEARBY', 'NEARLY',
+  'NIGHTS', 'NOBODY', 'NORMAL', 'NOTICE', 'NOTION', 'NUMBER', 'OBTAIN', 'OFFICE',
+  'OLDEST', 'ONLINE', 'OPENED', 'OPTION', 'ORANGE', 'ORDERS', 'ORIGIN', 'OUTPUT',
+  'PACING', 'PALACE', 'PANELS', 'PARENT', 'PARTLY', 'PASSED', 'PATENT', 'PAYING',
+  'PEOPLE', 'PERIOD', 'PERMIT', 'PERSON', 'PICKED', 'PLACES', 'PLACED', 'PLANET',
+  'PLAYER', 'PLEASE', 'PLENTY', 'POCKET', 'POINTS', 'POLICE', 'POLICY', 'POSTED',
+  'POUNDS', 'POWERS', 'PREFER', 'PRETTY', 'PRIEST', 'PRINCE', 'PRISON', 'PROFIT',
+  'PROPER', 'PROVEN', 'PUBLIC', 'PUSHED', 'RACIAL', 'RAISED', 'RANDOM', 'RATHER',
+  'RATING', 'READER', 'REALLY', 'REASON', 'RECALL', 'RECENT', 'RECORD', 'REDUCE',
+  'REFORM', 'REFUSE', 'REGARD', 'REGION', 'RELATE', 'RELIEF', 'REMAIN', 'REMOTE',
+  'REMOVE', 'RENTAL', 'REPAIR', 'REPEAT', 'REPORT', 'RESCUE', 'RESIST', 'RESORT',
+  'RESULT', 'RETAIL', 'RETAIN', 'RETIRE', 'RETURN', 'REVEAL', 'REVIEW', 'REWARD',
+  'RIDING', 'RIGHTS', 'RISING', 'ROBUST', 'ROLLED', 'ROUTER', 'RULING', 'RUNNER',
+  'SAFETY', 'SALARY', 'SAMPLE', 'SAYING', 'SCHEME', 'SCHOOL', 'SCORED', 'SCREEN',
+  'SCRIPT', 'SEARCH', 'SEASON', 'SECOND', 'SECRET', 'SECTOR', 'SECURE', 'SEEING',
+  'SEEMED', 'SELECT', 'SELLER', 'SENATE', 'SENIOR', 'SEQUEL', 'SERIAL', 'SERIES',
+  'SERVED', 'SERVER', 'SETTLE', 'SEVERE', 'SEXUAL', 'SHADOW', 'SHAPED', 'SHARED',
+  'SHOULD', 'SHOWED', 'SHOWER', 'SIGNAL', 'SIGNED', 'SILENT', 'SILVER', 'SIMPLE',
+  'SIMPLY', 'SINGLE', 'SISTER', 'SLIGHT', 'SLOWLY', 'SMOOTH', 'SOCIAL', 'SOLELY',
+  'SOLVED', 'SOUGHT', 'SOUNDS', 'SOURCE', 'SPEECH', 'SPIRIT', 'SPOKEN', 'SPREAD',
+  'SPRING', 'SQUARE', 'STABLE', 'STAGES', 'STANDS', 'STARTS', 'STATED', 'STATES',
+  'STATUS', 'STAYED', 'STEADY', 'STOLEN', 'STORED', 'STRAIN', 'STRAND', 'STREET',
+  'STRESS', 'STRICT', 'STRIKE', 'STRING', 'STRONG', 'STRUCK', 'STUDIO', 'SUBMIT',
+  'SUDDEN', 'SUFFER', 'SUMMER', 'SUMMIT', 'SUPPLY', 'SURELY', 'SURVEY', 'SWITCH',
+  'SYMBOL', 'SYSTEM', 'TABLES', 'TACKLE', 'TAKING', 'TALENT', 'TARGET', 'TAUGHT',
+  'TEMPLE', 'TENANT', 'TENDER', 'TENNIS', 'TERROR', 'THANKS', 'THEIRS', 'THEORY',
+  'THIRTY', 'THOUGH', 'THREAT', 'THROWN', 'TICKET', 'TIMING', 'TISSUE', 'TITLED',
+  'TITLES', 'TONGUE', 'TOPICS', 'TOWARD', 'TRADER', 'TRAVEL', 'TREATY', 'TRIBAL',
+  'TRICKY', 'TROOPS', 'TRUCKS', 'TUNNEL', 'TURNED', 'TWELVE', 'TWENTY', 'UNABLE',
+  'UNIQUE', 'UNITED', 'UNLESS', 'UNLIKE', 'UPDATE', 'USEFUL', 'VALLEY', 'VALUES',
+  'VARIED', 'VENDOR', 'VERSUS', 'VICTIM', 'VIEWED', 'VIEWER', 'VISION', 'VISUAL',
+  'VOLUME', 'WAITED', 'WALKER', 'WALKED', 'WANDER', 'WANTED', 'WARMTH', 'WARNED',
+  'WEALTH', 'WEAPON', 'WEEKLY', 'WEIGHT', 'WIDELY', 'WINDOW', 'WINNER', 'WINTER',
+  'WITHIN', 'WONDER', 'WOODEN', 'WORKER', 'WOUNDS', 'WRITER', 'YELLOW', 'YIELDS',
+  // 7-letter words
+  'ABANDON', 'ABILITY', 'ABSENCE', 'ACCOUNT', 'ACHIEVE', 'ACQUIRE', 'ADDRESS', 'ADVANCE',
+  'ADVISER', 'AGAINST', 'AIRLINE', 'AIRPORT', 'ALCOHOL', 'ANCIENT', 'ANOTHER', 'ANXIETY',
+  'APPLIED', 'ARRANGE', 'ARRIVAL', 'ARTICLE', 'ASSAULT', 'ASSUME', 'ATHLETE', 'ATTEMPT',
+  'ATTRACT', 'AUCTION', 'AVERAGE', 'BACKING', 'BALANCE', 'BANKING', 'BARRIER', 'BATTERY',
+  'BEARING', 'BEATING', 'BECAUSE', 'BEDROOM', 'BELIEVE', 'BENEATH', 'BENEFIT', 'BESIDES',
+  'BETWEEN', 'BILLION', 'BINDING', 'BIZARRE', 'BLANKET', 'BLOCKED', 'BOOKING', 'BOROUGH',
+  'BROTHER', 'BROUGHT', 'BUILDER', 'BURNING', 'CABINET', 'CALLING', 'CAMPING', 'CAPABLE',
+  'CAPITAL', 'CAPTAIN', 'CAPTURE', 'CAREFUL', 'CARRIER', 'CARRIED', 'CATALOG', 'CAUTION',
+  'CEILING', 'CENTRAL', 'CENTURY', 'CERTAIN', 'CHAPTER', 'CHARITY', 'CHARTER', 'CHEAPER',
+  'CHICKEN', 'CHRONIC', 'CIRCUIT', 'CLASSIC', 'CLIMATE', 'CLOSING', 'CLOTHES', 'CLUSTER',
+  'COASTAL', 'COATING', 'COLLEGE', 'COMBINE', 'COMFORT', 'COMMAND', 'COMMENT', 'COMPACT',
+  'COMPANY', 'COMPARE', 'COMPETE', 'COMPILE', 'COMPLEX', 'CONCEPT', 'CONCERN', 'CONDUCT',
+  'CONFIRM', 'CONNECT', 'CONSENT', 'CONSIST', 'CONSULT', 'CONTAIN', 'CONTENT', 'CONTEST',
+  'CONTEXT', 'CONTROL', 'CONVERT', 'CORRECT', 'COUNCIL', 'COUNSEL', 'COUNTER', 'COUNTRY',
+  'COVERED', 'CREATED', 'CREATOR', 'CREDITS', 'CRICKET', 'CRITICS', 'CRUCIAL', 'CRYSTAL',
+  'CULTURE', 'CURRENT', 'CURTAIN', 'DEALING', 'DECLINE', 'DEFAULT', 'DEFENCE', 'DEFICIT',
+  'DELIVER', 'DEPOSIT', 'DERIVED', 'DESKTOP', 'DESPITE', 'DESTROY', 'DEVELOP', 'DIAMOND',
+  'DIGITAL', 'DISABLE', 'DISEASE', 'DISPLAY', 'DISPUTE', 'DISTANT', 'DIVERSE', 'DIVIDED',
+  'DRIVING', 'DROPPED', 'DYNAMIC', 'EARLIER', 'EARNING', 'EASTERN', 'EDITION', 'ELDERLY',
+  'ELEMENT', 'EMBASSY', 'EMOTION', 'ENDLESS', 'ENHANCE', 'ESSENCE', 'EVENING', 'EVIDENT',
+  'EXACTLY', 'EXAMINE', 'EXAMPLE', 'EXCITED', 'EXCLUDE', 'EXECUTE', 'EXHIBIT', 'EXPENSE',
+  'EXPLAIN', 'EXPLORE', 'EXPRESS', 'EXTRACT', 'EXTREME', 'FACTORY', 'FACULTY', 'FAILURE',
+  'FALLING', 'FASHION', 'FASTEST', 'FATIGUE', 'FEATURE', 'FEDERAL', 'FEELING', 'FICTION',
+  'FIFTEEN', 'FIGHTER', 'FILLING', 'FINALLY', 'FINANCE', 'FINDING', 'FISHING', 'FITNESS',
+  'FOREIGN', 'FOREVER', 'FORMULA', 'FORTUNE', 'FORWARD', 'FOUNDED', 'FOUNDER', 'FREEDOM',
+  'FREIGHT', 'FURTHER', 'GALLERY', 'GATEWAY', 'GENERAL', 'GENERIC', 'GENESIS', 'GENETIC',
+  'GENUINE', 'GETTING', 'GLASSES', 'GLIMPSE', 'GRABBED', 'GRANTED', 'GRAPHIC', 'GREATER',
+  'GREATLY', 'GROCERY', 'GROWING', 'HABITAT', 'HANGING', 'HAPPIER', 'HARBOUR', 'HEADING',
+  'HEALING', 'HEALTHY', 'HEARING', 'HELPFUL', 'HELPING', 'HERSELF', 'HIGHWAY', 'HIMSELF',
+  'HISTORY', 'HITTING', 'HOLDING', 'HOLIDAY', 'HOUSING', 'HOWEVER', 'HUNDRED', 'HUNTING',
+  'ILLNESS', 'IMAGINE', 'IMPACTS', 'IMPLIES', 'IMPORTS', 'IMPOSED', 'IMPROVE', 'INCLUDE',
+  'INCOMES', 'INDEXED', 'INDICES', 'INDUCED', 'INITIAL', 'INQUIRY', 'INSIGHT', 'INSTALL',
+  'INSTANT', 'INSTEAD', 'INTENSE', 'INTERIM', 'INVITED', 'INWARDS', 'IRELAND', 'ISLANDS',
+  'ITALIAN', 'JOINTLY', 'JOURNAL', 'JOURNEY', 'KEEPING', 'KILLING', 'KINGDOM', 'KITCHEN',
+  'KNOCKED', 'KNOWING', 'LANDING', 'LARGELY', 'LASTING', 'LEADING', 'LEARNED', 'LEATHER',
+  'LEAVING', 'LEISURE', 'LENDING', 'LENGTHY', 'LIBERAL', 'LIBERTY', 'LICENSE', 'LIGHTER',
+  'LIMITED', 'LINKING', 'LISTING', 'LITERAL', 'LOADING', 'LOCALLY', 'LOCATED', 'LOOKING',
+  'LOOPING', 'MACHINE', 'MAGICAL', 'MAILING', 'MANAGER', 'MANDATE', 'MANKIND', 'MAPPING',
+  'MARGINS', 'MARINES', 'MARKING', 'MARRIED', 'MASSIVE', 'MASTERS', 'MATCHED', 'MAXIMUM',
+  'MEASURE', 'MEDICAL', 'MEETING', 'MENTION', 'MESSAGE', 'MILLION', 'MINERAL', 'MINIMUM',
+  'MISSING', 'MISSION', 'MISTAKE', 'MIXTURE', 'MODULAR', 'MONITOR', 'MONSTER', 'MONTHLY',
+  'MORNING', 'MOUNTED', 'MUSICAL', 'MYSTERY', 'NATIONS', 'NATURAL', 'NEAREST', 'NEITHER',
+  'NERVOUS', 'NETWORK', 'NEUTRAL', 'NOMINAL', 'NOTHING', 'NOTICED', 'NUCLEAR', 'NURSING',
+  'OAKLAND', 'OBJECTS', 'OBSERVE', 'OBVIOUS', 'OPINION', 'OPTIMAL', 'OPTIONS', 'ORGANIC',
+  'ORIGINS', 'OUTDOOR', 'OUTLINE', 'OUTLOOK', 'OUTPUTS', 'OVERALL', 'OVERLAP', 'OVERSEE',
+  'PACKAGE', 'PAINFUL', 'PAINTED', 'PAINTER', 'PARTIAL', 'PARTNER', 'PASSAGE', 'PASSING',
+  'PASSION', 'PASSIVE', 'PATIENT', 'PATTERN', 'PAYMENT', 'PENDING', 'PENSION', 'PERCENT',
+  'PERFECT', 'PERFORM', 'PERHAPS', 'PERIODS', 'PERMITS', 'PICKING', 'PICTURE', 'PIONEER',
+  'PITCHED', 'PLACING', 'PLANNED', 'PLANNER', 'PLASTIC', 'PLAYERS', 'PLAYING', 'PLEASED',
+  'POINTED', 'POPULAR', 'PORTION', 'POSTING', 'POVERTY', 'POWERED', 'PRAISED', 'PRECISE',
+  'PREDICT', 'PREMIER', 'PREMIUM', 'PREPARE', 'PRESENT', 'PRESSED', 'PREVENT', 'PRIMARY',
+  'PRINTED', 'PRINTER', 'PRIVACY', 'PRIVATE', 'PROBLEM', 'PROCEED', 'PROCESS', 'PRODUCE',
+  'PRODUCT', 'PROFILE', 'PROFITS', 'PROGRAM', 'PROJECT', 'PROMISE', 'PROMOTE', 'PROPOSE',
+  'PROTECT', 'PROTEIN', 'PROTEST', 'PROVIDE', 'PUBLISH', 'PULLING', 'PUMPING', 'PUSHING',
+  'PUTTING', 'QUALIFY', 'QUALITY', 'QUARTER', 'QUICKLY', 'RADICAL', 'RAISING', 'RANGING',
+  'RANKING', 'RAPIDLY', 'REACHED', 'READERS', 'READING', 'REALITY', 'REALIZE', 'RECEIPT',
+  'RECEIVE', 'RECOVER', 'REDUCED', 'REFLECT', 'REFORMS', 'REFUSED', 'REGARDS', 'REGIONS',
+  'REGULAR', 'RELATED', 'RELEASE', 'REMAINS', 'REMARKS', 'REMOVED', 'RENEWED', 'REPAIRS',
+  'REPLACE', 'REPORTS', 'REQUEST', 'REQUIRE', 'RESCUED', 'RESERVE', 'RESOLVE', 'RESPECT',
+  'RESPOND', 'RESTORE', 'RESULTS', 'RESUMED', 'RETIRED', 'RETURNS', 'REUNION', 'REUNION',
+  'REVENUE', 'REVERSE', 'REVISED', 'REVIVAL', 'RHYTHM', 'ROUGHLY', 'ROUTINE', 'RUNNING',
+  'SAILING', 'SAVINGS', 'SCALING', 'SCANDAL', 'SCATTER', 'SCHOLAR', 'SCIENCE', 'SCRATCH',
+  'SEASONS', 'SECTION', 'SEEKING', 'SEGMENT', 'SELLING', 'SEMINAR', 'SENATOR', 'SENDING',
+  'SENIORS', 'SENSORY', 'SERIOUS', 'SERPENT', 'SERVANT', 'SERVICE', 'SESSION', 'SETTING',
+  'SETTLED', 'SEVENTH', 'SEVERAL', 'SHELTER', 'SHERIFF', 'SHIFTED', 'SHIPPED', 'SHOCKED',
+  'SHORTER', 'SHORTLY', 'SHOWING', 'SHUFFLE', 'SIMILAR', 'SITTING', 'SIXTEEN', 'SKILLED',
+  'SLAVERY', 'SMOKING', 'SNOWDEN', 'SOCIETY', 'SOLDIER', 'SOMEHOW', 'SOMEONE', 'SORTING',
+  'SPEAKER', 'SPECIAL', 'SPECIES', 'SPECIFY', 'SPIRITS', 'SPONSOR', 'SPOTTED', 'SPRINGS',
+  'STADIUM', 'STAFFED', 'STAGING', 'STAMPED', 'STARTED', 'STARTER', 'STATING', 'STATION',
+  'STATUTE', 'STAYING', 'STORAGE', 'STRANGE', 'STREETS', 'STRETCH', 'STRINGS', 'STUDIED',
+  'STUDIES', 'SUBJECT', 'SUCCEED', 'SUCCESS', 'SUGGEST', 'SUICIDE', 'SUMMARY', 'SUNRISE',
+  'SUPPORT', 'SUPPOSE', 'SUPREME', 'SURFACE', 'SURPLUS', 'SURNAME', 'SURPLUS', 'SURVIVE',
+  'SUSPECT', 'SUSPEND', 'SWEATER', 'SYMBOLS', 'SYSTEMS', 'TABLOID', 'TACTICS', 'TARGETS',
+  'TEACHER', 'TEENAGE', 'TELLING', 'TEMPLES', 'TENSION', 'TERRIBLE', 'TESTING', 'TEXTILE',
+  'THEATRE', 'THERAPY', 'THEREBY', 'THERMAL', 'THOUGHT', 'THREATS', 'THROUGH', 'THUNDER',
+  'TONIGHT', 'TOOLBAR', 'TOURISM', 'TOURIST', 'TOWARDS', 'TRACKER', 'TRADING', 'TRAFFIC',
+  'TRAINED', 'TRAINER', 'TRANSIT', 'TRAPPED', 'TRAVELS', 'TREATED', 'TRIGGER', 'TRIUMPH',
+  'TROUBLE', 'TURNING', 'TWELFTH', 'TYPICAL', 'UKRAINE', 'UNABLE', 'UNIFORM', 'UNKNOWN',
+  'UNUSUAL', 'UPGRADE', 'UPWARDS', 'UTILITY', 'VACANCY', 'VALIANT', 'VARIANT', 'VARIETY',
+  'VARIOUS', 'VEHICLE', 'VENTURE', 'VERSION', 'VETERAN', 'VICTIMS', 'VICTORY', 'VIEWING',
+  'VILLAGE', 'VIOLENT', 'VIRTUAL', 'VISIBLE', 'VISITED', 'VISITOR', 'VOLUMES', 'WAITING',
+  'WARNING', 'WARRANT', 'WEATHER', 'WEBSITE', 'WEDDING', 'WEEKEND', 'WELFARE', 'WESTERN',
+  'WHEREAS', 'WHETHER', 'WILLING', 'WINNING', 'WITHOUT', 'WITNESS', 'WORKING', 'WORKOUT',
+  'WORSHIP', 'WORTHY', 'WOUNDED', 'WRAPPED', 'WRITING', 'WRITTEN', 'YOUNGER',
+];
+
+// Board generation parameters
+export const BOARD_CONFIG = {
+  // Percentage of cells that should be playable (not dead spaces)
+  minPlayablePercent: 0.65,
+  maxPlayablePercent: 0.85,
+
+  // Bonus square counts for a 9x9 board (asymmetric placement allowed)
+  bonusCounts: {
+    DL: 5,  // Double Letter
+    TL: 4,  // Triple Letter
+    DW: 3,  // Double Word
+    TW: 2,  // Triple Word
+  },
+};
+
+// Board symmetry configuration
+export const BOARD_SYMMETRY = {
+  type: '180' as const,       // 180-degree rotational symmetry
+  centerProtectionRadius: 2,  // Cells within 2 of center always playable
+};
+
+// Bonus placement configuration - strategic placement rules
+// Bonuses are placed with quadrant balancing to ensure spread across the board
+export const BONUS_PLACEMENT = {
+  TW: { edgePreference: 0.8, minDistFromCenter: 3, allowAdjacent: false },  // Edges only
+  DW: { edgePreference: 0.5, minDistFromCenter: 2, allowAdjacent: false },  // Mid-range spread
+  TL: { edgePreference: 0.6, minDistFromCenter: 2, allowAdjacent: false },  // Mid-range spread
+  DL: { edgePreference: 0.4, minDistFromCenter: 1, allowAdjacent: true },   // Can be closer to center
+};
+
+// Bonus multipliers
+export const BONUS_MULTIPLIERS = {
+  DL: { letter: 2, word: 1 },
+  TL: { letter: 3, word: 1 },
+  DW: { letter: 1, word: 2 },
+  TW: { letter: 1, word: 3 },
+  START: { letter: 1, word: 2 }, // Start square acts as double word
+};
+
+// Visual styling for bonus squares
+export const BONUS_COLORS: Record<string, { bg: string; text: string; label: string }> = {
+  DL: { bg: 'bg-sky-600', text: 'text-sky-100', label: 'DL' },
+  TL: { bg: 'bg-blue-700', text: 'text-blue-100', label: 'TL' },
+  DW: { bg: 'bg-rose-600', text: 'text-rose-100', label: 'DW' },
+  TW: { bg: 'bg-orange-600', text: 'text-orange-100', label: 'TW' },
+  START: { bg: 'bg-amber-500', text: 'text-amber-900', label: '★' },
+};

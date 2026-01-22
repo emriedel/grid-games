@@ -1,0 +1,27 @@
+{
+  "name": "@grid-games/ui",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
+  "exports": {
+    ".": "./src/index.tsx",
+    "./modal": "./src/Modal.tsx",
+    "./button": "./src/Button.tsx",
+    "./page-container": "./src/PageContainer.tsx",
+    "./game-header": "./src/GameHeader.tsx"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo node_modules"
+  },
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
