@@ -213,6 +213,37 @@ export const newGameTheme: GameTheme = {
 };
 ```
 
+### Step 6: Deploy to Vercel
+
+**6a. Deploy the new game app:**
+1. Go to https://vercel.com/new
+2. Import the `grid-games` GitHub repo
+3. Set **Root Directory** to `apps/new-game`
+4. Add Environment Variable: `NEXT_PUBLIC_BASE_PATH` = `/new-game`
+5. Deploy and note the URL (e.g., `grid-games-new-game.vercel.app`)
+6. Verify it works at `https://grid-games-new-game.vercel.app/new-game`
+
+**6b. Add rewrite to the web app:**
+Edit `apps/web/next.config.ts` and add rewrites for the new game:
+```typescript
+{
+  source: '/new-game',
+  destination: 'https://grid-games-new-game.vercel.app/new-game',
+},
+{
+  source: '/new-game/:path*',
+  destination: 'https://grid-games-new-game.vercel.app/new-game/:path*',
+},
+```
+
+**6c. Push and redeploy:**
+```bash
+git add .
+git commit -m "Add new-game to deployment"
+git push
+```
+The web app will automatically redeploy with the new rewrites.
+
 ---
 
 ## Common Gotchas
@@ -258,18 +289,24 @@ npm install some-package -w @grid-games/dabble
 
 ### What's Complete
 - ✅ Turborepo monorepo structure
-- ✅ Dabble game (fully functional, copied from scrabble-game)
-- ✅ Jumble game (fully functional, copied from jumble)
+- ✅ Dabble game (fully functional)
+- ✅ Jumble game (fully functional)
 - ✅ Landing page (apps/web)
 - ✅ Shared UI package (Modal, Button, PageContainer, GameHeader)
 - ✅ Shared config package (theme system)
 - ✅ Shared utilities package (share, date)
 - ✅ All apps build successfully
+- ✅ Git repo initialized
+- ✅ Vercel deployment configured (multi-zone)
+- ✅ Custom domain: games.ericriedel.dev
+
+### Deployment URLs
+- **Landing Page:** https://games.ericriedel.dev
+- **Dabble:** https://games.ericriedel.dev/dabble (hosted at grid-games-dabble.vercel.app)
+- **Jumble:** https://games.ericriedel.dev/jumble (hosted at grid-games-jumble.vercel.app)
 
 ### What's Not Yet Done
 - 🔲 Games not yet migrated to use shared UI components (still using inline components)
-- 🔲 Vercel deployment not configured
-- 🔲 Git repo not initialized
 - 🔲 Statistics/streak tracking not implemented
 
 ### Migration Opportunities
