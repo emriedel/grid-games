@@ -2,35 +2,24 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    const dabbleUrl = process.env.DABBLE_URL;
-    const jumbleUrl = process.env.JUMBLE_URL;
-
-    // Only configure rewrites if the URLs are set (production)
-    const rewrites = [];
-
-    if (dabbleUrl) {
-      rewrites.push({
+    return [
+      {
         source: '/dabble',
-        destination: `${dabbleUrl}/dabble`,
-      });
-      rewrites.push({
+        destination: 'https://grid-games-dabble.vercel.app/dabble',
+      },
+      {
         source: '/dabble/:path*',
-        destination: `${dabbleUrl}/dabble/:path*`,
-      });
-    }
-
-    if (jumbleUrl) {
-      rewrites.push({
+        destination: 'https://grid-games-dabble.vercel.app/dabble/:path*',
+      },
+      {
         source: '/jumble',
-        destination: `${jumbleUrl}/jumble`,
-      });
-      rewrites.push({
+        destination: 'https://grid-games-jumble.vercel.app/jumble',
+      },
+      {
         source: '/jumble/:path*',
-        destination: `${jumbleUrl}/jumble/:path*`,
-      });
-    }
-
-    return rewrites;
+        destination: 'https://grid-games-jumble.vercel.app/jumble/:path*',
+      },
+    ];
   },
 };
 
