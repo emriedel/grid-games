@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { generatePerformanceBar, formatTime } from '@/lib/scoring';
+import { Button } from '@grid-games/ui';
+import { buildShareText, shareOrCopy, generateEmojiBar } from '@grid-games/shared';
 import { TIMER_DURATION } from '@/constants/gameConfig';
+import { formatTime } from '@/lib/scoring';
 
 interface ShareButtonProps {
   puzzleNumber: number;
@@ -20,46 +22,35 @@ export default function ShareButton({
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
-    const performanceBar = generatePerformanceBar(wordsFound, totalPossibleWords);
-    const shareText = `Jumble #${puzzleNumber} 🔤
-⏱️ ${formatTime(TIMER_DURATION)}
-📝 ${wordsFound} words
-⭐ ${score} points
+    const emojiGrid = generateEmojiBar(wordsFound, totalPossibleWords, {
+      filledEmoji: '🟩',
+      emptyEmoji: '⬜',
+    });
 
-${performanceBar}`;
+    const shareText = buildShareText({
+      gameId: 'jumble',
+      gameName: 'Jumble',
+      puzzleId: puzzleNumber,
+      score,
+      maxScore: undefined,
+      emojiGrid,
+      extraLines: [
+        `${formatTime(TIMER_DURATION)}`,
+        `${wordsFound} of ${totalPossibleWords} words`,
+      ],
+      shareUrl: 'https://games.ericriedel.dev/jumble',
+    });
 
-    // Try native share first (mobile)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          text: shareText,
-        });
-        return;
-      } catch {
-        // User cancelled or share failed, fall through to clipboard
-      }
-    }
-
-    // Fallback to clipboard
-    try {
-      await navigator.clipboard.writeText(shareText);
+    const result = await shareOrCopy(shareText);
+    if (result.success && result.method === 'clipboard') {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error('Failed to copy:', error);
     }
   };
 
   return (
-    <button
-      onClick={handleShare}
-      className="
-        px-6 py-3 rounded-lg font-bold text-lg
-        bg-[var(--accent)] hover:opacity-90
-        transition-opacity
-      "
-    >
+    <Button variant="primary" size="lg" onClick={handleShare}>
       {copied ? 'Copied!' : 'Share'}
-    </button>
+    </Button>
   );
 }

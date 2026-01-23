@@ -1,13 +1,23 @@
 @import "tailwindcss";
 
 :root {
+  /* Base tokens */
   --background: #0a0a0a;
   --foreground: #ededed;
+  --muted: #a1a1aa;
+  --border: #27272a;
+
+  /* Jumble theme - Red/Pink accent */
+  --accent: #e94560;
+  --accent-foreground: #ffffff;
+  --accent-secondary: #0f3460;
+
+  /* Tile styling */
   --tile-bg: #1a1a2e;
   --tile-bg-selected: #4a4a6e;
   --tile-border: #2d2d44;
-  --accent: #e94560;
-  --accent-secondary: #0f3460;
+
+  /* Status colors */
   --success: #22c55e;
   --warning: #eab308;
   --danger: #ef4444;

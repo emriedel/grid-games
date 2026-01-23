@@ -1,7 +1,8 @@
 'use client';
 
+import { Modal, Button } from '@grid-games/ui';
 import { FoundWord } from '@/types';
-import { generatePerformanceBar } from '@/lib/scoring';
+import { generateEmojiBar } from '@grid-games/shared';
 import ShareButton from './ShareButton';
 
 interface ResultsModalProps {
@@ -21,12 +22,13 @@ export default function ResultsModal({
   totalPossibleWords,
   score,
 }: ResultsModalProps) {
-  if (!isOpen) return null;
-
   const percentage = totalPossibleWords > 0
     ? Math.round((foundWords.length / totalPossibleWords) * 100)
     : 0;
-  const performanceBar = generatePerformanceBar(foundWords.length, totalPossibleWords);
+  const performanceBar = generateEmojiBar(foundWords.length, totalPossibleWords, {
+    filledEmoji: '🟩',
+    emptyEmoji: '⬜',
+  });
 
   // Sort words by score descending
   const sortedWords = [...foundWords].sort((a, b) => {
@@ -35,9 +37,9 @@ export default function ResultsModal({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[var(--background)] rounded-xl p-6 max-w-sm w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold text-center mb-4">
+    <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <div className="p-6">
+        <h2 className="text-2xl font-bold text-center text-[var(--foreground)] mb-4">
           Jumble #{puzzleNumber}
         </h2>
 
@@ -45,7 +47,7 @@ export default function ResultsModal({
           <div className="text-4xl font-bold text-[var(--accent)] mb-2">
             {score} points
           </div>
-          <div className="text-lg mb-2">
+          <div className="text-lg text-[var(--muted)] mb-2">
             {foundWords.length} of {totalPossibleWords} words ({percentage}%)
           </div>
           <div className="text-2xl tracking-wider">
@@ -64,14 +66,14 @@ export default function ResultsModal({
 
         {sortedWords.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-sm font-bold uppercase tracking-wider mb-2 opacity-60">
+            <h3 className="text-sm font-bold uppercase tracking-wider mb-2 text-[var(--muted)]">
               Words Found
             </h3>
             <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
               {sortedWords.map((fw) => (
                 <span
                   key={fw.word}
-                  className="px-2 py-1 text-xs rounded bg-[var(--tile-bg)]"
+                  className="px-2 py-1 text-xs rounded bg-[var(--tile-bg)] text-[var(--foreground)]"
                 >
                   {fw.word} +{fw.score}
                 </span>
@@ -80,17 +82,10 @@ export default function ResultsModal({
           </div>
         )}
 
-        <button
-          onClick={onClose}
-          className="
-            w-full py-2 rounded-lg
-            bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)]
-            transition-colors
-          "
-        >
+        <Button variant="secondary" fullWidth onClick={onClose}>
           Close
-        </button>
+        </Button>
       </div>
-    </div>
+    </Modal>
   );
 }

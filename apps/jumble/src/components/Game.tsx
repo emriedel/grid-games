@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
+import { LandingScreen, NavBar, GameContainer, Button } from '@grid-games/ui';
 import { Position } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
+import { jumbleConfig } from '@/config';
 import BoggleGrid from './BoggleGrid';
 import Timer from './Timer';
 import CurrentWord from './CurrentWord';
@@ -73,77 +75,55 @@ export default function Game() {
     setShowResults(true);
   }
 
+  // Get puzzle info for display
+  const puzzleInfo = jumbleConfig.getPuzzleInfo();
+
   // Loading state
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-        <div className="text-xl">Loading...</div>
+        <div className="text-xl text-[var(--foreground)]">Loading...</div>
       </div>
     );
   }
 
-  // Ready state - show start button
+  // Ready state - show landing screen
   if (status === 'ready') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background)] p-4">
-        <h1 className="text-4xl font-bold mb-2">JUMBLE</h1>
-        <p className="text-lg opacity-60 mb-8">#{puzzleNumber}</p>
-
-        <button
-          onClick={startGame}
-          className="
-            px-8 py-4 rounded-xl text-xl font-bold
-            bg-[var(--accent)] hover:opacity-90
-            transition-opacity
-          "
+      <>
+        <LandingScreen
+          emoji={jumbleConfig.emoji}
+          name={jumbleConfig.name}
+          description={jumbleConfig.description}
+          puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}
+          onPlay={startGame}
+          onRules={() => setShowHowToPlay(true)}
         >
-          Start Game
-        </button>
-
-        <div className="flex gap-4 mt-8">
-          <button
-            onClick={() => setShowHowToPlay(true)}
-            className="px-4 py-2 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)]"
-          >
-            How to Play
-          </button>
-          <button
-            onClick={() => setShowStats(true)}
-            className="px-4 py-2 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)]"
-          >
+          <Button variant="secondary" fullWidth onClick={() => setShowStats(true)}>
             Stats
-          </button>
-        </div>
-
+          </Button>
+        </LandingScreen>
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
         <StatsModal isOpen={showStats} onClose={() => setShowStats(false)} />
-      </div>
+      </>
     );
   }
 
   // Finished state with results already shown
   if (status === 'finished') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background)] p-4">
-        <h1 className="text-4xl font-bold mb-2">JUMBLE</h1>
-        <p className="text-lg opacity-60 mb-4">#{puzzleNumber}</p>
-        <p className="text-xl mb-8">You&apos;ve already played today!</p>
-
-        <div className="flex gap-4">
-          <button
-            onClick={() => setShowResults(true)}
-            className="px-6 py-3 rounded-lg bg-[var(--accent)] hover:opacity-90"
-          >
-            View Results
-          </button>
-          <button
-            onClick={() => setShowStats(true)}
-            className="px-6 py-3 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)]"
-          >
+      <>
+        <LandingScreen
+          emoji={jumbleConfig.emoji}
+          name={jumbleConfig.name}
+          description="You've already played today!"
+          puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}
+          onPlay={() => setShowResults(true)}
+        >
+          <Button variant="secondary" fullWidth onClick={() => setShowStats(true)}>
             Stats
-          </button>
-        </div>
-
+          </Button>
+        </LandingScreen>
         <ResultsModal
           isOpen={showResults}
           onClose={() => setShowResults(false)}
@@ -153,21 +133,26 @@ export default function Game() {
           score={totalScore}
         />
         <StatsModal isOpen={showStats} onClose={() => setShowStats(false)} />
-      </div>
+      </>
     );
   }
 
   // Playing state
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--background)] p-4 max-w-md mx-auto">
-      {/* Header */}
-      <div className="text-center mb-4">
-        <h1 className="text-2xl font-bold">JUMBLE #{puzzleNumber}</h1>
-        <Timer timeRemaining={timeRemaining} />
-      </div>
-
+    <GameContainer
+      maxWidth="md"
+      navBar={
+        <NavBar
+          title={jumbleConfig.name}
+          subtitle={`#${puzzleNumber}`}
+          homeUrl={jumbleConfig.homeUrl}
+          onRulesClick={() => setShowHowToPlay(true)}
+          rightContent={<Timer timeRemaining={timeRemaining} />}
+        />
+      }
+    >
       {/* Grid */}
-      <div className="flex-shrink-0 mb-4">
+      <div className="flex-shrink-0 mb-4 w-full">
         <BoggleGrid
           board={board}
           onPathChange={handlePathChange}
@@ -177,7 +162,7 @@ export default function Game() {
       </div>
 
       {/* Current Word */}
-      <div className="relative mb-4">
+      <div className="relative mb-4 w-full">
         <CurrentWord
           word={currentWord}
           isAlreadyFound={isWordAlreadyFound(currentWord)}
@@ -198,30 +183,22 @@ export default function Game() {
       </div>
 
       {/* Found Words */}
-      <div className="mb-4">
+      <div className="mb-4 w-full">
         <FoundWordsList foundWords={foundWords} totalScore={totalScore} />
       </div>
 
       {/* Bottom Actions */}
-      <div className="flex justify-center gap-4 mt-auto pt-4">
-        <button
-          onClick={() => setShowHowToPlay(true)}
-          className="px-4 py-2 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)]"
-        >
-          ?
-        </button>
-        <button
-          onClick={() => setShowStats(true)}
-          className="px-4 py-2 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)]"
-        >
+      <div className="flex justify-center gap-3 mt-auto pt-4 w-full max-w-xs">
+        <Button variant="secondary" onClick={() => setShowStats(true)}>
           Stats
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="primary"
           onClick={handleEndGame}
-          className="px-4 py-2 rounded-lg bg-[var(--danger)] hover:opacity-90"
+          className="!bg-[var(--danger)] hover:!bg-[var(--danger)]/80"
         >
           End Game
-        </button>
+        </Button>
       </div>
 
       {/* Modals */}
@@ -235,6 +212,6 @@ export default function Game() {
         totalPossibleWords={allValidWords.size}
         score={totalScore}
       />
-    </div>
+    </GameContainer>
   );
 }

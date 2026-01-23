@@ -52,12 +52,19 @@ Before creating a new component, check if it exists in `packages/ui/`:
 |-----------|---------|
 | `Modal` | Any overlay dialog (results, settings, how-to-play) |
 | `Button` | Any clickable button (use variants: primary/secondary/ghost) |
+| `LandingScreen` | Pre-game landing page with play button |
+| `NavBar` | Top navigation during gameplay |
+| `GameContainer` | Wrapper for game content with consistent layout |
+| `ToastProvider` / `useToast` | Toast notifications |
+| `Skeleton` / `SkeletonGrid` / `SkeletonText` | Loading placeholders |
+| `useKeyboardShortcuts` | Keyboard shortcut handling |
 | `PageContainer` | Wrapping page content with consistent padding |
 | `GameHeader` | Game title + score display |
 
 **Import from the package:**
 ```tsx
-import { Modal, Button } from '@grid-games/ui';
+import { Modal, Button, LandingScreen, NavBar, GameContainer } from '@grid-games/ui';
+import { ToastProvider, useToast } from '@grid-games/ui';
 ```
 
 **When to add to shared UI:**
@@ -70,26 +77,100 @@ import { Modal, Button } from '@grid-games/ui';
 - Component is unique to one game's mechanics
 - Component would need heavy customization per game
 
-### 3. Share Format Consistency
+### 3. GameConfig Interface
+
+Each game defines a configuration object for integration with shared components:
+
+```tsx
+// In src/config.ts
+import { defineGameConfig, dabbleTheme } from '@grid-games/config';
+import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-games/shared';
+
+const PUZZLE_BASE_DATE = new Date('2026-01-01');
+
+export const dabbleConfig = defineGameConfig({
+  id: 'dabble',
+  name: 'Dabble',
+  emoji: '🔤',
+  description: 'A daily Scrabble-style word puzzle.',
+  theme: dabbleTheme,
+  homeUrl: '/',
+  getPuzzleInfo: () => {
+    const dateStr = getTodayDateString();
+    const puzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE);
+    return { number: puzzleNumber, date: formatDisplayDate(dateStr) };
+  },
+});
+```
+
+### 4. Game State Pattern
+
+Games use a three-state pattern: `landing` → `playing` → `finished`
+
+```tsx
+type GameState = 'landing' | 'playing' | 'finished';
+
+// In Game.tsx
+const [gameState, setGameState] = useState<GameState>('landing');
+
+// Landing screen
+if (gameState === 'landing') {
+  return (
+    <LandingScreen
+      emoji={config.emoji}
+      name={config.name}
+      description={config.description}
+      puzzleInfo={config.getPuzzleInfo()}
+      onPlay={() => setGameState('playing')}
+      onRules={() => setShowRulesModal(true)}
+    />
+  );
+}
+
+// Playing state
+return (
+  <GameContainer
+    navBar={
+      <NavBar
+        title={config.name}
+        subtitle={`#${puzzleNumber}`}
+        homeUrl={config.homeUrl}
+        onRulesClick={() => setShowRulesModal(true)}
+        rightContent={<ScoreDisplay score={score} />}
+      />
+    }
+  >
+    {/* Game content */}
+  </GameContainer>
+);
+```
+
+### 5. Share Format Consistency
 
 All games should use the shared share utilities for consistent brand feel:
 
 ```tsx
-import { buildShareText, shareOrCopy } from '@grid-games/shared';
+import { buildShareText, shareOrCopy, generateEmojiBar } from '@grid-games/shared';
+
+const emojiGrid = generateEmojiBar(score, maxScore, {
+  filledEmoji: '🟨',
+  emptyEmoji: '⬛',
+});
 
 const shareText = buildShareText({
   gameId: 'dabble',
   gameName: 'Dabble',
   puzzleId: puzzleDate,
   score: totalScore,
-  emojiGrid: '🟨🟨🟨🟨🟨⬛⬛⬛⬛⬛',
+  emojiGrid,
   extraLines: ['5 words found'],
+  shareUrl: 'https://games.ericriedel.dev/dabble',
 });
 
 await shareOrCopy(shareText);
 ```
 
-### 4. File Structure Conventions
+### 6. File Structure Conventions
 
 Each game app follows this structure:
 ```
@@ -101,6 +182,7 @@ apps/[game]/
 │   │   └── globals.css     # Theme CSS variables
 │   ├── components/         # Game-specific components
 │   │   ├── Game.tsx        # Main game orchestrator
+│   │   ├── HowToPlayModal.tsx  # Rules modal using shared Modal
 │   │   └── ...
 │   ├── lib/                # Game logic (pure functions preferred)
 │   │   ├── dictionary.ts   # Word validation (Trie-based)
@@ -110,14 +192,15 @@ apps/[game]/
 │   │   └── index.ts        # TypeScript interfaces
 │   ├── constants/
 │   │   └── gameConfig.ts   # Game configuration values
-│   └── hooks/              # Custom React hooks
+│   ├── hooks/              # Custom React hooks
+│   └── config.ts           # GameConfig definition
 ├── public/
 │   └── dict/
 │       └── words.txt       # Word dictionary
 └── package.json
 ```
 
-### 5. Daily Puzzle Generation
+### 7. Daily Puzzle Generation
 
 All games use seeded random generation based on the date:
 
@@ -133,7 +216,7 @@ const randomValue = rng(); // Returns 0-1, same result for same date
 
 This ensures all players get the same puzzle on the same day.
 
-### 6. Dictionary Pattern
+### 8. Dictionary Pattern
 
 Both games use a Trie data structure for O(k) word lookup:
 
@@ -181,13 +264,61 @@ Edit `apps/new-game/package.json`:
 Edit `apps/new-game/src/app/globals.css`:
 ```css
 :root {
+  /* Base tokens */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #a1a1aa;
+  --border: #27272a;
+
+  /* Game theme - Your accent */
   --accent: #your-color;
   --accent-foreground: #text-on-accent;
-  /* ... other tokens */
+  --accent-secondary: #secondary-color;
+
+  /* Tile styling */
+  --tile-bg: #your-tile-bg;
+  --tile-bg-selected: #your-tile-selected;
+  --tile-border: #your-tile-border;
+
+  /* Status colors */
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
 }
 ```
 
-### Step 4: Add to Landing Page
+### Step 4: Create Game Config
+Create `apps/new-game/src/config.ts`:
+```tsx
+import { defineGameConfig } from '@grid-games/config';
+import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-games/shared';
+
+const PUZZLE_BASE_DATE = new Date('2026-01-01');
+
+export const newGameConfig = defineGameConfig({
+  id: 'new-game',
+  name: 'New Game',
+  emoji: '🎮',
+  description: 'Your game description.',
+  theme: { /* your theme */ },
+  homeUrl: '/',
+  getPuzzleInfo: () => ({
+    number: getPuzzleNumber(PUZZLE_BASE_DATE),
+    date: formatDisplayDate(getTodayDateString()),
+  }),
+});
+```
+
+### Step 5: Update Game.tsx Structure
+Use the shared components:
+```tsx
+import { LandingScreen, NavBar, GameContainer, Button, Modal } from '@grid-games/ui';
+import { newGameConfig } from '@/config';
+
+// Implement landing → playing → finished state machine
+```
+
+### Step 6: Add to Landing Page
 Edit `apps/web/src/app/page.tsx`:
 ```tsx
 const games: GameCard[] = [
@@ -203,7 +334,7 @@ const games: GameCard[] = [
 ];
 ```
 
-### Step 5: Add to Config Package (Optional)
+### Step 7: Add to Config Package (Optional)
 If the theme should be programmatically accessible, add to `packages/config/src/theme.ts`:
 ```tsx
 export const newGameTheme: GameTheme = {
@@ -213,9 +344,9 @@ export const newGameTheme: GameTheme = {
 };
 ```
 
-### Step 6: Deploy to Vercel
+### Step 8: Deploy to Vercel
 
-**6a. Deploy the new game app:**
+**8a. Deploy the new game app:**
 1. Go to https://vercel.com/new
 2. Import the `grid-games` GitHub repo
 3. Set **Root Directory** to `apps/new-game`
@@ -223,7 +354,7 @@ export const newGameTheme: GameTheme = {
 5. Deploy and note the URL (e.g., `grid-games-new-game.vercel.app`)
 6. Verify it works at `https://grid-games-new-game.vercel.app/new-game`
 
-**6b. Add rewrite to the web app:**
+**8b. Add rewrite to the web app:**
 Edit `apps/web/next.config.ts` and add rewrites for the new game:
 ```typescript
 {
@@ -236,7 +367,7 @@ Edit `apps/web/next.config.ts` and add rewrites for the new game:
 },
 ```
 
-**6c. Push and redeploy:**
+**8c. Push and redeploy:**
 ```bash
 git add .
 git commit -m "Add new-game to deployment"
@@ -267,9 +398,9 @@ export default function Page() {
 ### Workspace Package Imports
 Import shared packages with the workspace name:
 ```tsx
-import { Modal } from '@grid-games/ui';
-import { dabbleTheme } from '@grid-games/config';
-import { shareOrCopy } from '@grid-games/shared';
+import { Modal, LandingScreen, NavBar } from '@grid-games/ui';
+import { dabbleTheme, defineGameConfig } from '@grid-games/config';
+import { shareOrCopy, buildShareText } from '@grid-games/shared';
 ```
 
 ### Running Single App
@@ -289,12 +420,13 @@ npm install some-package -w @grid-games/dabble
 
 ### What's Complete
 - ✅ Turborepo monorepo structure
-- ✅ Dabble game (fully functional)
-- ✅ Jumble game (fully functional)
+- ✅ Dabble game (fully functional with shared UI)
+- ✅ Jumble game (fully functional with shared UI)
 - ✅ Landing page (apps/web)
-- ✅ Shared UI package (Modal, Button, PageContainer, GameHeader)
-- ✅ Shared config package (theme system)
+- ✅ Shared UI package (Modal, Button, LandingScreen, NavBar, GameContainer, Toast, Skeleton)
+- ✅ Shared config package (theme system, GameConfig interface)
 - ✅ Shared utilities package (share, date)
+- ✅ Games migrated to use shared components
 - ✅ All apps build successfully
 - ✅ Git repo initialized
 - ✅ Vercel deployment configured (multi-zone)
@@ -306,11 +438,7 @@ npm install some-package -w @grid-games/dabble
 - **Jumble:** https://games.ericriedel.dev/jumble (hosted at grid-games-jumble.vercel.app)
 
 ### What's Not Yet Done
-- 🔲 Games not yet migrated to use shared UI components (still using inline components)
-- 🔲 Statistics/streak tracking not implemented
-
-### Migration Opportunities
-The shared packages exist but games haven't been refactored to use them yet. When modifying a game's modal or button, consider migrating to the shared component.
+- 🔲 Statistics/streak tracking not implemented for Dabble
 
 ---
 
@@ -321,10 +449,18 @@ The shared packages exist but games haven't been refactored to use them yet. Whe
 | `turbo.json` | Turborepo task definitions |
 | `package.json` (root) | Workspace configuration |
 | `packages/config/src/theme.ts` | Theme interface and game themes |
+| `packages/config/src/gameConfig.ts` | GameConfig interface |
 | `packages/ui/src/Modal.tsx` | Shared modal component |
+| `packages/ui/src/LandingScreen.tsx` | Pre-game landing screen |
+| `packages/ui/src/NavBar.tsx` | Navigation bar for gameplay |
+| `packages/ui/src/GameContainer.tsx` | Game layout wrapper |
+| `packages/ui/src/Toast.tsx` | Toast notification system |
+| `packages/ui/src/Skeleton.tsx` | Loading placeholder components |
 | `packages/shared/src/share.ts` | Share utilities |
+| `packages/shared/src/date.ts` | Date utilities |
 | `apps/web/src/app/page.tsx` | Landing page with game list |
 | `apps/[game]/src/app/globals.css` | Per-game theme variables |
+| `apps/[game]/src/config.ts` | Game configuration |
 | `apps/[game]/src/components/Game.tsx` | Main game component |
 | `apps/[game]/src/lib/puzzleGenerator.ts` | Daily puzzle generation |
 

@@ -1,8 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base tokens */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #a1a1aa;
+  --border: #27272a;
+
+  /* Dabble theme - Amber accent */
+  --accent: #f59e0b;
+  --accent-foreground: #1c1917;
+  --accent-secondary: #78350f;
+
+  /* Tile styling */
+  --tile-bg: #292524;
+  --tile-bg-selected: #44403c;
+  --tile-border: #57534e;
+
+  /* Status colors */
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
 }
 
 @theme inline {
@@ -10,13 +28,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

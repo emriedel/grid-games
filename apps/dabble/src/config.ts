@@ -1,0 +1,22 @@
+import { defineGameConfig, dabbleTheme } from '@grid-games/config';
+import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-games/shared';
+
+// Base date for puzzle numbering (first puzzle date)
+const PUZZLE_BASE_DATE = new Date('2026-01-01');
+
+export const dabbleConfig = defineGameConfig({
+  id: 'dabble',
+  name: 'Dabble',
+  emoji: '🔤',
+  description: 'A daily Scrabble-style word puzzle. Place tiles to form words and maximize your score.',
+  theme: dabbleTheme,
+  homeUrl: '/',
+  getPuzzleInfo: () => {
+    const dateStr = getTodayDateString();
+    const puzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE);
+    return {
+      number: puzzleNumber,
+      date: formatDisplayDate(dateStr),
+    };
+  },
+});
