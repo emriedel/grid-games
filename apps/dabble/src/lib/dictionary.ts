@@ -58,7 +58,8 @@ export async function loadDictionary(): Promise<void> {
 
   loadPromise = (async () => {
     try {
-      const response = await fetch('/dict/words.txt');
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      const response = await fetch(`${basePath}/dict/words.txt`);
       if (!response.ok) {
         throw new Error('Failed to load dictionary');
       }

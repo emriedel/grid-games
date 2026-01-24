@@ -61,7 +61,8 @@ export async function loadDictionary(): Promise<void> {
   if (dictionary) return;
 
   try {
-    const response = await fetch('/dict/words.txt');
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const response = await fetch(`${basePath}/dict/words.txt`);
     const text = await response.text();
     const words = text.split('\n').map((w) => w.trim().toUpperCase()).filter((w) => w.length >= MIN_WORD_LENGTH);
 
