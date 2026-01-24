@@ -10,8 +10,8 @@ interface ShareModalProps {
   date: string;
   words: Word[];
   totalScore: number;
+  totalBonuses: number;
   allLettersUsed: boolean;
-  allLettersBonus: number;
   onClose: () => void;
 }
 
@@ -20,8 +20,8 @@ export function ShareModal({
   date,
   words,
   totalScore,
+  totalBonuses,
   allLettersUsed,
-  allLettersBonus,
   onClose,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
@@ -37,7 +37,10 @@ export function ShareModal({
 
     const extraLines = [`${words.length} word${words.length !== 1 ? 's' : ''}`];
     if (allLettersUsed) {
-      extraLines.push(`All letters used! +${allLettersBonus}`);
+      extraLines.push('All letters used!');
+    }
+    if (totalBonuses > 0) {
+      extraLines.push(`+${totalBonuses} bonuses`);
     }
 
     const shareText = buildShareText({
@@ -60,10 +63,11 @@ export function ShareModal({
   const handleCopyDetailed = async () => {
     const lines = [
       `Dabble ${displayDate}`,
-      `Score: ${totalScore}${allLettersUsed ? ` (includes +${allLettersBonus} bonus!)` : ''}`,
+      `Score: ${totalScore}${totalBonuses > 0 ? ` (includes +${totalBonuses} bonuses)` : ''}`,
       '',
       ...words.map((w) => `${w.word} (${w.score})`),
-      ...(allLettersUsed ? [`All letters bonus (+${allLettersBonus})`] : []),
+      ...(totalBonuses > 0 ? [`Bonuses: +${totalBonuses}`] : []),
+      ...(allLettersUsed ? ['All letters used!'] : []),
       '',
       'https://games.ericriedel.dev/dabble',
     ];
@@ -87,10 +91,11 @@ export function ShareModal({
           <div className="text-5xl font-bold text-[var(--accent)] mb-2">{totalScore}</div>
           <div className="text-[var(--muted)]">
             {words.length} word{words.length !== 1 ? 's' : ''}
+            {totalBonuses > 0 && ` · +${totalBonuses} bonuses`}
           </div>
           {allLettersUsed && (
             <div className="mt-2 text-[var(--success)] font-semibold">
-              All letters used! +{allLettersBonus} bonus
+              All letters used!
             </div>
           )}
         </div>

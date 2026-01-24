@@ -50,15 +50,19 @@ Then open http://localhost:3001
   - ★ (Start) - amber, acts as Double Word
 
 ### Letter Rack
-- Players receive 12 letters per puzzle (configurable)
+- Players receive 14 letters per puzzle (configurable)
 - Letter distribution weighted by Scrabble frequencies
-- Minimum 3 vowels guaranteed
-- +50 bonus for using all letters
+- Minimum 4 vowels guaranteed
 
 ### Scoring
 - Standard Scrabble letter point values (A=1, B=3, Q=10, etc.)
 - Bonus squares multiply letter or word scores
 - Bonuses only apply to newly placed tiles
+- **Per-turn tile bonus**: Playing more tiles at once earns bonus points
+  - 3 tiles: +2, 4 tiles: +5, 5 tiles: +10, 6+ tiles: +15
+- **Letter usage bonus**: Using more letters earns milestone bonuses
+  - 12 letters: +10, 13 letters: +25, 14 letters: +50
+- Bonuses are configurable in `src/constants/gameConfig.ts`
 
 ## File Structure
 

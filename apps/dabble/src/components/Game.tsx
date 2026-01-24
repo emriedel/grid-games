@@ -23,10 +23,8 @@ import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import { dabbleConfig } from '@/config';
+import { getPerTurnTileBonus, getLetterUsageBonus } from '@/constants/gameConfig';
 import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData } from '@/types';
-
-// Bonus for using all letters in the puzzle
-const ALL_LETTERS_BONUS = 50;
 
 type GameState = 'landing' | 'playing' | 'finished';
 
@@ -45,6 +43,7 @@ export function Game() {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [submittedWords, setSubmittedWords] = useState<Word[]>([]);
   const [totalScore, setTotalScore] = useState(0);
+  const [totalBonuses, setTotalBonuses] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -161,16 +160,36 @@ export function Game() {
     const newLockedIndices = new Set([...lockedRackIndices, ...usedRackIndices]);
     setLockedRackIndices(newLockedIndices);
 
-    const allLettersUsed = newLockedIndices.size === rackLetters.length;
-    const bonus = allLettersUsed ? ALL_LETTERS_BONUS : 0;
+    // Calculate bonuses
+    const tilesPlacedThisTurn = placedTiles.length;
+    const tileBonus = getPerTurnTileBonus(tilesPlacedThisTurn);
+
+    const previousLettersUsed = lockedRackIndices.size;
+    const newLettersUsed = newLockedIndices.size;
+    // Only award the difference in letter usage bonus (not cumulative)
+    const previousLetterBonus = getLetterUsageBonus(previousLettersUsed);
+    const newLetterBonus = getLetterUsageBonus(newLettersUsed);
+    const letterBonusDelta = newLetterBonus - previousLetterBonus;
+
+    const totalBonus = tileBonus + letterBonusDelta;
 
     setSubmittedWords((prev) => [...prev, ...result.words]);
-    setTotalScore((prev) => prev + result.totalScore + bonus);
+    setTotalScore((prev) => prev + result.totalScore + totalBonus);
+    setTotalBonuses((prev) => prev + totalBonus);
     setPlacedTiles([]);
     setUsedRackIndices(new Set());
 
-    if (allLettersUsed) {
-      setError(`All letters used! +${ALL_LETTERS_BONUS} bonus!`);
+    // Show feedback message
+    const bonusMessages: string[] = [];
+    if (tileBonus > 0) {
+      bonusMessages.push(`+${tileBonus} tile bonus`);
+    }
+    if (letterBonusDelta > 0) {
+      bonusMessages.push(`+${letterBonusDelta} letter bonus`);
+    }
+
+    if (bonusMessages.length > 0) {
+      setError(bonusMessages.join(', ') + '!');
     } else {
       setError(null);
     }
@@ -208,6 +227,7 @@ export function Game() {
     setSelectedCell(null);
     setSubmittedWords([]);
     setTotalScore(0);
+    setTotalBonuses(0);
     setError(null);
   }, []);
 
@@ -417,8 +437,8 @@ export function Game() {
         date={puzzle.date}
         words={submittedWords}
         totalScore={totalScore}
+        totalBonuses={totalBonuses}
         allLettersUsed={lockedRackIndices.size === rackLetters.length}
-        allLettersBonus={ALL_LETTERS_BONUS}
         onClose={() => setShowShareModal(false)}
       />
       <HowToPlayModal

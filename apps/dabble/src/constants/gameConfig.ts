@@ -308,6 +308,46 @@ export const BONUS_MULTIPLIERS = {
   START: { letter: 1, word: 2 }, // Start square acts as double word
 };
 
+// Scoring bonuses - easily tunable
+export const SCORING_CONFIG = {
+  // Per-turn tile bonus: rewards playing more tiles at once
+  // Key is minimum tiles placed, value is bonus points
+  // Encourages longer plays over incremental single-letter additions
+  perTurnTileBonus: {
+    3: 2,   // 3 tiles: +2 bonus
+    4: 5,   // 4 tiles: +5 bonus
+    5: 10,  // 5 tiles: +10 bonus
+    6: 15,  // 6+ tiles: +15 bonus
+  } as Record<number, number>,
+
+  // Letter usage bonuses: rewards using more of your letters
+  // Key is number of letters used, value is bonus points
+  letterUsageBonus: {
+    12: 10,  // 12 letters: +10 bonus
+    13: 25,  // 13 letters: +25 bonus
+    14: 50,  // 14 letters (all): +50 bonus
+  } as Record<number, number>,
+};
+
+// Helper to calculate per-turn tile bonus
+export function getPerTurnTileBonus(tilesPlaced: number): number {
+  const thresholds = Object.keys(SCORING_CONFIG.perTurnTileBonus)
+    .map(Number)
+    .sort((a, b) => b - a); // Sort descending
+
+  for (const threshold of thresholds) {
+    if (tilesPlaced >= threshold) {
+      return SCORING_CONFIG.perTurnTileBonus[threshold];
+    }
+  }
+  return 0;
+}
+
+// Helper to calculate letter usage bonus (returns bonus for current usage, not cumulative)
+export function getLetterUsageBonus(lettersUsed: number): number {
+  return SCORING_CONFIG.letterUsageBonus[lettersUsed] || 0;
+}
+
 // Visual styling for bonus squares
 export const BONUS_COLORS: Record<string, { bg: string; text: string; label: string }> = {
   DL: { bg: 'bg-sky-600', text: 'text-sky-100', label: 'DL' },
