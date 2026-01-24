@@ -1,6 +1,6 @@
 # Dabble - Daily Word Puzzle Game
 
-> **Part of The Grid** - See root `CLAUDE.md` for shared patterns and monorepo guidelines.
+Part of **The Grid** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
 
 ## Project Overview
 
@@ -9,6 +9,12 @@ Dabble is a daily Scrabble-style word puzzle game where players receive a random
 - **Accent Color:** Amber (#f59e0b)
 - **Dev Port:** 3001
 - **Package Name:** `@grid-games/dabble`
+
+**Theme:** Always use CSS variables, never hardcode colors:
+```tsx
+<button className="bg-[var(--accent)]">  // Good
+<button className="bg-amber-500">        // Bad
+```
 
 ## Quick Start
 

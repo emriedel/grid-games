@@ -1,6 +1,6 @@
 # Jumble - Daily Word Search Game
 
-> **Part of The Grid** - See root `CLAUDE.md` for shared patterns and monorepo guidelines.
+Part of **The Grid** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
 
 ## Project Overview
 
@@ -9,6 +9,12 @@ Jumble is a timed word search game where players find words on a Boggle-style le
 - **Accent Color:** Red/Pink (#e94560)
 - **Dev Port:** 3002
 - **Package Name:** `@grid-games/jumble`
+
+**Theme:** Always use CSS variables, never hardcode colors:
+```tsx
+<button className="bg-[var(--accent)]">  // Good
+<button className="bg-[#e94560]">        // Bad
+```
 
 ## Quick Start
 
