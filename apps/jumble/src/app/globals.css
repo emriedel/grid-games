@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tell Tailwind to scan the shared UI package for classes */
+@source "../../../../node_modules/@grid-games/ui/src/**/*.tsx";
+
 :root {
   /* Base tokens */
   --background: #0a0a0a;
@@ -26,14 +29,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-tile-bg: var(--tile-bg);
-  --color-tile-bg-selected: var(--tile-bg-selected);
-  --color-tile-border: var(--tile-border);
-  --color-accent: var(--accent);
-  --color-accent-secondary: var(--accent-secondary);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

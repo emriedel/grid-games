@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tell Tailwind to scan the shared UI package for classes */
+@source "../../../../node_modules/@grid-games/ui/src/**/*.tsx";
+
 :root {
   /* Base tokens */
   --background: #0a0a0a;

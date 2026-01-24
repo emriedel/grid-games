@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   // Ensure assets are loaded from the correct path
   assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  // Transpile shared packages to ensure Tailwind scans them
+  transpilePackages: ['@grid-games/ui', '@grid-games/config', '@grid-games/shared'],
 };
 
 export default nextConfig;
