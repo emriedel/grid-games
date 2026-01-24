@@ -28,17 +28,6 @@ export interface GameState {
   puzzleNumber: number;
 }
 
-export interface GameStats {
-  gamesPlayed: number;
-  totalScore: number;
-  totalWords: number;
-  bestScore: number;
-  bestWordCount: number;
-  currentStreak: number;
-  maxStreak: number;
-  lastPlayedDate: string | null;
-}
-
 export interface DailyResult {
   puzzleNumber: number;
   date: string;

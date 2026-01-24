@@ -437,8 +437,8 @@ npm install some-package -w @grid-games/dabble
 - **Dabble:** https://games.ericriedel.dev/dabble (hosted at grid-games-dabble.vercel.app)
 - **Jumble:** https://games.ericriedel.dev/jumble (hosted at grid-games-jumble.vercel.app)
 
-### What's Not Yet Done
-- 🔲 Statistics/streak tracking not implemented for Dabble
+### Design Decisions
+- Statistics/streak tracking intentionally not implemented - games focus on daily play without persistent stats
 
 ---
 

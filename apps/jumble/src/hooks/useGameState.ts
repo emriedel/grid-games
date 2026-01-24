@@ -6,7 +6,7 @@ import { generateBoard, getPuzzleNumber } from '@/lib/boardGenerator';
 import { loadDictionary } from '@/lib/dictionary';
 import { getWordFromPath, findAllValidWords, validatePath } from '@/lib/wordValidator';
 import { calculateWordScore, calculateTotalScore, calculateMaxScore } from '@/lib/scoring';
-import { hasPlayedToday, getTodayResult, updateStatsAfterGame, saveDailyResult } from '@/lib/storage';
+import { hasPlayedToday, getTodayResult, saveDailyResult } from '@/lib/storage';
 import { TIMER_DURATION } from '@/constants/gameConfig';
 import { useTimer } from './useTimer';
 
@@ -116,14 +116,6 @@ export function useGameState(): UseGameStateReturn {
     if (status !== 'playing') return;
 
     setStatus('finished');
-
-    // Save stats
-    updateStatsAfterGame(
-      foundWords.length,
-      totalScore,
-      allValidWords.size,
-      maxPossibleScore
-    );
 
     // Save daily result with puzzle number
     saveDailyResult({

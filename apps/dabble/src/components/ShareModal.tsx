@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { Modal, Button } from '@grid-games/ui';
-import { buildShareText, shareOrCopy, generateEmojiBar } from '@grid-games/shared';
-import { formatDisplayDate } from '@grid-games/shared';
+import { buildShareText, shareOrCopy, generateEmojiBar, formatDisplayDate } from '@grid-games/shared';
 import type { Word } from '@/types';
 
 interface ShareModalProps {

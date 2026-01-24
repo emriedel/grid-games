@@ -10,7 +10,6 @@ import Timer from './Timer';
 import CurrentWord from './CurrentWord';
 import FoundWordsList from './FoundWordsList';
 import ResultsModal from './ResultsModal';
-import StatsModal from './StatsModal';
 import HowToPlayModal from './HowToPlayModal';
 
 export default function Game() {
@@ -31,7 +30,6 @@ export default function Game() {
   } = useGameState();
 
   const [showResults, setShowResults] = useState(false);
-  const [showStats, setShowStats] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; word: string } | null>(null);
 
@@ -98,13 +96,8 @@ export default function Game() {
           puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}
           onPlay={startGame}
           onRules={() => setShowHowToPlay(true)}
-        >
-          <Button variant="secondary" fullWidth onClick={() => setShowStats(true)}>
-            Stats
-          </Button>
-        </LandingScreen>
+        />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
-        <StatsModal isOpen={showStats} onClose={() => setShowStats(false)} />
       </>
     );
   }
@@ -119,11 +112,7 @@ export default function Game() {
           description="You've already played today!"
           puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}
           onPlay={() => setShowResults(true)}
-        >
-          <Button variant="secondary" fullWidth onClick={() => setShowStats(true)}>
-            Stats
-          </Button>
-        </LandingScreen>
+        />
         <ResultsModal
           isOpen={showResults}
           onClose={() => setShowResults(false)}
@@ -132,7 +121,6 @@ export default function Game() {
           totalPossibleWords={allValidWords.size}
           score={totalScore}
         />
-        <StatsModal isOpen={showStats} onClose={() => setShowStats(false)} />
       </>
     );
   }
@@ -188,12 +176,10 @@ export default function Game() {
       </div>
 
       {/* Bottom Actions */}
-      <div className="flex justify-center gap-3 mt-auto pt-4 w-full max-w-xs">
-        <Button variant="secondary" onClick={() => setShowStats(true)}>
-          Stats
-        </Button>
+      <div className="flex justify-center mt-auto pt-4 w-full max-w-xs">
         <Button
           variant="primary"
+          fullWidth
           onClick={handleEndGame}
           className="!bg-[var(--danger)] hover:!bg-[var(--danger)]/80"
         >
@@ -203,7 +189,6 @@ export default function Game() {
 
       {/* Modals */}
       <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
-      <StatsModal isOpen={showStats} onClose={() => setShowStats(false)} />
       <ResultsModal
         isOpen={showResults}
         onClose={() => setShowResults(false)}

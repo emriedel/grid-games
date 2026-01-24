@@ -44,14 +44,6 @@ export function calculateMaxScore(words: string[]): number {
   return words.reduce((total, word) => total + calculateWordScore(word), 0);
 }
 
-// Generate performance bar for sharing (10 segments)
-export function generatePerformanceBar(foundCount: number, totalCount: number): string {
-  const percentage = totalCount > 0 ? foundCount / totalCount : 0;
-  const filledSegments = Math.round(percentage * 10);
-  const emptySegments = 10 - filledSegments;
-  return '🟨'.repeat(filledSegments) + '⬜'.repeat(emptySegments);
-}
-
 // Format time as M:SS
 export function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
