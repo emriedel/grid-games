@@ -8,7 +8,7 @@ export const jumbleConfig = defineGameConfig({
   id: 'jumble',
   name: 'Jumble',
   emoji: '🔠',
-  description: 'Find words in a letter grid before time runs out. Connect adjacent tiles to form words.',
+  description: 'Find words in a letter grid before time runs out.',
   theme: jumbleTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {
