@@ -5,9 +5,7 @@ import type { ReactNode } from 'react';
 interface NavBarProps {
   /** Game title */
   title: string;
-  /** Subtitle (puzzle number/date) */
-  subtitle?: string;
-  /** URL for home button (default: '/') */
+  /** URL for home button - should go to main game selection (default: '/') */
   homeUrl?: string;
   /** Handler for rules/how-to-play button */
   onRulesClick?: () => void;
@@ -21,20 +19,19 @@ interface NavBarProps {
  */
 export function NavBar({
   title,
-  subtitle,
   homeUrl = '/',
   onRulesClick,
   rightContent,
 }: NavBarProps) {
   return (
-    <nav className="sticky top-0 z-40 w-full bg-[var(--background,#0a0a0a)] border-b border-[var(--border,#27272a)]">
+    <nav className="sticky top-0 z-40 w-full bg-[var(--background,#0a0a0a)] border-b border-[var(--border,#27272a)] pt-2">
       <div className="flex items-center justify-between px-4 py-3 max-w-lg mx-auto">
         {/* Left: Home button + Title */}
         <div className="flex items-center gap-3">
           <a
             href={homeUrl}
             className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--tile-bg,#1a1a2e)] hover:bg-[var(--tile-bg-selected,#4a4a6e)] transition-colors"
-            aria-label="Back to home"
+            aria-label="Back to game selection"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -52,16 +49,9 @@ export function NavBar({
               <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
           </a>
-          <div className="flex flex-col">
-            <span className="text-[var(--accent)] font-bold text-lg leading-tight">
-              {title}
-            </span>
-            {subtitle && (
-              <span className="text-[var(--muted,#a1a1aa)] text-xs">
-                {subtitle}
-              </span>
-            )}
-          </div>
+          <span className="text-[var(--accent)] font-bold text-lg">
+            {title}
+          </span>
         </div>
 
         {/* Right: Rules button + Custom content */}

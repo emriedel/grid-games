@@ -314,7 +314,6 @@ export function Game() {
         navBar={
           <NavBar
             title={dabbleConfig.name}
-            subtitle={puzzleInfo.number ? `#${puzzleInfo.number}` : puzzleInfo.date}
             homeUrl={dabbleConfig.homeUrl}
             onRulesClick={() => setShowRulesModal(true)}
             rightContent={

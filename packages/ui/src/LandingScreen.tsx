@@ -34,7 +34,7 @@ export function LandingScreen({
   children,
 }: LandingScreenProps) {
   return (
-    <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center justify-center px-6 py-8">
+    <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center px-6 py-8 pt-[18vh]">
       {/* Game icon with accent background */}
       <div className="w-24 h-24 rounded-full bg-[var(--accent)] flex items-center justify-center mb-6">
         <span className="text-5xl" role="img" aria-label={`${name} icon`}>
@@ -43,23 +43,14 @@ export function LandingScreen({
       </div>
 
       {/* Game name */}
-      <h1 className="text-3xl font-bold text-[var(--accent)] mb-2">
+      <h1 className="text-4xl font-bold text-[var(--accent)] mb-3">
         {name}
       </h1>
 
       {/* Description */}
-      <p className="text-[var(--muted,#a1a1aa)] text-center max-w-xs mb-4">
+      <p className="text-[var(--muted,#a1a1aa)] text-center text-lg max-w-xs mb-8">
         {description}
       </p>
-
-      {/* Puzzle info */}
-      <div className="text-[var(--foreground,#ededed)] text-sm mb-8">
-        {puzzleInfo.number !== undefined && (
-          <span className="font-semibold">#{puzzleInfo.number}</span>
-        )}
-        {puzzleInfo.number !== undefined && ' \u2022 '}
-        <span>{puzzleInfo.date}</span>
-      </div>
 
       {/* Action buttons */}
       <div className="flex flex-col gap-3 w-full max-w-xs">
@@ -72,6 +63,11 @@ export function LandingScreen({
           Play
         </Button>
         {children}
+      </div>
+
+      {/* Date below buttons */}
+      <div className="text-[var(--muted,#a1a1aa)] text-base mt-6">
+        {puzzleInfo.date}
       </div>
     </div>
   );

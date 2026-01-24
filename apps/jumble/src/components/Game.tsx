@@ -132,7 +132,6 @@ export default function Game() {
       navBar={
         <NavBar
           title={jumbleConfig.name}
-          subtitle={`#${puzzleNumber}`}
           homeUrl={jumbleConfig.homeUrl}
           onRulesClick={() => setShowHowToPlay(true)}
           rightContent={<Timer timeRemaining={timeRemaining} />}
