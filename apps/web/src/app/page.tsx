@@ -26,6 +26,14 @@ const games: GameCard[] = [
     emoji: '⏱️',
     href: '/jumble',
   },
+  {
+    id: 'edgewise',
+    name: 'Edgewise',
+    description: 'Rotate tiles to match word pairs with categories in this daily puzzle.',
+    accentColor: '#a855f7', // purple
+    emoji: '🔄',
+    href: '/edgewise',
+  },
 ];
 
 export default function Home() {

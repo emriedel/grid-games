@@ -60,13 +60,25 @@ export const jumbleTheme: GameTheme = {
   tileBorder: '#2d2d44',
 };
 
+/** Edgewise game theme - purple accent */
+export const edgewiseTheme: GameTheme = {
+  ...baseTheme,
+  accent: '#a855f7',        // purple-500
+  accentForeground: '#faf5ff',
+  accentSecondary: '#7e22ce', // purple-700
+  tileBg: '#1e1b4b',        // indigo-950
+  tileBgSelected: '#312e81', // indigo-900
+  tileBorder: '#4c1d95',    // purple-800
+};
+
 /** Game identifiers */
-export type GameId = 'dabble' | 'jumble';
+export type GameId = 'dabble' | 'jumble' | 'edgewise';
 
 /** Map of all game themes */
 export const gameThemes: Record<GameId, GameTheme> = {
   dabble: dabbleTheme,
   jumble: jumbleTheme,
+  edgewise: edgewiseTheme,
 };
 
 /**

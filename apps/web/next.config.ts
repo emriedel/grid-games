@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
         source: '/jumble/:path*',
         destination: 'https://grid-games-jumble.vercel.app/jumble/:path*',
       },
+      {
+        source: '/edgewise',
+        destination: 'https://grid-games-edgewise.vercel.app/edgewise',
+      },
+      {
+        source: '/edgewise/:path*',
+        destination: 'https://grid-games-edgewise.vercel.app/edgewise/:path*',
+      },
     ];
   },
 };
