@@ -8,6 +8,7 @@ import { GuessFeedback } from '@/types';
 interface ResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onTryAgain: () => void;
   solved: boolean;
   guessesUsed: number;
   feedbackHistory: GuessFeedback[];
@@ -18,6 +19,7 @@ interface ResultsModalProps {
 export function ResultsModal({
   isOpen,
   onClose,
+  onTryAgain,
   solved,
   guessesUsed,
   feedbackHistory,
@@ -103,10 +105,15 @@ export function ResultsModal({
           })}
         </div>
 
-        {/* Share button */}
-        <Button onClick={handleShare} variant="primary" fullWidth>
-          {copied ? 'Copied!' : 'Share Results'}
-        </Button>
+        {/* Buttons */}
+        <div className="flex flex-col gap-2">
+          <Button onClick={handleShare} variant="primary" fullWidth>
+            {copied ? 'Copied!' : 'Share Results'}
+          </Button>
+          <Button onClick={onTryAgain} variant="secondary" fullWidth>
+            Try Again
+          </Button>
+        </div>
       </div>
     </Modal>
   );

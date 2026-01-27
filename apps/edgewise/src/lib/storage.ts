@@ -113,6 +113,19 @@ export function clearGameState(): void {
 }
 
 /**
+ * Clear daily result (for try again functionality)
+ */
+export function clearDailyResult(): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    localStorage.removeItem(DAILY_RESULT_KEY);
+  } catch (error) {
+    console.error('Failed to clear daily result:', error);
+  }
+}
+
+/**
  * Restore squares from saved state
  */
 export function restoreSquaresFromState(

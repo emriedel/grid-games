@@ -26,6 +26,7 @@ import {
   getSavedGameState,
   restoreSquaresFromState,
   clearGameState,
+  clearDailyResult,
 } from '@/lib/storage';
 
 import { edgewiseConfig } from '@/config';
@@ -194,6 +195,27 @@ export function Game() {
     }
   }, [puzzle, squares, guessesUsed, feedbackHistory, gameState, dateStr, puzzleNumber]);
 
+  // Handle try again - reset game state and replay
+  const handleTryAgain = useCallback(() => {
+    if (!puzzle) return;
+
+    // Clear all saved progress
+    clearGameState();
+    clearDailyResult();
+
+    // Reset game state
+    const initialSquares = initializeGameState(puzzle, dateStr);
+    setSquares(initialSquares);
+    setGuessesUsed(0);
+    setFeedbackHistory([]);
+    setSolved(false);
+    setCategoryResults({ top: null, right: null, bottom: null, left: null });
+
+    // Back to playing
+    setGameState('playing');
+    setShowResults(false);
+  }, [puzzle, dateStr]);
+
   // Render landing screen
   if (gameState === 'landing') {
     return (
@@ -280,6 +302,7 @@ export function Game() {
       <ResultsModal
         isOpen={showResults}
         onClose={() => setShowResults(false)}
+        onTryAgain={handleTryAgain}
         solved={solved}
         guessesUsed={guessesUsed}
         feedbackHistory={feedbackHistory}
