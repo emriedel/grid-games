@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import { SquareState, Edge } from '@/types';
 import { CENTER_FACING_EDGES } from '@/constants/gameConfig';
 
@@ -12,13 +13,53 @@ interface SquareProps {
 }
 
 // Get the word that appears at a visual position after rotation
-function getWordAtVisualPosition(square: SquareState, visualPosition: Edge): string {
-  // If rotated by R, the word at visual position P comes from original position (P - R + 4) % 4
-  const originalIndex = ((visualPosition - square.rotation + 4) % 4) as Edge;
+function getWordAtVisualPosition(square: SquareState, visualPosition: Edge, rotationOverride?: number): string {
+  const rotation = rotationOverride ?? square.rotation;
+  const originalIndex = ((visualPosition - rotation + 4) % 4) as Edge;
   return square.words[originalIndex];
 }
 
 export function Square({ square, squareIndex, onRotate, disabled, style }: SquareProps) {
+  // Track square identity to detect individual rotation vs group rotation
+  const squareId = square.words.join('-');
+  const prevSquareIdRef = useRef(squareId);
+  const prevRotationRef = useRef(square.rotation);
+
+  // Animation state for individual rotation
+  const [animationRotation, setAnimationRotation] = useState(0);
+  const [displayRotation, setDisplayRotation] = useState(square.rotation);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const isSameSquare = prevSquareIdRef.current === squareId;
+    const prevRotation = prevRotationRef.current;
+    const newRotation = square.rotation;
+
+    if (isSameSquare && prevRotation !== newRotation) {
+      // Individual rotation - animate
+      setIsAnimating(true);
+      setAnimationRotation(90); // Rotate 90 degrees
+
+      // After animation, update display and reset
+      const timer = setTimeout(() => {
+        setAnimationRotation(0);
+        setDisplayRotation(newRotation);
+        setIsAnimating(false);
+      }, 300);
+
+      prevRotationRef.current = newRotation;
+      return () => clearTimeout(timer);
+    } else if (!isSameSquare) {
+      // Different square arrived (group rotation) - update instantly
+      setAnimationRotation(0);
+      setDisplayRotation(newRotation);
+      setIsAnimating(false);
+    }
+
+    prevSquareIdRef.current = squareId;
+    prevRotationRef.current = newRotation;
+  }, [square.rotation, squareId]);
+
   // Visual center-facing positions for this square
   const centerFacingVisual = CENTER_FACING_EDGES[squareIndex as 0 | 1 | 2 | 3];
 
@@ -29,11 +70,20 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
   const getWordColor = (visualPosition: Edge) =>
     isCenterFacing(visualPosition) ? 'var(--muted)' : 'var(--foreground)';
 
-  // Get the word for each visual position
-  const topWord = getWordAtVisualPosition(square, 0);
-  const rightWord = getWordAtVisualPosition(square, 1);
-  const bottomWord = getWordAtVisualPosition(square, 2);
-  const leftWord = getWordAtVisualPosition(square, 3);
+  // Use displayRotation for word calculation (delays update during animation)
+  const topWord = getWordAtVisualPosition(square, 0, displayRotation);
+  const rightWord = getWordAtVisualPosition(square, 1, displayRotation);
+  const bottomWord = getWordAtVisualPosition(square, 2, displayRotation);
+  const leftWord = getWordAtVisualPosition(square, 3, displayRotation);
+
+  // Combine position style with rotation animation
+  const combinedStyle: React.CSSProperties = {
+    ...style,
+    transform: `${style?.transform || ''} rotate(${animationRotation}deg)`.trim(),
+    transition: isAnimating
+      ? 'transform 300ms ease-out, left 300ms ease-out, top 300ms ease-out'
+      : (style?.transition || 'none'),
+  };
 
   return (
     <button
@@ -45,14 +95,11 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-[var(--accent)] active:scale-95'}
         select-none
       `}
-      style={style}
+      style={combinedStyle}
     >
       {/* Top word - horizontal */}
       <div className="absolute top-1 left-0 right-0 flex justify-center">
-        <span
-          className="text-[11px] font-bold"
-          style={{ color: getWordColor(0) }}
-        >
+        <span className="text-[11px] font-bold" style={{ color: getWordColor(0) }}>
           {topWord}
         </span>
       </div>
@@ -73,10 +120,7 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
 
       {/* Bottom word - horizontal */}
       <div className="absolute bottom-1 left-0 right-0 flex justify-center">
-        <span
-          className="text-[11px] font-bold"
-          style={{ color: getWordColor(2) }}
-        >
+        <span className="text-[11px] font-bold" style={{ color: getWordColor(2) }}>
           {bottomWord}
         </span>
       </div>
