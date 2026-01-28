@@ -1,3 +1,4 @@
 {
-  "buildCommand": "cd ../.. && npx turbo build --filter=@grid-games/carom"
+  "buildCommand": "cd ../.. && npx turbo build --filter=@grid-games/carom",
+  "ignoreCommand": "npx turbo-ignore"
 }
