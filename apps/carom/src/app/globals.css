@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@source "../../../../node_modules/@grid-games/ui/src/**/*.tsx";
+
+:root {
+  /* Base tokens */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #a1a1aa;
+  --border: #27272a;
+
+  /* Carom accent - Amber */
+  --accent: #f59e0b;
+  --accent-foreground: #000000;
+  --accent-secondary: #d97706;
+
+  /* Tile/piece styling */
+  --tile-bg: #1c1917;
+  --tile-bg-selected: #292524;
+  --tile-border: #44403c;
+
+  /* Status colors */
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
+
+  /* Game-specific */
+  --piece-target: #f59e0b;
+  --piece-blocker: #71717a;
+  --goal-bg: rgba(245, 158, 11, 0.2);
+  --wall-color: #f59e0b;
+  --cell-bg: #1c1917;
+  --cell-border: #27272a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
