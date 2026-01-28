@@ -34,13 +34,13 @@ export function CenterButton({ onRotate, disabled }: CenterButtonProps) {
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M4 4v5h5M20 20v-5h-5"
+          d="M20 4v5h-5M4 20v-5h5"
         />
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M4 9a9 9 0 0 1 15.36-5.36L20 4M20 15a9 9 0 0 1-15.36 5.36L4 20"
+          d="M20 9a9 9 0 0 0-15.36-5.36L4 4M4 15a9 9 0 0 0 15.36 5.36L20 20"
         />
       </svg>
     </button>

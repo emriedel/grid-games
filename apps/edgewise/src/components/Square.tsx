@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import { SquareState, Edge } from '@/types';
 import { CENTER_FACING_EDGES } from '@/constants/gameConfig';
 
@@ -9,113 +8,56 @@ interface SquareProps {
   squareIndex: number;
   onRotate: () => void;
   disabled?: boolean;
+  style?: React.CSSProperties;
 }
 
-export function Square({ square, squareIndex, onRotate, disabled }: SquareProps) {
-  // Track cumulative rotation to avoid backwards animation on wrap-around
-  const [displayRotation, setDisplayRotation] = useState(square.rotation * 90);
-  const prevRotationRef = useRef(square.rotation);
+// Get the word that appears at a visual position after rotation
+function getWordAtVisualPosition(square: SquareState, visualPosition: Edge): string {
+  // If rotated by R, the word at visual position P comes from original position (P - R + 4) % 4
+  const originalIndex = ((visualPosition - square.rotation + 4) % 4) as Edge;
+  return square.words[originalIndex];
+}
 
-  // Track cumulative flip for each word to avoid backwards animation
-  // Flips use -180° so they take the shorter path when combined with container rotation
-  const [wordFlips, setWordFlips] = useState<[number, number, number, number]>(() => {
-    // Calculate initial flips:
-    // - LEFT (position 3) needs -180° base flip to read bottom-to-top
-    // - Add -180° for each transition during rotation
-    const countInitialFlips = (originalPos: number, rotation: number): number => {
-      // Base flip for LEFT position to read bottom-to-top
-      let flips = (originalPos === 3) ? 1 : 0;
-
-      // Add flips from transitions during rotation
-      for (let i = 0; i < rotation; i++) {
-        const from = (originalPos + i) % 4;
-        const to = (originalPos + i + 1) % 4;
-        // Flip happens on RIGHT→BOTTOM (1→2) and BOTTOM→LEFT (2→3)
-        if ((from === 1 && to === 2) || (from === 2 && to === 3)) {
-          flips++;
-        }
-      }
-      return flips * -180;  // Negative for shorter animation path
-    };
-
-    return [0, 1, 2, 3].map(pos => countInitialFlips(pos, square.rotation)) as [number, number, number, number];
-  });
-
-  useEffect(() => {
-    const prevRotation = prevRotationRef.current;
-    const newRotation = square.rotation;
-
-    let diff = newRotation - prevRotation;
-    if (diff === -3) diff = 1;
-    if (diff === 3) diff = -1;
-
-    setDisplayRotation(prev => prev + diff * 90);
-    prevRotationRef.current = newRotation;
-
-    // Update word flips based on transitions
-    // Flips use -180° for shorter animation path
-    // 1. RIGHT (1) → BOTTOM (2): -180°
-    // 2. BOTTOM (2) → LEFT (3): -180°
-    setWordFlips(prev => {
-      return [0, 1, 2, 3].map(originalPos => {
-        const prevVisualPos = (originalPos + prevRotation) % 4;
-        const newVisualPos = (originalPos + newRotation) % 4;
-
-        // Check if this word is transitioning RIGHT→BOTTOM or BOTTOM→LEFT
-        if (prevVisualPos === 1 && newVisualPos === 2) {
-          // RIGHT → BOTTOM: subtract 180 for shorter path
-          return prev[originalPos] - 180;
-        } else if (prevVisualPos === 2 && newVisualPos === 3) {
-          // BOTTOM → LEFT: subtract 180 for shorter path
-          return prev[originalPos] - 180;
-        }
-        return prev[originalPos];
-      }) as [number, number, number, number];
-    });
-  }, [square.rotation]);
-
+export function Square({ square, squareIndex, onRotate, disabled, style }: SquareProps) {
   // Visual center-facing positions for this square
   const centerFacingVisual = CENTER_FACING_EDGES[squareIndex as 0 | 1 | 2 | 3];
 
-  const isCenterFacing = (originalEdge: Edge): boolean => {
-    const visualPosition = (originalEdge + square.rotation) % 4;
+  const isCenterFacing = (visualPosition: Edge): boolean => {
     return (centerFacingVisual as readonly number[]).includes(visualPosition);
   };
 
-  const getWordColor = (edge: Edge) =>
-    isCenterFacing(edge) ? 'var(--muted)' : 'var(--foreground)';
+  const getWordColor = (visualPosition: Edge) =>
+    isCenterFacing(visualPosition) ? 'var(--muted)' : 'var(--foreground)';
+
+  // Get the word for each visual position
+  const topWord = getWordAtVisualPosition(square, 0);
+  const rightWord = getWordAtVisualPosition(square, 1);
+  const bottomWord = getWordAtVisualPosition(square, 2);
+  const leftWord = getWordAtVisualPosition(square, 3);
 
   return (
     <button
       onClick={onRotate}
       disabled={disabled}
       className={`
-        relative w-full h-full
         bg-[var(--tile-bg)] border-2 border-[var(--tile-border)]
         rounded-lg overflow-hidden
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-[var(--accent)] active:scale-95'}
         select-none
       `}
-      style={{
-        transform: `rotate(${displayRotation}deg)`,
-        transition: 'transform 300ms ease-out',
-      }}
+      style={style}
     >
-      {/* Top word (words[0]) - horizontal */}
+      {/* Top word - horizontal */}
       <div className="absolute top-1 left-0 right-0 flex justify-center">
         <span
           className="text-[11px] font-bold"
-          style={{
-            color: getWordColor(0),
-            transform: `rotate(${wordFlips[0]}deg)`,
-            transition: 'transform 300ms ease-out',
-          }}
+          style={{ color: getWordColor(0) }}
         >
-          {square.words[0]}
+          {topWord}
         </span>
       </div>
 
-      {/* Right word (words[1]) - vertical */}
+      {/* Right word - vertical, reading top-to-bottom */}
       <div className="absolute right-1 top-0 bottom-0 flex items-center justify-center">
         <span
           className="text-[11px] font-bold"
@@ -123,29 +65,23 @@ export function Square({ square, squareIndex, onRotate, disabled }: SquareProps)
             color: getWordColor(1),
             writingMode: 'vertical-rl',
             textOrientation: 'mixed',
-            transform: `rotate(${wordFlips[1]}deg)`,
-            transition: 'transform 300ms ease-out',
           }}
         >
-          {square.words[1]}
+          {rightWord}
         </span>
       </div>
 
-      {/* Bottom word (words[2]) - horizontal */}
+      {/* Bottom word - horizontal */}
       <div className="absolute bottom-1 left-0 right-0 flex justify-center">
         <span
           className="text-[11px] font-bold"
-          style={{
-            color: getWordColor(2),
-            transform: `rotate(${wordFlips[2]}deg)`,
-            transition: 'transform 300ms ease-out',
-          }}
+          style={{ color: getWordColor(2) }}
         >
-          {square.words[2]}
+          {bottomWord}
         </span>
       </div>
 
-      {/* Left word (words[3]) - vertical */}
+      {/* Left word - vertical, reading bottom-to-top */}
       <div className="absolute left-1 top-0 bottom-0 flex items-center justify-center">
         <span
           className="text-[11px] font-bold"
@@ -153,11 +89,10 @@ export function Square({ square, squareIndex, onRotate, disabled }: SquareProps)
             color: getWordColor(3),
             writingMode: 'vertical-rl',
             textOrientation: 'mixed',
-            transform: `rotate(${wordFlips[3]}deg)`,
-            transition: 'transform 300ms ease-out',
+            transform: 'rotate(180deg)',
           }}
         >
-          {square.words[3]}
+          {leftWord}
         </span>
       </div>
     </button>
