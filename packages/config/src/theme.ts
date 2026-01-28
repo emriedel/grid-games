@@ -38,23 +38,23 @@ export const baseTheme = {
   danger: '#ef4444',
 } as const;
 
-/** Dabble (Scrabble) game theme - amber accent */
+/** Dabble (Scrabble) game theme - red accent */
 export const dabbleTheme: GameTheme = {
   ...baseTheme,
-  accent: '#f59e0b',        // amber-500
-  accentForeground: '#1c1917',
-  accentSecondary: '#78350f', // amber-900
+  accent: '#c41e3a',        // crimson red
+  accentForeground: '#ffffff',
+  accentSecondary: '#8b1429', // darker red
   tileBg: '#292524',        // stone-800
   tileBgSelected: '#44403c', // stone-700
   tileBorder: '#57534e',    // stone-600
 };
 
-/** Jumble game theme - red/pink accent */
+/** Jumble game theme - blue accent */
 export const jumbleTheme: GameTheme = {
   ...baseTheme,
-  accent: '#e94560',
+  accent: '#4a5d7a',        // slate blue
   accentForeground: '#ffffff',
-  accentSecondary: '#0f3460',
+  accentSecondary: '#1e3a5f', // darker navy
   tileBg: '#1a1a2e',
   tileBgSelected: '#4a4a6e',
   tileBorder: '#2d2d44',

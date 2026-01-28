@@ -4,8 +4,10 @@ import type { ReactNode } from 'react';
 import { Button } from './Button';
 
 interface LandingScreenProps {
-  /** Game emoji */
-  emoji: string;
+  /** Game emoji (deprecated, use icon instead) */
+  emoji?: string;
+  /** Game icon image path */
+  icon?: string;
   /** Game name */
   name: string;
   /** Game description */
@@ -26,6 +28,7 @@ interface LandingScreenProps {
  */
 export function LandingScreen({
   emoji,
+  icon,
   name,
   description,
   puzzleInfo,
@@ -35,12 +38,22 @@ export function LandingScreen({
 }: LandingScreenProps) {
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center px-6 py-8 pt-[18vh]">
-      {/* Game icon with accent background */}
-      <div className="w-24 h-24 rounded-full bg-[var(--accent)] flex items-center justify-center mb-6">
-        <span className="text-5xl" role="img" aria-label={`${name} icon`}>
-          {emoji}
-        </span>
-      </div>
+      {/* Game icon */}
+      {icon ? (
+        <div className="w-24 h-24 rounded-xl overflow-hidden mb-6">
+          <img
+            src={icon}
+            alt={`${name} icon`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <div className="w-24 h-24 rounded-full bg-[var(--accent)] flex items-center justify-center mb-6">
+          <span className="text-5xl" role="img" aria-label={`${name} icon`}>
+            {emoji}
+          </span>
+        </div>
+      )}
 
       {/* Game name */}
       <h1 className="text-4xl font-bold text-[var(--accent)] mb-3">

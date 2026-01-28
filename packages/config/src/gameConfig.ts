@@ -9,8 +9,10 @@ export interface GameConfig {
   id: string;
   /** Display name shown in UI */
   name: string;
-  /** Emoji icon for the game */
-  emoji: string;
+  /** Emoji icon for the game (deprecated, use icon instead) */
+  emoji?: string;
+  /** Icon image path */
+  icon?: string;
   /** Brief description */
   description: string;
   /** Game theme configuration */

@@ -221,7 +221,7 @@ export function Game() {
     return (
       <>
         <LandingScreen
-          emoji={edgewiseConfig.emoji}
+          icon={edgewiseConfig.icon}
           name={edgewiseConfig.name}
           description={edgewiseConfig.description}
           puzzleInfo={edgewiseConfig.getPuzzleInfo()}

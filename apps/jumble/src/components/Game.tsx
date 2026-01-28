@@ -90,7 +90,7 @@ export default function Game() {
     return (
       <>
         <LandingScreen
-          emoji={jumbleConfig.emoji}
+          icon={jumbleConfig.icon}
           name={jumbleConfig.name}
           description={jumbleConfig.description}
           puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}
@@ -107,7 +107,7 @@ export default function Game() {
     return (
       <>
         <LandingScreen
-          emoji={jumbleConfig.emoji}
+          icon={jumbleConfig.icon}
           name={jumbleConfig.name}
           description="You've already played today!"
           puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}

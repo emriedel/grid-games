@@ -15,7 +15,7 @@ export const edgewiseTheme = {
 export const edgewiseConfig = defineGameConfig({
   id: 'edgewise',
   name: 'Edgewise',
-  emoji: '🔄',
+  icon: '/icon.png',
   description: 'Rotate tiles to match word pairs with categories.',
   theme: edgewiseTheme,
   homeUrl: '/',

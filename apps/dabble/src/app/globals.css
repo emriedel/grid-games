@@ -10,10 +10,10 @@
   --muted: #a1a1aa;
   --border: #27272a;
 
-  /* Dabble theme - Amber accent */
-  --accent: #f59e0b;
-  --accent-foreground: #1c1917;
-  --accent-secondary: #78350f;
+  /* Dabble theme - Red accent */
+  --accent: #c41e3a;
+  --accent-foreground: #ffffff;
+  --accent-secondary: #8b1429;
 
   /* Tile styling */
   --tile-bg: #292524;

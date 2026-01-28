@@ -10,10 +10,10 @@
   --muted: #a1a1aa;
   --border: #27272a;
 
-  /* Jumble theme - Red/Pink accent */
-  --accent: #e94560;
+  /* Jumble theme - Blue accent */
+  --accent: #4a5d7a;
   --accent-foreground: #ffffff;
-  --accent-secondary: #0f3460;
+  --accent-secondary: #1e3a5f;
 
   /* Tile styling */
   --tile-bg: #1a1a2e;

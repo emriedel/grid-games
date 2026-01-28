@@ -305,7 +305,7 @@ export function Game() {
     return (
       <>
         <LandingScreen
-          emoji={dabbleConfig.emoji}
+          icon={dabbleConfig.icon}
           name={dabbleConfig.name}
           description={dabbleConfig.description}
           puzzleInfo={puzzleInfo}

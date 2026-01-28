@@ -7,7 +7,7 @@ const PUZZLE_BASE_DATE = new Date('2026-01-01');
 export const dabbleConfig = defineGameConfig({
   id: 'dabble',
   name: 'Dabble',
-  emoji: '🔤',
+  icon: '/icon.png',
   description: 'Place tiles to form words and maximize your score.',
   theme: dabbleTheme,
   homeUrl: '/',

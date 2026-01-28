@@ -7,7 +7,7 @@ const PUZZLE_BASE_DATE = new Date('2026-01-01');
 export const jumbleConfig = defineGameConfig({
   id: 'jumble',
   name: 'Jumble',
-  emoji: '🔠',
+  icon: '/icon.png',
   description: 'Find words in a letter grid before time runs out.',
   theme: jumbleTheme,
   homeUrl: '/',
