@@ -1,5 +1,5 @@
-export const BOARD_SIZE = 4; // 4x4 grid
-export const TIMER_DURATION = 180; // 3 minutes in seconds
+export const BOARD_SIZE = 5; // 5x5 grid (Big Boggle)
+export const TIMER_DURATION = 120; // 2 minutes in seconds
 export const MIN_WORD_LENGTH = 3;
 
 export const SCORING_TABLE: Record<number, number> = {
@@ -11,24 +11,33 @@ export const SCORING_TABLE: Record<number, number> = {
   8: 11,
 };
 
-// Standard Boggle dice (16 dice for 4x4 grid)
+// Standard Big Boggle dice (25 dice for 5x5 grid)
 export const BOGGLE_DICE = [
-  'AAEEGN',
-  'ABBJOO',
-  'ACHOPS',
-  'AFFKPS',
-  'AOOTTW',
-  'CIMOTU',
-  'DEILRX',
-  'DELRVY',
-  'DISTTY',
-  'EEGHNW',
-  'EEINSU',
-  'EHRTVW',
-  'EIOSST',
-  'ELRTTY',
-  'HIMNQU',
-  'HLNNRZ',
+  'AAAFRS',
+  'AAEEEE',
+  'AAFIRS',
+  'ADENNN',
+  'AEEEEM',
+  'AEEGMU',
+  'AEGMNN',
+  'AFIRSY',
+  'BJKQXZ',
+  'CCENST',
+  'CEIILT',
+  'CEILPT',
+  'CEIPST',
+  'DDHNOT',
+  'DHHLOR',
+  'DHLNOR',
+  'DHLNOR',
+  'EIIITT',
+  'EMOTTT',
+  'ENSSSU',
+  'FIPRSY',
+  'GORRVW',
+  'IPRRRY',
+  'NOOTUW',
+  'OOOTTU',
 ];
 
 // For display purposes, Qu is shown as a single tile

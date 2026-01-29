@@ -33,7 +33,7 @@ export default function Tile({
         w-full aspect-square
         rounded-lg border-2 cursor-pointer
         tile-transition no-select touch-none
-        text-2xl sm:text-3xl font-bold
+        text-xl sm:text-2xl font-bold
         ${isSelected
           ? isLastSelected
             ? 'bg-[var(--accent)] border-[var(--accent)] scale-105'
@@ -46,7 +46,7 @@ export default function Tile({
     >
       {displayLetter}
       {selectionIndex !== null && (
-        <span className="absolute top-1 right-1 text-xs opacity-50">
+        <span className="absolute top-0.5 right-1 text-[10px] opacity-50">
           {selectionIndex + 1}
         </span>
       )}

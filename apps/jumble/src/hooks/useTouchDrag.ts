@@ -18,6 +18,7 @@ interface UseTouchDragReturn {
   handlePointerMove: (e: React.PointerEvent) => void;
   handlePointerUp: () => void;
   handleTileClick: (pos: Position) => void;
+  handleOutsideClick: () => void;
   clearPath: () => void;
 }
 
@@ -31,6 +32,8 @@ export function useTouchDrag({
   const [isDragging, setIsDragging] = useState(false);
   const lastTapRef = useRef<{ pos: Position; time: number } | null>(null);
   const pathRef = useRef<Position[]>([]);
+  // Track if actual drag movement occurred (moved to a different tile)
+  const hasDragMovedRef = useRef(false);
 
   // Keep pathRef in sync
   const updatePath = useCallback((newPath: Position[]) => {
@@ -42,6 +45,7 @@ export function useTouchDrag({
   const clearPath = useCallback(() => {
     updatePath([]);
     setIsDragging(false);
+    hasDragMovedRef.current = false;
     lastTapRef.current = null;
   }, [updatePath]);
 
@@ -52,8 +56,11 @@ export function useTouchDrag({
     (e.target as Element).setPointerCapture(e.pointerId);
 
     setIsDragging(true);
-    updatePath([pos]);
-  }, [disabled, updatePath]);
+    hasDragMovedRef.current = false;
+    // Don't set path here - wait to see if it's a drag or tap
+    // Store the starting position
+    pathRef.current = [pos];
+  }, [disabled]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging || disabled) return;
@@ -66,6 +73,20 @@ export function useTouchDrag({
     if (!pos) return;
 
     const currentPath = pathRef.current;
+
+    // If this is the first move and we haven't committed the path yet
+    if (!hasDragMovedRef.current && currentPath.length === 1) {
+      const startPos = currentPath[0];
+      // Check if we moved to a different tile
+      if (pos.row !== startPos.row || pos.col !== startPos.col) {
+        // Now we know it's a real drag - commit the starting position and add this one
+        hasDragMovedRef.current = true;
+        if (areAdjacent(startPos, pos)) {
+          updatePath([startPos, pos]);
+        }
+      }
+      return;
+    }
 
     // Check if we're backtracking (going to second-to-last tile)
     if (currentPath.length >= 2) {
@@ -94,17 +115,34 @@ export function useTouchDrag({
     if (!isDragging) return;
 
     setIsDragging(false);
-    const finalPath = pathRef.current;
 
-    if (finalPath.length > 0) {
-      onPathComplete(finalPath);
-      updatePath([]);
+    // Only submit if actual dragging occurred (moved to different tiles)
+    if (hasDragMovedRef.current) {
+      const finalPath = pathRef.current;
+      if (finalPath.length > 0) {
+        onPathComplete(finalPath);
+        updatePath([]);
+      }
     }
+    // If no drag movement, it was a tap - let handleTileClick handle it
+
+    hasDragMovedRef.current = false;
   }, [isDragging, onPathComplete, updatePath]);
+
+  // Handle clicking outside tiles to clear the path
+  const handleOutsideClick = useCallback(() => {
+    if (disabled) return;
+
+    const currentPath = pathRef.current;
+    if (currentPath.length > 0) {
+      updatePath([]);
+      lastTapRef.current = null;
+    }
+  }, [disabled, updatePath]);
 
   // Tap-to-select mode
   const handleTileClick = useCallback((pos: Position) => {
-    if (disabled || isDragging) return;
+    if (disabled) return;
 
     const now = Date.now();
     const currentPath = pathRef.current;
@@ -115,7 +153,7 @@ export function useTouchDrag({
       if (
         pos.row === lastPos.row &&
         pos.col === lastPos.col &&
-        now - lastTime < 300
+        now - lastTime < 400
       ) {
         // Double-tap on same tile - submit
         if (currentPath.length > 0) {
@@ -129,11 +167,10 @@ export function useTouchDrag({
 
     lastTapRef.current = { pos, time: now };
 
-    // Check if tapping current tile again (toggle off last tile)
+    // Check if tapping the last tile in the path (wait for potential double-tap)
     if (currentPath.length > 0) {
       const lastPos = currentPath[currentPath.length - 1];
       if (pos.row === lastPos.row && pos.col === lastPos.col) {
-        // Tap on last tile - wait for potential double-tap
         return;
       }
     }
@@ -147,7 +184,7 @@ export function useTouchDrag({
       return;
     }
 
-    // Check if adjacent to last tile (or first tile)
+    // Check if adjacent to last tile
     if (currentPath.length > 0) {
       const lastPos = currentPath[currentPath.length - 1];
       if (!areAdjacent(lastPos, pos)) {
@@ -155,11 +192,13 @@ export function useTouchDrag({
         updatePath([pos]);
         return;
       }
+      // Adjacent - add to path
+      updatePath([...currentPath, pos]);
+    } else {
+      // Start new path
+      updatePath([pos]);
     }
-
-    // Add to path
-    updatePath([...currentPath, pos]);
-  }, [disabled, isDragging, onPathComplete, updatePath]);
+  }, [disabled, onPathComplete, updatePath]);
 
   return {
     path,
@@ -168,6 +207,7 @@ export function useTouchDrag({
     handlePointerMove,
     handlePointerUp,
     handleTileClick,
+    handleOutsideClick,
     clearPath,
   };
 }

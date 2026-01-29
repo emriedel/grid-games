@@ -4,7 +4,7 @@ Part of **The Grid** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-ga
 
 ## Project Overview
 
-Jumble is a timed word search game where players find words on a Boggle-style letter grid by connecting adjacent tiles. Same puzzle for all players each day, with shareable results.
+Jumble is a timed word search game where players find words on a Big Boggle-style 5x5 letter grid by connecting adjacent tiles. Same puzzle for all players each day, with shareable results.
 
 - **Accent Color:** Red/Pink (#e94560)
 - **Dev Port:** 3002
@@ -33,9 +33,10 @@ Then open http://localhost:3002
 ### Core Gameplay
 1. Find words by connecting adjacent tiles (including diagonals)
 2. Each tile can only be used once per word
-3. Drag/swipe across tiles to form words
-4. Release to submit the word
-5. Timer: 3 minutes (configurable)
+3. Drag/swipe across tiles to form words, or tap to select
+4. Release drag or double-tap last tile to submit the word
+5. Tap outside grid to clear selection
+6. Timer: 2 minutes
 
 ### Word Requirements
 - Minimum word length: 3 letters
@@ -64,14 +65,14 @@ src/
 │   ├── BoggleGrid.tsx   # Letter grid with touch/mouse path tracing
 │   ├── Tile.tsx         # Individual tile components
 │   ├── CurrentWord.tsx  # Currently selected word display
-│   ├── FoundWordsList.tsx  # List of found words
+│   ├── FoundWordsList.tsx  # List of found words (always visible)
 │   ├── Timer.tsx        # Countdown timer
 │   ├── ResultsModal.tsx # End-game results
 │   ├── StatsModal.tsx   # Statistics display
 │   ├── HowToPlayModal.tsx # Instructions
 │   └── ShareButton.tsx  # Share results button
 ├── lib/
-│   ├── boardGenerator.ts   # Seeded daily board generation
+│   ├── boardGenerator.ts   # Seeded daily board generation with validation
 │   ├── dictionary.ts       # Trie-based word lookup
 │   ├── wordValidator.ts    # Path adjacency validation
 │   └── scoring.ts          # Score calculation
@@ -85,10 +86,11 @@ src/
 ## Key Configuration
 
 `src/constants/gameConfig.ts`:
-- `GRID_SIZE`: Board dimensions (default: 4x4)
-- `TIMER_DURATION`: Game time in seconds (default: 180)
+- `BOARD_SIZE`: Board dimensions (5x5 Big Boggle)
+- `TIMER_DURATION`: Game time in seconds (120 = 2 minutes)
 - `MIN_WORD_LENGTH`: Minimum word length (default: 3)
-- `SCORING`: Points per word length
+- `BOGGLE_DICE`: Standard Big Boggle 25-dice set
+- `SCORING_TABLE`: Points per word length
 
 ## Implementation Notes
 
@@ -98,11 +100,15 @@ Touch/mouse input tracks a path of connected tiles:
 - Each tile can only appear once in path
 - Only adjacent tiles can be added (including diagonals)
 - CSS class `path-line` styles the connecting SVG lines
+- Tap outside tiles to clear the path
 
 ### Board Generation
 - Uses custom seeded RNG (date-based)
-- Letter distribution weighted for playability
-- Ensures "Qu" appears as single tile
+- Uses standard Big Boggle 25-dice set
+- Validates board for playability:
+  - At least 4 vowels spread across 3+ rows and columns
+  - Maximum 2 rare letters (Q, Z, X, J, K)
+- Retries with deterministic seed increment if validation fails
 
 ### Touch Handling
 Special CSS classes in `globals.css`:
@@ -111,8 +117,14 @@ Special CSS classes in `globals.css`:
 - `overscroll-behavior: none` - Prevents pull-to-refresh
 
 ### Results & Sharing
-- Performance bar shows percentage of possible words found
-- Share format includes puzzle number, time, words found, score
+Share format shows words found by length:
+```
+Jumble 🟥
+Score: 47 pts
+3L: 8 | 4L: 5 | 5L: 3 | 6L: 1 | 7L+: 0
+
+games.ericriedel.dev/jumble
+```
 
 ## Dependencies
 
@@ -124,6 +136,5 @@ Special CSS classes in `globals.css`:
 
 - [ ] Hint system
 - [ ] Statistics tracking (localStorage)
-- [ ] Difficulty variants (larger grids, longer timers)
 - [ ] Sound effects
 - [ ] Animations for word submission

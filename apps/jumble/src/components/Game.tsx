@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import { LandingScreen, NavBar, GameContainer, Button } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer } from '@grid-games/ui';
 import { Position } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
 import { jumbleConfig } from '@/config';
@@ -19,13 +19,10 @@ export default function Game() {
     currentWord,
     status,
     timeRemaining,
-    puzzleNumber,
     totalScore,
-    allValidWords,
     setCurrentPath,
     submitWord,
     startGame,
-    endGame,
     isWordAlreadyFound,
   } = useGameState();
 
@@ -59,15 +56,6 @@ export default function Game() {
     setCurrentPath([]);
   }, [submitWord, currentWord, showFeedback, setCurrentPath]);
 
-  const handleClearPath = useCallback(() => {
-    setCurrentPath([]);
-  }, [setCurrentPath]);
-
-  const handleEndGame = useCallback(() => {
-    endGame();
-    setShowResults(true);
-  }, [endGame]);
-
   // Watch for status change to finished
   if (status === 'finished' && !showResults && foundWords.length > 0) {
     setShowResults(true);
@@ -93,7 +81,7 @@ export default function Game() {
           icon={jumbleConfig.icon}
           name={jumbleConfig.name}
           description={jumbleConfig.description}
-          puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}
+          puzzleInfo={{ date: puzzleInfo.date }}
           onPlay={startGame}
           onRules={() => setShowHowToPlay(true)}
         />
@@ -110,15 +98,13 @@ export default function Game() {
           icon={jumbleConfig.icon}
           name={jumbleConfig.name}
           description="You've already played today!"
-          puzzleInfo={{ number: puzzleNumber, date: puzzleInfo.date }}
+          puzzleInfo={{ date: puzzleInfo.date }}
           onPlay={() => setShowResults(true)}
         />
         <ResultsModal
           isOpen={showResults}
           onClose={() => setShowResults(false)}
-          puzzleNumber={puzzleNumber}
           foundWords={foundWords}
-          totalPossibleWords={allValidWords.size}
           score={totalScore}
         />
       </>
@@ -138,22 +124,11 @@ export default function Game() {
         />
       }
     >
-      {/* Grid */}
-      <div className="flex-shrink-0 mb-4 w-full">
-        <BoggleGrid
-          board={board}
-          onPathChange={handlePathChange}
-          onPathComplete={handlePathComplete}
-          disabled={status !== 'playing'}
-        />
-      </div>
-
-      {/* Current Word */}
+      {/* Current Word - Above the grid */}
       <div className="relative mb-4 w-full">
         <CurrentWord
           word={currentWord}
           isAlreadyFound={isWordAlreadyFound(currentWord)}
-          onClear={handleClearPath}
         />
         {/* Feedback toast */}
         {feedback && (
@@ -169,21 +144,19 @@ export default function Game() {
         )}
       </div>
 
+      {/* Grid */}
+      <div className="flex-shrink-0 mb-4 w-full">
+        <BoggleGrid
+          board={board}
+          onPathChange={handlePathChange}
+          onPathComplete={handlePathComplete}
+          disabled={status !== 'playing'}
+        />
+      </div>
+
       {/* Found Words */}
       <div className="mb-4 w-full">
         <FoundWordsList foundWords={foundWords} totalScore={totalScore} />
-      </div>
-
-      {/* Bottom Actions */}
-      <div className="flex justify-center mt-auto pt-4 w-full max-w-xs">
-        <Button
-          variant="primary"
-          fullWidth
-          onClick={handleEndGame}
-          className="!bg-[var(--danger)] hover:!bg-[var(--danger)]/80"
-        >
-          End Game
-        </Button>
       </div>
 
       {/* Modals */}
@@ -191,9 +164,7 @@ export default function Game() {
       <ResultsModal
         isOpen={showResults}
         onClose={() => setShowResults(false)}
-        puzzleNumber={puzzleNumber}
         foundWords={foundWords}
-        totalPossibleWords={allValidWords.size}
         score={totalScore}
       />
     </GameContainer>

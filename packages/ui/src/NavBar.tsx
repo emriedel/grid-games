@@ -54,8 +54,9 @@ export function NavBar({
           </span>
         </div>
 
-        {/* Right: Rules button + Custom content */}
+        {/* Right: Custom content + Rules button */}
         <div className="flex items-center gap-2">
+          {rightContent}
           {onRulesClick && (
             <button
               onClick={onRulesClick}
@@ -80,7 +81,6 @@ export function NavBar({
               </svg>
             </button>
           )}
-          {rightContent}
         </div>
       </div>
     </nav>

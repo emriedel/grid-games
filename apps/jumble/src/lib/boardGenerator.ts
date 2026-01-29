@@ -37,15 +37,64 @@ function shuffle<T>(array: T[], random: () => number): T[] {
   return shuffled;
 }
 
-// Generate board for a specific date
-export function generateBoard(date: Date = new Date()): Board {
-  const seed = dateToSeed(date);
-  const random = createSeededRandom(seed);
+// Check if a letter is a vowel
+function isVowel(letter: string): boolean {
+  return 'AEIOU'.includes(letter.charAt(0));
+}
 
-  // Shuffle the dice
-  const shuffledDice = shuffle([...BOGGLE_DICE], random);
+// Check if a letter is rare (Q, Z, X, J, K)
+function isRareLetter(letter: string): boolean {
+  return 'QZXJK'.includes(letter.charAt(0));
+}
 
-  // Create the board
+// Validate board meets playability criteria
+function validateBoard(board: Board): boolean {
+  // Flatten board to get all letters
+  const letters: string[] = [];
+  const vowelPositions: { row: number; col: number }[] = [];
+  let rareCount = 0;
+
+  for (let row = 0; row < BOARD_SIZE; row++) {
+    for (let col = 0; col < BOARD_SIZE; col++) {
+      const letter = board[row][col];
+      letters.push(letter);
+
+      if (isVowel(letter)) {
+        vowelPositions.push({ row, col });
+      }
+      if (isRareLetter(letter)) {
+        rareCount++;
+      }
+    }
+  }
+
+  // Check 1: At least 4 vowels
+  if (vowelPositions.length < 4) {
+    return false;
+  }
+
+  // Check 2: Vowels spread across at least 3 different rows
+  const vowelRows = new Set(vowelPositions.map((p) => p.row));
+  if (vowelRows.size < 3) {
+    return false;
+  }
+
+  // Check 3: Vowels spread across at least 3 different columns
+  const vowelCols = new Set(vowelPositions.map((p) => p.col));
+  if (vowelCols.size < 3) {
+    return false;
+  }
+
+  // Check 4: Max 2 rare letters
+  if (rareCount > 2) {
+    return false;
+  }
+
+  return true;
+}
+
+// Generate a board from shuffled dice
+function createBoardFromDice(shuffledDice: string[], random: () => number): Board {
   const board: Board = [];
   let diceIndex = 0;
 
@@ -68,6 +117,35 @@ export function generateBoard(date: Date = new Date()): Board {
   }
 
   return board;
+}
+
+// Generate board for a specific date with validation
+export function generateBoard(date: Date = new Date()): Board {
+  const baseSeed = dateToSeed(date);
+  const maxAttempts = 50;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    // Use seed + attempt for deterministic retries
+    const seed = baseSeed + attempt;
+    const random = createSeededRandom(seed);
+
+    // Shuffle the dice
+    const shuffledDice = shuffle([...BOGGLE_DICE], random);
+
+    // Create the board
+    const board = createBoardFromDice(shuffledDice, random);
+
+    // Validate board
+    if (validateBoard(board)) {
+      return board;
+    }
+  }
+
+  // If all attempts fail, use the last attempt's board anyway
+  // This shouldn't happen with properly designed dice
+  const random = createSeededRandom(baseSeed + maxAttempts - 1);
+  const shuffledDice = shuffle([...BOGGLE_DICE], random);
+  return createBoardFromDice(shuffledDice, random);
 }
 
 // Get today's date string for storage keys

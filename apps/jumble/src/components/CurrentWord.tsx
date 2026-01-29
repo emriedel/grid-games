@@ -6,15 +6,14 @@ import { isValidWord } from '@/lib/dictionary';
 interface CurrentWordProps {
   word: string;
   isAlreadyFound: boolean;
-  onClear: () => void;
 }
 
-export default function CurrentWord({ word, isAlreadyFound, onClear }: CurrentWordProps) {
+export default function CurrentWord({ word, isAlreadyFound }: CurrentWordProps) {
   const isValid = word.length >= MIN_WORD_LENGTH && isValidWord(word);
   const isTooShort = word.length > 0 && word.length < MIN_WORD_LENGTH;
 
   return (
-    <div className="flex items-center justify-center gap-3 h-12">
+    <div className="flex items-center justify-center h-12">
       <div
         className={`
           text-xl sm:text-2xl font-bold tracking-wider min-w-[120px] text-center
@@ -28,18 +27,6 @@ export default function CurrentWord({ word, isAlreadyFound, onClear }: CurrentWo
       >
         {word || '\u00A0'}
       </div>
-      {word.length > 0 && (
-        <button
-          onClick={onClear}
-          className="
-            px-3 py-1 text-sm rounded
-            bg-[var(--tile-border)] hover:bg-[var(--tile-bg-selected)]
-            transition-colors
-          "
-        >
-          Clear
-        </button>
-      )}
     </div>
   );
 }

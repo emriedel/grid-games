@@ -39,6 +39,7 @@ export default function BoggleGrid({
     handlePointerMove,
     handlePointerUp,
     handleTileClick,
+    handleOutsideClick,
   } = useTouchDrag({
     onPathChange,
     onPathComplete,
@@ -101,6 +102,15 @@ export default function BoggleGrid({
     );
   }, [path]);
 
+  // Handle clicks on the container (but not on tiles) to clear the path
+  const handleContainerClick = useCallback((e: React.MouseEvent) => {
+    // Only clear if clicking directly on the container or grid, not on tiles
+    const target = e.target as Element;
+    if (!target.closest('[data-row]')) {
+      handleOutsideClick();
+    }
+  }, [handleOutsideClick]);
+
   if (board.length === 0) {
     return <div className="w-full aspect-square bg-[var(--tile-bg)] rounded-lg animate-pulse" />;
   }
@@ -108,10 +118,11 @@ export default function BoggleGrid({
   return (
     <div
       ref={gridRef}
-      className="relative w-full max-w-[320px] mx-auto touch-none"
+      className="relative w-full max-w-[min(90vw,360px)] mx-auto touch-none"
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
+      onClick={handleContainerClick}
     >
       {getPathLines()}
       <div
