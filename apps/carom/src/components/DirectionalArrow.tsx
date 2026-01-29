@@ -23,32 +23,28 @@ export function DirectionalArrow({
     right: '▶',
   };
 
-  // Calculate position at the edge of the selected piece
-  const arrowSize = cellSize * 0.25;
-  const pieceSize = cellSize * 0.7;
-  const pieceOffset = (cellSize - pieceSize) / 2;
-  const pieceCenter = cellSize / 2;
+  // Calculate position centered in the adjacent cell
+  const arrowSize = cellSize * 0.4;
 
-  // Position the arrow at the edge of the piece (not in adjacent cell)
   let top: number;
   let left: number;
 
   switch (direction) {
     case 'up':
-      top = piecePosition.row * cellSize + pieceOffset - arrowSize / 2;
-      left = piecePosition.col * cellSize + pieceCenter - arrowSize / 2;
+      top = (piecePosition.row - 1) * cellSize + cellSize / 2 - arrowSize / 2;
+      left = piecePosition.col * cellSize + cellSize / 2 - arrowSize / 2;
       break;
     case 'down':
-      top = piecePosition.row * cellSize + pieceOffset + pieceSize - arrowSize / 2;
-      left = piecePosition.col * cellSize + pieceCenter - arrowSize / 2;
+      top = (piecePosition.row + 1) * cellSize + cellSize / 2 - arrowSize / 2;
+      left = piecePosition.col * cellSize + cellSize / 2 - arrowSize / 2;
       break;
     case 'left':
-      top = piecePosition.row * cellSize + pieceCenter - arrowSize / 2;
-      left = piecePosition.col * cellSize + pieceOffset - arrowSize / 2;
+      top = piecePosition.row * cellSize + cellSize / 2 - arrowSize / 2;
+      left = (piecePosition.col - 1) * cellSize + cellSize / 2 - arrowSize / 2;
       break;
     case 'right':
-      top = piecePosition.row * cellSize + pieceCenter - arrowSize / 2;
-      left = piecePosition.col * cellSize + pieceOffset + pieceSize - arrowSize / 2;
+      top = piecePosition.row * cellSize + cellSize / 2 - arrowSize / 2;
+      left = (piecePosition.col + 1) * cellSize + cellSize / 2 - arrowSize / 2;
       break;
   }
 

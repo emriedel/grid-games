@@ -72,9 +72,6 @@ export function ResultsModal({
           <div className="text-[var(--muted)]">
             {moveCount === 1 ? 'move' : 'moves'}
           </div>
-          <div className="text-sm text-[var(--muted)]">
-            Par: {optimalMoves}
-          </div>
         </div>
 
         <div className="space-y-3 pt-4">

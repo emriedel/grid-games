@@ -41,7 +41,7 @@ export function Cell({ row, col, walls, isGoal, isObstacle, children }: CellProp
   }
 
   // Corner fills to close gaps where walls meet
-  const cornerSize = '3px';
+  const cornerSize = '4px';
 
   return (
     <div
@@ -57,25 +57,25 @@ export function Cell({ row, col, walls, isGoal, isObstacle, children }: CellProp
       {hasTop && hasLeft && (
         <div
           className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ top: -3, left: -3, width: cornerSize, height: cornerSize }}
+          style={{ top: -4, left: -4, width: cornerSize, height: cornerSize }}
         />
       )}
       {hasTop && hasRight && (
         <div
           className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ top: -3, right: -3, width: cornerSize, height: cornerSize }}
+          style={{ top: -4, right: -4, width: cornerSize, height: cornerSize }}
         />
       )}
       {hasBottom && hasLeft && (
         <div
           className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ bottom: -3, left: -3, width: cornerSize, height: cornerSize }}
+          style={{ bottom: -4, left: -4, width: cornerSize, height: cornerSize }}
         />
       )}
       {hasBottom && hasRight && (
         <div
           className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ bottom: -3, right: -3, width: cornerSize, height: cornerSize }}
+          style={{ bottom: -4, right: -4, width: cornerSize, height: cornerSize }}
         />
       )}
       {isGoal && !isObstacle && (

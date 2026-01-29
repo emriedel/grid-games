@@ -118,7 +118,7 @@ export function Board({
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-2 border-[var(--border)]"
+      className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-[3px] border-[var(--wall-color)]"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
