@@ -1,10 +1,12 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { Board as BoardType, Piece as PieceType, Direction } from '@/types';
 import { Cell } from './Cell';
 import { Piece } from './Piece';
+import { DirectionalArrow } from './DirectionalArrow';
 import { BOARD_SIZE } from '@/constants/gameConfig';
+import { getValidDirections } from '@/lib/gameLogic';
 
 interface BoardProps {
   board: BoardType;
@@ -101,6 +103,18 @@ export function Board({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [disabled, selectedPieceId, onMove]);
 
+  // Get valid directions for selected piece
+  const validDirections = useMemo(() => {
+    if (!selectedPieceId || disabled) return [];
+    return getValidDirections(board, pieces, selectedPieceId);
+  }, [board, pieces, selectedPieceId, disabled]);
+
+  // Get selected piece position
+  const selectedPiece = useMemo(() => {
+    if (!selectedPieceId) return null;
+    return pieces.find((p) => p.id === selectedPieceId) || null;
+  }, [pieces, selectedPieceId]);
+
   return (
     <div
       ref={containerRef}
@@ -146,6 +160,18 @@ export function Board({
             isSelected={piece.id === selectedPieceId}
             onClick={() => !disabled && onPieceSelect(piece.id)}
             cellSize={cellSize}
+          />
+        ))}
+
+      {/* Directional arrows for selected piece */}
+      {cellSize > 0 && selectedPiece && !disabled &&
+        validDirections.map((direction) => (
+          <DirectionalArrow
+            key={direction}
+            direction={direction}
+            onClick={() => onMove(direction)}
+            cellSize={cellSize}
+            piecePosition={selectedPiece.position}
           />
         ))}
     </div>

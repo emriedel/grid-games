@@ -5,11 +5,10 @@ import { useSearchParams } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, Button } from '@grid-games/ui';
 import { caromConfig } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
-import { generateDailyPuzzle } from '@/lib/puzzleGenerator';
+import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
 import { saveGameCompletion, getTodayGameState } from '@/lib/storage';
 import { Board } from './Board';
-import { DirectionalPad } from './DirectionalPad';
-import { MoveCounter } from './MoveCounter';
+import { HeaderMoveCounter } from './HeaderMoveCounter';
 import { HowToPlayModal } from './HowToPlayModal';
 import { ResultsModal } from './ResultsModal';
 import { Direction, Puzzle } from '@/types';
@@ -90,6 +89,12 @@ export function Game() {
           <NavBar
             title={caromConfig.name}
             onRulesClick={() => setShowRules(true)}
+            rightContent={
+              <HeaderMoveCounter
+                moves={state.moveCount}
+                optimalMoves={isDebug ? state.puzzle?.optimalMoves : undefined}
+              />
+            }
           />
         }
       >
@@ -106,12 +111,6 @@ export function Game() {
             />
           )}
 
-          {/* Move counter */}
-          <MoveCounter
-            moves={state.moveCount}
-            optimalMoves={isDebug ? state.puzzle?.optimalMoves : undefined}
-          />
-
           {/* Instructions */}
           {!state.selectedPieceId && state.phase === 'playing' && (
             <p className="text-sm text-[var(--muted)] text-center">
@@ -121,15 +120,9 @@ export function Game() {
 
           {state.selectedPieceId && state.phase === 'playing' && (
             <p className="text-sm text-[var(--muted)] text-center">
-              Use arrows or swipe to move
+              Tap an arrow or swipe to move
             </p>
           )}
-
-          {/* Directional pad */}
-          <DirectionalPad
-            onMove={handleMove}
-            disabled={!state.selectedPieceId || state.isAnimating || state.phase === 'finished'}
-          />
 
           {/* Reset button */}
           <Button variant="secondary" onClick={reset}>
@@ -142,6 +135,17 @@ export function Game() {
               <p>Optimal: {state.puzzle.optimalMoves} moves</p>
               <p>Date: {state.puzzle.date}</p>
               <p>Selected: {state.selectedPieceId || 'none'}</p>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  const newPuzzle = generateRandomPuzzle();
+                  setPuzzle(newPuzzle);
+                  startGame(newPuzzle);
+                }}
+                className="mt-2 bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                New Puzzle
+              </Button>
             </div>
           )}
         </div>

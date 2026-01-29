@@ -206,6 +206,18 @@ export function getValidMoves(
 }
 
 /**
+ * Get valid directions for a specific piece
+ */
+export function getValidDirections(
+  board: Board,
+  pieces: Piece[],
+  pieceId: string
+): Direction[] {
+  const directions: Direction[] = ['up', 'right', 'down', 'left'];
+  return directions.filter((dir) => wouldPieceMove(board, pieces, pieceId, dir));
+}
+
+/**
  * Determine what obstacle stops a piece at a given position in a given direction.
  * Returns the type of obstacle that would stop a piece sliding FROM this position
  * in the given direction.

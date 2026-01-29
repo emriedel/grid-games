@@ -19,6 +19,7 @@ import {
   NUM_BLOCKERS,
   MIN_BACKWARD_MOVES,
   MAX_BACKWARD_MOVES,
+  MIN_OPTIMAL_SOLUTION,
   L_WALLS_PER_QUADRANT_MIN,
   L_WALLS_PER_QUADRANT_MAX,
   L_WALLS_TOTAL_MIN,
@@ -686,8 +687,8 @@ export function generateDailyPuzzle(dateStr?: string): Puzzle {
       // Quick validation: solve to verify
       const optimalMoves = solve(board, result.pieces, MAX_BACKWARD_MOVES + 5);
 
-      // Accept if solvable (any positive number within reasonable range)
-      if (optimalMoves > 0 && optimalMoves <= MAX_BACKWARD_MOVES + 5) {
+      // Accept if solvable AND meets minimum solution length
+      if (optimalMoves >= MIN_OPTIMAL_SOLUTION && optimalMoves <= MAX_BACKWARD_MOVES + 5) {
         return {
           board,
           pieces: result.pieces,
@@ -752,4 +753,12 @@ function generateFallbackPuzzle(date: string): Puzzle {
  */
 export function generateTestPuzzle(): Puzzle {
   return generateDailyPuzzle('test-puzzle');
+}
+
+/**
+ * Generate a random puzzle (not date-based) for debug mode
+ */
+export function generateRandomPuzzle(): Puzzle {
+  const randomSeed = `random-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return generateDailyPuzzle(randomSeed);
 }

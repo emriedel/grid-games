@@ -5,6 +5,9 @@ export const NUM_BLOCKERS = 3;
 export const MIN_BACKWARD_MOVES = 7;
 export const MAX_BACKWARD_MOVES = 10;
 
+// Minimum optimal solution length (reject puzzles that are too easy)
+export const MIN_OPTIMAL_SOLUTION = 7;
+
 // Wall generation (new system)
 export const L_WALLS_PER_QUADRANT_MIN = 1;
 export const L_WALLS_PER_QUADRANT_MAX = 2; // 4-8 total, aim for 6-8
