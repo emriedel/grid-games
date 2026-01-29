@@ -85,6 +85,7 @@ export function Game() {
   return (
     <>
       <GameContainer
+        maxWidth="full"
         navBar={
           <NavBar
             title={caromConfig.name}
@@ -92,7 +93,7 @@ export function Game() {
           />
         }
       >
-        <div className="flex flex-col items-center gap-6 py-4 px-4">
+        <div className="flex flex-col items-center gap-6 py-4 w-full max-w-md sm:max-w-lg">
           {/* Board */}
           {state.puzzle && (
             <Board

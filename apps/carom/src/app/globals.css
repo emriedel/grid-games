@@ -30,6 +30,7 @@
   --wall-color: #f59e0b;
   --cell-bg: #1c1917;
   --cell-border: #27272a;
+  --obstacle-block: #52525b;
 }
 
 @theme inline {

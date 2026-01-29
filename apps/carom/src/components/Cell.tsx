@@ -7,10 +7,11 @@ interface CellProps {
   col: number;
   walls: WallFlags;
   isGoal: boolean;
+  isObstacle: boolean;
   children?: React.ReactNode;
 }
 
-export function Cell({ row, col, walls, isGoal, children }: CellProps) {
+export function Cell({ row, col, walls, isGoal, isObstacle, children }: CellProps) {
   // Build wall border classes
   const wallClasses: string[] = [];
 
@@ -27,20 +28,38 @@ export function Cell({ row, col, walls, isGoal, children }: CellProps) {
     wallClasses.push('border-l-[3px] border-l-[var(--wall-color)]');
   }
 
+  // Determine background: obstacle takes priority, then goal, then default
+  let bgClass = 'bg-[var(--cell-bg)]';
+  if (isObstacle) {
+    bgClass = 'bg-[var(--muted)]';
+  } else if (isGoal) {
+    bgClass = 'bg-[var(--goal-bg)]';
+  }
+
   return (
     <div
       className={`
         relative w-full aspect-square
-        bg-[var(--cell-bg)] border border-[var(--cell-border)]
+        ${bgClass} border border-[var(--cell-border)]
         ${wallClasses.join(' ')}
-        ${isGoal ? 'bg-[var(--goal-bg)]' : ''}
       `}
       data-row={row}
       data-col={col}
     >
-      {isGoal && (
+      {isGoal && !isObstacle && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-3 h-3 rounded-full bg-[var(--accent)] opacity-50" />
+          <svg
+            className="w-5 h-5 text-[var(--accent)] opacity-60"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+          </svg>
+        </div>
+      )}
+      {isObstacle && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-4 h-4 bg-[var(--obstacle-block)] rounded-sm" />
         </div>
       )}
       {children}

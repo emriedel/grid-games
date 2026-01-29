@@ -3,6 +3,7 @@ import {
   Direction,
   Piece,
   Board,
+  ReverseMove,
   WALL_TOP,
   WALL_RIGHT,
   WALL_BOTTOM,
@@ -80,6 +81,14 @@ export function hasPieceAt(pieces: Piece[], pos: Position, excludeId?: string): 
 }
 
 /**
+ * Check if a position has a solid obstacle (1x1 block)
+ */
+export function hasObstacle(board: Board, pos: Position): boolean {
+  if (!board.obstacles) return false;
+  return board.obstacles.some((o) => o.row === pos.row && o.col === pos.col);
+}
+
+/**
  * Simulate a piece sliding in a direction until it hits something
  * Returns the final position after sliding
  */
@@ -117,6 +126,11 @@ export function simulateSlide(
     // Check if next cell has a wall blocking entry
     const nextWalls = board.walls[nextPos.row]?.[nextPos.col] ?? 0;
     if ((nextWalls & getEntryWallFlag(direction)) !== 0) {
+      break;
+    }
+
+    // Check if next position has a solid obstacle
+    if (hasObstacle(board, nextPos)) {
       break;
     }
 
@@ -189,4 +203,174 @@ export function getValidMoves(
   }
 
   return moves;
+}
+
+/**
+ * Determine what obstacle stops a piece at a given position in a given direction.
+ * Returns the type of obstacle that would stop a piece sliding FROM this position
+ * in the given direction.
+ */
+export function getStoppingObstacle(
+  board: Board,
+  pieces: Piece[],
+  pos: Position,
+  dir: Direction
+): 'wall' | 'edge' | 'piece' | 'obstacle' | null {
+  // Check if current cell has a wall blocking exit
+  if (hasWallBlocking(board, pos, dir)) {
+    return 'wall';
+  }
+
+  const { dRow, dCol } = getDirectionDelta(dir);
+  const nextPos: Position = {
+    row: pos.row + dRow,
+    col: pos.col + dCol,
+  };
+
+  // Check if next position is out of bounds
+  if (!isInBounds(board, nextPos)) {
+    return 'edge';
+  }
+
+  // Check if next cell has a wall blocking entry
+  const nextWalls = board.walls[nextPos.row]?.[nextPos.col] ?? 0;
+  if ((nextWalls & getEntryWallFlag(dir)) !== 0) {
+    return 'wall';
+  }
+
+  // Check if next position has a solid obstacle
+  if (hasObstacle(board, nextPos)) {
+    return 'obstacle';
+  }
+
+  // Check if next position has another piece
+  if (hasPieceAt(pieces, nextPos)) {
+    return 'piece';
+  }
+
+  return null; // Nothing stopping the piece
+}
+
+/**
+ * Check if a position is blocked in a given direction
+ * (cannot continue sliding in that direction)
+ */
+export function isBlockedInDirection(
+  board: Board,
+  pieces: Piece[],
+  pos: Position,
+  dir: Direction,
+  excludePieceId?: string
+): boolean {
+  // Check if current cell has a wall blocking exit
+  if (hasWallBlocking(board, pos, dir)) {
+    return true;
+  }
+
+  const { dRow, dCol } = getDirectionDelta(dir);
+  const nextPos: Position = {
+    row: pos.row + dRow,
+    col: pos.col + dCol,
+  };
+
+  // Check if next position is out of bounds
+  if (!isInBounds(board, nextPos)) {
+    return true;
+  }
+
+  // Check if next cell has a wall blocking entry
+  const nextWalls = board.walls[nextPos.row]?.[nextPos.col] ?? 0;
+  if ((nextWalls & getEntryWallFlag(dir)) !== 0) {
+    return true;
+  }
+
+  // Check if next position has a solid obstacle
+  if (hasObstacle(board, nextPos)) {
+    return true;
+  }
+
+  // Check if next position has another piece
+  if (hasPieceAt(pieces, nextPos, excludePieceId)) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Find valid origin positions for a reverse move.
+ * Given a piece at `currentPos` that was stopped by something when moving in `arrivalDir`,
+ * find all positions it could have come FROM (along the opposite direction path).
+ */
+export function findValidOrigins(
+  board: Board,
+  pieces: Piece[],
+  pieceId: string,
+  currentPos: Position,
+  arrivalDir: Direction
+): ReverseMove[] {
+  const reverseMoves: ReverseMove[] = [];
+  const reverseDir = getOppositeDirection(arrivalDir);
+  const { dRow, dCol } = getDirectionDelta(reverseDir);
+
+  // First, check what stopped the piece at currentPos
+  const stoppedBy = getStoppingObstacle(board, pieces, currentPos, arrivalDir);
+  if (!stoppedBy) {
+    // Piece wouldn't actually stop here, invalid
+    return [];
+  }
+
+  // Walk backward along the reverse direction to find all valid origins
+  let checkPos = { ...currentPos };
+  let distance = 0;
+
+  while (true) {
+    // Move one step in the reverse direction
+    const nextOrigin: Position = {
+      row: checkPos.row + dRow,
+      col: checkPos.col + dCol,
+    };
+
+    // Check if this origin is out of bounds
+    if (!isInBounds(board, nextOrigin)) {
+      break;
+    }
+
+    // Check if there's a wall blocking movement from nextOrigin toward currentPos
+    if (hasWallBlocking(board, nextOrigin, arrivalDir)) {
+      break;
+    }
+
+    // Check if there's a wall blocking entry into checkPos from nextOrigin's direction
+    const checkWalls = board.walls[checkPos.row]?.[checkPos.col] ?? 0;
+    if ((checkWalls & getEntryWallFlag(arrivalDir)) !== 0) {
+      break;
+    }
+
+    // Check if there's an obstacle at nextOrigin
+    if (hasObstacle(board, nextOrigin)) {
+      break;
+    }
+
+    // Check if there's another piece at nextOrigin (excluding the piece we're analyzing)
+    if (hasPieceAt(pieces, nextOrigin, pieceId)) {
+      break;
+    }
+
+    distance++;
+
+    // This is a valid origin - piece could have started here
+    reverseMoves.push({
+      pieceId,
+      fromPosition: currentPos,
+      toPosition: nextOrigin,
+      direction: arrivalDir,
+      stoppedBy,
+      distance,
+    });
+
+    checkPos = nextOrigin;
+  }
+
+  return reverseMoves;
 }

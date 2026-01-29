@@ -104,7 +104,7 @@ export function Board({
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-sm mx-auto aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-2 border-[var(--border)]"
+      className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-2 border-[var(--border)]"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -120,6 +120,9 @@ export function Board({
           const row = Math.floor(index / BOARD_SIZE);
           const col = index % BOARD_SIZE;
           const isGoal = board.goal.row === row && board.goal.col === col;
+          const isObstacle = board.obstacles?.some(
+            (o) => o.row === row && o.col === col
+          ) ?? false;
 
           return (
             <Cell
@@ -128,6 +131,7 @@ export function Board({
               col={col}
               walls={board.walls[row][col]}
               isGoal={isGoal}
+              isObstacle={isObstacle}
             />
           );
         })}

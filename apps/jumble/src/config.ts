@@ -8,7 +8,7 @@ export const jumbleConfig = defineGameConfig({
   id: 'jumble',
   name: 'Jumble',
   icon: '/icon.png',
-  description: 'Find words in a letter grid before time runs out.',
+  description: 'Find words in a letter grid before time runs out',
   theme: jumbleTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {

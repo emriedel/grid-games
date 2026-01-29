@@ -8,7 +8,7 @@ export const dabbleConfig = defineGameConfig({
   id: 'dabble',
   name: 'Dabble',
   icon: '/icon.png',
-  description: 'Place tiles to form words and maximize your score.',
+  description: 'Place tiles to form words and maximize your score',
   theme: dabbleTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {

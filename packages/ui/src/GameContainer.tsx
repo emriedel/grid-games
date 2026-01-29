@@ -7,7 +7,7 @@ interface GameContainerProps {
   /** Optional nav bar component */
   navBar?: ReactNode;
   /** Max width constraint */
-  maxWidth?: 'sm' | 'md' | 'lg';
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   /** Additional classes */
   className?: string;
 }
@@ -16,6 +16,8 @@ const maxWidthClasses = {
   sm: 'max-w-xs',   // 320px
   md: 'max-w-sm',   // 384px
   lg: 'max-w-md',   // 448px
+  xl: 'max-w-lg',   // 512px
+  full: 'max-w-none', // No constraint
 };
 
 /**

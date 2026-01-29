@@ -31,6 +31,7 @@ export interface Board {
   size: number;
   walls: WallFlags[][];
   goal: Position;
+  obstacles: Position[]; // Solid blocks that pieces cannot pass through or land on
 }
 
 export interface Puzzle {
@@ -60,4 +61,17 @@ export interface SolverState {
   positions: Position[];
   moves: number;
   path: Move[];
+}
+
+// L-wall orientations: NE, NW, SE, SW indicate which corner the L opens toward
+export type LWallOrientation = 'NE' | 'NW' | 'SE' | 'SW';
+
+// Reverse move for backward puzzle generation
+export interface ReverseMove {
+  pieceId: string;
+  fromPosition: Position; // Where the piece ends up (current position in backward gen)
+  toPosition: Position; // Where the piece came from (origin before the move)
+  direction: Direction; // The direction the piece traveled to get to fromPosition
+  stoppedBy: 'wall' | 'edge' | 'piece' | 'obstacle';
+  distance: number;
 }
