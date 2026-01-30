@@ -12,7 +12,7 @@ interface PieceProps {
 
 export function Piece({ piece, isSelected, onClick, cellSize }: PieceProps) {
   const isTarget = piece.type === 'target';
-  const pieceSize = cellSize * 0.7;
+  const pieceSize = cellSize * 0.6;
   const offset = (cellSize - pieceSize) / 2;
 
   return (

@@ -20,16 +20,16 @@ export function Cell({ row, col, walls, isGoal, isObstacle, children }: CellProp
   const hasLeft = (walls & WALL_LEFT) !== 0;
 
   if (hasTop) {
-    wallClasses.push('border-t-[3px] border-t-[var(--wall-color)]');
+    wallClasses.push('border-t-[2px] border-t-[var(--wall-color)]');
   }
   if (hasRight) {
-    wallClasses.push('border-r-[3px] border-r-[var(--wall-color)]');
+    wallClasses.push('border-r-[2px] border-r-[var(--wall-color)]');
   }
   if (hasBottom) {
-    wallClasses.push('border-b-[3px] border-b-[var(--wall-color)]');
+    wallClasses.push('border-b-[2px] border-b-[var(--wall-color)]');
   }
   if (hasLeft) {
-    wallClasses.push('border-l-[3px] border-l-[var(--wall-color)]');
+    wallClasses.push('border-l-[2px] border-l-[var(--wall-color)]');
   }
 
   // Determine background: obstacle takes priority, then goal, then default
@@ -39,9 +39,6 @@ export function Cell({ row, col, walls, isGoal, isObstacle, children }: CellProp
   } else if (isGoal) {
     bgClass = 'bg-[var(--goal-bg)]';
   }
-
-  // Corner fills to close gaps where walls meet
-  const cornerSize = '4px';
 
   return (
     <div
@@ -53,31 +50,7 @@ export function Cell({ row, col, walls, isGoal, isObstacle, children }: CellProp
       data-row={row}
       data-col={col}
     >
-      {/* Corner fills where walls meet */}
-      {hasTop && hasLeft && (
-        <div
-          className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ top: -4, left: -4, width: cornerSize, height: cornerSize }}
-        />
-      )}
-      {hasTop && hasRight && (
-        <div
-          className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ top: -4, right: -4, width: cornerSize, height: cornerSize }}
-        />
-      )}
-      {hasBottom && hasLeft && (
-        <div
-          className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ bottom: -4, left: -4, width: cornerSize, height: cornerSize }}
-        />
-      )}
-      {hasBottom && hasRight && (
-        <div
-          className="absolute bg-[var(--wall-color)] pointer-events-none"
-          style={{ bottom: -4, right: -4, width: cornerSize, height: cornerSize }}
-        />
-      )}
+
       {isGoal && !isObstacle && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <svg

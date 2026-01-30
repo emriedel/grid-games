@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Carom - Daily Sliding Puzzle",
-  description: "A Ricochet Robots-style daily sliding puzzle game. Navigate pieces through walls to reach the goal.",
-  keywords: ["puzzle", "daily game", "sliding puzzle", "ricochet robots"],
+  description: "A daily piece-sliding puzzle game. Navigate pieces through walls to reach the goal.",
+  keywords: ["puzzle", "daily game", "sliding puzzle"],
 };
 
 export const viewport: Viewport = {

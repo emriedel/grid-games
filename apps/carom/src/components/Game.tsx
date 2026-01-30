@@ -111,19 +111,6 @@ export function Game() {
             />
           )}
 
-          {/* Instructions */}
-          {!state.selectedPieceId && state.phase === 'playing' && (
-            <p className="text-sm text-[var(--muted)] text-center">
-              Tap a piece to select it
-            </p>
-          )}
-
-          {state.selectedPieceId && state.phase === 'playing' && (
-            <p className="text-sm text-[var(--muted)] text-center">
-              Tap an arrow or swipe to move
-            </p>
-          )}
-
           {/* Reset button */}
           <Button variant="secondary" onClick={reset}>
             Reset

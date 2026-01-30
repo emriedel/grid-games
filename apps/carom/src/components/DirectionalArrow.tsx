@@ -24,7 +24,7 @@ export function DirectionalArrow({
   };
 
   // Calculate position centered in the adjacent cell
-  const arrowSize = cellSize * 0.4;
+  const arrowSize = cellSize * 0.5;
 
   let top: number;
   let left: number;
