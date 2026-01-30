@@ -10,10 +10,10 @@
 ## Game Rules
 
 - **Board:** 8x8 grid with internal walls
-- **Pieces:** 1 amber target (circle) + 3 slate-blue blockers (circles)
+- **Pieces:** 1 amber target + 3 steel blue blockers (rounded squares)
 - **Movement:** Pieces slide until blocked by wall, edge, or piece
 - **Goal:** Get the target piece to the goal square (marked with star)
-- **Scoring:** Star rating based on moves vs optimal (3★ optimal/+1, 2★ +2-4, 1★ +5+)
+- **Completion:** Track number of moves used to solve
 
 ## Commands
 
@@ -113,8 +113,8 @@ The script generates puzzles with:
 ```css
 --accent: #f59e0b;           /* Amber primary */
 --piece-target: #f59e0b;     /* Target piece (amber) */
---piece-blocker: #64748b;    /* Blocker pieces (slate blue) */
---goal-bg: rgba(245, 158, 11, 0.2);
+--piece-blocker: #3b82f6;    /* Blocker pieces (steel blue) */
+--goal-bg: rgba(245, 158, 11, 0.35);
 --wall-color: #ffffff;       /* Wall borders (white for visibility) */
 ```
 
@@ -136,7 +136,7 @@ Add `?debug=true` to URL:
 
 ## UI Components
 
-- **Pieces:** Circular (rounded-full), target is amber, blockers are slate-blue
+- **Pieces:** Rounded squares (rounded-lg), target is amber, blockers are steel blue
 - **Directional arrows:** Appear on edges of selected piece, only for valid moves
 - **Goal star:** Large (w-8 h-8), amber, 60% opacity
 - **Walls:** White (#ffffff) 3px borders with corner fills where walls meet

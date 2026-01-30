@@ -38,15 +38,6 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
           </ul>
         </section>
 
-        <section>
-          <h3 className="font-semibold text-lg mb-2">Scoring</h3>
-          <ul className="list-disc list-inside space-y-2 text-[var(--muted)]">
-            <li><span className="text-[var(--accent)]">⭐⭐⭐</span> Optimal or +1 move</li>
-            <li><span className="text-[var(--accent)]">⭐⭐</span> +2-4 moves over optimal</li>
-            <li><span className="text-[var(--accent)]">⭐</span> +5 or more moves</li>
-          </ul>
-        </section>
-
         <div className="pt-4">
           <Button variant="primary" fullWidth onClick={onClose}>
             Got it!
