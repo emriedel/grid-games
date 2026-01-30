@@ -417,21 +417,24 @@ export function Game() {
 
           {/* Action buttons - only show when playing */}
           {gameState === 'playing' && (
-            <div className="flex gap-3 w-full max-w-xs">
-              <Button
-                variant="secondary"
-                fullWidth
+            <div className="flex gap-2 w-full max-w-xs items-center">
+              {/* Clear button - small icon */}
+              <button
                 onClick={handleClear}
                 disabled={placedTiles.length === 0}
+                className="w-10 h-10 flex items-center justify-center rounded-lg bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                title="Clear placed tiles"
               >
-                Clear
-              </Button>
+                <svg className="w-5 h-5 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              {/* Submit button - takes remaining width */}
               <Button
                 variant="primary"
                 fullWidth
                 onClick={handleSubmit}
                 disabled={placedTiles.length === 0 || turnCount >= MAX_TURNS}
-                className="!bg-[var(--success)] hover:!bg-[var(--success)]/80"
               >
                 Submit Word
               </Button>
@@ -448,7 +451,7 @@ export function Game() {
               size="lg"
               fullWidth
               onClick={handleFinish}
-              className="max-w-xs"
+              className="max-w-xs !bg-violet-500 hover:!bg-violet-600"
             >
               Finish & Share
             </Button>
@@ -461,7 +464,7 @@ export function Game() {
               size="lg"
               fullWidth
               onClick={() => setShowShareModal(true)}
-              className="max-w-xs"
+              className="max-w-xs !bg-violet-500 hover:!bg-violet-600"
             >
               View Results
             </Button>
