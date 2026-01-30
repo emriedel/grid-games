@@ -40,6 +40,7 @@ const games: GameCard[] = [
     name: 'Carom',
     description: 'Navigate pieces across the board to reach the goal in the fewest moves',
     accentColor: '#f59e0b', // amber
+    icon: '/icons/carom.png',
     href: '/carom',
   },
 ];
