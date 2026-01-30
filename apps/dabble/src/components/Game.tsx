@@ -23,7 +23,7 @@ import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import { dabbleConfig } from '@/config';
-import { getLetterUsageBonus, MAX_TURNS } from '@/constants/gameConfig';
+import { MAX_TURNS } from '@/constants/gameConfig';
 import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData } from '@/types';
 
 type GameState = 'landing' | 'playing' | 'finished';
@@ -44,13 +44,13 @@ export function Game() {
   const [submittedWords, setSubmittedWords] = useState<Word[]>([]);
   const [turnCount, setTurnCount] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
-  const [totalBonuses, setTotalBonuses] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [activeDragLetter, setActiveDragLetter] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
+  const [isDraggingBoardTile, setIsDraggingBoardTile] = useState(false);
   const [scorePopup, setScorePopup] = useState<{ score: number; key: number } | null>(null);
 
   // Configure drag-and-drop sensors
@@ -162,21 +162,14 @@ export function Game() {
     const newLockedIndices = new Set([...lockedRackIndices, ...usedRackIndices]);
     setLockedRackIndices(newLockedIndices);
 
-    // Calculate letter usage bonus (only awarded at thresholds)
-    const previousLettersUsed = lockedRackIndices.size;
-    const newLettersUsed = newLockedIndices.size;
-    const previousLetterBonus = getLetterUsageBonus(previousLettersUsed);
-    const newLetterBonus = getLetterUsageBonus(newLettersUsed);
-    const letterBonusDelta = newLetterBonus - previousLetterBonus;
-
-    const turnScore = result.totalScore + letterBonusDelta;
+    // Word score only (letter bonus deferred to end of game)
+    const turnScore = result.totalScore;
 
     // Show score popup animation
     setScorePopup({ score: turnScore, key: Date.now() });
 
     setSubmittedWords((prev) => [...prev, ...result.words]);
     setTotalScore((prev) => prev + turnScore);
-    setTotalBonuses((prev) => prev + letterBonusDelta);
     setPlacedTiles([]);
     setUsedRackIndices(new Set());
 
@@ -190,12 +183,7 @@ export function Game() {
       setShowShareModal(true);
     }
 
-    // Show feedback message for letter usage bonus
-    if (letterBonusDelta > 0) {
-      setError(`+${letterBonusDelta} letter bonus!`);
-    } else {
-      setError(null);
-    }
+    setError(null);
   }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, turnCount]);
 
   // Clear current placement
@@ -231,7 +219,6 @@ export function Game() {
     setSubmittedWords([]);
     setTurnCount(0);
     setTotalScore(0);
-    setTotalBonuses(0);
     setError(null);
     setGameState('playing');
   }, []);
@@ -242,6 +229,7 @@ export function Game() {
     if (data?.type === 'rack-tile' || data?.type === 'board-tile') {
       setActiveDragLetter(data.letter);
       setActiveDragId(event.active.id as string);
+      setIsDraggingBoardTile(data.type === 'board-tile');
       setSelectedRackIndex(null);
     }
   }, []);
@@ -250,6 +238,7 @@ export function Game() {
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     setActiveDragLetter(null);
     setActiveDragId(null);
+    setIsDraggingBoardTile(false);
 
     const { active, over } = event;
     if (!board) return;
@@ -259,6 +248,22 @@ export function Game() {
 
     if (over) {
       const overId = over.id as string;
+
+      // Handle drops back to rack
+      if (overId === 'rack-drop-zone' && dragData.type === 'board-tile') {
+        const { row: fromRow, col: fromCol, rackIndex } = dragData;
+        setPlacedTiles((prev) =>
+          prev.filter((t) => !(t.row === fromRow && t.col === fromCol))
+        );
+        setUsedRackIndices((prev) => {
+          const next = new Set(prev);
+          next.delete(rackIndex);
+          return next;
+        });
+        setError(null);
+        return;
+      }
+
       if (overId.startsWith('cell-')) {
         const [, rowStr, colStr] = overId.split('-');
         const row = parseInt(rowStr, 10);
@@ -340,10 +345,14 @@ export function Game() {
             homeUrl={dabbleConfig.homeUrl}
             onRulesClick={() => setShowRulesModal(true)}
             rightContent={
-              <div className="flex items-center gap-4">
-                <div className="text-xs text-[var(--muted)]">Turn {turnCount + 1}/{MAX_TURNS}</div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-xs text-[var(--muted)]">Score</span>
+              <div className="flex items-center gap-5">
+                {gameState === 'finished' ? (
+                  <div className="text-xs text-[var(--success)]"></div>
+                ) : (
+                  <div className="text-s text-[var(--muted)]">Turn {turnCount + 1}/{MAX_TURNS}</div>
+                )}
+                <div className="flex items-center gap-2">
+                  <span className="text-s text-[var(--muted)]">Score:</span>
                   <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>
                 </div>
               </div>
@@ -375,8 +384,8 @@ export function Game() {
             {scorePopup && (
               <div
                 key={scorePopup.key}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-[var(--accent)] pointer-events-none"
-                style={{ animation: 'scorePopup 0.8s ease-out forwards' }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-rose-500 pointer-events-none"
+                style={{ animation: 'scorePopup 1.2s ease-out forwards' }}
                 onAnimationEnd={() => setScorePopup(null)}
               >
                 +{scorePopup.score}
@@ -402,34 +411,38 @@ export function Game() {
             lockedIndices={lockedRackIndices}
             selectedIndex={selectedRackIndex}
             onLetterClick={handleRackClick}
+            isDraggingBoardTile={isDraggingBoardTile}
+            disabled={gameState === 'finished'}
           />
 
-          {/* Action buttons */}
-          <div className="flex gap-3 w-full max-w-xs">
-            <Button
-              variant="secondary"
-              fullWidth
-              onClick={handleClear}
-              disabled={placedTiles.length === 0}
-            >
-              Clear
-            </Button>
-            <Button
-              variant="primary"
-              fullWidth
-              onClick={handleSubmit}
-              disabled={placedTiles.length === 0 || turnCount >= MAX_TURNS}
-              className="!bg-[var(--success)] hover:!bg-[var(--success)]/80"
-            >
-              Submit Word
-            </Button>
-          </div>
+          {/* Action buttons - only show when playing */}
+          {gameState === 'playing' && (
+            <div className="flex gap-3 w-full max-w-xs">
+              <Button
+                variant="secondary"
+                fullWidth
+                onClick={handleClear}
+                disabled={placedTiles.length === 0}
+              >
+                Clear
+              </Button>
+              <Button
+                variant="primary"
+                fullWidth
+                onClick={handleSubmit}
+                disabled={placedTiles.length === 0 || turnCount >= MAX_TURNS}
+                className="!bg-[var(--success)] hover:!bg-[var(--success)]/80"
+              >
+                Submit Word
+              </Button>
+            </div>
+          )}
 
           {/* Word list */}
           <WordList words={submittedWords} />
 
-          {/* Finish button */}
-          {submittedWords.length > 0 && (
+          {/* Finish button - only show when playing and have words */}
+          {gameState === 'playing' && submittedWords.length > 0 && (
             <Button
               variant="primary"
               size="lg"
@@ -438,6 +451,19 @@ export function Game() {
               className="max-w-xs"
             >
               Finish & Share
+            </Button>
+          )}
+
+          {/* View Results button - show when finished and modal is closed */}
+          {gameState === 'finished' && !showShareModal && (
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={() => setShowShareModal(true)}
+              className="max-w-xs"
+            >
+              View Results
             </Button>
           )}
         </div>
@@ -449,8 +475,7 @@ export function Game() {
         date={puzzle.date}
         words={submittedWords}
         totalScore={totalScore}
-        totalBonuses={totalBonuses}
-        allLettersUsed={lockedRackIndices.size === rackLetters.length}
+        lettersUsed={lockedRackIndices.size}
         onClose={() => setShowShareModal(false)}
       />
       <HowToPlayModal

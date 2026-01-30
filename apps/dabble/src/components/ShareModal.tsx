@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { Modal, Button } from '@grid-games/ui';
-import { buildShareText, shareOrCopy, generateEmojiBar, formatDisplayDate } from '@grid-games/shared';
+import { buildShareText, shareOrCopy, formatDisplayDate } from '@grid-games/shared';
+import { getLetterUsageBonus } from '@/constants/gameConfig';
 import type { Word } from '@/types';
 
 interface ShareModalProps {
@@ -10,44 +11,42 @@ interface ShareModalProps {
   date: string;
   words: Word[];
   totalScore: number;
-  totalBonuses: number;
-  allLettersUsed: boolean;
+  lettersUsed: number;
   onClose: () => void;
 }
+
+const TOTAL_LETTERS = 14;
 
 export function ShareModal({
   isOpen,
   date,
   words,
   totalScore,
-  totalBonuses,
-  allLettersUsed,
+  lettersUsed,
   onClose,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
 
   const displayDate = formatDisplayDate(date);
+  const letterBonus = getLetterUsageBonus(lettersUsed);
+  const finalScore = totalScore + letterBonus;
+  const allLettersUsed = lettersUsed === TOTAL_LETTERS;
 
   const handleShare = async () => {
-    // Generate emoji grid for score visualization
-    const emojiGrid = generateEmojiBar(totalScore, 200, {
-      filledEmoji: '🟨',
-      emptyEmoji: '⬛',
-    });
+    // Generate letter usage grid (14 squares total)
+    const letterGrid = '🟨'.repeat(lettersUsed) + '⬛'.repeat(TOTAL_LETTERS - lettersUsed);
+    const emojiGrid = `${letterGrid} (${lettersUsed}/${TOTAL_LETTERS})`;
 
-    const extraLines = [`${words.length} word${words.length !== 1 ? 's' : ''}`];
-    if (allLettersUsed) {
-      extraLines.push('All letters used!');
-    }
-    if (totalBonuses > 0) {
-      extraLines.push(`+${totalBonuses} bonuses`);
+    const extraLines: string[] = [];
+    if (letterBonus > 0) {
+      extraLines.push(`+${letterBonus} letter bonus!`);
     }
 
     const shareText = buildShareText({
       gameId: 'dabble',
       gameName: 'Dabble',
       puzzleId: displayDate,
-      score: totalScore,
+      score: finalScore,
       emojiGrid,
       extraLines,
       shareUrl: 'https://games.ericriedel.dev/dabble',
@@ -63,10 +62,10 @@ export function ShareModal({
   const handleCopyDetailed = async () => {
     const lines = [
       `Dabble ${displayDate}`,
-      `Score: ${totalScore}${totalBonuses > 0 ? ` (includes +${totalBonuses} bonuses)` : ''}`,
+      `Score: ${finalScore}${letterBonus > 0 ? ` (includes +${letterBonus} letter bonus)` : ''}`,
       '',
       ...words.map((w) => `${w.word} (${w.score})`),
-      ...(totalBonuses > 0 ? [`Bonuses: +${totalBonuses}`] : []),
+      ...(letterBonus > 0 ? [`Letter bonus: +${letterBonus}`] : []),
       ...(allLettersUsed ? ['All letters used!'] : []),
       '',
       'https://games.ericriedel.dev/dabble',
@@ -88,13 +87,17 @@ export function ShareModal({
 
         {/* Score summary */}
         <div className="text-center mb-6">
-          <div className="text-5xl font-bold text-[var(--accent)] mb-2">{totalScore}</div>
+          <div className="text-5xl font-bold text-[var(--accent)] mb-2">{finalScore}</div>
           <div className="text-[var(--muted)]">
-            {words.length} word{words.length !== 1 ? 's' : ''}
-            {totalBonuses > 0 && ` · +${totalBonuses} bonuses`}
+            {words.length} word{words.length !== 1 ? 's' : ''} · {lettersUsed}/{TOTAL_LETTERS} letters
           </div>
-          {allLettersUsed && (
+          {letterBonus > 0 && (
             <div className="mt-2 text-[var(--success)] font-semibold">
+              +{letterBonus} letter bonus!
+            </div>
+          )}
+          {allLettersUsed && (
+            <div className="mt-1 text-[var(--success)] text-sm">
               All letters used!
             </div>
           )}
