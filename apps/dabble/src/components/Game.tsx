@@ -349,7 +349,7 @@ export function Game() {
                 {gameState === 'finished' ? (
                   <div className="text-xs text-[var(--success)]"></div>
                 ) : (
-                  <div className="text-s text-[var(--muted)]">Turn {turnCount + 1}/{MAX_TURNS}</div>
+                  <div className="text-s text-[var(--muted)]">Turn: {turnCount + 1}/{MAX_TURNS}</div>
                 )}
                 <div className="flex items-center gap-2">
                   <span className="text-s text-[var(--muted)]">Score:</span>
