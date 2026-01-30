@@ -25,10 +25,12 @@
 
   /* Game-specific */
   --piece-target: #f59e0b;
-  --piece-blocker: #64748b;
+  --piece-target-light: #fbbf24;
+  --piece-blocker: #78716c;
+  --piece-blocker-light: #a8a29e;
   --goal-bg: rgba(245, 158, 11, 0.2);
   --wall-color: #ffffff;
-  --cell-bg: #1c1917;
+  --cell-bg: #161616;
   --cell-border: #27272a;
   --obstacle-block: #52525b;
 }
