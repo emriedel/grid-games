@@ -29,7 +29,7 @@ export function Piece({ piece, isSelected, onClick, cellSize }: PieceProps) {
     <button
       onClick={onClick}
       className={`
-        absolute rounded-xl cursor-pointer
+        absolute rounded-lg cursor-pointer
         flex items-center justify-center
         transition-all
         ${isSelected ? 'scale-105' : ''}
