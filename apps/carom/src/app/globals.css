@@ -26,9 +26,9 @@
   /* Game-specific */
   --piece-target: #f59e0b;
   --piece-target-light: #fbbf24;
-  --piece-blocker: #78716c;
-  --piece-blocker-light: #a8a29e;
-  --goal-bg: rgba(245, 158, 11, 0.2);
+  --piece-blocker: #3b82f6;
+  --piece-blocker-light: #60a5fa;
+  --goal-bg: rgba(245, 158, 11, 0.35);
   --wall-color: #ffffff;
   --cell-bg: #161616;
   --cell-border: #27272a;

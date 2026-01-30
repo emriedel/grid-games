@@ -18,7 +18,7 @@ export function Piece({ piece, isSelected, onClick, cellSize }: PieceProps) {
   // Build radial gradient for 3D ball effect (using hex colors since CSS vars don't work in inline gradients)
   const gradient = isTarget
     ? 'radial-gradient(circle at 30% 30%, #fbbf24, #f59e0b 60%)'
-    : 'radial-gradient(circle at 30% 30%, #a8a29e, #78716c 60%)';
+    : 'radial-gradient(circle at 30% 30%, #60a5fa, #3b82f6 60%)';
 
   // Shadow effects: amber glow when selected, subtle drop shadow otherwise
   const boxShadow = isSelected
