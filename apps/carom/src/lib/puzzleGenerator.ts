@@ -32,7 +32,8 @@ async function loadPuzzlePool(): Promise<PrecomputedPuzzle[]> {
   }
 
   try {
-    const response = await fetch('/puzzles.json');
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const response = await fetch(`${basePath}/puzzles.json`);
     if (!response.ok) {
       throw new Error(`Failed to load puzzles: ${response.status}`);
     }
