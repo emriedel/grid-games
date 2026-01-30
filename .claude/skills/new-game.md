@@ -60,10 +60,13 @@ import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-ga
 
 const PUZZLE_BASE_DATE = new Date('2026-01-01');
 
+// Base path for assets (set via NEXT_PUBLIC_BASE_PATH on Vercel)
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export const newGameConfig = defineGameConfig({
   id: 'new-game',
   name: 'New Game',
-  emoji: '🎮',
+  icon: `${basePath}/icon.png`,
   description: 'Your game description.',
   theme: { /* your theme */ },
   homeUrl: '/',

@@ -3,6 +3,9 @@
 
 export const BOARD_SIZE = 9;
 
+// Maximum number of turns before game ends
+export const MAX_TURNS = 4;
+
 // Board archetypes for variety in daily puzzles
 export const BOARD_ARCHETYPES = ['classic', 'corridor', 'islands', 'diagonal', 'scattered', 'open'] as const;
 export type BoardArchetype = typeof BOARD_ARCHETYPES[number];
@@ -277,7 +280,7 @@ export const BOARD_CONFIG = {
 
   // Bonus square counts for a 9x9 board (asymmetric placement allowed)
   bonusCounts: {
-    DL: 5,  // Double Letter
+    DL: 4,  // Double Letter
     TL: 4,  // Triple Letter
     DW: 3,  // Double Word
     TW: 2,  // Triple Word
@@ -296,7 +299,7 @@ export const BONUS_PLACEMENT = {
   TW: { edgePreference: 0.8, minDistFromCenter: 3, allowAdjacent: false },  // Edges only
   DW: { edgePreference: 0.5, minDistFromCenter: 2, allowAdjacent: false },  // Mid-range spread
   TL: { edgePreference: 0.6, minDistFromCenter: 2, allowAdjacent: false },  // Mid-range spread
-  DL: { edgePreference: 0.4, minDistFromCenter: 1, allowAdjacent: true },   // Can be closer to center
+  DL: { edgePreference: 0.5, minDistFromCenter: 1, allowAdjacent: true },   // Balanced spread
 };
 
 // Bonus multipliers
@@ -323,9 +326,9 @@ export const SCORING_CONFIG = {
   // Letter usage bonuses: rewards using more of your letters
   // Key is number of letters used, value is bonus points
   letterUsageBonus: {
-    12: 10,  // 12 letters: +10 bonus
-    13: 25,  // 13 letters: +25 bonus
-    14: 50,  // 14 letters (all): +50 bonus
+    12: 5,   // 12 letters: +5 bonus
+    13: 10,  // 13 letters: +10 bonus
+    14: 20,  // 14 letters (all): +20 bonus
   } as Record<number, number>,
 };
 

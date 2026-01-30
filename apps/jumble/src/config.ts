@@ -4,10 +4,13 @@ import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-ga
 // Base date for puzzle numbering (first puzzle date)
 const PUZZLE_BASE_DATE = new Date('2026-01-01');
 
+// Base path for assets (set via NEXT_PUBLIC_BASE_PATH on Vercel)
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export const jumbleConfig = defineGameConfig({
   id: 'jumble',
   name: 'Jumble',
-  icon: '/icon.png',
+  icon: `${basePath}/icon.png`,
   description: 'Find words in a letter grid before time runs out',
   theme: jumbleTheme,
   homeUrl: '/',

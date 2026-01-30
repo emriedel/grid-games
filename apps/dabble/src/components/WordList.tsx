@@ -8,11 +8,7 @@ interface WordListProps {
 
 export function WordList({ words }: WordListProps) {
   if (words.length === 0) {
-    return (
-      <div className="text-center text-neutral-500 text-sm py-2">
-        No words submitted yet
-      </div>
-    );
+    return null;
   }
 
   return (

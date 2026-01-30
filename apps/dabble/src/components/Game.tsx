@@ -23,7 +23,7 @@ import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import { dabbleConfig } from '@/config';
-import { getPerTurnTileBonus, getLetterUsageBonus } from '@/constants/gameConfig';
+import { getLetterUsageBonus, MAX_TURNS } from '@/constants/gameConfig';
 import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData } from '@/types';
 
 type GameState = 'landing' | 'playing' | 'finished';
@@ -42,6 +42,7 @@ export function Game() {
   const [selectedRackIndex, setSelectedRackIndex] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [submittedWords, setSubmittedWords] = useState<Word[]>([]);
+  const [turnCount, setTurnCount] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [totalBonuses, setTotalBonuses] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +51,7 @@ export function Game() {
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [activeDragLetter, setActiveDragLetter] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
+  const [scorePopup, setScorePopup] = useState<{ score: number; key: number } | null>(null);
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -160,40 +162,41 @@ export function Game() {
     const newLockedIndices = new Set([...lockedRackIndices, ...usedRackIndices]);
     setLockedRackIndices(newLockedIndices);
 
-    // Calculate bonuses
-    const tilesPlacedThisTurn = placedTiles.length;
-    const tileBonus = getPerTurnTileBonus(tilesPlacedThisTurn);
-
+    // Calculate letter usage bonus (only awarded at thresholds)
     const previousLettersUsed = lockedRackIndices.size;
     const newLettersUsed = newLockedIndices.size;
-    // Only award the difference in letter usage bonus (not cumulative)
     const previousLetterBonus = getLetterUsageBonus(previousLettersUsed);
     const newLetterBonus = getLetterUsageBonus(newLettersUsed);
     const letterBonusDelta = newLetterBonus - previousLetterBonus;
 
-    const totalBonus = tileBonus + letterBonusDelta;
+    const turnScore = result.totalScore + letterBonusDelta;
+
+    // Show score popup animation
+    setScorePopup({ score: turnScore, key: Date.now() });
 
     setSubmittedWords((prev) => [...prev, ...result.words]);
-    setTotalScore((prev) => prev + result.totalScore + totalBonus);
-    setTotalBonuses((prev) => prev + totalBonus);
+    setTotalScore((prev) => prev + turnScore);
+    setTotalBonuses((prev) => prev + letterBonusDelta);
     setPlacedTiles([]);
     setUsedRackIndices(new Set());
 
-    // Show feedback message
-    const bonusMessages: string[] = [];
-    if (tileBonus > 0) {
-      bonusMessages.push(`+${tileBonus} tile bonus`);
-    }
-    if (letterBonusDelta > 0) {
-      bonusMessages.push(`+${letterBonusDelta} letter bonus`);
+    // Increment turn counter
+    const newTurnCount = turnCount + 1;
+    setTurnCount(newTurnCount);
+
+    // Check if game should end
+    if (newTurnCount >= MAX_TURNS) {
+      setGameState('finished');
+      setShowShareModal(true);
     }
 
-    if (bonusMessages.length > 0) {
-      setError(bonusMessages.join(', ') + '!');
+    // Show feedback message for letter usage bonus
+    if (letterBonusDelta > 0) {
+      setError(`+${letterBonusDelta} letter bonus!`);
     } else {
       setError(null);
     }
-  }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, rackLetters.length]);
+  }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, turnCount]);
 
   // Clear current placement
   const handleClear = useCallback(() => {
@@ -226,9 +229,11 @@ export function Game() {
     setSelectedRackIndex(null);
     setSelectedCell(null);
     setSubmittedWords([]);
+    setTurnCount(0);
     setTotalScore(0);
     setTotalBonuses(0);
     setError(null);
+    setGameState('playing');
   }, []);
 
   // Handle drag start
@@ -320,8 +325,6 @@ export function Game() {
     );
   }
 
-  const availableLetterCount = rackLetters.length - lockedRackIndices.size - usedRackIndices.size;
-
   // Playing/finished state
   return (
     <DndContext
@@ -337,9 +340,12 @@ export function Game() {
             homeUrl={dabbleConfig.homeUrl}
             onRulesClick={() => setShowRulesModal(true)}
             rightContent={
-              <div className="text-right">
-                <div className="text-xl font-bold text-[var(--accent)]">{totalScore}</div>
-                <div className="text-xs text-[var(--muted)]">Score</div>
+              <div className="flex items-center gap-4">
+                <div className="text-xs text-[var(--muted)]">Turn {turnCount + 1}/{MAX_TURNS}</div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-xs text-[var(--muted)]">Score</span>
+                  <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>
+                </div>
               </div>
             }
           />
@@ -357,14 +363,26 @@ export function Game() {
 
         {/* Main game area */}
         <div className="flex flex-col items-center gap-4 w-full py-2">
-          {/* Game Board */}
-          <GameBoard
-            board={board}
-            placedTiles={placedTiles}
-            selectedCell={selectedCell}
-            activeDragId={activeDragId}
-            onCellClick={handleCellClick}
-          />
+          {/* Game Board with score popup */}
+          <div className="relative w-full max-w-[400px]">
+            <GameBoard
+              board={board}
+              placedTiles={placedTiles}
+              selectedCell={selectedCell}
+              activeDragId={activeDragId}
+              onCellClick={handleCellClick}
+            />
+            {scorePopup && (
+              <div
+                key={scorePopup.key}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-[var(--accent)] pointer-events-none"
+                style={{ animation: 'scorePopup 0.8s ease-out forwards' }}
+                onAnimationEnd={() => setScorePopup(null)}
+              >
+                +{scorePopup.score}
+              </div>
+            )}
+          </div>
 
           {/* Error message */}
           {error && (
@@ -400,17 +418,11 @@ export function Game() {
               variant="primary"
               fullWidth
               onClick={handleSubmit}
-              disabled={placedTiles.length === 0}
+              disabled={placedTiles.length === 0 || turnCount >= MAX_TURNS}
               className="!bg-[var(--success)] hover:!bg-[var(--success)]/80"
             >
               Submit Word
             </Button>
-          </div>
-
-          {/* Status info */}
-          <div className="flex gap-4 text-sm text-[var(--muted)]">
-            <span>{submittedWords.length} words</span>
-            <span>{availableLetterCount} letters left</span>
           </div>
 
           {/* Word list */}
