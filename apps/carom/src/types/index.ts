@@ -39,6 +39,7 @@ export interface Puzzle {
   pieces: Piece[];
   optimalMoves: number;
   date: string;
+  puzzleNumber?: number;
 }
 
 export interface GameState {
@@ -74,4 +75,12 @@ export interface ReverseMove {
   direction: Direction; // The direction the piece traveled to get to fromPosition
   stoppedBy: 'wall' | 'edge' | 'piece' | 'obstacle';
   distance: number;
+}
+
+// Pre-computed puzzle for JSON storage
+export interface PrecomputedPuzzle {
+  walls: WallFlags[][];
+  goal: { row: number; col: number };
+  pieces: { id: string; type: PieceType; row: number; col: number }[];
+  optimalMoves: number;
 }

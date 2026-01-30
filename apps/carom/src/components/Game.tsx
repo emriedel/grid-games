@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, Button } from '@grid-games/ui';
+import { formatDisplayDate } from '@grid-games/shared';
 import { caromConfig } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
-import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
+import { getDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
 import { saveGameCompletion, getTodayGameState } from '@/lib/storage';
 import { Board } from './Board';
 import { HeaderMoveCounter } from './HeaderMoveCounter';
@@ -17,15 +18,27 @@ export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
 
-  const { state, startGame, selectPiece, movePiece, reset, setFinished } = useGameState();
+  const { state, startGame, selectPiece, movePiece, reset } = useGameState();
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Initialize puzzle on mount
   useEffect(() => {
-    const dailyPuzzle = generateDailyPuzzle();
-    setPuzzle(dailyPuzzle);
+    async function loadPuzzle() {
+      setIsLoading(true);
+      try {
+        const dailyPuzzle = await getDailyPuzzle();
+        setPuzzle(dailyPuzzle);
+      } catch (error) {
+        console.error('Failed to load puzzle:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadPuzzle();
 
     // Check if already completed today
     const savedState = getTodayGameState();
@@ -63,15 +76,29 @@ export function Game() {
     }
   }, [state.phase, state.moveCount, state.puzzle]);
 
+  // Handle new random puzzle (debug mode)
+  const handleNewPuzzle = useCallback(async () => {
+    const newPuzzle = await generateRandomPuzzle();
+    setPuzzle(newPuzzle);
+    startGame(newPuzzle);
+  }, [startGame]);
+
   // Landing screen
   if (state.phase === 'landing') {
+    const puzzleInfo = puzzle
+      ? {
+          number: puzzle.puzzleNumber,
+          date: formatDisplayDate(puzzle.date),
+        }
+      : caromConfig.getPuzzleInfo();
+
     return (
       <>
         <LandingScreen
           icon={caromConfig.icon}
           name={caromConfig.name}
           description={caromConfig.description}
-          puzzleInfo={caromConfig.getPuzzleInfo()}
+          puzzleInfo={puzzleInfo}
           onPlay={handlePlay}
           onRules={() => setShowRules(true)}
         />
@@ -87,7 +114,11 @@ export function Game() {
         maxWidth="full"
         navBar={
           <NavBar
-            title={caromConfig.name}
+            title={
+              state.puzzle?.puzzleNumber
+                ? `${caromConfig.name} #${state.puzzle.puzzleNumber}`
+                : caromConfig.name
+            }
             onRulesClick={() => setShowRules(true)}
             rightContent={
               <HeaderMoveCounter
@@ -124,11 +155,7 @@ export function Game() {
               <p>Selected: {state.selectedPieceId || 'none'}</p>
               <Button
                 variant="secondary"
-                onClick={() => {
-                  const newPuzzle = generateRandomPuzzle();
-                  setPuzzle(newPuzzle);
-                  startGame(newPuzzle);
-                }}
+                onClick={handleNewPuzzle}
                 className="mt-2 bg-purple-600 hover:bg-purple-700 text-white"
               >
                 New Puzzle
@@ -147,6 +174,7 @@ export function Game() {
           moveCount={state.moveCount}
           optimalMoves={state.puzzle.optimalMoves}
           date={state.puzzle.date}
+          puzzleNumber={state.puzzle.puzzleNumber}
         />
       )}
     </>

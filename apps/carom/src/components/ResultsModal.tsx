@@ -9,6 +9,7 @@ interface ResultsModalProps {
   moveCount: number;
   optimalMoves: number;
   date: string;
+  puzzleNumber?: number;
 }
 
 function getStarRating(moves: number, optimal: number): number {
@@ -39,9 +40,11 @@ export function ResultsModal({
   moveCount,
   optimalMoves,
   date,
+  puzzleNumber: propPuzzleNumber,
 }: ResultsModalProps) {
   const stars = getStarRating(moveCount, optimalMoves);
-  const puzzleNumber = getPuzzleNumber(new Date('2026-01-01'), new Date(date));
+  // Use provided puzzle number, or fall back to calculation
+  const puzzleNumber = propPuzzleNumber ?? getPuzzleNumber(new Date('2026-01-30'), new Date(date));
 
   const handleShare = async () => {
     const text = buildShareText({

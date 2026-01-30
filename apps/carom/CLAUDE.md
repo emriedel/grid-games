@@ -26,6 +26,9 @@ npx turbo type-check --filter=@grid-games/carom
 
 # Build
 npx turbo build --filter=@grid-games/carom
+
+# Generate more puzzles (edit TARGET_PUZZLES in script first)
+npm run generate-puzzles -w @grid-games/carom
 ```
 
 ## Key Files
@@ -36,8 +39,10 @@ npx turbo build --filter=@grid-games/carom
 | `src/components/Board.tsx` | Grid rendering with pieces and directional arrows |
 | `src/lib/gameLogic.ts` | Move simulation, collision detection |
 | `src/lib/solver.ts` | BFS solver for optimal solution |
-| `src/lib/puzzleGenerator.ts` | Daily puzzle generation |
+| `src/lib/puzzleGenerator.ts` | Loads pre-computed puzzles from JSON |
 | `src/types/index.ts` | Type definitions |
+| `public/puzzles.json` | Pre-computed puzzle pool |
+| `scripts/generatePuzzles.ts` | Offline puzzle generation script |
 
 ## Architecture
 
@@ -69,57 +74,37 @@ State = positions of all 4 pieces. Explores all (piece, direction) combinations.
 
 ---
 
-## Puzzle Generation Algorithm
+## Puzzle System
 
-### Key Insights (Learned Through Iteration)
+### Pre-computed Puzzles
 
-**Why backward generation fails:**
-The original approach started from solved state and worked backward N moves. However, BFS finds the OPTIMAL forward path, which is often completely different and shorter than the backward path taken. This made it nearly impossible to guarantee solution length.
+Puzzles are **pre-generated offline** and stored in `public/puzzles.json`. This eliminates runtime computation and ensures instant puzzle loading.
 
-**Forward generation with quality scoring works better:**
-1. Generate board structure (walls)
-2. Place pieces randomly
-3. Solve with BFS to get actual optimal solution
-4. Score the solution for "interestingness"
-5. Keep the best result, retry if not good enough
+**Launch date:** January 30, 2026 (defined in `src/config.ts` as `CAROM_LAUNCH_DATE`)
 
-### What Makes a Good Board
+### Generating More Puzzles
 
-1. **L-walls (6-8 total):** Create corner "traps" where pieces must bounce to enter
-2. **Edge walls (1 per edge):** Single-segment walls perpendicular to board edge, in middle third
-3. **L-wall placement:** Can be in rows/cols 1-6 (not on the very edge 0 or 7)
-4. **Spacing rules:**
-   - L-walls must not be adjacent to each other (1+ cell gap)
-   - L-walls must not be adjacent to edge wall cells (place edge walls first, then check)
-   - This allows L-walls near corners as long as they don't touch the specific edge walls
-5. **Goal placement:** Always at the center of an L-wall (requires bouncing to reach)
-
-### What Makes a Good Puzzle
-
-1. **Solution length:** 7-12 moves optimal (not too easy, not frustrating)
-2. **Multi-piece solutions:** Best puzzles require moving blockers to create "stepping stones"
-3. **Piece interaction:** Solutions where you set up blockers first, then move target are most interesting
-4. **Scoring formula:**
-   - +10 per unique piece used in solution
-   - +15 per blocker used (extra bonus for non-target pieces)
-   - +2 per move in solution (up to 12)
-
-### Performance Considerations
-
-- BFS is expensive (explores entire state space)
-- Limit total attempts (15 boards × 40 piece placements = 600 max)
-- Add time limit (2 seconds) to prevent browser hangs
-- Stop early if "great" puzzle found (3+ pieces, 8+ moves)
-- Always have hand-crafted fallback layouts ready
-
-### Configuration Constants
-
-```typescript
-MIN_OPTIMAL_SOLUTION = 7    // Reject puzzles solved in fewer moves
-MAX_OPTIMAL_SOLUTION = 12   // Reject puzzles that are too hard
-L_WALLS_TOTAL_MIN = 6       // Minimum L-walls on board
-L_WALLS_TOTAL_MAX = 8       // Maximum L-walls on board
+```bash
+# Edit TARGET_PUZZLES in scripts/generatePuzzles.ts, then:
+npm run generate-puzzles -w @grid-games/carom
 ```
+
+The script generates puzzles with:
+- 10-20 optimal moves
+- Must use 2+ pieces in solution
+- Quality scoring favors multi-piece solutions
+
+### Puzzle Quality Criteria
+
+1. **Solution length:** 10-20 moves optimal
+2. **Multi-piece solutions:** Must require moving blockers
+3. **Piece interaction:** Best puzzles require setting up blockers before moving target
+
+### Board Structure
+
+- **L-walls (6-8):** Create corner "traps" requiring bounces
+- **Edge walls (1 per edge):** Single-segment walls in middle third
+- **Goal placement:** Always at center of an L-wall
 
 ---
 
