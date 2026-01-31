@@ -1,6 +1,6 @@
 # Dabble - Daily Word Puzzle Game
 
-Part of **The Grid** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
+Part of **Nerdcube Games** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
 
 ## Project Overview
 

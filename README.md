@@ -1,4 +1,4 @@
-# The Grid - Daily Word Games
+# Nerdcube Games
 
 A Turborepo monorepo containing a collection of daily word puzzle games. Each day, players get a new puzzle to solve and can share their results.
 

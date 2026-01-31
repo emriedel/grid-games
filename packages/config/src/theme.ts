@@ -1,5 +1,5 @@
 /**
- * Theme contract for all Grid Games
+ * Theme contract for all Nerdcube Games
  * Each game defines its theme using this interface
  */
 export interface GameTheme {

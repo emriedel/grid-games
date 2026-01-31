@@ -51,7 +51,7 @@ export default function Home() {
       <div className="max-w-xl mx-auto px-4 py-12">
         {/* Header */}
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold">The Grid</h1>
+          <h1 className="text-3xl font-bold">Nerdcube Games</h1>
           <p className="text-[var(--muted)]">Daily Games by Eric Riedel</p>
         </header>
 

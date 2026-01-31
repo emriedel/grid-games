@@ -1,6 +1,6 @@
-# Adding a New Game to The Grid
+# Adding a New Game to Nerdcube Games
 
-Use this skill when creating a new game for the Grid Games monorepo.
+Use this skill when creating a new game for the Nerdcube Games monorepo.
 
 ---
 

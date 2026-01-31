@@ -1,6 +1,6 @@
 # Jumble - Daily Word Search Game
 
-Part of **The Grid** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
+Part of **Nerdcube Games** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
 
 ## Project Overview
 
@@ -123,7 +123,7 @@ Jumble 🟥
 Score: 47 pts
 3L: 8 | 4L: 5 | 5L: 3 | 6L: 1 | 7L+: 0
 
-games.ericriedel.dev/jumble
+nerdcube.games/jumble
 ```
 
 ## Dependencies

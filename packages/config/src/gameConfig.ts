@@ -1,7 +1,7 @@
 import { GameTheme } from './theme';
 
 /**
- * Configuration interface for Grid Games
+ * Configuration interface for Nerdcube Games
  * Each game defines this to integrate with shared UI components
  */
 export interface GameConfig {
