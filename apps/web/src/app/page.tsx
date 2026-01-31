@@ -50,12 +50,27 @@ export default function Home() {
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <div className="max-w-xl mx-auto px-4 py-12">
         {/* Header */}
-        <header className="mb-8 text-center">
-          <div className="flex items-center justify-center gap-3 mb-1">
-            <Image src="/icon.png" alt="Nerdcube" width={48} height={48} />
-            <h1 className="text-3xl font-bold">Nerdcube Games</h1>
+        <header className="mb-10 text-center">
+          {/* Icon with subtle glow */}
+          <div className="mb-3 flex justify-center">
+            <Image
+              src="/icon.png"
+              alt="Nerdcube"
+              width={56}
+              height={56}
+              className="drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]"
+            />
           </div>
-          <p className="text-[var(--muted)]">Daily Games by Eric Riedel</p>
+
+          {/* Title with subtle text glow */}
+          <h1 className="text-4xl font-bold tracking-tight [text-shadow:0_0_20px_rgba(147,51,234,0.35)]">
+            Nerdcube Games
+          </h1>
+
+          {/* Styled subtitle */}
+          <p className="text-[var(--muted)] text-sm italic mt-1">
+            Daily Games by Eric Riedel
+          </p>
         </header>
 
         {/* Game List */}
