@@ -25,7 +25,7 @@ export function ResultsModal({
 
   const handleShare = async () => {
     const movesText = moveCount === 1 ? 'move' : 'moves';
-    const text = `Carom #${puzzleNumber}\n${moveCount} ${movesText}\n\ngames.ericriedel.dev/carom`;
+    const text = `Carom #${puzzleNumber}\n${moveCount} ${movesText}\n\nhttps://nerdcube.games/carom`;
 
     await shareOrCopy(text);
   };

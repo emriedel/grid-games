@@ -60,7 +60,7 @@ export default function ShareButton({
       `Score: ${score} pts`,
       counts.join(' | '),
       '',
-      'games.ericriedel.dev/jumble',
+      'https://nerdcube.games/jumble',
     ].join('\n');
 
     const result = await shareOrCopy(shareText);

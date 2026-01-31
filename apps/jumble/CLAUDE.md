@@ -123,7 +123,7 @@ Jumble 🟥
 Score: 47 pts
 3L: 8 | 4L: 5 | 5L: 3 | 6L: 1 | 7L+: 0
 
-nerdcube.games/jumble
+https://nerdcube.games/jumble
 ```
 
 ## Dependencies

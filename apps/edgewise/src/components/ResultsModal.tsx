@@ -54,7 +54,7 @@ export function ResultsModal({
       maxScore: 4,
       emojiGrid,
       extraLines: [solved ? '🎉' : ''],
-      shareUrl: 'https://games.ericriedel.dev/edgewise',
+      shareUrl: 'https://nerdcube.games/edgewise',
     });
 
     const result = await shareOrCopy(shareText);

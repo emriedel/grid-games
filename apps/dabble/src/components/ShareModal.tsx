@@ -49,7 +49,7 @@ export function ShareModal({
       score: finalScore,
       emojiGrid,
       extraLines,
-      shareUrl: 'https://games.ericriedel.dev/dabble',
+      shareUrl: 'https://nerdcube.games/dabble',
     });
 
     const result = await shareOrCopy(shareText);
@@ -68,7 +68,7 @@ export function ShareModal({
       ...(letterBonus > 0 ? [`Letter bonus: +${letterBonus}`] : []),
       ...(allLettersUsed ? ['All letters used!'] : []),
       '',
-      'https://games.ericriedel.dev/dabble',
+      'https://nerdcube.games/dabble',
     ];
 
     await shareOrCopy(lines.join('\n'));
