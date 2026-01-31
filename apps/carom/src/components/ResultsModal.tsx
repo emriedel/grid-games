@@ -2,6 +2,14 @@
 
 import { Modal, Button } from '@grid-games/ui';
 import { shareOrCopy, getPuzzleNumber } from '@grid-games/shared';
+import { Move, Direction } from '@/types';
+
+const directionArrows: Record<Direction, string> = {
+  up: '⬆️',
+  down: '⬇️',
+  left: '⬅️',
+  right: '➡️',
+};
 
 interface ResultsModalProps {
   isOpen: boolean;
@@ -10,6 +18,7 @@ interface ResultsModalProps {
   optimalMoves: number;
   date: string;
   puzzleNumber?: number;
+  moveHistory: Move[];
 }
 
 export function ResultsModal({
@@ -19,13 +28,15 @@ export function ResultsModal({
   optimalMoves,
   date,
   puzzleNumber: propPuzzleNumber,
+  moveHistory,
 }: ResultsModalProps) {
   // Use provided puzzle number, or fall back to calculation
   const puzzleNumber = propPuzzleNumber ?? getPuzzleNumber(new Date('2026-01-30'), new Date(date));
 
   const handleShare = async () => {
     const movesText = moveCount === 1 ? 'move' : 'moves';
-    const text = `Carom #${puzzleNumber}\n${moveCount} ${movesText}\n\nhttps://nerdcube.games/carom`;
+    const arrowSequence = moveHistory.map((m) => directionArrows[m.direction]).join('');
+    const text = `Carom #${puzzleNumber}\n${arrowSequence}\n${moveCount} ${movesText}\n\nhttps://nerdcube.games/carom`;
 
     await shareOrCopy(text);
   };

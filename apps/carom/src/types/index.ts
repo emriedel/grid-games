@@ -49,6 +49,7 @@ export interface GameState {
   selectedPieceId: string | null;
   moveCount: number;
   isAnimating: boolean;
+  moveHistory: Move[];
 }
 
 export interface Move {

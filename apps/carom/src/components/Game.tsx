@@ -175,6 +175,7 @@ export function Game() {
           optimalMoves={state.puzzle.optimalMoves}
           date={state.puzzle.date}
           puzzleNumber={state.puzzle.puzzleNumber}
+          moveHistory={state.moveHistory}
         />
       )}
     </>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useReducer, useCallback } from 'react';
-import { GameState, Puzzle, Piece, Direction } from '@/types';
+import { GameState, Puzzle, Piece, Direction, Move, Position } from '@/types';
 import { simulateSlide, applyMove, isTargetOnGoal, wouldPieceMove } from '@/lib/gameLogic';
 import { SLIDE_ANIMATION_DURATION } from '@/constants/gameConfig';
 
@@ -9,7 +9,7 @@ type GameAction =
   | { type: 'START_GAME'; puzzle: Puzzle }
   | { type: 'SELECT_PIECE'; pieceId: string }
   | { type: 'MOVE_START' }
-  | { type: 'MOVE_END'; pieces: Piece[]; didWin: boolean }
+  | { type: 'MOVE_END'; pieces: Piece[]; didWin: boolean; move: Move }
   | { type: 'RESET' }
   | { type: 'SET_FINISHED' };
 
@@ -24,6 +24,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         selectedPieceId: null,
         moveCount: 0,
         isAnimating: false,
+        moveHistory: [],
       };
 
     case 'SELECT_PIECE':
@@ -45,6 +46,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         moveCount: state.moveCount + 1,
         isAnimating: false,
         phase: action.didWin ? 'finished' : state.phase,
+        moveHistory: [...state.moveHistory, action.move],
       };
 
     case 'RESET':
@@ -56,6 +58,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         moveCount: 0,
         isAnimating: false,
         phase: 'playing',
+        moveHistory: [],
       };
 
     case 'SET_FINISHED':
@@ -76,6 +79,7 @@ const initialState: GameState = {
   selectedPieceId: null,
   moveCount: 0,
   isAnimating: false,
+  moveHistory: [],
 };
 
 export function useGameState() {
@@ -99,6 +103,11 @@ export function useGameState() {
         return;
       }
 
+      // Get starting position
+      const piece = state.pieces.find((p) => p.id === state.selectedPieceId);
+      if (!piece) return;
+      const startPos: Position = { ...piece.position };
+
       // Start animation
       dispatch({ type: 'MOVE_START' });
 
@@ -116,9 +125,17 @@ export function useGameState() {
       // Check win condition
       const didWin = isTargetOnGoal(newPieces, state.puzzle.board.goal);
 
+      // Create move record
+      const move: Move = {
+        pieceId: state.selectedPieceId,
+        direction,
+        from: startPos,
+        to: endPos,
+      };
+
       // Wait for animation then update state
       setTimeout(() => {
-        dispatch({ type: 'MOVE_END', pieces: newPieces, didWin });
+        dispatch({ type: 'MOVE_END', pieces: newPieces, didWin, move });
       }, SLIDE_ANIMATION_DURATION);
     },
     [state.puzzle, state.selectedPieceId, state.pieces, state.isAnimating]
