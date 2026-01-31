@@ -51,7 +51,10 @@ export default function Home() {
       <div className="max-w-xl mx-auto px-4 py-12">
         {/* Header */}
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold">Nerdcube Games</h1>
+          <div className="flex items-center justify-center gap-3 mb-1">
+            <Image src="/icon.png" alt="Nerdcube" width={48} height={48} />
+            <h1 className="text-3xl font-bold">Nerdcube Games</h1>
+          </div>
           <p className="text-[var(--muted)]">Daily Games by Eric Riedel</p>
         </header>
 
