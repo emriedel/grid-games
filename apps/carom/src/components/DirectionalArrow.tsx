@@ -16,11 +16,12 @@ export function DirectionalArrow({
   piecePosition,
 }: DirectionalArrowProps) {
   // Arrow symbols for each direction
+  // Using \uFE0E (text variation selector) for left/right to prevent emoji rendering on mobile
   const arrowSymbols: Record<Direction, string> = {
     up: '▲',
     down: '▼',
-    left: '◀',
-    right: '▶',
+    left: '◀\uFE0E',
+    right: '▶\uFE0E',
   };
 
   // Calculate position centered in the adjacent cell
