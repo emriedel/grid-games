@@ -13,6 +13,7 @@ interface BoardProps {
   pieces: PieceType[];
   selectedPieceId: string | null;
   onPieceSelect: (pieceId: string) => void;
+  onDeselect: () => void;
   onMove: (direction: Direction) => void;
   disabled?: boolean;
 }
@@ -22,6 +23,7 @@ export function Board({
   pieces,
   selectedPieceId,
   onPieceSelect,
+  onDeselect,
   onMove,
   disabled = false,
 }: BoardProps) {
@@ -115,12 +117,20 @@ export function Board({
     return pieces.find((p) => p.id === selectedPieceId) || null;
   }, [pieces, selectedPieceId]);
 
+  // Handle click on empty board area to deselect
+  const handleBoardClick = useCallback(() => {
+    if (!disabled && selectedPieceId) {
+      onDeselect();
+    }
+  }, [disabled, selectedPieceId, onDeselect]);
+
   return (
     <div
       ref={containerRef}
       className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-[3px] border-[var(--wall-color)]"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      onClick={handleBoardClick}
     >
       {/* Grid cells */}
       <div

@@ -8,6 +8,7 @@ import { SLIDE_ANIMATION_DURATION } from '@/constants/gameConfig';
 type GameAction =
   | { type: 'START_GAME'; puzzle: Puzzle }
   | { type: 'SELECT_PIECE'; pieceId: string }
+  | { type: 'DESELECT' }
   | { type: 'MOVE_START' }
   | { type: 'MOVE_END'; pieces: Piece[]; didWin: boolean; move: Move }
   | { type: 'RESET' }
@@ -31,6 +32,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         selectedPieceId: state.selectedPieceId === action.pieceId ? null : action.pieceId,
+      };
+
+    case 'DESELECT':
+      return {
+        ...state,
+        selectedPieceId: null,
       };
 
     case 'MOVE_START':
@@ -94,6 +101,11 @@ export function useGameState() {
     dispatch({ type: 'SELECT_PIECE', pieceId });
   }, [state.isAnimating]);
 
+  const deselectPiece = useCallback(() => {
+    if (state.isAnimating) return;
+    dispatch({ type: 'DESELECT' });
+  }, [state.isAnimating]);
+
   const movePiece = useCallback(
     (direction: Direction) => {
       if (!state.puzzle || !state.selectedPieceId || state.isAnimating) return;
@@ -153,6 +165,7 @@ export function useGameState() {
     state,
     startGame,
     selectPiece,
+    deselectPiece,
     movePiece,
     reset,
     setFinished,

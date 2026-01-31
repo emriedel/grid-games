@@ -18,7 +18,7 @@ export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
 
-  const { state, startGame, selectPiece, movePiece, reset } = useGameState();
+  const { state, startGame, selectPiece, deselectPiece, movePiece, reset } = useGameState();
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -137,6 +137,7 @@ export function Game() {
               pieces={state.pieces}
               selectedPieceId={state.selectedPieceId}
               onPieceSelect={selectPiece}
+              onDeselect={deselectPiece}
               onMove={handleMove}
               disabled={state.isAnimating || state.phase === 'finished'}
             />

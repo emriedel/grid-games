@@ -27,7 +27,10 @@ export function Piece({ piece, isSelected, onClick, cellSize }: PieceProps) {
 
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
       className={`
         absolute rounded-lg cursor-pointer
         flex items-center justify-center
