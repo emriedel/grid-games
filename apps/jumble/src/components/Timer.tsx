@@ -19,9 +19,10 @@ export default function Timer({ timeRemaining }: TimerProps) {
   return (
     <div
       className={`
-        text-4xl sm:text-5xl font-mono font-bold tracking-wider
+        text-2xl sm:text-2xl font-mono font-bold tracking-wider
         transition-colors duration-300
         ${textColorClass}
+        pr-2
       `}
     >
       {formatTime(timeRemaining)}
