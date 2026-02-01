@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Edgewise - Daily Word Puzzle",
+  title: "Edgewise | Nerdcube Games",
   description: "Rotate tiles to match word pairs with categories in this daily puzzle game.",
+  icons: {
+    icon: "https://nerdcube.games/icons/edgewise.png",
+    apple: "https://nerdcube.games/icons/edgewise.png",
+  },
 };
 
 export const viewport: Viewport = {

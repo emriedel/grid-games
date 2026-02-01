@@ -39,11 +39,14 @@ Check `packages/ui/` before creating components:
 |-----------|---------|
 | `Modal` | Dialogs (results, settings, how-to-play) |
 | `Button` | Buttons (variants: primary/secondary/ghost) |
-| `LandingScreen` | Pre-game landing page |
-| `NavBar` | Top navigation during gameplay |
+| `LandingScreen` | Pre-game landing page (with optional `homeUrl` for home button) |
+| `NavBar` | Top navigation with hamburger menu (pass `gameId` to highlight current game) |
+| `HamburgerMenu` | Slide-out game navigation menu |
 | `GameContainer` | Game layout wrapper |
 | `ToastProvider` / `useToast` | Toast notifications |
 | `Skeleton` | Loading placeholders |
+| `DebugPanel` | Fixed debug info panel (purple styling) |
+| `DebugButton` | Debug action button (purple styling) |
 
 ```tsx
 import { Modal, Button, LandingScreen, NavBar, GameContainer } from '@grid-games/ui';
@@ -102,6 +105,32 @@ apps/[game]/
 import { Modal } from '@grid-games/ui';
 import { dabbleTheme } from '@grid-games/config';
 import { shareOrCopy } from '@grid-games/shared';
+```
+
+---
+
+## Debug Mode
+
+All games support debug mode via `?debug=true` query parameter. Debug mode:
+- Bypasses localStorage saved state (start fresh every time)
+- Shows a purple debug panel with:
+  - Game-specific info (optimal moves, word counts, etc.)
+  - "New Puzzle" button to regenerate with random puzzle
+
+```
+http://localhost:3001?debug=true
+```
+
+Use shared debug components:
+```tsx
+import { DebugPanel, DebugButton } from '@grid-games/ui';
+
+{isDebug && (
+  <DebugPanel>
+    <div>Debug info here</div>
+    <DebugButton onClick={handleNewPuzzle} />
+  </DebugPanel>
+)}
 ```
 
 ---

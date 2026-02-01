@@ -35,7 +35,7 @@ export function parseDateString(dateStr: string): Date {
 export function formatDisplayDate(date: Date | string): string {
   const d = typeof date === 'string' ? parseDateString(date) : date;
   return d.toLocaleDateString('en-US', {
-    month: 'short',
+    month: 'long',
     day: 'numeric',
     year: 'numeric',
   });

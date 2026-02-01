@@ -26,6 +26,7 @@ interface UseGameStateReturn {
   startGame: () => void;
   endGame: () => void;
   isWordAlreadyFound: (word: string) => boolean;
+  regeneratePuzzle: () => void;
 }
 
 export function useGameState(): UseGameStateReturn {
@@ -128,6 +129,25 @@ export function useGameState(): UseGameStateReturn {
     });
   }, [status, foundWords.length, totalScore, allValidWords.size, maxPossibleScore, puzzleNumber]);
 
+  // Regenerate puzzle with random date (debug mode)
+  const regeneratePuzzle = useCallback(async () => {
+    // Generate a random date for a new puzzle
+    const randomDate = new Date(Date.now() + Math.random() * 365 * 24 * 60 * 60 * 1000);
+    const newBoard = generateBoard(randomDate);
+    const number = getPuzzleNumber(randomDate);
+
+    setBoard(newBoard);
+    setPuzzleNumber(number);
+    setStatus('ready');
+    setFoundWords([]);
+    setCurrentPath([]);
+    resetTimer(TIMER_DURATION);
+
+    // Find all valid words for the new board
+    const validWords = findAllValidWords(newBoard);
+    setAllValidWords(validWords);
+  }, [resetTimer]);
+
   // Submit a word
   const submitWord = useCallback((path: Position[]): boolean => {
     if (status !== 'playing' || path.length === 0) return false;
@@ -172,5 +192,6 @@ export function useGameState(): UseGameStateReturn {
     startGame,
     endGame,
     isWordAlreadyFound,
+    regeneratePuzzle,
   };
 }

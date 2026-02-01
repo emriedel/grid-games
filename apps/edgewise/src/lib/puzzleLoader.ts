@@ -81,3 +81,17 @@ export function getPuzzleNumber(baseDate: Date, currentDate?: Date): number {
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   return diffDays + 1;
 }
+
+/**
+ * Get a random puzzle (for debug mode)
+ */
+export function getRandomPuzzle(): { puzzle: Puzzle; dateStr: string } | null {
+  if (puzzles.length === 0) return null;
+
+  const randomDate = new Date(Date.now() + Math.random() * 365 * 24 * 60 * 60 * 1000);
+  const dateStr = randomDate.toISOString().split('T')[0];
+  const rng = seedrandom(dateStr);
+  const index = Math.floor(rng() * puzzles.length);
+
+  return { puzzle: puzzles[index], dateStr };
+}

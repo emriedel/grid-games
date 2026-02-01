@@ -11,7 +11,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
-import { LandingScreen, NavBar, GameContainer, Button } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton } from '@grid-games/ui';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
 import { WordList } from './WordList';
@@ -321,6 +321,7 @@ export function Game() {
           puzzleInfo={puzzleInfo}
           onPlay={handlePlay}
           onRules={() => setShowRulesModal(true)}
+          homeUrl="/"
         />
         <HowToPlayModal
           isOpen={showRulesModal}
@@ -342,7 +343,7 @@ export function Game() {
         navBar={
           <NavBar
             title={dabbleConfig.name}
-            homeUrl={dabbleConfig.homeUrl}
+            gameId={dabbleConfig.id}
             onRulesClick={() => setShowRulesModal(true)}
             rightContent={
               <div className="flex items-center gap-5">
@@ -360,14 +361,11 @@ export function Game() {
           />
         }
       >
-        {/* Debug button */}
+        {/* Debug Panel */}
         {debugMode && (
-          <button
-            onClick={handleNewPuzzle}
-            className="mb-2 px-3 py-1 text-xs font-medium rounded bg-purple-600 hover:bg-purple-500 transition-colors"
-          >
-            New Puzzle
-          </button>
+          <DebugPanel>
+            <DebugButton onClick={handleNewPuzzle} />
+          </DebugPanel>
         )}
 
         {/* Main game area */}

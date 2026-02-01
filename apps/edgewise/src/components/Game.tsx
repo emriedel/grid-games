@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, Button } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton } from '@grid-games/ui';
 import { getTodayDateString, formatDisplayDate, getPuzzleNumber } from '@grid-games/shared';
 
 import { GameBoard } from './GameBoard';
@@ -11,7 +11,7 @@ import { FeedbackHistory } from './FeedbackDots';
 import { HowToPlayModal } from './HowToPlayModal';
 import { ResultsModal } from './ResultsModal';
 
-import { getTodayPuzzle, initializeGameState } from '@/lib/puzzleLoader';
+import { getTodayPuzzle, initializeGameState, getRandomPuzzle } from '@/lib/puzzleLoader';
 import {
   rotateSquare,
   groupRotate,
@@ -216,6 +216,24 @@ export function Game() {
     setShowResults(false);
   }, [puzzle, dateStr]);
 
+  // Handle regenerate puzzle (debug mode)
+  const handleNewPuzzle = useCallback(() => {
+    const result = getRandomPuzzle();
+    if (!result) return;
+
+    const { puzzle: newPuzzle, dateStr: newDateStr } = result;
+    setPuzzle(newPuzzle);
+
+    const initialSquares = initializeGameState(newPuzzle, newDateStr);
+    setSquares(initialSquares);
+    setGuessesUsed(0);
+    setFeedbackHistory([]);
+    setSolved(false);
+    setCategoryResults({ top: null, right: null, bottom: null, left: null });
+    setGameState('playing');
+    setShowResults(false);
+  }, []);
+
   // Render landing screen
   if (gameState === 'landing') {
     return (
@@ -227,6 +245,7 @@ export function Game() {
           puzzleInfo={edgewiseConfig.getPuzzleInfo()}
           onPlay={handlePlay}
           onRules={() => setShowHowToPlay(true)}
+          homeUrl="/"
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
       </>
@@ -245,7 +264,7 @@ export function Game() {
   const navBar = (
     <NavBar
       title={`${edgewiseConfig.name} #${puzzleNumber}`}
-      homeUrl={edgewiseConfig.homeUrl}
+      gameId={edgewiseConfig.id}
       onRulesClick={() => setShowHowToPlay(true)}
     />
   );
@@ -309,6 +328,15 @@ export function Game() {
         puzzleDate={formatDisplayDate(dateStr)}
         puzzleNumber={puzzleNumber}
       />
+
+      {/* Debug Panel */}
+      {isDebug && (
+        <DebugPanel>
+          <div>Puzzle #{puzzleNumber}</div>
+          <div>Guesses: {guessesUsed}/{MAX_ATTEMPTS}</div>
+          <DebugButton onClick={handleNewPuzzle} />
+        </DebugPanel>
+      )}
     </GameContainer>
   );
 }

@@ -13,9 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Carom - Daily Sliding Puzzle",
+  title: "Carom | Nerdcube Games",
   description: "A daily piece-sliding puzzle game. Navigate pieces through walls to reach the goal.",
   keywords: ["puzzle", "daily game", "sliding puzzle"],
+  icons: {
+    icon: "https://nerdcube.games/icons/carom.png",
+    apple: "https://nerdcube.games/icons/carom.png",
+  },
 };
 
 export const viewport: Viewport = {

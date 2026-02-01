@@ -12,13 +12,10 @@ export const edgewiseTheme = {
   tileBorder: '#4c1d95',
 };
 
-// Base path for assets (set via NEXT_PUBLIC_BASE_PATH on Vercel)
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-
 export const edgewiseConfig = defineGameConfig({
   id: 'edgewise',
   name: 'Edgewise',
-  icon: `${basePath}/icon.png`,
+  icon: 'https://nerdcube.games/icons/edgewise.png',
   description: 'Rotate tiles to match word pairs with categories.',
   theme: edgewiseTheme,
   homeUrl: '/',

@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jumble - Daily Word Puzzle",
+  title: "Jumble | Nerdcube Games",
   description: "Find words on a Boggle-style letter grid. New puzzle every day!",
+  icons: {
+    icon: "https://nerdcube.games/icons/jumble.png",
+    apple: "https://nerdcube.games/icons/jumble.png",
+  },
 };
 
 export const viewport: Viewport = {

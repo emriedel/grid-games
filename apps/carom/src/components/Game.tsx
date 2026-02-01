@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, Button } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton } from '@grid-games/ui';
 import { formatDisplayDate } from '@grid-games/shared';
 import { caromConfig } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
@@ -101,6 +101,7 @@ export function Game() {
           puzzleInfo={puzzleInfo}
           onPlay={handlePlay}
           onRules={() => setShowRules(true)}
+          homeUrl="/"
         />
         <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
       </>
@@ -119,6 +120,7 @@ export function Game() {
                 ? `${caromConfig.name} #${state.puzzle.puzzleNumber}`
                 : caromConfig.name
             }
+            gameId={caromConfig.id}
             onRulesClick={() => setShowRules(true)}
             rightContent={
               <HeaderMoveCounter
@@ -148,20 +150,14 @@ export function Game() {
             Reset
           </Button>
 
-          {/* Debug info */}
+          {/* Debug Panel */}
           {isDebug && state.puzzle && (
-            <div className="text-xs text-[var(--muted)] text-center space-y-1">
-              <p>Optimal: {state.puzzle.optimalMoves} moves</p>
-              <p>Date: {state.puzzle.date}</p>
-              <p>Selected: {state.selectedPieceId || 'none'}</p>
-              <Button
-                variant="secondary"
-                onClick={handleNewPuzzle}
-                className="mt-2 bg-purple-600 hover:bg-purple-700 text-white"
-              >
-                New Puzzle
-              </Button>
-            </div>
+            <DebugPanel>
+              <div>Optimal: {state.puzzle.optimalMoves} moves</div>
+              <div>Date: {state.puzzle.date}</div>
+              <div>Selected: {state.selectedPieceId || 'none'}</div>
+              <DebugButton onClick={handleNewPuzzle} />
+            </DebugPanel>
           )}
         </div>
       </GameContainer>

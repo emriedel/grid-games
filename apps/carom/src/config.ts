@@ -13,13 +13,10 @@ export const caromTheme = {
 // Launch date for Carom - puzzle #1 starts on this date
 export const CAROM_LAUNCH_DATE = new Date('2026-01-30');
 
-// Base path for assets (set via NEXT_PUBLIC_BASE_PATH on Vercel)
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-
 export const caromConfig = defineGameConfig({
   id: 'carom',
   name: 'Carom',
-  icon: `${basePath}/icon.png`,
+  icon: 'https://nerdcube.games/icons/carom.png',
   description: 'Slide pieces to reach the goal. A daily sliding puzzle.',
   theme: caromTheme,
   homeUrl: '/',

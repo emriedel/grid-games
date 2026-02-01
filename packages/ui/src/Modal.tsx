@@ -78,6 +78,7 @@ export function Modal({
       <div
         className={`
           bg-[var(--background,#0a0a0a)] rounded-xl
+          border border-[var(--border,#27272a)] shadow-xl shadow-black/50
           ${sizeClasses[size]} w-full mx-4 max-h-[90vh] overflow-y-auto
           ${className}
         `}

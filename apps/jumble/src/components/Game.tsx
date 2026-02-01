@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import { LandingScreen, NavBar, GameContainer } from '@grid-games/ui';
+import { useSearchParams } from 'next/navigation';
+import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton } from '@grid-games/ui';
 import { Position } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
 import { jumbleConfig } from '@/config';
@@ -13,6 +14,9 @@ import ResultsModal from './ResultsModal';
 import HowToPlayModal from './HowToPlayModal';
 
 export default function Game() {
+  const searchParams = useSearchParams();
+  const isDebug = searchParams.get('debug') === 'true';
+
   const {
     board,
     foundWords,
@@ -20,10 +24,13 @@ export default function Game() {
     status,
     timeRemaining,
     totalScore,
+    allValidWords,
+    maxPossibleScore,
     setCurrentPath,
     submitWord,
     startGame,
     isWordAlreadyFound,
+    regeneratePuzzle,
   } = useGameState();
 
   const [showResults, setShowResults] = useState(false);
@@ -84,6 +91,7 @@ export default function Game() {
           puzzleInfo={{ date: puzzleInfo.date }}
           onPlay={startGame}
           onRules={() => setShowHowToPlay(true)}
+          homeUrl="/"
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
       </>
@@ -100,6 +108,7 @@ export default function Game() {
           description="You've already played today!"
           puzzleInfo={{ date: puzzleInfo.date }}
           onPlay={() => setShowResults(true)}
+          homeUrl="/"
         />
         <ResultsModal
           isOpen={showResults}
@@ -118,7 +127,7 @@ export default function Game() {
       navBar={
         <NavBar
           title={jumbleConfig.name}
-          homeUrl={jumbleConfig.homeUrl}
+          gameId={jumbleConfig.id}
           onRulesClick={() => setShowHowToPlay(true)}
           rightContent={<Timer timeRemaining={timeRemaining} />}
         />
@@ -167,6 +176,14 @@ export default function Game() {
         foundWords={foundWords}
         score={totalScore}
       />
+
+      {/* Debug Panel */}
+      {isDebug && (
+        <DebugPanel>
+          <div>Words: {allValidWords.size} | Max: {maxPossibleScore}pts</div>
+          <DebugButton onClick={regeneratePuzzle} />
+        </DebugPanel>
+      )}
     </GameContainer>
   );
 }
