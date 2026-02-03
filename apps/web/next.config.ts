@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'nerdcube.games',
+        pathname: '/icons/**',
+      },
+    ],
+  },
   async rewrites() {
     return [
       {
