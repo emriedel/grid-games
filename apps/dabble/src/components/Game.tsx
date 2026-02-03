@@ -321,7 +321,7 @@ export function Game() {
           puzzleInfo={puzzleInfo}
           onPlay={handlePlay}
           onRules={() => setShowRulesModal(true)}
-          homeUrl="/"
+          gameId="dabble"
         />
         <HowToPlayModal
           isOpen={showRulesModal}

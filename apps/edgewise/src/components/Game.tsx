@@ -245,7 +245,7 @@ export function Game() {
           puzzleInfo={edgewiseConfig.getPuzzleInfo()}
           onPlay={handlePlay}
           onRules={() => setShowHowToPlay(true)}
-          homeUrl="/"
+          gameId="edgewise"
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
       </>

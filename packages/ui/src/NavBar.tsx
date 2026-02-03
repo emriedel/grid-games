@@ -8,8 +8,6 @@ interface NavBarProps {
   title: string;
   /** Current game ID for menu highlighting */
   gameId?: string;
-  /** URL for home button - should go to main game selection (default: '/') */
-  homeUrl?: string;
   /** Handler for rules/how-to-play button */
   onRulesClick?: () => void;
   /** Custom content for right side (score, timer, etc.) */

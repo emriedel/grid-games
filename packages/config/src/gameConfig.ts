@@ -19,8 +19,8 @@ export interface GameConfig {
   theme: GameTheme;
   /** Function to get current puzzle info */
   getPuzzleInfo: () => { number?: number; date: string };
-  /** URL to navigate back to home */
-  homeUrl: string;
+  /** @deprecated No longer used - menu is now shown via HamburgerMenu component */
+  homeUrl?: string;
 }
 
 /**

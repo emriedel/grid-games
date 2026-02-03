@@ -101,7 +101,7 @@ export function Game() {
           puzzleInfo={puzzleInfo}
           onPlay={handlePlay}
           onRules={() => setShowRules(true)}
-          homeUrl="/"
+          gameId="carom"
         />
         <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
       </>

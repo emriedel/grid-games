@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { Button } from './Button';
+import { HamburgerMenu } from './HamburgerMenu';
 
 interface LandingScreenProps {
   /** Game emoji (deprecated, use icon instead) */
@@ -20,8 +21,10 @@ interface LandingScreenProps {
   onRules?: () => void;
   /** Additional buttons (stats, etc.) */
   children?: ReactNode;
-  /** URL for home/all games link */
+  /** URL for home/all games link (deprecated, menu now used instead) */
   homeUrl?: string;
+  /** Current game ID for menu highlighting */
+  gameId?: string;
 }
 
 /**
@@ -37,35 +40,14 @@ export function LandingScreen({
   onPlay,
   onRules,
   children,
-  homeUrl,
+  gameId,
 }: LandingScreenProps) {
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center px-6 py-8 pt-[18vh] relative">
-      {/* Home button */}
-      {homeUrl && (
-        <a
-          href={homeUrl}
-          className="absolute top-4 left-4 p-2 rounded-lg text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
-          aria-label="All games"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-          </svg>
-        </a>
-      )}
+      {/* Menu button */}
+      <div className="absolute top-4 left-4">
+        <HamburgerMenu currentGameId={gameId} />
+      </div>
 
       {/* Game icon */}
       {icon ? (

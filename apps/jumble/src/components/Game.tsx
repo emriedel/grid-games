@@ -91,7 +91,7 @@ export default function Game() {
           puzzleInfo={{ date: puzzleInfo.date }}
           onPlay={startGame}
           onRules={() => setShowHowToPlay(true)}
-          homeUrl="/"
+          gameId="jumble"
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
       </>
@@ -108,7 +108,7 @@ export default function Game() {
           description="You've already played today!"
           puzzleInfo={{ date: puzzleInfo.date }}
           onPlay={() => setShowResults(true)}
-          homeUrl="/"
+          gameId="jumble"
         />
         <ResultsModal
           isOpen={showResults}

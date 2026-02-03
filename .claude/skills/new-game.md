@@ -69,7 +69,6 @@ export const newGameConfig = defineGameConfig({
   icon: `${basePath}/icon.png`,
   description: 'Your game description.',
   theme: { /* your theme */ },
-  homeUrl: '/',
   getPuzzleInfo: () => ({
     number: getPuzzleNumber(PUZZLE_BASE_DATE),
     date: formatDisplayDate(getTodayDateString()),
@@ -85,6 +84,22 @@ import { LandingScreen, NavBar, GameContainer, Button, Modal } from '@grid-games
 import { newGameConfig } from '@/config';
 
 // Implement landing → playing → finished state machine
+// LandingScreen and NavBar use gameId for menu highlighting:
+<LandingScreen
+  icon={newGameConfig.icon}
+  name={newGameConfig.name}
+  description={newGameConfig.description}
+  puzzleInfo={newGameConfig.getPuzzleInfo()}
+  onPlay={handlePlay}
+  onRules={() => setShowRules(true)}
+  gameId="new-game"
+/>
+
+<NavBar
+  title={newGameConfig.name}
+  gameId="new-game"
+  onRulesClick={() => setShowRules(true)}
+/>
 ```
 
 ## Step 6: Add to Landing Page
