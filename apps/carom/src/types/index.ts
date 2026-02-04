@@ -50,6 +50,7 @@ export interface GameState {
   moveCount: number;
   isAnimating: boolean;
   moveHistory: Move[];
+  lastActionWasUndo: boolean;
 }
 
 export interface Move {

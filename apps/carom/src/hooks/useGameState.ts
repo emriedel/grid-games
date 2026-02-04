@@ -12,7 +12,8 @@ type GameAction =
   | { type: 'MOVE_START' }
   | { type: 'MOVE_END'; pieces: Piece[]; didWin: boolean; move: Move }
   | { type: 'RESET' }
-  | { type: 'SET_FINISHED' };
+  | { type: 'SET_FINISHED' }
+  | { type: 'UNDO' };
 
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
@@ -26,6 +27,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         moveCount: 0,
         isAnimating: false,
         moveHistory: [],
+        lastActionWasUndo: false,
       };
 
     case 'SELECT_PIECE':
@@ -54,6 +56,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         isAnimating: false,
         phase: action.didWin ? 'finished' : state.phase,
         moveHistory: [...state.moveHistory, action.move],
+        lastActionWasUndo: false,
       };
 
     case 'RESET':
@@ -66,6 +69,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         isAnimating: false,
         phase: 'playing',
         moveHistory: [],
+        lastActionWasUndo: false,
       };
 
     case 'SET_FINISHED':
@@ -73,6 +77,24 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...state,
         phase: 'finished',
       };
+
+    case 'UNDO': {
+      if (state.moveHistory.length === 0 || state.lastActionWasUndo) return state;
+      const lastMove = state.moveHistory[state.moveHistory.length - 1];
+      const newPieces = state.pieces.map((p) =>
+        p.id === lastMove.pieceId
+          ? { ...p, position: { ...lastMove.from } }
+          : p
+      );
+      return {
+        ...state,
+        pieces: newPieces,
+        moveCount: state.moveCount - 1,
+        moveHistory: state.moveHistory.slice(0, -1),
+        lastActionWasUndo: true,
+        selectedPieceId: null,
+      };
+    }
 
     default:
       return state;
@@ -87,6 +109,7 @@ const initialState: GameState = {
   moveCount: 0,
   isAnimating: false,
   moveHistory: [],
+  lastActionWasUndo: false,
 };
 
 export function useGameState() {
@@ -161,6 +184,13 @@ export function useGameState() {
     dispatch({ type: 'SET_FINISHED' });
   }, []);
 
+  const undo = useCallback(() => {
+    if (state.isAnimating) return;
+    dispatch({ type: 'UNDO' });
+  }, [state.isAnimating]);
+
+  const canUndo = state.moveHistory.length > 0 && !state.lastActionWasUndo && !state.isAnimating;
+
   return {
     state,
     startGame,
@@ -169,5 +199,7 @@ export function useGameState() {
     movePiece,
     reset,
     setFinished,
+    undo,
+    canUndo,
   };
 }

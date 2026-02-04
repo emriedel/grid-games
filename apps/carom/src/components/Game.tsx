@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Undo2 } from 'lucide-react';
 import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton } from '@grid-games/ui';
 import { formatDisplayDate } from '@grid-games/shared';
 import { caromConfig } from '@/config';
@@ -18,7 +19,7 @@ export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
 
-  const { state, startGame, selectPiece, deselectPiece, movePiece, reset } = useGameState();
+  const { state, startGame, selectPiece, deselectPiece, movePiece, reset, undo, canUndo } = useGameState();
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -145,10 +146,21 @@ export function Game() {
             />
           )}
 
-          {/* Reset button */}
-          <Button variant="secondary" onClick={reset}>
-            Reset
-          </Button>
+          {/* Undo and Reset buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={undo}
+              disabled={!canUndo}
+              className="p-2 rounded-lg bg-[var(--muted)] text-[var(--foreground)] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--border)] transition-colors"
+              aria-label="Undo last move"
+              title="Undo"
+            >
+              <Undo2 className="w-5 h-5" />
+            </button>
+            <Button variant="secondary" onClick={reset}>
+              Reset
+            </Button>
+          </div>
 
           {/* Debug Panel */}
           {isDebug && state.puzzle && (
