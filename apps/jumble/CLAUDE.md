@@ -36,7 +36,7 @@ Then open http://localhost:3002
 3. Drag/swipe across tiles to form words, or tap to select
 4. Release drag or double-tap last tile to submit the word
 5. Tap outside grid to clear selection
-6. Timer: 2 minutes
+6. Timer: 90 seconds
 
 ### Word Requirements
 - Minimum word length: 3 letters
@@ -85,7 +85,7 @@ src/
 
 `src/constants/gameConfig.ts`:
 - `BOARD_SIZE`: Board dimensions (5x5 Big Boggle)
-- `TIMER_DURATION`: Game time in seconds (120 = 2 minutes)
+- `TIMER_DURATION`: Game time in seconds (90 = 1.5 minutes)
 - `MIN_WORD_LENGTH`: Minimum word length (default: 3)
 - `BOGGLE_DICE`: Standard Big Boggle 25-dice set
 - `SCORING_TABLE`: Points per word length
@@ -105,8 +105,11 @@ Touch/mouse input tracks a path of connected tiles:
 - Uses standard Big Boggle 25-dice set
 - Validates board for playability:
   - At least 4 vowels spread across 3+ rows and columns
+  - At least 1 vowel in each quadrant of the board
   - Maximum 2 rare letters (Q, Z, X, J, K)
+  - At least 50 total words and 5 words of 6+ letters
 - Retries with deterministic seed increment if validation fails
+- Falls back to best available board if enhanced validation can't be satisfied
 
 ### Touch Handling
 Special CSS classes in `globals.css`:

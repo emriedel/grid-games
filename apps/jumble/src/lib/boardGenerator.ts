@@ -1,5 +1,6 @@
 import { BOARD_SIZE, BOGGLE_DICE } from '@/constants/gameConfig';
 import { Board } from '@/types';
+import { findAllValidWords } from './wordValidator';
 
 // Seeded random number generator (Mulberry32)
 function createSeededRandom(seed: number): () => number {
@@ -45,6 +46,57 @@ function isVowel(letter: string): boolean {
 // Check if a letter is rare (Q, Z, X, J, K)
 function isRareLetter(letter: string): boolean {
   return 'QZXJK'.includes(letter.charAt(0));
+}
+
+// Get quadrant for a position (TL=0, TR=1, BL=2, BR=3)
+// For 5x5: rows 0-2 = top, 2-4 = bottom; cols 0-2 = left, 2-4 = right (center shared)
+function getQuadrant(row: number, col: number): number {
+  const isTop = row <= 2;
+  const isLeft = col <= 2;
+  if (isTop && isLeft) return 0; // TL
+  if (isTop && !isLeft) return 1; // TR
+  if (!isTop && isLeft) return 2; // BL
+  return 3; // BR
+}
+
+// Validate that each quadrant has at least one vowel
+function validateVowelQuadrants(board: Board): boolean {
+  const quadrantsWithVowels = new Set<number>();
+
+  for (let row = 0; row < BOARD_SIZE; row++) {
+    for (let col = 0; col < BOARD_SIZE; col++) {
+      if (isVowel(board[row][col])) {
+        quadrantsWithVowels.add(getQuadrant(row, col));
+      }
+    }
+  }
+
+  return quadrantsWithVowels.size === 4;
+}
+
+interface BoardQuality {
+  totalWords: number;
+  words6Plus: number;
+  words7Plus: number;
+}
+
+// Evaluate board quality by finding all valid words
+function evaluateBoardQuality(board: Board): BoardQuality {
+  const allWords = findAllValidWords(board);
+  let words6Plus = 0;
+  let words7Plus = 0;
+
+  for (const word of allWords.keys()) {
+    const length = word.replace('QU', 'Q').length; // QU counts as 2 for scoring but 1 tile
+    if (length >= 6) words6Plus++;
+    if (length >= 7) words7Plus++;
+  }
+
+  return {
+    totalWords: allWords.size,
+    words6Plus,
+    words7Plus,
+  };
 }
 
 // Validate board meets playability criteria
@@ -120,10 +172,12 @@ function createBoardFromDice(shuffledDice: string[], random: () => number): Boar
 }
 
 // Generate board for a specific date with validation
+// Uses enhanced validation: basic checks + quadrant vowels + word quality
 export function generateBoard(date: Date = new Date()): Board {
   const baseSeed = dateToSeed(date);
-  const maxAttempts = 50;
+  const maxAttempts = 100;
 
+  // First pass: try to find a board with enhanced validation
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     // Use seed + attempt for deterministic retries
     const seed = baseSeed + attempt;
@@ -135,15 +189,50 @@ export function generateBoard(date: Date = new Date()): Board {
     // Create the board
     const board = createBoardFromDice(shuffledDice, random);
 
-    // Validate board
-    if (validateBoard(board)) {
+    // Basic validation first (fast)
+    if (!validateBoard(board)) {
+      continue;
+    }
+
+    // Check quadrant vowel distribution
+    if (!validateVowelQuadrants(board)) {
+      continue;
+    }
+
+    // Evaluate word quality (slower, so do last)
+    const quality = evaluateBoardQuality(board);
+
+    // Require at least 50 total words and 5 words of 6+ letters
+    if (quality.totalWords >= 50 && quality.words6Plus >= 5) {
       return board;
     }
   }
 
-  // If all attempts fail, use the last attempt's board anyway
-  // This shouldn't happen with properly designed dice
-  const random = createSeededRandom(baseSeed + maxAttempts - 1);
+  // Fallback: find best board that passes basic validation
+  let bestBoard: Board | null = null;
+  let bestQuality: BoardQuality = { totalWords: 0, words6Plus: 0, words7Plus: 0 };
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const seed = baseSeed + attempt;
+    const random = createSeededRandom(seed);
+    const shuffledDice = shuffle([...BOGGLE_DICE], random);
+    const board = createBoardFromDice(shuffledDice, random);
+
+    if (validateBoard(board)) {
+      const quality = evaluateBoardQuality(board);
+      if (quality.totalWords > bestQuality.totalWords) {
+        bestBoard = board;
+        bestQuality = quality;
+      }
+    }
+  }
+
+  // Return best board found, or generate one as last resort
+  if (bestBoard) {
+    return bestBoard;
+  }
+
+  const random = createSeededRandom(baseSeed);
   const shuffledDice = shuffle([...BOGGLE_DICE], random);
   return createBoardFromDice(shuffledDice, random);
 }

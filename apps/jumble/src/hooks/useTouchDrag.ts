@@ -8,6 +8,7 @@ interface UseTouchDragProps {
   onPathChange: (path: Position[]) => void;
   onPathComplete: (path: Position[]) => void;
   getTilePosition: (element: Element) => Position | null;
+  gridRef: React.RefObject<HTMLDivElement | null>;
   disabled?: boolean;
 }
 
@@ -22,10 +23,45 @@ interface UseTouchDragReturn {
   clearPath: () => void;
 }
 
+// Find the closest tile to a point using distance from tile center
+function findClosestTile(
+  clientX: number,
+  clientY: number,
+  gridRef: React.RefObject<HTMLDivElement | null>,
+  getTilePosition: (element: Element) => Position | null
+): Position | null {
+  const grid = gridRef.current;
+  if (!grid) return null;
+
+  const tiles = grid.querySelectorAll('[data-row]');
+  let closestPos: Position | null = null;
+  let closestDistance = Infinity;
+
+  tiles.forEach((tile) => {
+    const rect = tile.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.sqrt(
+      Math.pow(clientX - centerX, 2) + Math.pow(clientY - centerY, 2)
+    );
+
+    // Use 60% of tile width as hit radius (covers the tile and small gaps)
+    const hitRadius = rect.width * 0.6;
+
+    if (distance < hitRadius && distance < closestDistance) {
+      closestDistance = distance;
+      closestPos = getTilePosition(tile);
+    }
+  });
+
+  return closestPos;
+}
+
 export function useTouchDrag({
   onPathChange,
   onPathComplete,
   getTilePosition,
+  gridRef,
   disabled = false,
 }: UseTouchDragProps): UseTouchDragReturn {
   const [path, setPath] = useState<Position[]>([]);
@@ -69,11 +105,8 @@ export function useTouchDrag({
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging || disabled) return;
 
-    // Get element under pointer
-    const element = document.elementFromPoint(e.clientX, e.clientY);
-    if (!element) return;
-
-    const pos = getTilePosition(element);
+    // Use distance-based hit detection for better diagonal selection
+    const pos = findClosestTile(e.clientX, e.clientY, gridRef, getTilePosition);
     if (!pos) return;
 
     const currentPath = pathRef.current;
@@ -113,7 +146,7 @@ export function useTouchDrag({
 
     // Add to path
     updatePath([...currentPath, pos]);
-  }, [isDragging, disabled, getTilePosition, updatePath]);
+  }, [isDragging, disabled, gridRef, getTilePosition, updatePath]);
 
   const handlePointerUp = useCallback(() => {
     if (!isDragging) return;

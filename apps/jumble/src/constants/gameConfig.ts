@@ -1,5 +1,5 @@
 export const BOARD_SIZE = 5; // 5x5 grid (Big Boggle)
-export const TIMER_DURATION = 120; // 2 minutes in seconds
+export const TIMER_DURATION = 90; // 1.5 minutes in seconds
 export const MIN_WORD_LENGTH = 3;
 
 export const SCORING_TABLE: Record<number, number> = {

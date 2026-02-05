@@ -8,12 +8,6 @@ interface FoundWordsListProps {
 }
 
 export default function FoundWordsList({ foundWords, totalScore }: FoundWordsListProps) {
-  // Sort words by score (descending), then alphabetically
-  const sortedWords = [...foundWords].sort((a, b) => {
-    if (b.score !== a.score) return b.score - a.score;
-    return a.word.localeCompare(b.word);
-  });
-
   return (
     <div className="w-full">
       <div
@@ -29,11 +23,11 @@ export default function FoundWordsList({ foundWords, totalScore }: FoundWordsLis
       </div>
 
       <div className="max-h-32 overflow-y-auto bg-[var(--tile-bg)] rounded-b-lg p-2 border-t border-[var(--tile-border)]">
-        {sortedWords.length === 0 ? (
+        {foundWords.length === 0 ? (
           <p className="text-center text-gray-500 text-sm py-2">No words found yet</p>
         ) : (
           <div className="flex flex-wrap gap-2">
-            {sortedWords.map((fw) => (
+            {foundWords.map((fw) => (
               <span
                 key={fw.word}
                 className="
