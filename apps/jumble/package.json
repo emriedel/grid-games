@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@grid-games/config": "*",
+    "@grid-games/dictionary": "*",
     "@grid-games/ui": "*",
     "@grid-games/shared": "*",
     "next": "16.1.4",

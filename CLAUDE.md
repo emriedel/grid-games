@@ -109,6 +109,26 @@ if (loading) return <Loading />;
 import { buildShareText, shareOrCopy, generateEmojiBar } from '@grid-games/shared';
 ```
 
+### Dictionary (Word Games)
+
+Word games use the shared `@grid-games/dictionary` package for word validation:
+
+```tsx
+import { loadDictionary, isValidWord, isValidPrefix, getAllWords } from '@grid-games/dictionary';
+
+// Load dictionary at game start (with optional min word length)
+await loadDictionary({ minWordLength: 3 });
+
+// Check words
+isValidWord('HELLO');    // true
+isValidPrefix('HEL');    // true (could lead to valid words)
+getAllWords();           // Set<string> of all words
+```
+
+- **Dictionary**: Collins Scrabble Words (2019) - 279,495 words
+- **Storage**: Each app has `public/dict/words.txt` (served statically)
+- **Implementation**: Trie data structure for O(k) lookups where k = word length
+
 ### Daily Puzzle Generation
 
 Use `seedrandom` with date string for deterministic puzzles:
@@ -129,7 +149,7 @@ apps/[game]/
 │   │   ├── Game.tsx          # Main orchestrator
 │   │   └── ...
 │   ├── lib/
-│   │   ├── dictionary.ts     # Trie-based word lookup
+│   │   ├── dictionary.ts     # Re-exports from @grid-games/dictionary
 │   │   ├── gameLogic.ts
 │   │   └── puzzleGenerator.ts
 │   ├── types/, constants/, hooks/
@@ -152,6 +172,7 @@ apps/[game]/
 import { Modal } from '@grid-games/ui';
 import { dabbleTheme } from '@grid-games/config';
 import { shareOrCopy } from '@grid-games/shared';
+import { loadDictionary, isValidWord } from '@grid-games/dictionary';
 ```
 
 ---
@@ -200,6 +221,8 @@ npm install <pkg> -w @grid-games/dabble      # Add dep to specific app
 | `packages/ui/src/` | Shared UI components |
 | `packages/config/src/theme.ts` | Theme interface |
 | `packages/shared/src/share.ts` | Share utilities |
+| `packages/dictionary/src/` | Shared word dictionary (Trie + validation) |
 | `apps/[game]/src/app/globals.css` | Per-game theme variables |
 | `apps/[game]/src/components/Game.tsx` | Main game component |
+| `apps/[game]/public/dict/words.txt` | Dictionary word list (Collins 2019) |
 | `apps/web/next.config.ts` | Rewrites for game routing |
