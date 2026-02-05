@@ -569,6 +569,7 @@ export function Game() {
               selectedCell={selectedCell}
               activeDragId={activeDragId}
               onCellClick={handleCellClick}
+              disabled={gameState === 'finished'}
             />
             {scorePopup && (
               <div
@@ -646,16 +647,16 @@ export function Game() {
             </Button>
           )}
 
-          {/* View Results button - show when finished and modal is closed */}
+          {/* See Results button - show when finished and modal is closed */}
           {gameState === 'finished' && !showShareModal && (
             <Button
               variant="primary"
               size="lg"
               fullWidth
               onClick={() => setShowShareModal(true)}
-              className="max-w-xs !bg-violet-500 hover:!bg-violet-600"
+              className="max-w-xs"
             >
-              View Results
+              See Results
             </Button>
           )}
         </div>

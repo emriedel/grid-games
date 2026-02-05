@@ -10,6 +10,7 @@ interface GameBoardProps {
   selectedCell: { row: number; col: number } | null;
   activeDragId: string | null; // Track which tile is being dragged
   onCellClick: (row: number, col: number) => void;
+  disabled?: boolean;
 }
 
 // Droppable cell wrapper (also draggable if it has a placed tile)
@@ -83,6 +84,7 @@ export function GameBoard({
   selectedCell,
   activeDragId,
   onCellClick,
+  disabled = false,
 }: GameBoardProps) {
   // Create a map of placed tiles for quick lookup
   const placedMap = new Map(
@@ -111,7 +113,7 @@ export function GameBoard({
             placedTile={placedTile}
             isSelected={isSelected}
             isDragging={isDragging}
-            onCellClick={() => onCellClick(cell.row, cell.col)}
+            onCellClick={() => !disabled && onCellClick(cell.row, cell.col)}
           />
         );
       })}

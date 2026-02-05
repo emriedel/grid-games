@@ -271,7 +271,9 @@ export default function Game() {
     );
   }
 
-  // Playing state
+  // Playing state (or viewing completed game)
+  const isViewingCompleted = status === 'finished' && viewingCompletedGame;
+
   return (
     <GameContainer
       maxWidth="md"
@@ -280,29 +282,31 @@ export default function Game() {
           title={jumbleConfig.name}
           gameId={jumbleConfig.id}
           onRulesClick={() => setShowHowToPlay(true)}
-          rightContent={<Timer timeRemaining={timeRemaining} />}
+          rightContent={!isViewingCompleted ? <Timer timeRemaining={timeRemaining} /> : undefined}
         />
       }
     >
-      {/* Current Word - Above the grid */}
-      <div className="relative mb-4 w-full">
-        <CurrentWord
-          word={currentWord}
-          isAlreadyFound={isWordAlreadyFound(currentWord)}
-        />
-        {/* Feedback toast */}
-        {feedback && (
-          <div
-            className={`
-              absolute inset-0 flex items-center justify-center
-              text-xl font-bold animate-pulse
-              ${feedback.type === 'success' ? 'text-[var(--success)]' : 'text-[var(--danger)]'}
-            `}
-          >
-            {feedback.type === 'success' ? `+${foundWords[foundWords.length - 1]?.score || 0}` : 'Invalid'}
-          </div>
-        )}
-      </div>
+      {/* Current Word - Above the grid (hide when viewing completed game) */}
+      {!isViewingCompleted && (
+        <div className="relative mb-4 w-full">
+          <CurrentWord
+            word={currentWord}
+            isAlreadyFound={isWordAlreadyFound(currentWord)}
+          />
+          {/* Feedback toast */}
+          {feedback && (
+            <div
+              className={`
+                absolute inset-0 flex items-center justify-center
+                text-xl font-bold animate-pulse
+                ${feedback.type === 'success' ? 'text-[var(--success)]' : 'text-[var(--danger)]'}
+              `}
+            >
+              {feedback.type === 'success' ? `+${foundWords[foundWords.length - 1]?.score || 0}` : 'Invalid'}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Grid */}
       <div className="flex-shrink-0 mb-4 w-full">
@@ -318,6 +322,18 @@ export default function Game() {
       <div className="mb-4 w-full">
         <FoundWordsList foundWords={foundWords} totalScore={totalScore} />
       </div>
+
+      {/* See Results button - show when viewing completed game */}
+      {isViewingCompleted && (
+        <div className="w-full max-w-xs mx-auto">
+          <button
+            onClick={() => setShowResults(true)}
+            className="w-full py-3 px-6 rounded-lg bg-[var(--accent)] text-white font-semibold hover:opacity-90 transition-opacity"
+          >
+            See Results
+          </button>
+        </div>
+      )}
 
       {/* Modals */}
       <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />

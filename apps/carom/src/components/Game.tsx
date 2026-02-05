@@ -73,12 +73,13 @@ export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
 
-  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, undo, canUndo } = useGameState();
+  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, setFinished, undo, canUndo } = useGameState();
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
 
   // Initialize puzzle on mount
   useEffect(() => {
@@ -109,6 +110,7 @@ export function Game() {
   // Handle game start (fresh)
   const handlePlay = useCallback(() => {
     if (puzzle) {
+      setWasPlayingThisSession(true);
       startGame(puzzle);
     }
   }, [puzzle, startGame]);
@@ -117,6 +119,7 @@ export function Game() {
   const handleResume = useCallback(() => {
     if (!puzzle) return;
 
+    setWasPlayingThisSession(true);
     const inProgress = getInProgressState();
     if (inProgress) {
       restoreGame(puzzle, inProgress.pieces, inProgress.moveCount, inProgress.moveHistory);
@@ -140,10 +143,11 @@ export function Game() {
         }
       }
 
-      // Restore the final state - don't open modal, just show the game board
+      // Restore the final state and mark as finished
       restoreGame(puzzle, finalPieces, completion.moveCount, completion.moveHistory);
+      setFinished();
     }
-  }, [puzzle, restoreGame]);
+  }, [puzzle, restoreGame, setFinished]);
 
   // Handle move
   const handleMove = useCallback(
@@ -155,9 +159,9 @@ export function Game() {
     [state.selectedPieceId, movePiece]
   );
 
-  // Handle win condition
+  // Handle win condition - only auto-show results if player was playing this session
   useEffect(() => {
-    if (state.phase === 'finished' && state.puzzle) {
+    if (state.phase === 'finished' && state.puzzle && wasPlayingThisSession) {
       saveGameCompletion(state.moveCount, state.puzzle.optimalMoves, state.moveHistory);
       // Small delay before showing results
       const timer = setTimeout(() => {
@@ -165,7 +169,7 @@ export function Game() {
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory]);
+  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession]);
 
   // Handle new random puzzle (debug mode)
   const handleNewPuzzle = useCallback(async () => {
@@ -246,21 +250,34 @@ export function Game() {
             />
           )}
 
-          {/* Undo and Reset buttons */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={undo}
-              disabled={!canUndo}
-              className="p-2 rounded-lg bg-[var(--muted)] text-[var(--foreground)] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--border)] transition-colors"
-              aria-label="Undo last move"
-              title="Undo"
+          {/* Undo and Reset buttons - only show when playing */}
+          {state.phase === 'playing' && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={undo}
+                disabled={!canUndo}
+                className="p-2 rounded-lg bg-[var(--muted)] text-[var(--foreground)] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--border)] transition-colors"
+                aria-label="Undo last move"
+                title="Undo"
+              >
+                <Undo2 className="w-5 h-5" />
+              </button>
+              <Button variant="secondary" onClick={reset}>
+                Reset
+              </Button>
+            </div>
+          )}
+
+          {/* See Results button - show when finished */}
+          {state.phase === 'finished' && (
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => setShowResults(true)}
             >
-              <Undo2 className="w-5 h-5" />
-            </button>
-            <Button variant="secondary" onClick={reset}>
-              Reset
+              See Results
             </Button>
-          </div>
+          )}
 
           {/* Debug Panel */}
           {isDebug && state.puzzle && (

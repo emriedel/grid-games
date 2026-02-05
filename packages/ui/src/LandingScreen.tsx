@@ -76,7 +76,7 @@ export function LandingScreen({
             fullWidth
             onClick={onSeeResults}
           >
-            See Results
+            View Game
           </Button>
         );
 
