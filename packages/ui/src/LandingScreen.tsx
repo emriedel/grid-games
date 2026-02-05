@@ -4,6 +4,9 @@ import type { ReactNode } from 'react';
 import { Button } from './Button';
 import { HamburgerMenu } from './HamburgerMenu';
 
+/** Landing screen mode determines the UI state */
+export type LandingScreenMode = 'fresh' | 'in-progress' | 'completed';
+
 interface LandingScreenProps {
   /** Game emoji (deprecated, use icon instead) */
   emoji?: string;
@@ -11,12 +14,16 @@ interface LandingScreenProps {
   icon?: string;
   /** Game name */
   name: string;
-  /** Game description */
+  /** Game description (shown in 'fresh' mode, can be overridden by mode) */
   description: string;
   /** Puzzle info (number and/or date) */
   puzzleInfo: { number?: number; date: string };
-  /** Handler for Play button */
-  onPlay: () => void;
+  /** Handler for Play button (fresh mode) */
+  onPlay?: () => void;
+  /** Handler for Resume button (in-progress mode) */
+  onResume?: () => void;
+  /** Handler for See Results button (completed mode) */
+  onSeeResults?: () => void;
   /** Handler for How to Play button */
   onRules?: () => void;
   /** Additional buttons (stats, etc.) */
@@ -25,11 +32,17 @@ interface LandingScreenProps {
   homeUrl?: string;
   /** Current game ID for menu highlighting */
   gameId?: string;
+  /** Landing screen mode: 'fresh' (default), 'in-progress', or 'completed' */
+  mode?: LandingScreenMode;
 }
 
 /**
  * Landing screen for games
  * Shows game identity, puzzle info, and action buttons
+ * Supports three modes:
+ * - 'fresh': New game, shows description with How to Play + Play buttons
+ * - 'in-progress': Saved game exists, shows resume message with How to Play + Resume buttons
+ * - 'completed': Today's puzzle completed, shows congrats message with See Results button
  */
 export function LandingScreen({
   emoji,
@@ -38,10 +51,64 @@ export function LandingScreen({
   description,
   puzzleInfo,
   onPlay,
+  onResume,
+  onSeeResults,
   onRules,
   children,
   gameId,
+  mode = 'fresh',
 }: LandingScreenProps) {
+  // Determine description text based on mode
+  const displayDescription = mode === 'fresh'
+    ? description
+    : mode === 'in-progress'
+    ? 'You have a game in progress'
+    : "Great job on today's game!";
+
+  // Render action buttons based on mode
+  const renderActionButtons = () => {
+    switch (mode) {
+      case 'completed':
+        return (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={onSeeResults}
+          >
+            See Results
+          </Button>
+        );
+
+      case 'in-progress':
+        return (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={onResume ?? onPlay}
+          >
+            Resume
+          </Button>
+        );
+
+      case 'fresh':
+      default:
+        return (
+          <>
+            {onRules && (
+              <Button variant="secondary" fullWidth onClick={onRules}>
+                How to Play
+              </Button>
+            )}
+            <Button variant="primary" size="lg" fullWidth onClick={onPlay}>
+              Play
+            </Button>
+          </>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center px-6 py-8 pt-[18vh] relative">
       {/* Menu button */}
@@ -73,19 +140,12 @@ export function LandingScreen({
 
       {/* Description */}
       <p className="text-[var(--muted,#a1a1aa)] text-center text-lg max-w-xs mb-8">
-        {description}
+        {displayDescription}
       </p>
 
       {/* Action buttons */}
       <div className="flex flex-col gap-3 w-full max-w-xs">
-        {onRules && (
-          <Button variant="secondary" fullWidth onClick={onRules}>
-            How to Play
-          </Button>
-        )}
-        <Button variant="primary" size="lg" fullWidth onClick={onPlay}>
-          Play
-        </Button>
+        {renderActionButtons()}
         {children}
       </div>
 

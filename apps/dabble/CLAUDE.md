@@ -124,6 +124,25 @@ Add `?debug=true` to URL to enable:
 5. Validate each word against dictionary
 6. Calculate score with bonuses
 
+### State Persistence
+
+Storage module: `src/lib/storage.ts`
+
+**In-progress state:**
+- `date` - puzzle date
+- `board` - current board state with placed tiles
+- `rack` - remaining letters in rack
+- `placedTiles` - tiles placed on board (positions and letters)
+- `submittedWords` - words already submitted
+- `turnCount` - number of turns taken
+
+**Completion state:**
+- `date` - puzzle date
+- `board` - final board state
+- `submittedWords` - all submitted words with scores
+- `lockedIndices` - positions of locked tiles
+- `score` - final score
+
 ## Dependencies
 
 - `@dnd-kit/core` - Drag and drop

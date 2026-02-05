@@ -126,6 +126,38 @@ Score: 47 pts
 https://nerdcube.games/jumble
 ```
 
+### State Persistence
+
+Storage module: `src/lib/storage.ts`
+
+**In-progress state:**
+- `date` - puzzle date
+- `foundWords` - array of found word strings
+- `timeRemaining` - seconds left on timer
+
+**Completion state:**
+- `date` - puzzle date
+- `foundWords` - array of found words with scores and paths
+- `maxPossible` - maximum possible score for the puzzle
+- `score` - final score
+
+**Timer Visibility API:**
+Timer pauses when tab is hidden using `document.visibilitychange` event:
+```tsx
+useEffect(() => {
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      if (isRunning) { wasRunningBeforeHidden.current = true; setIsRunning(false); }
+    } else {
+      if (wasRunningBeforeHidden.current && timeRemaining > 0) setIsRunning(true);
+      wasRunningBeforeHidden.current = false;
+    }
+  };
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+}, [isRunning, timeRemaining]);
+```
+
 ## Dependencies
 
 - No game-specific external dependencies

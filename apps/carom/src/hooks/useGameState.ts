@@ -1,12 +1,14 @@
 'use client';
 
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback, useEffect } from 'react';
 import { GameState, Puzzle, Piece, Direction, Move, Position } from '@/types';
 import { simulateSlide, applyMove, isTargetOnGoal, wouldPieceMove } from '@/lib/gameLogic';
 import { SLIDE_ANIMATION_DURATION } from '@/constants/gameConfig';
+import { saveInProgressState, clearInProgressState } from '@/lib/storage';
 
 type GameAction =
   | { type: 'START_GAME'; puzzle: Puzzle }
+  | { type: 'RESTORE_GAME'; puzzle: Puzzle; pieces: Piece[]; moveCount: number; moveHistory: Move[] }
   | { type: 'SELECT_PIECE'; pieceId: string }
   | { type: 'DESELECT' }
   | { type: 'MOVE_START' }
@@ -27,6 +29,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         moveCount: 0,
         isAnimating: false,
         moveHistory: [],
+        lastActionWasUndo: false,
+      };
+
+    case 'RESTORE_GAME':
+      return {
+        ...state,
+        phase: 'playing',
+        puzzle: action.puzzle,
+        pieces: action.pieces.map((p) => ({ ...p })),
+        selectedPieceId: null,
+        moveCount: action.moveCount,
+        isAnimating: false,
+        moveHistory: action.moveHistory,
         lastActionWasUndo: false,
       };
 
@@ -115,8 +130,26 @@ const initialState: GameState = {
 export function useGameState() {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
+  // Save in-progress state whenever pieces or moves change
+  useEffect(() => {
+    if (state.phase === 'playing' && state.pieces.length > 0) {
+      saveInProgressState(state.pieces, state.moveCount, state.moveHistory);
+    }
+  }, [state.phase, state.pieces, state.moveCount, state.moveHistory]);
+
+  // Clear in-progress state when finished
+  useEffect(() => {
+    if (state.phase === 'finished') {
+      clearInProgressState();
+    }
+  }, [state.phase]);
+
   const startGame = useCallback((puzzle: Puzzle) => {
     dispatch({ type: 'START_GAME', puzzle });
+  }, []);
+
+  const restoreGame = useCallback((puzzle: Puzzle, pieces: Piece[], moveCount: number, moveHistory: Move[]) => {
+    dispatch({ type: 'RESTORE_GAME', puzzle, pieces, moveCount, moveHistory });
   }, []);
 
   const selectPiece = useCallback((pieceId: string) => {
@@ -194,6 +227,7 @@ export function useGameState() {
   return {
     state,
     startGame,
+    restoreGame,
     selectPiece,
     deselectPiece,
     movePiece,

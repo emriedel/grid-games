@@ -2,11 +2,19 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Board, FoundWord, GameStatus, Position } from '@/types';
-import { generateBoard, getPuzzleNumber } from '@/lib/boardGenerator';
+import { generateBoard, getPuzzleNumber, getTodayDateString } from '@/lib/boardGenerator';
 import { loadDictionary } from '@/lib/dictionary';
 import { getWordFromPath, findAllValidWords, validatePath } from '@/lib/wordValidator';
 import { calculateWordScore, calculateTotalScore, calculateMaxScore } from '@/lib/scoring';
-import { hasPlayedToday, getTodayResult, saveDailyResult } from '@/lib/storage';
+import {
+  hasPlayedToday,
+  getTodayResult,
+  saveDailyResult,
+  getInProgressState,
+  saveInProgressState,
+  clearInProgressState,
+  hasInProgressGame,
+} from '@/lib/storage';
 import { TIMER_DURATION } from '@/constants/gameConfig';
 import { useTimer } from './useTimer';
 
@@ -24,9 +32,12 @@ interface UseGameStateReturn {
   setCurrentPath: (path: Position[]) => void;
   submitWord: (path: Position[]) => boolean;
   startGame: () => void;
+  resumeGame: () => void;
   endGame: () => void;
   isWordAlreadyFound: (word: string) => boolean;
   regeneratePuzzle: () => void;
+  hasInProgress: boolean;
+  hasCompleted: boolean;
 }
 
 export function useGameState(): UseGameStateReturn {
@@ -36,12 +47,14 @@ export function useGameState(): UseGameStateReturn {
   const [status, setStatus] = useState<GameStatus>('loading');
   const [puzzleNumber, setPuzzleNumber] = useState(0);
   const [allValidWords, setAllValidWords] = useState<Map<string, Position[]>>(new Map());
+  const [hasInProgress, setHasInProgress] = useState(false);
+  const [hasCompleted, setHasCompleted] = useState(false);
 
   const handleGameEnd = useCallback(() => {
     setStatus('finished');
   }, []);
 
-  const { timeRemaining, start: startTimer, reset: resetTimer } = useTimer(
+  const { timeRemaining, start: startTimer, reset: resetTimer, setTime } = useTimer(
     TIMER_DURATION,
     handleGameEnd
   );
@@ -78,15 +91,20 @@ export function useGameState(): UseGameStateReturn {
         setBoard(newBoard);
         setPuzzleNumber(number);
 
+        // Check saved state and set flags for landing mode
+        const completed = hasPlayedToday();
+        const inProgress = hasInProgressGame();
+        setHasCompleted(completed);
+        setHasInProgress(inProgress);
+
         // Check if already played today
-        if (hasPlayedToday()) {
+        if (completed) {
+          // Restore found words from completed game
           const todayResult = getTodayResult();
-          if (todayResult) {
-            setStatus('finished');
-            // We don't restore found words since we don't store them
-          } else {
-            setStatus('ready');
+          if (todayResult?.foundWords) {
+            setFoundWords(todayResult.foundWords);
           }
+          setStatus('finished');
         } else {
           setStatus('ready');
         }
@@ -102,7 +120,35 @@ export function useGameState(): UseGameStateReturn {
     init();
   }, []);
 
-  // Start game
+  // Save in-progress state when playing
+  useEffect(() => {
+    if (status === 'playing') {
+      saveInProgressState(foundWords, timeRemaining);
+    }
+  }, [status, foundWords, timeRemaining]);
+
+  // Clear in-progress state when finished
+  useEffect(() => {
+    if (status === 'finished') {
+      clearInProgressState();
+    }
+  }, [status]);
+
+  // Save daily result when game finishes (timer or manual)
+  useEffect(() => {
+    if (status === 'finished' && foundWords.length > 0) {
+      saveDailyResult({
+        puzzleNumber,
+        date: getTodayDateString(),
+        foundWords,
+        totalPossibleWords: allValidWords.size,
+        score: totalScore,
+        maxPossibleScore,
+      });
+    }
+  }, [status, foundWords, puzzleNumber, allValidWords.size, totalScore, maxPossibleScore]);
+
+  // Start game (fresh)
   const startGame = useCallback(() => {
     if (status !== 'ready') return;
 
@@ -112,22 +158,28 @@ export function useGameState(): UseGameStateReturn {
     startTimer();
   }, [status, resetTimer, startTimer]);
 
+  // Resume game (from in-progress state)
+  const resumeGame = useCallback(() => {
+    if (status !== 'ready') return;
+
+    const inProgress = getInProgressState();
+    if (inProgress) {
+      setFoundWords(inProgress.foundWords);
+      setTime(inProgress.timeRemaining);
+      setStatus('playing');
+      startTimer();
+    } else {
+      // Fall back to fresh start if no in-progress state
+      startGame();
+    }
+  }, [status, setTime, startTimer, startGame]);
+
   // End game manually
   const endGame = useCallback(() => {
     if (status !== 'playing') return;
-
     setStatus('finished');
-
-    // Save daily result with puzzle number
-    saveDailyResult({
-      puzzleNumber,
-      date: new Date().toISOString().split('T')[0],
-      wordsFound: foundWords.length,
-      totalPossibleWords: allValidWords.size,
-      score: totalScore,
-      maxPossibleScore,
-    });
-  }, [status, foundWords.length, totalScore, allValidWords.size, maxPossibleScore, puzzleNumber]);
+    // Note: saveDailyResult is called by the effect that watches status === 'finished'
+  }, [status]);
 
   // Regenerate puzzle with random date (debug mode)
   const regeneratePuzzle = useCallback(async () => {
@@ -190,8 +242,11 @@ export function useGameState(): UseGameStateReturn {
     setCurrentPath,
     submitWord,
     startGame,
+    resumeGame,
     endGame,
     isWordAlreadyFound,
     regeneratePuzzle,
+    hasInProgress,
+    hasCompleted,
   };
 }

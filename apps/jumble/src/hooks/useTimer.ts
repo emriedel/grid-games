@@ -8,6 +8,7 @@ interface UseTimerReturn {
   start: () => void;
   pause: () => void;
   reset: (newDuration?: number) => void;
+  setTime: (time: number) => void;
 }
 
 export function useTimer(initialDuration: number, onComplete?: () => void): UseTimerReturn {
@@ -15,6 +16,7 @@ export function useTimer(initialDuration: number, onComplete?: () => void): UseT
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const onCompleteRef = useRef(onComplete);
+  const wasRunningBeforeHidden = useRef(false);
 
   // Keep onComplete ref updated
   useEffect(() => {
@@ -46,6 +48,30 @@ export function useTimer(initialDuration: number, onComplete?: () => void): UseT
     };
   }, [isRunning, timeRemaining]);
 
+  // Pause timer when tab becomes hidden, resume when visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Tab is now hidden - pause timer
+        if (isRunning) {
+          wasRunningBeforeHidden.current = true;
+          setIsRunning(false);
+        }
+      } else {
+        // Tab is now visible - resume if it was running
+        if (wasRunningBeforeHidden.current && timeRemaining > 0) {
+          setIsRunning(true);
+        }
+        wasRunningBeforeHidden.current = false;
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [isRunning, timeRemaining]);
+
   const start = useCallback(() => {
     if (timeRemaining > 0) {
       setIsRunning(true);
@@ -54,12 +80,19 @@ export function useTimer(initialDuration: number, onComplete?: () => void): UseT
 
   const pause = useCallback(() => {
     setIsRunning(false);
+    wasRunningBeforeHidden.current = false;
   }, []);
 
   const reset = useCallback((newDuration?: number) => {
     setIsRunning(false);
+    wasRunningBeforeHidden.current = false;
     setTimeRemaining(newDuration ?? initialDuration);
   }, [initialDuration]);
+
+  // Set time directly (for restoring from saved state)
+  const setTime = useCallback((time: number) => {
+    setTimeRemaining(time);
+  }, []);
 
   return {
     timeRemaining,
@@ -67,5 +100,6 @@ export function useTimer(initialDuration: number, onComplete?: () => void): UseT
     start,
     pause,
     reset,
+    setTime,
   };
 }

@@ -56,6 +56,52 @@ import { Modal, Button, LandingScreen, NavBar, GameContainer } from '@grid-games
 
 Games use: `landing` → `playing` → `finished`
 
+### Game State Persistence
+
+**LandingScreen Modes:**
+```tsx
+<LandingScreen
+  mode={landingMode}  // 'fresh' | 'in-progress' | 'completed'
+  onPlay={handlePlay}
+  onResume={handleResume}
+  onSeeResults={handleSeeResults}
+/>
+```
+
+**Critical Patterns:**
+
+1. **Hydration Safety** - Use state + useEffect, not computed values:
+```tsx
+// BAD - causes hydration mismatch (server has no localStorage)
+const landingMode = hasCompletedToday() ? 'completed' : 'fresh';
+
+// GOOD - defer to client-side
+const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+useEffect(() => {
+  if (hasCompletedToday()) setLandingMode('completed');
+  else if (hasInProgressGame()) setLandingMode('in-progress');
+}, []);
+```
+
+2. **Hook Order** - All hooks MUST be defined BEFORE any early returns:
+```tsx
+// Define all hooks first
+const [loading, setLoading] = useState(true);
+const handlePlay = useCallback(() => {...}, []);
+const handleResume = useCallback(() => {...}, []);
+
+// THEN early returns
+if (loading) return <Loading />;
+```
+
+3. **Loading States** - Show loading screen while async data loads
+
+**Storage Pattern:**
+- In-progress state: saves during gameplay, cleared on completion
+- Completion state: includes enough data to reconstruct results view
+- Date-isolated: storage functions only return state for today's puzzle
+- SSR safety: check `typeof window !== 'undefined'` before localStorage access
+
 ### Share Utilities
 
 ```tsx

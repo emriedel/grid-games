@@ -141,3 +141,28 @@ Add `?debug=true` to URL:
 - **Goal star:** Large (w-8 h-8), amber, 60% opacity
 - **Walls:** White (#ffffff) 3px borders with corner fills where walls meet
 - **Move counter:** Compact display in NavBar header
+
+## State Persistence
+
+Storage module: `src/lib/storage.ts`
+
+**In-progress state:**
+- `date` - puzzle date
+- `pieces` - current positions of all pieces
+- `moveCount` - number of moves made
+- `moveHistory` - array of moves for undo functionality
+
+**Completion state:**
+- `date` - puzzle date
+- `moveCount` - total moves to solve
+- `optimalMoves` - optimal solution length
+- `moveHistory` - full sequence of moves made
+
+**Auto-persistence:** Uses `useEffect` to watch state changes and auto-save:
+```tsx
+useEffect(() => {
+  if (gameState === 'playing') {
+    saveInProgressState({ date, pieces, moveCount, moveHistory });
+  }
+}, [pieces, moveCount, moveHistory, gameState]);
+```

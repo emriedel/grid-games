@@ -51,7 +51,75 @@ Edit `apps/new-game/src/app/globals.css`:
 }
 ```
 
-## Step 4: Create Game Config
+## Step 4: Create Storage Module
+
+Create `apps/new-game/src/lib/storage.ts`:
+```tsx
+import { getTodayDateString } from '@grid-games/shared';
+
+const IN_PROGRESS_KEY = 'new-game-in-progress';
+const COMPLETION_KEY = 'new-game-completion';
+
+export interface InProgressState {
+  date: string;
+  // Add game-specific fields (e.g., board state, moves, timer)
+}
+
+export interface CompletionState {
+  date: string;
+  // Add fields needed for results display (e.g., score, solved status)
+}
+
+// SSR safety - always check before localStorage access
+export function getInProgressState(): InProgressState | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(IN_PROGRESS_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as InProgressState;
+    // Only return if it's from today
+    if (state.date !== getTodayDateString()) return null;
+    return state;
+  } catch { return null; }
+}
+
+export function saveInProgressState(state: InProgressState): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(IN_PROGRESS_KEY, JSON.stringify(state));
+}
+
+export function clearInProgressState(): void {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(IN_PROGRESS_KEY);
+}
+
+export function getCompletionState(): CompletionState | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(COMPLETION_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as CompletionState;
+    if (state.date !== getTodayDateString()) return null;
+    return state;
+  } catch { return null; }
+}
+
+export function saveCompletionState(state: CompletionState): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(COMPLETION_KEY, JSON.stringify(state));
+  clearInProgressState(); // Clear in-progress on completion
+}
+
+export function hasCompletedToday(): boolean {
+  return getCompletionState() !== null;
+}
+
+export function hasInProgressGame(): boolean {
+  return getInProgressState() !== null;
+}
+```
+
+## Step 5: Create Game Config
 
 Create `apps/new-game/src/config.ts`:
 ```tsx
@@ -76,33 +144,95 @@ export const newGameConfig = defineGameConfig({
 });
 ```
 
-## Step 5: Update Game.tsx Structure
+## Step 6: Update Game.tsx Structure
 
-Use the shared components:
+Use the shared components with proper state persistence:
 ```tsx
 import { LandingScreen, NavBar, GameContainer, Button, Modal } from '@grid-games/ui';
 import { newGameConfig } from '@/config';
+import {
+  hasCompletedToday, hasInProgressGame,
+  getInProgressState, getCompletionState,
+  saveInProgressState, saveCompletionState
+} from '@/lib/storage';
 
-// Implement landing → playing → finished state machine
-// LandingScreen and NavBar use gameId for menu highlighting:
-<LandingScreen
-  icon={newGameConfig.icon}
-  name={newGameConfig.name}
-  description={newGameConfig.description}
-  puzzleInfo={newGameConfig.getPuzzleInfo()}
-  onPlay={handlePlay}
-  onRules={() => setShowRules(true)}
-  gameId="new-game"
-/>
+export default function Game() {
+  // === ALL HOOKS MUST BE DEFINED BEFORE EARLY RETURNS ===
 
-<NavBar
-  title={newGameConfig.name}
-  gameId="new-game"
-  onRulesClick={() => setShowRules(true)}
-/>
+  // Game state
+  const [gameState, setGameState] = useState<'landing' | 'playing' | 'finished'>('landing');
+  const [loading, setLoading] = useState(true);
+
+  // Hydration-safe landing mode (computed in useEffect, not directly)
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+
+  // Determine landing mode after mount (client-side only)
+  useEffect(() => {
+    if (hasCompletedToday()) {
+      setLandingMode('completed');
+    } else if (hasInProgressGame()) {
+      setLandingMode('in-progress');
+    }
+    setLoading(false);
+  }, []);
+
+  // Define all handlers before early returns
+  const handlePlay = useCallback(() => {
+    // Start fresh game
+    setGameState('playing');
+  }, []);
+
+  const handleResume = useCallback(() => {
+    // Restore in-progress state and continue
+    const state = getInProgressState();
+    if (state) {
+      // Restore game state from saved data
+    }
+    setGameState('playing');
+  }, []);
+
+  const handleSeeResults = useCallback(() => {
+    // Restore completion state and show results
+    const state = getCompletionState();
+    if (state) {
+      // Restore completed game state
+    }
+    setGameState('finished');
+  }, []);
+
+  // === EARLY RETURNS AFTER ALL HOOKS ===
+  if (loading) {
+    return <div className="min-h-screen bg-[var(--background)]" />;
+  }
+
+  if (gameState === 'landing') {
+    return (
+      <LandingScreen
+        icon={newGameConfig.icon}
+        name={newGameConfig.name}
+        description={newGameConfig.description}
+        puzzleInfo={newGameConfig.getPuzzleInfo()}
+        mode={landingMode}
+        onPlay={handlePlay}
+        onResume={handleResume}
+        onSeeResults={handleSeeResults}
+        onRules={() => setShowRules(true)}
+        gameId="new-game"
+      />
+    );
+  }
+
+  // ... rest of game rendering
+}
 ```
 
-## Step 6: Add to Landing Page
+**Key Points:**
+- All `useState`, `useCallback`, `useEffect` hooks defined BEFORE any early returns
+- `landingMode` uses state + useEffect for hydration safety
+- Show loading screen while determining initial state
+- LandingScreen receives mode prop and appropriate handlers
+
+## Step 7: Add to Landing Page
 
 Edit `apps/web/src/app/page.tsx`:
 ```tsx
@@ -119,7 +249,7 @@ const games: GameCard[] = [
 ];
 ```
 
-## Step 7: Add to Config Package (Optional)
+## Step 8: Add to Config Package (Optional)
 
 If the theme should be programmatically accessible, add to `packages/config/src/theme.ts`:
 ```tsx
@@ -130,9 +260,9 @@ export const newGameTheme: GameTheme = {
 };
 ```
 
-## Step 8: Deploy to Vercel
+## Step 9: Deploy to Vercel
 
-### 8a. Deploy the new game app
+### 9a. Deploy the new game app
 
 1. Go to https://vercel.com/new
 2. Import the `grid-games` GitHub repo
@@ -141,7 +271,7 @@ export const newGameTheme: GameTheme = {
 5. Deploy and note the URL (e.g., `grid-games-new-game.vercel.app`)
 6. Verify it works at `https://grid-games-new-game.vercel.app/new-game`
 
-### 8b. Add rewrite to the web app
+### 9b. Add rewrite to the web app
 
 Edit `apps/web/next.config.ts` and add rewrites for the new game:
 ```typescript
@@ -155,7 +285,7 @@ Edit `apps/web/next.config.ts` and add rewrites for the new game:
 },
 ```
 
-### 8c. Push and redeploy
+### 9c. Push and redeploy
 
 ```bash
 git add .
@@ -171,8 +301,15 @@ The web app will automatically redeploy with the new rewrites.
 
 - [ ] Package.json updated with unique name and port
 - [ ] Theme CSS variables defined in globals.css
+- [ ] Storage module created (`src/lib/storage.ts`)
 - [ ] Game config created in src/config.ts
 - [ ] Game.tsx uses shared LandingScreen, NavBar, GameContainer
+- [ ] **State persistence verified:**
+  - [ ] In-progress state saves/restores correctly
+  - [ ] Completion state saves/restores correctly
+  - [ ] `landingMode` uses state + useEffect (hydration safe)
+  - [ ] All hooks defined before early returns
+  - [ ] Loading screen shown while data loads
 - [ ] Added to landing page in apps/web
 - [ ] Deployed to Vercel
 - [ ] Rewrites added to apps/web/next.config.ts

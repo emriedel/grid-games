@@ -22,6 +22,15 @@ import { useSearchParams } from 'next/navigation';
 import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
+import {
+  getCompletionState,
+  saveCompletionState,
+  getInProgressState,
+  saveInProgressState,
+  clearInProgressState,
+  hasCompletedToday,
+  hasInProgressGame,
+} from '@/lib/storage';
 import { dabbleConfig } from '@/config';
 import { MAX_TURNS } from '@/constants/gameConfig';
 import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData } from '@/types';
@@ -52,6 +61,7 @@ export function Game() {
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [isDraggingBoardTile, setIsDraggingBoardTile] = useState(false);
   const [scorePopup, setScorePopup] = useState<{ score: number; key: number } | null>(null);
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -72,12 +82,48 @@ export function Game() {
       await loadDictionary();
       const dailyPuzzle = generateDailyPuzzle();
       setPuzzle(dailyPuzzle);
-      setBoard(dailyPuzzle.board);
       setRackLetters(dailyPuzzle.letters);
+
+      // Check for saved state (skip in debug mode)
+      if (!debugMode) {
+        // Check if already completed today
+        if (hasCompletedToday()) {
+          const completion = getCompletionState();
+          if (completion) {
+            setLandingMode('completed');
+            setBoard(completion.board);
+            setSubmittedWords(completion.submittedWords);
+            setLockedRackIndices(new Set(completion.lockedRackIndices));
+            setTotalScore(completion.totalScore);
+            // Keep gameState as 'landing' so the landing screen shows with 'completed' mode
+          }
+        }
+        // Check for in-progress game
+        else if (hasInProgressGame()) {
+          const inProgress = getInProgressState();
+          if (inProgress) {
+            setLandingMode('in-progress');
+            setBoard(inProgress.board);
+            setPlacedTiles(inProgress.placedTiles);
+            setUsedRackIndices(new Set(inProgress.usedRackIndices));
+            setLockedRackIndices(new Set(inProgress.lockedRackIndices));
+            setSubmittedWords(inProgress.submittedWords);
+            setTurnCount(inProgress.turnCount);
+            setTotalScore(inProgress.totalScore);
+          } else {
+            setBoard(dailyPuzzle.board);
+          }
+        } else {
+          setBoard(dailyPuzzle.board);
+        }
+      } else {
+        setBoard(dailyPuzzle.board);
+      }
+
       setIsLoading(false);
     }
     init();
-  }, []);
+  }, [debugMode]);
 
   // Log puzzle archetype in debug mode
   useEffect(() => {
@@ -85,6 +131,22 @@ export function Game() {
       console.log(`[Dabble Debug] Board archetype: ${puzzle.archetype}`);
     }
   }, [debugMode, puzzle]);
+
+  // Save in-progress state when playing
+  useEffect(() => {
+    if (gameState === 'playing' && board && !debugMode) {
+      saveInProgressState({
+        board,
+        rackLetters,
+        placedTiles,
+        usedRackIndices: Array.from(usedRackIndices),
+        lockedRackIndices: Array.from(lockedRackIndices),
+        submittedWords,
+        turnCount,
+        totalScore,
+      });
+    }
+  }, [gameState, board, rackLetters, placedTiles, usedRackIndices, lockedRackIndices, submittedWords, turnCount, totalScore, debugMode]);
 
   // Handle rack letter selection
   const handleRackClick = useCallback((index: number) => {
@@ -181,10 +243,19 @@ export function Game() {
     if (newTurnCount >= MAX_TURNS) {
       setGameState('finished');
       setShowShareModal(true);
+      // Save completion state with full board
+      saveCompletionState({
+        date: puzzle?.date || '',
+        board: newBoard,
+        submittedWords: [...submittedWords, ...result.words],
+        lockedRackIndices: Array.from(newLockedIndices),
+        totalScore: totalScore + turnScore,
+      });
+      clearInProgressState();
     }
 
     setError(null);
-  }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, turnCount]);
+  }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore]);
 
   // Clear current placement
   const handleClear = useCallback(() => {
@@ -197,13 +268,22 @@ export function Game() {
 
   // Finish game and show share modal
   const handleFinish = useCallback(() => {
-    if (submittedWords.length === 0) {
+    if (submittedWords.length === 0 || !board) {
       setError('Submit at least one word first');
       return;
     }
     setGameState('finished');
     setShowShareModal(true);
-  }, [submittedWords.length]);
+    // Save completion state with full board
+    saveCompletionState({
+      date: puzzle?.date || '',
+      board,
+      submittedWords,
+      lockedRackIndices: Array.from(lockedRackIndices),
+      totalScore,
+    });
+    clearInProgressState();
+  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board]);
 
   // Generate a new random puzzle (debug mode only)
   const handleNewPuzzle = useCallback(() => {
@@ -298,6 +378,17 @@ export function Game() {
     setGameState('playing');
   }, []);
 
+  // Handle resume (in-progress)
+  const handleResume = useCallback(() => {
+    setGameState('playing');
+  }, []);
+
+  // Handle see results (completed)
+  const handleSeeResults = useCallback(() => {
+    setShowShareModal(false);
+    setGameState('finished');
+  }, []);
+
   // Get puzzle info for display
   const puzzleInfo = dabbleConfig.getPuzzleInfo();
 
@@ -319,7 +410,10 @@ export function Game() {
           name={dabbleConfig.name}
           description={dabbleConfig.description}
           puzzleInfo={puzzleInfo}
+          mode={landingMode}
           onPlay={handlePlay}
+          onResume={handleResume}
+          onSeeResults={handleSeeResults}
           onRules={() => setShowRulesModal(true)}
           gameId="dabble"
         />
@@ -327,6 +421,17 @@ export function Game() {
           isOpen={showRulesModal}
           onClose={() => setShowRulesModal(false)}
         />
+        {/* Results modal accessible from landing when completed */}
+        {landingMode === 'completed' && puzzle && (
+          <ShareModal
+            isOpen={showShareModal}
+            date={puzzle.date}
+            words={submittedWords}
+            totalScore={totalScore}
+            lettersUsed={lockedRackIndices.size}
+            onClose={() => setShowShareModal(false)}
+          />
+        )}
       </>
     );
   }

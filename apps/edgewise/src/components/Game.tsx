@@ -52,6 +52,7 @@ export function Game() {
 
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
 
   const dateStr = getTodayDateString();
   const puzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE);
@@ -65,6 +66,9 @@ export function Game() {
       // Check if already played today
       const todayResult = getTodayResult();
       if (todayResult && !isDebug) {
+        // Set landing mode for completed game
+        setLandingMode('completed');
+
         // Restore finished state
         setSolved(todayResult.solved);
         setGuessesUsed(todayResult.guessesUsed);
@@ -87,6 +91,9 @@ export function Game() {
         // Check for in-progress game
         const savedState = getSavedGameState();
         if (savedState && !isDebug) {
+          // Set landing mode for in-progress game
+          setLandingMode('in-progress');
+
           const initialSquares = initializeGameState(loadedPuzzle, dateStr);
           const restoredSquares = restoreSquaresFromState(initialSquares, savedState);
           setSquares(restoredSquares);
@@ -243,7 +250,26 @@ export function Game() {
           name={edgewiseConfig.name}
           description={edgewiseConfig.description}
           puzzleInfo={edgewiseConfig.getPuzzleInfo()}
+          mode={landingMode}
           onPlay={handlePlay}
+          onResume={handlePlay}
+          onSeeResults={() => {
+            // Restore finished state - don't open modal, just show the completed board
+            const todayResult = getTodayResult();
+            if (todayResult && puzzle) {
+              setSolved(todayResult.solved);
+              setGuessesUsed(todayResult.guessesUsed);
+              setFeedbackHistory(todayResult.feedbackHistory);
+              if (todayResult.solved) {
+                setSquares(puzzle.squares.map(sq => ({
+                  words: [sq.top, sq.right, sq.bottom, sq.left],
+                  rotation: 0,
+                })));
+                setCategoryResults({ top: true, right: true, bottom: true, left: true });
+              }
+              setGameState('finished');
+            }
+          }}
           onRules={() => setShowHowToPlay(true)}
           gameId="edgewise"
         />

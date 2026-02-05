@@ -182,3 +182,21 @@ http://localhost:3003?debug=true
 --tile-bg-selected: #312e81;
 --tile-border: #4c1d95;
 ```
+
+## State Persistence
+
+Storage module: `src/lib/storage.ts`
+
+**In-progress state:**
+- `date` - puzzle date
+- `squareRotations` - rotation state of each square (0-3)
+- `squarePositions` - positions of squares after group rotations
+- `guessCount` - number of guesses made
+- `feedbackHistory` - array of previous guess feedback
+
+**Completion state:**
+- `date` - puzzle date
+- `solved` - whether puzzle was solved
+- `guessCount` - total guesses used
+- `feedbackHistory` - all feedback from guesses
+- `squareStates` - final state of all squares

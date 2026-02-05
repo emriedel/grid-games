@@ -31,7 +31,7 @@ export interface GameState {
 export interface DailyResult {
   puzzleNumber: number;
   date: string;
-  wordsFound: number;
+  foundWords: FoundWord[];
   totalPossibleWords: number;
   score: number;
   maxPossibleScore: number;

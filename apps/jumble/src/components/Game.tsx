@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton } from '@grid-games/ui';
 import { Position } from '@/types';
@@ -29,13 +29,37 @@ export default function Game() {
     setCurrentPath,
     submitWord,
     startGame,
+    resumeGame,
     isWordAlreadyFound,
     regeneratePuzzle,
+    hasInProgress,
+    hasCompleted,
   } = useGameState();
 
   const [showResults, setShowResults] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; word: string } | null>(null);
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [viewingCompletedGame, setViewingCompletedGame] = useState(false);
+  const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
+
+  // Determine landing mode after mount to avoid hydration mismatch
+  useEffect(() => {
+    if (!isDebug) {
+      if (hasCompleted) {
+        setLandingMode('completed');
+      } else if (hasInProgress) {
+        setLandingMode('in-progress');
+      }
+    }
+  }, [isDebug, hasCompleted, hasInProgress]);
+
+  // Track when game is actively being played
+  useEffect(() => {
+    if (status === 'playing') {
+      setWasPlayingThisSession(true);
+    }
+  }, [status]);
 
   const feedbackTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -63,8 +87,8 @@ export default function Game() {
     setCurrentPath([]);
   }, [submitWord, currentWord, showFeedback, setCurrentPath]);
 
-  // Watch for status change to finished
-  if (status === 'finished' && !showResults && foundWords.length > 0) {
+  // Watch for status change to finished (only auto-show if game was played this session)
+  if (status === 'finished' && !showResults && foundWords.length > 0 && wasPlayingThisSession) {
     setShowResults(true);
   }
 
@@ -89,7 +113,9 @@ export default function Game() {
           name={jumbleConfig.name}
           description={jumbleConfig.description}
           puzzleInfo={{ date: puzzleInfo.date }}
+          mode={landingMode}
           onPlay={startGame}
+          onResume={resumeGame}
           onRules={() => setShowHowToPlay(true)}
           gameId="jumble"
         />
@@ -98,16 +124,17 @@ export default function Game() {
     );
   }
 
-  // Finished state with results already shown
-  if (status === 'finished') {
+  // Finished state - show landing screen unless viewing completed game
+  if (status === 'finished' && !viewingCompletedGame) {
     return (
       <>
         <LandingScreen
           icon={jumbleConfig.icon}
           name={jumbleConfig.name}
-          description="You've already played today!"
+          description={jumbleConfig.description}
           puzzleInfo={{ date: puzzleInfo.date }}
-          onPlay={() => setShowResults(true)}
+          mode="completed"
+          onSeeResults={() => setViewingCompletedGame(true)}
           gameId="jumble"
         />
         <ResultsModal
