@@ -30,10 +30,13 @@ export function useTouchDrag({
 }: UseTouchDragProps): UseTouchDragReturn {
   const [path, setPath] = useState<Position[]>([]);
   const [isDragging, setIsDragging] = useState(false);
-  const lastTapRef = useRef<{ pos: Position; time: number } | null>(null);
   const pathRef = useRef<Position[]>([]);
   // Track if actual drag movement occurred (moved to a different tile)
   const hasDragMovedRef = useRef(false);
+  // Track the starting position of a pointer interaction
+  const dragStartPosRef = useRef<Position | null>(null);
+  // Track if a drag just completed (to suppress click after drag)
+  const justCompletedDragRef = useRef(false);
 
   // Keep pathRef in sync
   const updatePath = useCallback((newPath: Position[]) => {
@@ -46,7 +49,7 @@ export function useTouchDrag({
     updatePath([]);
     setIsDragging(false);
     hasDragMovedRef.current = false;
-    lastTapRef.current = null;
+    dragStartPosRef.current = null;
   }, [updatePath]);
 
   const handlePointerDown = useCallback((pos: Position, e: React.PointerEvent) => {
@@ -57,8 +60,9 @@ export function useTouchDrag({
 
     setIsDragging(true);
     hasDragMovedRef.current = false;
-    // Don't set path here - wait to see if it's a drag or tap
-    // Store the starting position
+    justCompletedDragRef.current = false;
+    // Store the starting position for drag detection
+    dragStartPosRef.current = pos;
     pathRef.current = [pos];
   }, [disabled]);
 
@@ -123,20 +127,21 @@ export function useTouchDrag({
         onPathComplete(finalPath);
         updatePath([]);
       }
+      // Mark that a drag just completed so we can suppress the subsequent click event
+      justCompletedDragRef.current = true;
     }
     // If no drag movement, it was a tap - let handleTileClick handle it
 
     hasDragMovedRef.current = false;
+    dragStartPosRef.current = null;
   }, [isDragging, onPathComplete, updatePath]);
 
   // Handle clicking outside tiles to clear the path
   const handleOutsideClick = useCallback(() => {
     if (disabled) return;
 
-    const currentPath = pathRef.current;
-    if (currentPath.length > 0) {
+    if (pathRef.current.length > 0) {
       updatePath([]);
-      lastTapRef.current = null;
     }
   }, [disabled, updatePath]);
 
@@ -144,33 +149,22 @@ export function useTouchDrag({
   const handleTileClick = useCallback((pos: Position) => {
     if (disabled) return;
 
-    const now = Date.now();
-    const currentPath = pathRef.current;
-
-    // Check for double-tap to submit
-    if (lastTapRef.current) {
-      const { pos: lastPos, time: lastTime } = lastTapRef.current;
-      if (
-        pos.row === lastPos.row &&
-        pos.col === lastPos.col &&
-        now - lastTime < 400
-      ) {
-        // Double-tap on same tile - submit
-        if (currentPath.length > 0) {
-          onPathComplete(currentPath);
-          updatePath([]);
-        }
-        lastTapRef.current = null;
-        return;
-      }
+    // If a drag just completed, suppress this click event
+    // (click fires after pointerUp on the starting tile)
+    if (justCompletedDragRef.current) {
+      justCompletedDragRef.current = false;
+      return;
     }
 
-    lastTapRef.current = { pos, time: now };
+    // Use the actual visual path state, not the ref (which might have been set by pointerDown)
+    const currentPath = path;
 
-    // Check if tapping the last tile in the path (wait for potential double-tap)
+    // If tapping the last tile in the path, submit the word
     if (currentPath.length > 0) {
       const lastPos = currentPath[currentPath.length - 1];
       if (pos.row === lastPos.row && pos.col === lastPos.col) {
+        onPathComplete(currentPath);
+        updatePath([]);
         return;
       }
     }
@@ -198,7 +192,7 @@ export function useTouchDrag({
       // Start new path
       updatePath([pos]);
     }
-  }, [disabled, onPathComplete, updatePath]);
+  }, [disabled, path, onPathComplete, updatePath]);
 
   return {
     path,

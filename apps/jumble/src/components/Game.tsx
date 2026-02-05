@@ -162,6 +162,7 @@ export default function Game() {
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [viewingCompletedGame, setViewingCompletedGame] = useState(false);
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
+  const hasAutoShownResultsRef = useRef(false);
 
   // Determine landing mode after mount to avoid hydration mismatch
   useEffect(() => {
@@ -180,6 +181,14 @@ export default function Game() {
       setWasPlayingThisSession(true);
     }
   }, [status]);
+
+  // Auto-show results modal when game finishes (only once per session)
+  useEffect(() => {
+    if (status === 'finished' && foundWords.length > 0 && wasPlayingThisSession && !hasAutoShownResultsRef.current) {
+      hasAutoShownResultsRef.current = true;
+      setShowResults(true);
+    }
+  }, [status, foundWords.length, wasPlayingThisSession]);
 
   const feedbackTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -206,11 +215,6 @@ export default function Game() {
     }
     setCurrentPath([]);
   }, [submitWord, currentWord, showFeedback, setCurrentPath]);
-
-  // Watch for status change to finished (only auto-show if game was played this session)
-  if (status === 'finished' && !showResults && foundWords.length > 0 && wasPlayingThisSession) {
-    setShowResults(true);
-  }
 
   // Get puzzle info for display
   const puzzleInfo = jumbleConfig.getPuzzleInfo();
