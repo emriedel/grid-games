@@ -12,3 +12,10 @@ export { Skeleton, SkeletonGrid, SkeletonText } from './Skeleton';
 export { useKeyboardShortcuts } from './useKeyboardShortcuts';
 export { DebugButton } from './DebugButton';
 export { DebugPanel } from './DebugPanel';
+export { ResultsModal } from './ResultsModal';
+export type {
+  ResultsModalProps,
+  PrimaryStat,
+  SecondaryStat,
+  ShareConfig,
+} from './ResultsModal';

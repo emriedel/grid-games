@@ -44,14 +44,13 @@ apps/edgewise/
 │   │   ├── page.tsx
 │   │   └── globals.css            # Purple theme
 │   ├── components/
-│   │   ├── Game.tsx               # Main orchestrator
+│   │   ├── Game.tsx               # Main orchestrator (includes EdgewiseResultsModal wrapper)
 │   │   ├── GameBoard.tsx          # Grid + categories layout
 │   │   ├── Square.tsx             # Rotatable tile
 │   │   ├── CategoryLabel.tsx      # Border category
 │   │   ├── CenterButton.tsx       # Group rotation button
 │   │   ├── FeedbackDots.tsx       # Guess feedback
 │   │   ├── AttemptsIndicator.tsx  # Remaining attempts
-│   │   ├── ResultsModal.tsx       # Win/lose modal
 │   │   └── HowToPlayModal.tsx
 │   ├── lib/
 │   │   ├── puzzleLoader.ts        # Load/scramble puzzles

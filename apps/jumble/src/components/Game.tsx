@@ -2,16 +2,136 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton } from '@grid-games/ui';
-import { Position } from '@/types';
+import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
+import { formatDisplayDate, getTodayDateString } from '@grid-games/shared';
+import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
 import { jumbleConfig } from '@/config';
 import BoggleGrid from './BoggleGrid';
 import Timer from './Timer';
 import CurrentWord from './CurrentWord';
 import FoundWordsList from './FoundWordsList';
-import ResultsModal from './ResultsModal';
 import HowToPlayModal from './HowToPlayModal';
+
+// Number to keycap emoji mapping
+const numberEmojis: Record<number, string> = {
+  3: '3️⃣',
+  4: '4️⃣',
+  5: '5️⃣',
+  6: '6️⃣',
+  7: '7️⃣',
+  8: '8️⃣',
+  9: '9️⃣',
+};
+
+// Jumble-specific wrapper for ResultsModal
+interface JumbleResultsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  foundWords: FoundWord[];
+  score: number;
+}
+
+function JumbleResultsModal({
+  isOpen,
+  onClose,
+  foundWords,
+  score,
+}: JumbleResultsModalProps) {
+  const displayDate = formatDisplayDate(getTodayDateString());
+
+  // Group words by length for share text
+  const wordsByLength: Record<number, FoundWord[]> = {};
+  for (const fw of foundWords) {
+    const len = fw.word.length;
+    if (!wordsByLength[len]) {
+      wordsByLength[len] = [];
+    }
+    wordsByLength[len].push(fw);
+  }
+
+  // Sort words within each length group alphabetically
+  for (const len in wordsByLength) {
+    wordsByLength[len].sort((a, b) => a.word.localeCompare(b.word));
+  }
+
+  // Get sorted lengths
+  const lengths = Object.keys(wordsByLength)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  // Build share text with word count by length
+  const wordCounts: Record<number, number> = {};
+  for (const fw of foundWords) {
+    const len = fw.word.length;
+    wordCounts[len] = (wordCounts[len] || 0) + 1;
+  }
+
+  const counts: string[] = [];
+  for (let len = 3; len <= 6; len++) {
+    if (wordCounts[len]) {
+      counts.push(`${numberEmojis[len]}: ${wordCounts[len]}`);
+    }
+  }
+
+  // 7+ letter words
+  const sevenPlus = Object.entries(wordCounts)
+    .filter(([len]) => parseInt(len) >= 7)
+    .reduce((sum, [, count]) => sum + count, 0);
+  if (sevenPlus > 0) {
+    counts.push(`${numberEmojis[7]}+: ${sevenPlus}`);
+  }
+
+  const shareText = [
+    'Jumble',
+    `Score: ${score} pts`,
+    counts.join(' | '),
+    '',
+    'https://nerdcube.games/jumble',
+  ].join('\n');
+
+  return (
+    <ResultsModal
+      isOpen={isOpen}
+      onClose={onClose}
+      gameId="jumble"
+      gameName="Jumble"
+      date={displayDate}
+      primaryStat={{ value: score, label: 'points' }}
+      secondaryStats={[
+        { label: 'words found', value: foundWords.length },
+      ]}
+      shareConfig={{ text: shareText }}
+    >
+      {/* Words grouped by length */}
+      {foundWords.length > 0 && (
+        <div className="space-y-4 max-h-48 overflow-y-auto">
+          {lengths.map((len) => {
+            const words = wordsByLength[len];
+            const emoji = len >= 7 ? `${numberEmojis[7]}+` : numberEmojis[len];
+            return (
+              <div key={len}>
+                <h3 className="text-sm font-bold mb-2 text-[var(--muted)]">
+                  {emoji} {len >= 7 ? '7+ letters' : `${len} letters`} ({words.length})
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {words.map((fw) => (
+                    <span
+                      key={fw.word}
+                      className="px-2 py-1 text-xs rounded bg-[var(--tile-bg)] text-[var(--foreground)]"
+                    >
+                      {fw.word}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </ResultsModal>
+  );
+}
 
 export default function Game() {
   const searchParams = useSearchParams();
@@ -137,7 +257,7 @@ export default function Game() {
           onSeeResults={() => setViewingCompletedGame(true)}
           gameId="jumble"
         />
-        <ResultsModal
+        <JumbleResultsModal
           isOpen={showResults}
           onClose={() => setShowResults(false)}
           foundWords={foundWords}
@@ -197,7 +317,7 @@ export default function Game() {
 
       {/* Modals */}
       <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
-      <ResultsModal
+      <JumbleResultsModal
         isOpen={showResults}
         onClose={() => setShowResults(false)}
         foundWords={foundWords}

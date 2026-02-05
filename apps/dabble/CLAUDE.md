@@ -73,12 +73,11 @@ src/
 │   ├── page.tsx         # Main game page (wraps Game in Suspense)
 │   └── globals.css      # Theme CSS variables (amber accent)
 ├── components/
-│   ├── Game.tsx         # Main game orchestrator (uses useSearchParams)
+│   ├── Game.tsx         # Main game orchestrator (includes DabbleResultsModal wrapper)
 │   ├── GameBoard.tsx    # Board grid with droppable cells
 │   ├── LetterRack.tsx   # Draggable letter tiles
 │   ├── Tile.tsx         # Individual tile components
-│   ├── WordList.tsx     # Submitted words display
-│   └── ShareModal.tsx   # Share results modal
+│   └── WordList.tsx     # Submitted words display
 ├── lib/
 │   ├── puzzleGenerator.ts  # Daily puzzle generation (seedrandom)
 │   ├── gameLogic.ts        # Word validation, scoring

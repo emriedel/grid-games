@@ -43,6 +43,7 @@ Check `packages/ui/` before creating components:
 | `NavBar` | Top navigation with hamburger menu (pass `gameId` to highlight current game) |
 | `HamburgerMenu` | Slide-out game navigation menu |
 | `GameContainer` | Game layout wrapper |
+| `ResultsModal` | End-game results with share button and "try other games" CTA |
 | `ToastProvider` / `useToast` | Toast notifications |
 | `Skeleton` | Loading placeholders |
 | `DebugPanel` | Fixed debug info panel (purple styling) |

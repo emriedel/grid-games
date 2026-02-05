@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton } from '@grid-games/ui';
-import { formatDisplayDate } from '@grid-games/shared';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
+import { formatDisplayDate, shareOrCopy, getPuzzleNumber } from '@grid-games/shared';
 import { caromConfig } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { getDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
@@ -18,8 +18,56 @@ import {
 import { Board } from './Board';
 import { HeaderMoveCounter } from './HeaderMoveCounter';
 import { HowToPlayModal } from './HowToPlayModal';
-import { ResultsModal } from './ResultsModal';
-import { Direction, Puzzle } from '@/types';
+import { Direction, Puzzle, Move } from '@/types';
+
+const directionArrows: Record<Direction, string> = {
+  up: '⬆️',
+  down: '⬇️',
+  left: '⬅️',
+  right: '➡️',
+};
+
+// Carom-specific wrapper for ResultsModal
+interface CaromResultsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  moveCount: number;
+  date: string;
+  puzzleNumber: number;
+  moveHistory: Move[];
+}
+
+function CaromResultsModal({
+  isOpen,
+  onClose,
+  moveCount,
+  date,
+  puzzleNumber,
+  moveHistory,
+}: CaromResultsModalProps) {
+  const displayDate = formatDisplayDate(date);
+  const movesText = moveCount === 1 ? 'move' : 'moves';
+  const arrowSequence = moveHistory.map((m) => directionArrows[m.direction]).join('');
+
+  const shareText = `Carom #${puzzleNumber}\n${arrowSequence}\n${moveCount} ${movesText}\n\nhttps://nerdcube.games/carom`;
+
+  return (
+    <ResultsModal
+      isOpen={isOpen}
+      onClose={onClose}
+      gameId="carom"
+      gameName="Carom"
+      date={displayDate}
+      primaryStat={{ value: moveCount, label: movesText }}
+      shareConfig={{ text: shareText }}
+    >
+      {/* Arrow sequence visualization */}
+      <div className="text-center">
+        <div className="text-2xl tracking-wider">{arrowSequence}</div>
+      </div>
+    </ResultsModal>
+  );
+}
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -229,13 +277,12 @@ export function Game() {
       <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
 
       {state.puzzle && (
-        <ResultsModal
+        <CaromResultsModal
           isOpen={showResults}
           onClose={() => setShowResults(false)}
           moveCount={state.moveCount}
-          optimalMoves={state.puzzle.optimalMoves}
           date={state.puzzle.date}
-          puzzleNumber={state.puzzle.puzzleNumber}
+          puzzleNumber={state.puzzle.puzzleNumber ?? getPuzzleNumber(new Date('2026-01-30'), new Date(state.puzzle.date))}
           moveHistory={state.moveHistory}
         />
       )}

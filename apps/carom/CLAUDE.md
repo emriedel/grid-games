@@ -35,7 +35,7 @@ npm run generate-puzzles -w @grid-games/carom
 
 | File | Purpose |
 |------|---------|
-| `src/components/Game.tsx` | Main game orchestrator |
+| `src/components/Game.tsx` | Main game orchestrator (includes CaromResultsModal wrapper) |
 | `src/components/Board.tsx` | Grid rendering with pieces and directional arrows |
 | `src/lib/gameLogic.ts` | Move simulation, collision detection |
 | `src/lib/solver.ts` | BFS solver for optimal solution |

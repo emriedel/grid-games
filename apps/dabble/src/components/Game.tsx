@@ -11,12 +11,13 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
+import { buildShareText, formatDisplayDate } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
 import { WordList } from './WordList';
-import { ShareModal } from './ShareModal';
 import { HowToPlayModal } from './HowToPlayModal';
+import { getLetterUsageBonus } from '@/constants/gameConfig';
 import { DragOverlayTile } from './Tile';
 import { useSearchParams } from 'next/navigation';
 import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
@@ -32,10 +33,95 @@ import {
   hasInProgressGame,
 } from '@/lib/storage';
 import { dabbleConfig } from '@/config';
-import { MAX_TURNS } from '@/constants/gameConfig';
+import { MAX_TURNS, PUZZLE_LETTER_COUNT } from '@/constants/gameConfig';
 import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData } from '@/types';
 
 type GameState = 'landing' | 'playing' | 'finished';
+
+// Dabble-specific wrapper for ResultsModal
+interface DabbleResultsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  date: string;
+  words: Word[];
+  totalScore: number;
+  lettersUsed: number;
+}
+
+function DabbleResultsModal({
+  isOpen,
+  onClose,
+  date,
+  words,
+  totalScore,
+  lettersUsed,
+}: DabbleResultsModalProps) {
+  const displayDate = formatDisplayDate(date);
+  const letterBonus = getLetterUsageBonus(lettersUsed);
+  const finalScore = totalScore + letterBonus;
+  const allLettersUsed = lettersUsed === PUZZLE_LETTER_COUNT;
+
+  // Generate share text
+  const letterGrid = '🟨'.repeat(lettersUsed) + '⬛'.repeat(PUZZLE_LETTER_COUNT - lettersUsed);
+  const emojiGrid = `${letterGrid} (${lettersUsed}/${PUZZLE_LETTER_COUNT})`;
+
+  const extraLines: string[] = [];
+  if (letterBonus > 0) {
+    extraLines.push(`+${letterBonus} letter bonus!`);
+  }
+
+  const shareText = buildShareText({
+    gameId: 'dabble',
+    gameName: 'Dabble',
+    puzzleId: displayDate,
+    score: finalScore,
+    emojiGrid,
+    extraLines,
+    shareUrl: 'https://nerdcube.games/dabble',
+  });
+
+  return (
+    <ResultsModal
+      isOpen={isOpen}
+      onClose={onClose}
+      gameId="dabble"
+      gameName="Dabble"
+      date={displayDate}
+      primaryStat={{ value: finalScore, label: 'points' }}
+      secondaryStats={[
+        { label: 'words', value: words.length },
+        { label: 'letters', value: `${lettersUsed}/${PUZZLE_LETTER_COUNT}` },
+      ]}
+      shareConfig={{ text: shareText }}
+    >
+      {/* Letter bonus */}
+      {letterBonus > 0 && (
+        <div className="text-center mb-4">
+          <span className="text-[var(--success)] font-semibold">
+            +{letterBonus} letter bonus!
+          </span>
+          {allLettersUsed && (
+            <span className="block text-[var(--success)] text-sm mt-1">
+              All letters used!
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Word breakdown */}
+      <div className="bg-[var(--tile-bg)] rounded-lg p-4 max-h-40 overflow-y-auto">
+        <div className="space-y-1">
+          {words.map((word, index) => (
+            <div key={index} className="flex justify-between text-sm">
+              <span className="font-medium text-[var(--foreground)]">{word.word}</span>
+              <span className="text-[var(--accent)]">{word.score}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </ResultsModal>
+  );
+}
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -423,13 +509,13 @@ export function Game() {
         />
         {/* Results modal accessible from landing when completed */}
         {landingMode === 'completed' && puzzle && (
-          <ShareModal
+          <DabbleResultsModal
             isOpen={showShareModal}
+            onClose={() => setShowShareModal(false)}
             date={puzzle.date}
             words={submittedWords}
             totalScore={totalScore}
             lettersUsed={lockedRackIndices.size}
-            onClose={() => setShowShareModal(false)}
           />
         )}
       </>
@@ -576,13 +662,13 @@ export function Game() {
       </GameContainer>
 
       {/* Modals */}
-      <ShareModal
+      <DabbleResultsModal
         isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
         date={puzzle.date}
         words={submittedWords}
         totalScore={totalScore}
         lettersUsed={lockedRackIndices.size}
-        onClose={() => setShowShareModal(false)}
       />
       <HowToPlayModal
         isOpen={showRulesModal}

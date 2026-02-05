@@ -148,7 +148,8 @@ export const newGameConfig = defineGameConfig({
 
 Use the shared components with proper state persistence:
 ```tsx
-import { LandingScreen, NavBar, GameContainer, Button, Modal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
+import { buildShareText, formatDisplayDate } from '@grid-games/shared';
 import { newGameConfig } from '@/config';
 import {
   hasCompletedToday, hasInProgressGame,
@@ -225,6 +226,68 @@ export default function Game() {
   // ... rest of game rendering
 }
 ```
+
+### ResultsModal Integration
+
+Create a game-specific wrapper for the shared ResultsModal:
+
+```tsx
+// Game-specific wrapper for ResultsModal
+interface NewGameResultsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  score: number;
+  puzzleDate: string;
+  // Add game-specific props
+}
+
+function NewGameResultsModal({
+  isOpen,
+  onClose,
+  score,
+  puzzleDate,
+}: NewGameResultsModalProps) {
+  const displayDate = formatDisplayDate(puzzleDate);
+
+  // Build share text with game-specific format
+  const shareText = buildShareText({
+    gameId: 'new-game',
+    gameName: 'New Game',
+    puzzleId: displayDate,
+    score: score,
+    emojiGrid: '🟩🟩🟩⬜⬜', // Game-specific emoji visualization
+    shareUrl: 'https://nerdcube.games/new-game',
+  });
+
+  return (
+    <ResultsModal
+      isOpen={isOpen}
+      onClose={onClose}
+      gameId="new-game"
+      date={displayDate}
+      primaryStat={{ value: score, label: 'points' }}
+      secondaryStats={[
+        { label: 'stat name', value: 'stat value' },
+      ]}
+      shareConfig={{ text: shareText }}
+    >
+      {/* Optional: Game-specific breakdown content */}
+      <div className="bg-[var(--tile-bg)] rounded-lg p-4">
+        {/* Custom content here */}
+      </div>
+    </ResultsModal>
+  );
+}
+```
+
+**ResultsModal Props:**
+- `isOpen`, `onClose` - Modal visibility control
+- `gameId` - Current game (filters from "try another game" section)
+- `date` - Display date (formatted)
+- `primaryStat` - Main result `{ value, label }`
+- `secondaryStats` - Optional array of `{ label, value, highlight? }`
+- `shareConfig` - `{ text: string }` for share button
+- `children` - Optional slot for game-specific breakdown
 
 **Key Points:**
 - All `useState`, `useCallback`, `useEffect` hooks defined BEFORE any early returns
@@ -303,7 +366,7 @@ The web app will automatically redeploy with the new rewrites.
 - [ ] Theme CSS variables defined in globals.css
 - [ ] Storage module created (`src/lib/storage.ts`)
 - [ ] Game config created in src/config.ts
-- [ ] Game.tsx uses shared LandingScreen, NavBar, GameContainer
+- [ ] Game.tsx uses shared LandingScreen, NavBar, GameContainer, ResultsModal
 - [ ] **State persistence verified:**
   - [ ] In-progress state saves/restores correctly
   - [ ] Completion state saves/restores correctly

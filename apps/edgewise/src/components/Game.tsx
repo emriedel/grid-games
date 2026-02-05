@@ -2,14 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton } from '@grid-games/ui';
-import { getTodayDateString, formatDisplayDate, getPuzzleNumber } from '@grid-games/shared';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
+import { getTodayDateString, formatDisplayDate, getPuzzleNumber, buildShareText } from '@grid-games/shared';
 
 import { GameBoard } from './GameBoard';
 import { AttemptsIndicator } from './AttemptsIndicator';
 import { FeedbackHistory } from './FeedbackDots';
 import { HowToPlayModal } from './HowToPlayModal';
-import { ResultsModal } from './ResultsModal';
 
 import { getTodayPuzzle, initializeGameState, getRandomPuzzle } from '@/lib/puzzleLoader';
 import {
@@ -32,6 +31,104 @@ import {
 import { edgewiseConfig } from '@/config';
 import { PUZZLE_BASE_DATE, MAX_ATTEMPTS } from '@/constants/gameConfig';
 import { GameState, SquareState, Puzzle, GuessFeedback, CategoryPosition } from '@/types';
+
+// Edgewise-specific wrapper for ResultsModal
+interface EdgewiseResultsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onTryAgain: () => void;
+  solved: boolean;
+  guessesUsed: number;
+  feedbackHistory: GuessFeedback[];
+  puzzleDate: string;
+  puzzleNumber: number;
+}
+
+function EdgewiseResultsModal({
+  isOpen,
+  onClose,
+  onTryAgain,
+  solved,
+  guessesUsed,
+  feedbackHistory,
+  puzzleDate,
+  puzzleNumber,
+}: EdgewiseResultsModalProps) {
+  // Generate emoji grid from feedback history
+  const generateEmojiGrid = (): string => {
+    return feedbackHistory
+      .map((feedback) => {
+        const sorted = [...feedback].sort((a, b) => b - a);
+        return sorted
+          .map((v) => {
+            if (v === 2) return '🟢';
+            if (v === 1) return '🟡';
+            return '⚪';
+          })
+          .join('');
+      })
+      .join('\n');
+  };
+
+  const emojiGrid = generateEmojiGrid();
+
+  const shareText = buildShareText({
+    gameId: 'edgewise',
+    gameName: 'Edgewise',
+    puzzleId: puzzleDate,
+    score: guessesUsed,
+    maxScore: 4,
+    emojiGrid,
+    extraLines: [solved ? '🎉' : ''],
+    shareUrl: 'https://nerdcube.games/edgewise',
+  });
+
+  return (
+    <ResultsModal
+      isOpen={isOpen}
+      onClose={onClose}
+      gameId="edgewise"
+      gameName="Edgewise"
+      date={puzzleDate}
+      primaryStat={{
+        value: solved ? guessesUsed : '❌',
+        label: solved ? (guessesUsed === 1 ? 'guess' : 'guesses') : 'not solved',
+      }}
+      secondaryStats={
+        solved
+          ? [{ label: '', value: `Edgewise #${puzzleNumber}` }]
+          : undefined
+      }
+      shareConfig={{ text: shareText }}
+    >
+      {/* Feedback history visualization */}
+      <div className="flex flex-col items-center gap-2 py-2">
+        {feedbackHistory.map((feedback, index) => {
+          const sorted = [...feedback].sort((a, b) => b - a);
+          return (
+            <div key={index} className="flex gap-1">
+              {sorted.map((v, i) => (
+                <div
+                  key={i}
+                  className={`w-5 h-5 rounded-full ${
+                    v === 2 ? 'bg-[var(--success)]' : v === 1 ? 'bg-[var(--warning)]' : 'bg-[var(--muted)] opacity-50'
+                  }`}
+                />
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Try Again button */}
+      <div className="mt-4">
+        <Button onClick={onTryAgain} variant="secondary" fullWidth>
+          Try Again
+        </Button>
+      </div>
+    </ResultsModal>
+  );
+}
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -344,7 +441,7 @@ export function Game() {
 
       {/* Modals */}
       <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
-      <ResultsModal
+      <EdgewiseResultsModal
         isOpen={showResults}
         onClose={() => setShowResults(false)}
         onTryAgain={handleTryAgain}

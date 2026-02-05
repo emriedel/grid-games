@@ -61,16 +61,14 @@ src/
 │   ├── page.tsx         # Main game page
 │   └── globals.css      # Theme CSS variables (red/pink accent)
 ├── components/
-│   ├── Game.tsx         # Main game orchestrator
+│   ├── Game.tsx         # Main game orchestrator (includes JumbleResultsModal wrapper)
 │   ├── BoggleGrid.tsx   # Letter grid with touch/mouse path tracing
 │   ├── Tile.tsx         # Individual tile components
 │   ├── CurrentWord.tsx  # Currently selected word display
 │   ├── FoundWordsList.tsx  # List of found words (always visible)
 │   ├── Timer.tsx        # Countdown timer
-│   ├── ResultsModal.tsx # End-game results
 │   ├── StatsModal.tsx   # Statistics display
-│   ├── HowToPlayModal.tsx # Instructions
-│   └── ShareButton.tsx  # Share results button
+│   └── HowToPlayModal.tsx # Instructions
 ├── lib/
 │   ├── boardGenerator.ts   # Seeded daily board generation with validation
 │   ├── dictionary.ts       # Trie-based word lookup
