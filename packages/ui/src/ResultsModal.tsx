@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, type ReactNode } from 'react';
+import { X } from 'lucide-react';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { GAMES, getIconUrl } from '@grid-games/config';
@@ -96,7 +97,16 @@ export function ResultsModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md">
-      <div className="p-6">
+      <div className="p-6 relative">
+        {/* Close X button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+          aria-label="Close"
+        >
+          <X size={20} />
+        </button>
+
         {/* Congrats + Game name + Date */}
         <div className="text-center mb-6">
           <p className="text-lg font-semibold text-[var(--foreground)] mb-1">
