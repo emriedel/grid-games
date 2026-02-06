@@ -1,10 +1,103 @@
-import { getTodayDateString } from '@grid-games/shared';
+import { getPuzzleNumber } from '@grid-games/shared';
 import { Piece, Move } from '@/types';
 
-const COMPLETION_KEY = 'carom-completion';
-const IN_PROGRESS_KEY = 'carom-in-progress';
+// Launch date for Carom - puzzle #1 starts on this date
+const PUZZLE_BASE_DATE = new Date('2026-01-30');
 
-/** Completion state saved when puzzle is solved */
+/**
+ * Get today's puzzle number
+ */
+export function getTodayPuzzleNumber(): number {
+  return getPuzzleNumber(PUZZLE_BASE_DATE);
+}
+
+/**
+ * Unified puzzle state - works for both daily and archive puzzles
+ */
+export interface CaromPuzzleState {
+  puzzleNumber: number;
+  status: 'in-progress' | 'completed';
+  data: {
+    moveCount: number;
+    moveHistory: Move[];
+    // In-progress only
+    pieces?: Piece[];
+    // Completed only
+    optimalMoves?: number;
+  };
+}
+
+/**
+ * Get storage key for a puzzle
+ */
+function getStorageKey(puzzleNumber: number): string {
+  return `carom-${puzzleNumber}`;
+}
+
+/**
+ * Get puzzle state by puzzle number
+ */
+export function getPuzzleState(puzzleNumber: number): CaromPuzzleState | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const key = getStorageKey(puzzleNumber);
+    const stored = localStorage.getItem(key);
+    if (!stored) return null;
+    return JSON.parse(stored) as CaromPuzzleState;
+  } catch (error) {
+    console.warn('[carom] Failed to load puzzle state:', error);
+    return null;
+  }
+}
+
+/**
+ * Save puzzle state
+ */
+export function savePuzzleState(puzzleNumber: number, state: CaromPuzzleState): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = getStorageKey(puzzleNumber);
+    localStorage.setItem(key, JSON.stringify(state));
+  } catch (error) {
+    console.warn('[carom] Failed to save puzzle state:', error);
+  }
+}
+
+/**
+ * Clear puzzle state
+ */
+export function clearPuzzleState(puzzleNumber: number): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = getStorageKey(puzzleNumber);
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.warn('[carom] Failed to clear puzzle state:', error);
+  }
+}
+
+/**
+ * Check if a puzzle is completed
+ */
+export function isPuzzleCompleted(puzzleNumber: number): boolean {
+  const state = getPuzzleState(puzzleNumber);
+  return state?.status === 'completed';
+}
+
+/**
+ * Check if a puzzle is in progress
+ */
+export function isPuzzleInProgress(puzzleNumber: number): boolean {
+  const state = getPuzzleState(puzzleNumber);
+  return state?.status === 'in-progress';
+}
+
+// ============ Legacy compatibility wrappers ============
+
+/** Legacy completion state interface */
 interface CompletionState {
   date: string;
   moveCount: number;
@@ -12,7 +105,7 @@ interface CompletionState {
   moveHistory: Move[];
 }
 
-/** In-progress state saved during gameplay */
+/** Legacy in-progress state interface */
 interface InProgressState {
   date: string;
   pieces: Piece[];
@@ -21,119 +114,90 @@ interface InProgressState {
 }
 
 /**
- * Save game completion state
+ * Save game completion (legacy compatibility)
  */
 export function saveGameCompletion(moveCount: number, optimalMoves: number, moveHistory: Move[]): void {
-  if (typeof window === 'undefined') return;
-
-  const state: CompletionState = {
-    date: getTodayDateString(),
-    moveCount,
-    optimalMoves,
-    moveHistory,
-  };
-
-  try {
-    localStorage.setItem(COMPLETION_KEY, JSON.stringify(state));
-    // Clear in-progress when completed
-    localStorage.removeItem(IN_PROGRESS_KEY);
-  } catch (e) {
-    console.warn('Failed to save completion state:', e);
-  }
+  const puzzleNumber = getTodayPuzzleNumber();
+  savePuzzleState(puzzleNumber, {
+    puzzleNumber,
+    status: 'completed',
+    data: {
+      moveCount,
+      optimalMoves,
+      moveHistory,
+    },
+  });
 }
 
 /**
- * Get today's completion state if exists
+ * Get today's completion state (legacy compatibility)
  */
 export function getCompletionState(): CompletionState | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const stored = localStorage.getItem(COMPLETION_KEY);
-    if (!stored) return null;
-
-    const state: CompletionState = JSON.parse(stored);
-
-    // Only return if it's today's game
-    if (state.date === getTodayDateString()) {
-      return state;
-    }
-
-    return null;
-  } catch (e) {
-    console.warn('Failed to load completion state:', e);
-    return null;
+  const puzzleNumber = getTodayPuzzleNumber();
+  const state = getPuzzleState(puzzleNumber);
+  if (state?.status === 'completed') {
+    return {
+      date: '', // Date is not stored in new format
+      moveCount: state.data.moveCount,
+      optimalMoves: state.data.optimalMoves ?? 0,
+      moveHistory: state.data.moveHistory,
+    };
   }
+  return null;
 }
 
 /**
- * Save in-progress game state
+ * Save in-progress state (legacy compatibility)
  */
 export function saveInProgressState(pieces: Piece[], moveCount: number, moveHistory: Move[]): void {
-  if (typeof window === 'undefined') return;
-
-  const state: InProgressState = {
-    date: getTodayDateString(),
-    pieces,
-    moveCount,
-    moveHistory,
-  };
-
-  try {
-    localStorage.setItem(IN_PROGRESS_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.warn('Failed to save in-progress state:', e);
-  }
+  const puzzleNumber = getTodayPuzzleNumber();
+  savePuzzleState(puzzleNumber, {
+    puzzleNumber,
+    status: 'in-progress',
+    data: {
+      pieces,
+      moveCount,
+      moveHistory,
+    },
+  });
 }
 
 /**
- * Get today's in-progress state if exists
+ * Get today's in-progress state (legacy compatibility)
  */
 export function getInProgressState(): InProgressState | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const stored = localStorage.getItem(IN_PROGRESS_KEY);
-    if (!stored) return null;
-
-    const state: InProgressState = JSON.parse(stored);
-
-    // Only return if it's today's game
-    if (state.date === getTodayDateString()) {
-      return state;
-    }
-
-    return null;
-  } catch (e) {
-    console.warn('Failed to load in-progress state:', e);
-    return null;
+  const puzzleNumber = getTodayPuzzleNumber();
+  const state = getPuzzleState(puzzleNumber);
+  if (state?.status === 'in-progress') {
+    return {
+      date: '', // Date is not stored in new format
+      pieces: state.data.pieces ?? [],
+      moveCount: state.data.moveCount,
+      moveHistory: state.data.moveHistory,
+    };
   }
+  return null;
 }
 
 /**
- * Clear in-progress state
+ * Clear in-progress state (legacy compatibility)
  */
 export function clearInProgressState(): void {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.removeItem(IN_PROGRESS_KEY);
-  } catch (e) {
-    console.warn('Failed to clear in-progress state:', e);
-  }
+  // Don't clear - the state transitions to 'completed'
 }
 
 /**
- * Check if today's puzzle was already completed
+ * Check if today's puzzle was already completed (legacy compatibility)
  */
 export function isTodayCompleted(): boolean {
-  return getCompletionState() !== null;
+  return isPuzzleCompleted(getTodayPuzzleNumber());
 }
 
 /**
- * Check if there's an in-progress game for today
+ * Check if there's an in-progress game for today (legacy compatibility)
  */
 export function hasInProgressGame(): boolean {
-  return getInProgressState() !== null;
+  return isPuzzleInProgress(getTodayPuzzleNumber());
 }
 
 /**
@@ -141,11 +205,12 @@ export function hasInProgressGame(): boolean {
  */
 export function clearStoredState(): void {
   if (typeof window === 'undefined') return;
-  localStorage.removeItem(COMPLETION_KEY);
-  localStorage.removeItem(IN_PROGRESS_KEY);
+  clearPuzzleState(getTodayPuzzleNumber());
 }
 
-// Legacy compatibility
+/**
+ * Legacy compatibility alias
+ */
 export function getTodayGameState(): CompletionState | null {
   return getCompletionState();
 }

@@ -4,7 +4,7 @@ import { useReducer, useCallback, useEffect } from 'react';
 import { GameState, Puzzle, Piece, Direction, Move, Position } from '@/types';
 import { simulateSlide, applyMove, isTargetOnGoal, wouldPieceMove } from '@/lib/gameLogic';
 import { SLIDE_ANIMATION_DURATION } from '@/constants/gameConfig';
-import { saveInProgressState, clearInProgressState } from '@/lib/storage';
+import { savePuzzleState, getTodayPuzzleNumber } from '@/lib/storage';
 
 type GameAction =
   | { type: 'START_GAME'; puzzle: Puzzle }
@@ -127,22 +127,29 @@ const initialState: GameState = {
   lastActionWasUndo: false,
 };
 
-export function useGameState() {
+interface UseGameStateProps {
+  /** Puzzle number for storage (defaults to today) */
+  puzzleNumber?: number;
+}
+
+export function useGameState(props?: UseGameStateProps) {
+  const activePuzzleNumber = props?.puzzleNumber ?? getTodayPuzzleNumber();
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   // Save in-progress state whenever pieces or moves change
   useEffect(() => {
     if (state.phase === 'playing' && state.pieces.length > 0) {
-      saveInProgressState(state.pieces, state.moveCount, state.moveHistory);
+      savePuzzleState(activePuzzleNumber, {
+        puzzleNumber: activePuzzleNumber,
+        status: 'in-progress',
+        data: {
+          pieces: state.pieces,
+          moveCount: state.moveCount,
+          moveHistory: state.moveHistory,
+        },
+      });
     }
-  }, [state.phase, state.pieces, state.moveCount, state.moveHistory]);
-
-  // Clear in-progress state when finished
-  useEffect(() => {
-    if (state.phase === 'finished') {
-      clearInProgressState();
-    }
-  }, [state.phase]);
+  }, [state.phase, state.pieces, state.moveCount, state.moveHistory, activePuzzleNumber]);
 
   const startGame = useCallback((puzzle: Puzzle) => {
     dispatch({ type: 'START_GAME', puzzle });

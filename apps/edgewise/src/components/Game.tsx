@@ -75,7 +75,7 @@ function EdgewiseResultsModal({
   const shareText = buildShareText({
     gameId: 'edgewise',
     gameName: 'Edgewise',
-    puzzleId: puzzleDate,
+    puzzleId: puzzleNumber,
     score: guessesUsed,
     maxScore: 4,
     emojiGrid,
@@ -90,15 +90,11 @@ function EdgewiseResultsModal({
       gameId="edgewise"
       gameName="Edgewise"
       date={puzzleDate}
+      puzzleNumber={puzzleNumber}
       primaryStat={{
         value: solved ? guessesUsed : '❌',
         label: solved ? (guessesUsed === 1 ? 'guess' : 'guesses') : 'not solved',
       }}
-      secondaryStats={
-        solved
-          ? [{ label: '', value: `Edgewise #${puzzleNumber}` }]
-          : undefined
-      }
       shareConfig={{ text: shareText }}
     >
       {/* Feedback history visualization */}

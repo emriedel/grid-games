@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, shareOrCopy, getPuzzleNumber } from '@grid-games/shared';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal, ArchiveModal } from '@grid-games/ui';
+import { formatDisplayDate, shareOrCopy, getPuzzleNumber, getDateForPuzzleNumber } from '@grid-games/shared';
 import { caromConfig } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { getDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
@@ -14,6 +14,11 @@ import {
   getInProgressState,
   isTodayCompleted,
   hasInProgressGame,
+  getPuzzleState,
+  savePuzzleState,
+  isPuzzleCompleted,
+  isPuzzleInProgress,
+  getTodayPuzzleNumber,
 } from '@/lib/storage';
 import { Board } from './Board';
 import { HeaderMoveCounter } from './HeaderMoveCounter';
@@ -58,6 +63,7 @@ function CaromResultsModal({
       gameId="carom"
       gameName="Carom"
       date={displayDate}
+      puzzleNumber={puzzleNumber}
       primaryStat={{ value: moveCount, label: movesText }}
       shareConfig={{ text: shareText }}
     >
@@ -69,32 +75,87 @@ function CaromResultsModal({
   );
 }
 
+// Base date for puzzle numbering (Carom launched Jan 30, 2026)
+const PUZZLE_BASE_DATE = '2026-01-30';
+const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
+
 export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
+  const showArchiveParam = searchParams.get('archive') === 'true';
+  const puzzleParam = searchParams.get('puzzle');
 
-  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, setFinished, undo, canUndo } = useGameState();
+  // Determine if this is archive mode
+  const archivePuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : null;
+  const isArchiveMode = archivePuzzleNumber !== null && !isNaN(archivePuzzleNumber) && archivePuzzleNumber >= 1;
+  const todayPuzzleNumber = getTodayPuzzleNumber();
+  const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
+
+  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber });
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
+  const [showArchiveModal, setShowArchiveModal] = useState(showArchiveParam);
 
   // Initialize puzzle on mount
   useEffect(() => {
     async function loadPuzzle() {
       setIsLoading(true);
       try {
-        const dailyPuzzle = await getDailyPuzzle();
-        setPuzzle(dailyPuzzle);
+        // For archive mode, convert puzzle number to date string
+        const puzzleDateString = isArchiveMode
+          ? getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, activePuzzleNumber)
+          : undefined; // undefined = today
 
-        // Determine landing mode after mount (to avoid hydration mismatch)
+        const loadedPuzzle = await getDailyPuzzle(puzzleDateString);
+        setPuzzle(loadedPuzzle);
+
+        // Check saved state using unified storage (skip in debug mode)
         if (!isDebug) {
-          if (isTodayCompleted()) {
-            setLandingMode('completed');
-          } else if (hasInProgressGame()) {
-            setLandingMode('in-progress');
+          const puzzleState = getPuzzleState(activePuzzleNumber);
+
+          if (puzzleState?.status === 'completed') {
+            if (isArchiveMode) {
+              // Archive: go directly to finished (skip landing)
+              // Reconstruct final piece positions from move history
+              const finalPieces = loadedPuzzle.pieces.map(p => ({ ...p }));
+              for (const move of puzzleState.data.moveHistory) {
+                const piece = finalPieces.find(p => p.id === move.pieceId);
+                if (piece) {
+                  piece.position = { ...move.to };
+                }
+              }
+              restoreGame(loadedPuzzle, finalPieces, puzzleState.data.moveCount, puzzleState.data.moveHistory);
+              setFinished();
+            } else {
+              // Today: show landing with completed mode
+              setLandingMode('completed');
+            }
+          } else if (puzzleState?.status === 'in-progress') {
+            if (isArchiveMode) {
+              // Archive: restore and go directly to playing (skip landing)
+              setWasPlayingThisSession(true);
+              restoreGame(
+                loadedPuzzle,
+                puzzleState.data.pieces ?? loadedPuzzle.pieces,
+                puzzleState.data.moveCount,
+                puzzleState.data.moveHistory
+              );
+            } else {
+              // Today: show landing with in-progress mode
+              setLandingMode('in-progress');
+            }
+          } else {
+            // Fresh puzzle
+            if (isArchiveMode) {
+              // Archive: go directly to playing (skip landing)
+              setWasPlayingThisSession(true);
+              startGame(loadedPuzzle);
+            }
+            // Today: stay on landing (fresh)
           }
         }
       } catch (error) {
@@ -105,7 +166,7 @@ export function Game() {
     }
 
     loadPuzzle();
-  }, [isDebug]);
+  }, [isDebug, isArchiveMode, activePuzzleNumber]);
 
   // Handle game start (fresh)
   const handlePlay = useCallback(() => {
@@ -162,14 +223,23 @@ export function Game() {
   // Handle win condition - only auto-show results if player was playing this session
   useEffect(() => {
     if (state.phase === 'finished' && state.puzzle && wasPlayingThisSession) {
-      saveGameCompletion(state.moveCount, state.puzzle.optimalMoves, state.moveHistory);
+      // Save using puzzle-number-based storage
+      savePuzzleState(activePuzzleNumber, {
+        puzzleNumber: activePuzzleNumber,
+        status: 'completed',
+        data: {
+          moveCount: state.moveCount,
+          optimalMoves: state.puzzle.optimalMoves,
+          moveHistory: state.moveHistory,
+        },
+      });
       // Small delay before showing results
       const timer = setTimeout(() => {
         setShowResults(true);
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession]);
+  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession, activePuzzleNumber]);
 
   // Handle new random puzzle (debug mode)
   const handleNewPuzzle = useCallback(async () => {
@@ -177,6 +247,22 @@ export function Game() {
     setPuzzle(newPuzzle);
     startGame(newPuzzle);
   }, [startGame]);
+
+  // Handle archive puzzle selection
+  const handleSelectArchivePuzzle = useCallback((puzzleNumber: number) => {
+    // Navigate to the archive puzzle (use relative URL for local/production compatibility)
+    window.location.href = `?puzzle=${puzzleNumber}`;
+  }, []);
+
+  // Check if an archive puzzle is completed
+  const isArchivePuzzleCompleted = useCallback((pn: number) => {
+    return isPuzzleCompleted(pn);
+  }, []);
+
+  // Check if an archive puzzle is in progress
+  const isArchivePuzzleInProgress = useCallback((pn: number) => {
+    return isPuzzleInProgress(pn);
+  }, []);
 
   // Loading state - show while puzzle is being fetched
   if (isLoading || !puzzle) {
@@ -206,9 +292,20 @@ export function Game() {
           onResume={handleResume}
           onSeeResults={handleSeeResults}
           onRules={() => setShowRules(true)}
+          onArchive={() => setShowArchiveModal(true)}
           gameId="carom"
         />
         <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
+        <ArchiveModal
+          isOpen={showArchiveModal}
+          onClose={() => setShowArchiveModal(false)}
+          gameName="Carom"
+          baseDate={PUZZLE_BASE_DATE}
+          todayPuzzleNumber={todayPuzzleNumber}
+          isPuzzleCompleted={isArchivePuzzleCompleted}
+          isPuzzleInProgress={isArchivePuzzleInProgress}
+          onSelectPuzzle={handleSelectArchivePuzzle}
+        />
       </>
     );
   }

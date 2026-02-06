@@ -1,0 +1,125 @@
+name: Protect Assigned Puzzles
+
+on:
+  pull_request:
+    paths:
+      - '**/puzzles/assigned.json'
+
+jobs:
+  check-assigned-modifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check for protected date modifications
+        run: |
+          #!/bin/bash
+          set -e
+
+          # Get today's date in YYYY-MM-DD format
+          TODAY=$(date +%Y-%m-%d)
+          echo "Today's date: $TODAY"
+
+          # Get the base branch (usually main)
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          echo "Base SHA: $BASE_SHA"
+          echo "Head SHA: $HEAD_SHA"
+
+          # Find all assigned.json files that were modified
+          MODIFIED_FILES=$(git diff --name-only $BASE_SHA $HEAD_SHA | grep "assigned.json" || true)
+
+          if [ -z "$MODIFIED_FILES" ]; then
+            echo "No assigned.json files modified"
+            exit 0
+          fi
+
+          echo "Modified assigned.json files:"
+          echo "$MODIFIED_FILES"
+
+          ERRORS=""
+
+          for FILE in $MODIFIED_FILES; do
+            echo ""
+            echo "Checking $FILE..."
+
+            # Check if file exists in both commits
+            if ! git show "$BASE_SHA:$FILE" > /dev/null 2>&1; then
+              echo "  File is new, allowing all changes"
+              continue
+            fi
+
+            # Get the base version of the file
+            git show "$BASE_SHA:$FILE" > /tmp/base_assigned.json
+            git show "$HEAD_SHA:$FILE" > /tmp/head_assigned.json
+
+            # Extract dates from base file that are <= today (protected dates)
+            PROTECTED_DATES=$(cat /tmp/base_assigned.json | \
+              grep -oP '"date":\s*"\K[0-9]{4}-[0-9]{2}-[0-9]{2}' | \
+              while read DATE; do
+                if [[ "$DATE" < "$TODAY" ]] || [[ "$DATE" == "$TODAY" ]]; then
+                  echo "$DATE"
+                fi
+              done | sort -u)
+
+            if [ -z "$PROTECTED_DATES" ]; then
+              echo "  No protected dates found in base file"
+              continue
+            fi
+
+            echo "  Protected dates (today or earlier):"
+            echo "$PROTECTED_DATES" | sed 's/^/    /'
+
+            # For each protected date, check if the assignment changed
+            for DATE in $PROTECTED_DATES; do
+              # Extract the assignment for this date from both files
+              BASE_ASSIGNMENT=$(cat /tmp/base_assigned.json | \
+                grep -A20 "\"date\": \"$DATE\"" | head -25 | tr -d '\n' | \
+                sed 's/.*"puzzleId": "\([^"]*\)".*/\1/')
+
+              HEAD_ASSIGNMENT=$(cat /tmp/head_assigned.json | \
+                grep -A20 "\"date\": \"$DATE\"" | head -25 | tr -d '\n' | \
+                sed 's/.*"puzzleId": "\([^"]*\)".*/\1/')
+
+              if [ -z "$HEAD_ASSIGNMENT" ]; then
+                echo "  ERROR: Assignment for $DATE was DELETED"
+                ERRORS="$ERRORS\n- $FILE: Assignment for $DATE was deleted"
+              elif [ "$BASE_ASSIGNMENT" != "$HEAD_ASSIGNMENT" ]; then
+                echo "  ERROR: Assignment for $DATE was MODIFIED"
+                echo "    Base puzzleId: $BASE_ASSIGNMENT"
+                echo "    Head puzzleId: $HEAD_ASSIGNMENT"
+                ERRORS="$ERRORS\n- $FILE: Assignment for $DATE was modified (puzzleId changed from $BASE_ASSIGNMENT to $HEAD_ASSIGNMENT)"
+              else
+                echo "  OK: Assignment for $DATE unchanged"
+              fi
+            done
+          done
+
+          if [ -n "$ERRORS" ]; then
+            echo ""
+            echo "=========================================="
+            echo "ERROR: Protected puzzle assignments modified!"
+            echo "=========================================="
+            echo ""
+            echo "The following protected assignments (today or earlier) were changed:"
+            echo -e "$ERRORS"
+            echo ""
+            echo "Past puzzle assignments cannot be modified to ensure players"
+            echo "who completed those puzzles retain their valid scores."
+            echo ""
+            echo "If you need to fix a bug in a past puzzle, create a new puzzle"
+            echo "for a future date instead."
+            exit 1
+          fi
+
+          echo ""
+          echo "All protected assignments are unchanged. PR is safe to merge."

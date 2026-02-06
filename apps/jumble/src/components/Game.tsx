@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, getTodayDateString } from '@grid-games/shared';
+import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton, ResultsModal, ArchiveModal } from '@grid-games/ui';
+import { formatDisplayDate, getTodayDateString, getDateForPuzzleNumber } from '@grid-games/shared';
+import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber } from '@/lib/storage';
 import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
 import { jumbleConfig } from '@/config';
@@ -30,6 +31,7 @@ interface JumbleResultsModalProps {
   onClose: () => void;
   foundWords: FoundWord[];
   score: number;
+  puzzleNumber?: number;
 }
 
 function JumbleResultsModal({
@@ -37,6 +39,7 @@ function JumbleResultsModal({
   onClose,
   foundWords,
   score,
+  puzzleNumber,
 }: JumbleResultsModalProps) {
   const displayDate = formatDisplayDate(getTodayDateString());
 
@@ -83,7 +86,7 @@ function JumbleResultsModal({
   }
 
   const shareText = [
-    'Jumble',
+    puzzleNumber ? `Jumble #${puzzleNumber}` : 'Jumble',
     `Score: ${score} pts`,
     counts.join(' | '),
     '',
@@ -97,6 +100,7 @@ function JumbleResultsModal({
       gameId="jumble"
       gameName="Jumble"
       date={displayDate}
+      puzzleNumber={puzzleNumber}
       primaryStat={{ value: score, label: 'points' }}
       secondaryStats={[
         { label: 'words found', value: foundWords.length },
@@ -133,9 +137,19 @@ function JumbleResultsModal({
   );
 }
 
+// Base date for puzzle numbering (must match config.ts)
+const PUZZLE_BASE_DATE = '2026-01-01';
+const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
+
 export default function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
+  const showArchiveParam = searchParams.get('archive') === 'true';
+  const puzzleParam = searchParams.get('puzzle');
+
+  // Determine if this is archive mode
+  const archivePuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : null;
+  const todayPuzzleNumber = getTodayPuzzleNumber();
 
   const {
     board,
@@ -143,6 +157,7 @@ export default function Game() {
     currentWord,
     status,
     timeRemaining,
+    puzzleNumber,
     totalScore,
     allValidWords,
     maxPossibleScore,
@@ -154,7 +169,8 @@ export default function Game() {
     regeneratePuzzle,
     hasInProgress,
     hasCompleted,
-  } = useGameState();
+    isArchiveMode,
+  } = useGameState({ archivePuzzleNumber });
 
   const [showResults, setShowResults] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
@@ -163,6 +179,7 @@ export default function Game() {
   const [viewingCompletedGame, setViewingCompletedGame] = useState(false);
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
   const hasAutoShownResultsRef = useRef(false);
+  const [showArchiveModal, setShowArchiveModal] = useState(showArchiveParam);
 
   // Determine landing mode after mount to avoid hydration mismatch
   useEffect(() => {
@@ -216,8 +233,29 @@ export default function Game() {
     setCurrentPath([]);
   }, [submitWord, currentWord, showFeedback, setCurrentPath]);
 
-  // Get puzzle info for display
-  const puzzleInfo = jumbleConfig.getPuzzleInfo();
+  // Handle archive puzzle selection
+  const handleSelectArchivePuzzle = useCallback((puzzleNumber: number) => {
+    // Navigate to the archive puzzle (use relative URL for local/production compatibility)
+    window.location.href = `?puzzle=${puzzleNumber}`;
+  }, []);
+
+  // Check if an archive puzzle is completed
+  const isArchivePuzzleCompleted = useCallback((pn: number) => {
+    return isPuzzleCompleted(pn);
+  }, []);
+
+  // Check if an archive puzzle is in progress
+  const isArchivePuzzleInProgress = useCallback((pn: number) => {
+    return isPuzzleInProgress(pn);
+  }, []);
+
+  // Get puzzle info for display (use puzzleNumber from hook for archive mode)
+  const puzzleInfo = isArchiveMode
+    ? {
+        number: puzzleNumber,
+        date: formatDisplayDate(getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, puzzleNumber)),
+      }
+    : jumbleConfig.getPuzzleInfo();
 
   // Loading state
   if (status === 'loading') {
@@ -236,14 +274,25 @@ export default function Game() {
           icon={jumbleConfig.icon}
           name={jumbleConfig.name}
           description={jumbleConfig.description}
-          puzzleInfo={{ date: puzzleInfo.date }}
+          puzzleInfo={puzzleInfo}
           mode={landingMode}
           onPlay={startGame}
           onResume={resumeGame}
           onRules={() => setShowHowToPlay(true)}
+          onArchive={() => setShowArchiveModal(true)}
           gameId="jumble"
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
+        <ArchiveModal
+          isOpen={showArchiveModal}
+          onClose={() => setShowArchiveModal(false)}
+          gameName="Jumble"
+          baseDate={PUZZLE_BASE_DATE}
+          todayPuzzleNumber={todayPuzzleNumber}
+          isPuzzleCompleted={isArchivePuzzleCompleted}
+          isPuzzleInProgress={isArchivePuzzleInProgress}
+          onSelectPuzzle={handleSelectArchivePuzzle}
+        />
       </>
     );
   }
@@ -256,9 +305,10 @@ export default function Game() {
           icon={jumbleConfig.icon}
           name={jumbleConfig.name}
           description={jumbleConfig.description}
-          puzzleInfo={{ date: puzzleInfo.date }}
+          puzzleInfo={puzzleInfo}
           mode="completed"
           onSeeResults={() => setViewingCompletedGame(true)}
+          onArchive={() => setShowArchiveModal(true)}
           gameId="jumble"
         />
         <JumbleResultsModal
@@ -266,6 +316,17 @@ export default function Game() {
           onClose={() => setShowResults(false)}
           foundWords={foundWords}
           score={totalScore}
+          puzzleNumber={puzzleInfo.number}
+        />
+        <ArchiveModal
+          isOpen={showArchiveModal}
+          onClose={() => setShowArchiveModal(false)}
+          gameName="Jumble"
+          baseDate={PUZZLE_BASE_DATE}
+          todayPuzzleNumber={todayPuzzleNumber}
+          isPuzzleCompleted={isArchivePuzzleCompleted}
+          isPuzzleInProgress={isArchivePuzzleInProgress}
+          onSelectPuzzle={handleSelectArchivePuzzle}
         />
       </>
     );
@@ -279,7 +340,7 @@ export default function Game() {
       maxWidth="md"
       navBar={
         <NavBar
-          title={jumbleConfig.name}
+          title={`${jumbleConfig.name} #${puzzleInfo.number}`}
           gameId={jumbleConfig.id}
           onRulesClick={() => setShowHowToPlay(true)}
           rightContent={!isViewingCompleted ? <Timer timeRemaining={timeRemaining} /> : undefined}
@@ -342,6 +403,7 @@ export default function Game() {
         onClose={() => setShowResults(false)}
         foundWords={foundWords}
         score={totalScore}
+        puzzleNumber={puzzleInfo.number}
       />
 
       {/* Debug Panel */}

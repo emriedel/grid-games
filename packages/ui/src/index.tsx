@@ -19,3 +19,5 @@ export type {
   SecondaryStat,
   ShareConfig,
 } from './ResultsModal';
+export { ArchiveModal } from './ArchiveModal';
+export type { ArchiveModalProps, ArchiveEntry } from './ArchiveModal';

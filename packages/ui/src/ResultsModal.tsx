@@ -40,6 +40,8 @@ export interface ResultsModalProps {
   gameName: string;
   /** Display date (formatted, e.g., "February 4, 2026") */
   date: string;
+  /** Optional puzzle number for display (e.g., 35 for "#35") */
+  puzzleNumber?: number;
   /** Primary stat shown prominently */
   primaryStat: PrimaryStat;
   /** Optional secondary stats row */
@@ -69,6 +71,7 @@ export function ResultsModal({
   gameId,
   gameName,
   date,
+  puzzleNumber,
   primaryStat,
   secondaryStats,
   children,
@@ -107,12 +110,14 @@ export function ResultsModal({
           <X size={20} />
         </button>
 
-        {/* Congrats + Game name + Date */}
+        {/* Congrats + Game name + Puzzle number + Date */}
         <div className="text-center mb-6">
           <p className="text-lg font-semibold text-[var(--foreground)] mb-1">
             {congratsMessage}
           </p>
-          <p className="text-[var(--muted)]">{gameName} · {date}</p>
+          <p className="text-[var(--muted)]">
+            {gameName}{puzzleNumber ? ` #${puzzleNumber}` : ''} · {date}
+          </p>
         </div>
 
         {/* Primary stat */}

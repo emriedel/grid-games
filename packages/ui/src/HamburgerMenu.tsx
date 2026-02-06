@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { ChevronDown, ChevronRight, Archive } from 'lucide-react';
 import { GAMES, getIconUrl } from '@grid-games/config';
 
 interface HamburgerMenuProps {
@@ -14,9 +15,14 @@ interface HamburgerMenuProps {
  */
 export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [expandedGame, setExpandedGame] = useState<string | null>(null);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
+  }, []);
+
+  const toggleExpanded = useCallback((gameId: string) => {
+    setExpandedGame(prev => prev === gameId ? null : gameId);
   }, []);
 
   // Handle escape key
@@ -117,24 +123,52 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
 
           {/* Game list */}
           <div className="py-2">
-            {GAMES.map((game) => (
-              <a
-                key={game.id}
-                href={game.href}
-                className={`flex items-center gap-3 px-4 py-3 hover:bg-[var(--tile-bg,#27272a)] transition-colors ${
-                  currentGameId === game.id ? 'bg-[var(--tile-bg,#27272a)]' : ''
-                }`}
-              >
-                <img
-                  src={getIconUrl(game.id)}
-                  alt={`${game.name} icon`}
-                  className="w-10 h-10 rounded-lg"
-                />
-                <span className="font-medium text-[var(--foreground,#ededed)]">
-                  {game.name}
-                </span>
-              </a>
-            ))}
+            {GAMES.map((game) => {
+              const isExpanded = expandedGame === game.id;
+              const isCurrent = currentGameId === game.id;
+
+              return (
+                <div key={game.id}>
+                  <div
+                    className={`flex items-center gap-3 px-4 py-3 hover:bg-[var(--tile-bg,#27272a)] transition-colors ${
+                      isCurrent ? 'bg-[var(--tile-bg,#27272a)]' : ''
+                    }`}
+                  >
+                    <a
+                      href={game.href}
+                      className="flex items-center gap-3 flex-1"
+                    >
+                      <img
+                        src={getIconUrl(game.id)}
+                        alt={`${game.name} icon`}
+                        className="w-10 h-10 rounded-lg"
+                      />
+                      <span className="font-medium text-[var(--foreground,#ededed)]">
+                        {game.name}
+                      </span>
+                    </a>
+                    <button
+                      onClick={() => toggleExpanded(game.id)}
+                      className="p-1 rounded text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--border,#27272a)] transition-colors"
+                      aria-label={isExpanded ? 'Collapse' : 'Expand'}
+                    >
+                      {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                    </button>
+                  </div>
+
+                  {/* Archive link (collapsed section) */}
+                  {isExpanded && (
+                    <a
+                      href={isCurrent ? '?archive=true' : `${game.href}?archive=true`}
+                      className="flex items-center gap-3 pl-14 pr-4 py-2 text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
+                    >
+                      <Archive size={14} />
+                      <span className="text-sm">Archive</span>
+                    </a>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Footer link */}

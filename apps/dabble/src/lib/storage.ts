@@ -1,21 +1,169 @@
-import { getTodayDateString } from '@grid-games/shared';
+import { getPuzzleNumber } from '@grid-games/shared';
 import type { GameBoard, PlacedTile, Word } from '@/types';
 
-const COMPLETION_KEY = 'dabble-completion';
-const IN_PROGRESS_KEY = 'dabble-in-progress';
+// Base date for puzzle numbering (first puzzle date)
+const PUZZLE_BASE_DATE = new Date('2026-01-01');
 
-/** Completion state saved when game is finished */
-export interface DabbleCompletionState {
+/**
+ * Get today's puzzle number
+ */
+export function getTodayPuzzleNumber(): number {
+  return getPuzzleNumber(PUZZLE_BASE_DATE);
+}
+
+/**
+ * Unified puzzle state - works for both daily and archive puzzles
+ */
+export interface DabblePuzzleState {
+  puzzleNumber: number;
+  status: 'in-progress' | 'completed';
+  data: {
+    board: GameBoard;
+    rackLetters: string[];
+    submittedWords: Word[];
+    lockedRackIndices: number[];
+    totalScore: number;
+    // In-progress only fields (optional for completed)
+    placedTiles?: PlacedTile[];
+    usedRackIndices?: number[];
+    turnCount?: number;
+  };
+}
+
+/**
+ * Get storage key for a puzzle
+ */
+function getStorageKey(puzzleNumber: number): string {
+  return `dabble-${puzzleNumber}`;
+}
+
+/**
+ * Get puzzle state by puzzle number
+ */
+export function getPuzzleState(puzzleNumber: number): DabblePuzzleState | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const key = getStorageKey(puzzleNumber);
+    const stored = localStorage.getItem(key);
+    if (!stored) return null;
+    return JSON.parse(stored) as DabblePuzzleState;
+  } catch (error) {
+    console.warn('[dabble] Failed to load puzzle state:', error);
+    return null;
+  }
+}
+
+/**
+ * Save puzzle state
+ */
+export function savePuzzleState(puzzleNumber: number, state: DabblePuzzleState): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = getStorageKey(puzzleNumber);
+    localStorage.setItem(key, JSON.stringify(state));
+  } catch (error) {
+    console.warn('[dabble] Failed to save puzzle state:', error);
+  }
+}
+
+/**
+ * Clear puzzle state
+ */
+export function clearPuzzleState(puzzleNumber: number): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = getStorageKey(puzzleNumber);
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.warn('[dabble] Failed to clear puzzle state:', error);
+  }
+}
+
+/**
+ * Check if a puzzle is completed
+ */
+export function isPuzzleCompleted(puzzleNumber: number): boolean {
+  const state = getPuzzleState(puzzleNumber);
+  return state?.status === 'completed';
+}
+
+/**
+ * Check if a puzzle is in progress
+ */
+export function isPuzzleInProgress(puzzleNumber: number): boolean {
+  const state = getPuzzleState(puzzleNumber);
+  return state?.status === 'in-progress';
+}
+
+// ============ Legacy compatibility wrappers ============
+
+/**
+ * Check if today's puzzle is completed
+ */
+export function hasCompletedToday(): boolean {
+  return isPuzzleCompleted(getTodayPuzzleNumber());
+}
+
+/**
+ * Check if there's an in-progress game for today
+ */
+export function hasInProgressGame(): boolean {
+  return isPuzzleInProgress(getTodayPuzzleNumber());
+}
+
+/**
+ * Get today's completion state (legacy compatibility)
+ */
+export function getCompletionState(): DabblePuzzleState['data'] | null {
+  const state = getPuzzleState(getTodayPuzzleNumber());
+  if (state?.status === 'completed') {
+    return state.data;
+  }
+  return null;
+}
+
+/**
+ * Get today's in-progress state (legacy compatibility)
+ */
+export function getInProgressState(): DabblePuzzleState['data'] | null {
+  const state = getPuzzleState(getTodayPuzzleNumber());
+  if (state?.status === 'in-progress') {
+    return state.data;
+  }
+  return null;
+}
+
+/**
+ * Save completion state (legacy compatibility)
+ */
+export function saveCompletionState(data: {
   date: string;
   board: GameBoard;
   submittedWords: Word[];
   lockedRackIndices: number[];
   totalScore: number;
+}): void {
+  const puzzleNumber = getTodayPuzzleNumber();
+  savePuzzleState(puzzleNumber, {
+    puzzleNumber,
+    status: 'completed',
+    data: {
+      board: data.board,
+      rackLetters: [], // Not needed for completed state
+      submittedWords: data.submittedWords,
+      lockedRackIndices: data.lockedRackIndices,
+      totalScore: data.totalScore,
+    },
+  });
 }
 
-/** In-progress state saved during gameplay */
-export interface DabbleInProgressState {
-  date: string;
+/**
+ * Save in-progress state (legacy compatibility)
+ */
+export function saveInProgressState(data: {
   board: GameBoard;
   rackLetters: string[];
   placedTiles: PlacedTile[];
@@ -24,99 +172,41 @@ export interface DabbleInProgressState {
   submittedWords: Word[];
   turnCount: number;
   totalScore: number;
+}): void {
+  const puzzleNumber = getTodayPuzzleNumber();
+  savePuzzleState(puzzleNumber, {
+    puzzleNumber,
+    status: 'in-progress',
+    data: {
+      board: data.board,
+      rackLetters: data.rackLetters,
+      submittedWords: data.submittedWords,
+      lockedRackIndices: data.lockedRackIndices,
+      totalScore: data.totalScore,
+      placedTiles: data.placedTiles,
+      usedRackIndices: data.usedRackIndices,
+      turnCount: data.turnCount,
+    },
+  });
 }
 
-// ============ Completion State ============
-
-export function getCompletionState(): DabbleCompletionState | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const stored = localStorage.getItem(COMPLETION_KEY);
-    if (stored) {
-      const state = JSON.parse(stored) as DabbleCompletionState;
-      if (state.date === getTodayDateString()) {
-        return state;
-      }
-    }
-  } catch (error) {
-    console.warn('Failed to load completion state:', error);
-  }
-  return null;
-}
-
-export function saveCompletionState(state: DabbleCompletionState): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    localStorage.setItem(COMPLETION_KEY, JSON.stringify(state));
-    // Clear in-progress when completed
-    localStorage.removeItem(IN_PROGRESS_KEY);
-  } catch (error) {
-    console.warn('Failed to save completion state:', error);
-  }
-}
-
-export function hasCompletedToday(): boolean {
-  return getCompletionState() !== null;
-}
-
-// ============ In-Progress State ============
-
-export function getInProgressState(): DabbleInProgressState | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const stored = localStorage.getItem(IN_PROGRESS_KEY);
-    if (stored) {
-      const state = JSON.parse(stored) as DabbleInProgressState;
-      if (state.date === getTodayDateString()) {
-        return state;
-      }
-    }
-  } catch (error) {
-    console.warn('Failed to load in-progress state:', error);
-  }
-  return null;
-}
-
-export function saveInProgressState(state: Omit<DabbleInProgressState, 'date'>): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    const fullState: DabbleInProgressState = {
-      ...state,
-      date: getTodayDateString(),
-    };
-    localStorage.setItem(IN_PROGRESS_KEY, JSON.stringify(fullState));
-  } catch (error) {
-    console.warn('Failed to save in-progress state:', error);
-  }
-}
-
+/**
+ * Clear in-progress state for today (legacy compatibility)
+ */
 export function clearInProgressState(): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    localStorage.removeItem(IN_PROGRESS_KEY);
-  } catch (error) {
-    console.warn('Failed to clear in-progress state:', error);
-  }
+  // Don't clear - the state is preserved as 'completed'
+  // This function is called after saveCompletionState, so it's already transitioned
 }
 
-export function hasInProgressGame(): boolean {
-  return getInProgressState() !== null;
-}
-
-// ============ Utilities ============
-
+/**
+ * Clear all state (debug/testing)
+ */
 export function clearAllState(): void {
   if (typeof window === 'undefined') return;
 
   try {
-    localStorage.removeItem(COMPLETION_KEY);
-    localStorage.removeItem(IN_PROGRESS_KEY);
+    clearPuzzleState(getTodayPuzzleNumber());
   } catch (error) {
-    console.warn('Failed to clear all state:', error);
+    console.warn('[dabble] Failed to clear all state:', error);
   }
 }

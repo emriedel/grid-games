@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { Archive } from 'lucide-react';
 import { Button } from './Button';
 import { HamburgerMenu } from './HamburgerMenu';
 
@@ -26,6 +27,8 @@ interface LandingScreenProps {
   onSeeResults?: () => void;
   /** Handler for How to Play button */
   onRules?: () => void;
+  /** Handler for Archive button (opens archive modal) */
+  onArchive?: () => void;
   /** Additional buttons (stats, etc.) */
   children?: ReactNode;
   /** URL for home/all games link (deprecated, menu now used instead) */
@@ -54,6 +57,7 @@ export function LandingScreen({
   onResume,
   onSeeResults,
   onRules,
+  onArchive,
   children,
   gameId,
   mode = 'fresh',
@@ -70,14 +74,25 @@ export function LandingScreen({
     switch (mode) {
       case 'completed':
         return (
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={onSeeResults}
-          >
-            View Game
-          </Button>
+          <>
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={onSeeResults}
+            >
+              View Game
+            </Button>
+            {onArchive && (
+              <button
+                onClick={onArchive}
+                className="flex items-center justify-center gap-2 w-full py-2 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+              >
+                <Archive size={16} />
+                <span className="text-sm">Play Past Puzzles</span>
+              </button>
+            )}
+          </>
         );
 
       case 'in-progress':
@@ -104,6 +119,15 @@ export function LandingScreen({
             <Button variant="primary" size="lg" fullWidth onClick={onPlay}>
               Play
             </Button>
+            {onArchive && (
+              <button
+                onClick={onArchive}
+                className="flex items-center justify-center gap-2 w-full py-2 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+              >
+                <Archive size={16} />
+                <span className="text-sm">Archive</span>
+              </button>
+            )}
           </>
         );
     }
@@ -149,9 +173,9 @@ export function LandingScreen({
         {children}
       </div>
 
-      {/* Date below buttons */}
+      {/* Puzzle info below buttons */}
       <div className="text-[var(--muted,#a1a1aa)] text-base mt-6">
-        {puzzleInfo.date}
+        {puzzleInfo.number ? `#${puzzleInfo.number} · ${puzzleInfo.date}` : puzzleInfo.date}
       </div>
     </div>
   );

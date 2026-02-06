@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { getDateForPuzzleNumber, parseDateString } from '@grid-games/shared';
 import { Board, FoundWord, GameStatus, Position } from '@/types';
-import { generateBoard, getPuzzleNumber, getTodayDateString } from '@/lib/boardGenerator';
+import { generateBoard, getPuzzleNumber } from '@/lib/boardGenerator';
 import { loadDictionary } from '@/lib/dictionary';
 import { getWordFromPath, findAllValidWords, validatePath } from '@/lib/wordValidator';
 import { calculateWordScore, calculateTotalScore, calculateMaxScore } from '@/lib/scoring';
@@ -14,9 +15,22 @@ import {
   saveInProgressState,
   clearInProgressState,
   hasInProgressGame,
+  getPuzzleState,
+  savePuzzleState,
+  isPuzzleCompleted,
+  isPuzzleInProgress,
+  getTodayPuzzleNumber,
 } from '@/lib/storage';
 import { TIMER_DURATION } from '@/constants/gameConfig';
 import { useTimer } from './useTimer';
+
+// Base date for puzzle numbering
+const PUZZLE_BASE_DATE = new Date('2026-01-01');
+
+interface UseGameStateProps {
+  /** Optional puzzle number for archive mode */
+  archivePuzzleNumber?: number | null;
+}
 
 interface UseGameStateReturn {
   board: Board;
@@ -38,9 +52,14 @@ interface UseGameStateReturn {
   regeneratePuzzle: () => void;
   hasInProgress: boolean;
   hasCompleted: boolean;
+  isArchiveMode: boolean;
 }
 
-export function useGameState(): UseGameStateReturn {
+export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
+  const archivePuzzleNumber = props?.archivePuzzleNumber;
+  const isArchiveMode = archivePuzzleNumber !== undefined && archivePuzzleNumber !== null;
+  const todayPuzzleNumber = getTodayPuzzleNumber();
+  const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
   const [board, setBoard] = useState<Board>([]);
   const [foundWords, setFoundWords] = useState<FoundWord[]>([]);
   const [currentPath, setCurrentPath] = useState<Position[]>([]);
@@ -84,29 +103,65 @@ export function useGameState(): UseGameStateReturn {
       try {
         await loadDictionary();
 
-        const today = new Date();
-        const newBoard = generateBoard(today);
-        const number = getPuzzleNumber(today);
-
-        setBoard(newBoard);
-        setPuzzleNumber(number);
-
-        // Check saved state and set flags for landing mode
-        const completed = hasPlayedToday();
-        const inProgress = hasInProgressGame();
-        setHasCompleted(completed);
-        setHasInProgress(inProgress);
-
-        // Check if already played today
-        if (completed) {
-          // Restore found words from completed game
-          const todayResult = getTodayResult();
-          if (todayResult?.foundWords) {
-            setFoundWords(todayResult.foundWords);
-          }
-          setStatus('finished');
+        // Generate board for the active puzzle number
+        // For archive mode, convert puzzle number to date
+        let puzzleDate: Date;
+        if (isArchiveMode) {
+          const dateString = getDateForPuzzleNumber(PUZZLE_BASE_DATE, activePuzzleNumber);
+          puzzleDate = parseDateString(dateString);
         } else {
-          setStatus('ready');
+          puzzleDate = new Date();
+        }
+
+        const newBoard = generateBoard(puzzleDate);
+        setBoard(newBoard);
+        setPuzzleNumber(activePuzzleNumber);
+
+        // Check saved state using unified storage
+        const puzzleState = getPuzzleState(activePuzzleNumber);
+
+        if (puzzleState?.status === 'completed') {
+          // Puzzle is completed
+          setFoundWords(puzzleState.data.foundWords);
+          setHasCompleted(true);
+          setHasInProgress(false);
+
+          if (isArchiveMode) {
+            // Archive: go directly to finished (skip landing)
+            setStatus('finished');
+          } else {
+            // Today: show landing with completed mode
+            setStatus('finished');
+          }
+        } else if (puzzleState?.status === 'in-progress') {
+          // Puzzle is in-progress
+          setFoundWords(puzzleState.data.foundWords);
+          setTime(puzzleState.data.timeRemaining ?? TIMER_DURATION);
+          setHasCompleted(false);
+          setHasInProgress(true);
+
+          if (isArchiveMode) {
+            // Archive: go directly to playing (skip landing)
+            setStatus('playing');
+            startTimer();
+          } else {
+            // Today: show landing with in-progress mode
+            setStatus('ready');
+          }
+        } else {
+          // Fresh puzzle
+          setHasCompleted(false);
+          setHasInProgress(false);
+
+          if (isArchiveMode) {
+            // Archive: go directly to playing (skip landing)
+            setStatus('playing');
+            resetTimer(TIMER_DURATION);
+            startTimer();
+          } else {
+            // Today: show landing
+            setStatus('ready');
+          }
         }
 
         // Find all valid words (for scoring max and results)
@@ -118,35 +173,37 @@ export function useGameState(): UseGameStateReturn {
     }
 
     init();
-  }, []);
+  }, [isArchiveMode, activePuzzleNumber]);
 
   // Save in-progress state when playing
   useEffect(() => {
     if (status === 'playing') {
-      saveInProgressState(foundWords, timeRemaining);
-    }
-  }, [status, foundWords, timeRemaining]);
-
-  // Clear in-progress state when finished
-  useEffect(() => {
-    if (status === 'finished') {
-      clearInProgressState();
-    }
-  }, [status]);
-
-  // Save daily result when game finishes (timer or manual)
-  useEffect(() => {
-    if (status === 'finished' && foundWords.length > 0) {
-      saveDailyResult({
-        puzzleNumber,
-        date: getTodayDateString(),
-        foundWords,
-        totalPossibleWords: allValidWords.size,
-        score: totalScore,
-        maxPossibleScore,
+      savePuzzleState(activePuzzleNumber, {
+        puzzleNumber: activePuzzleNumber,
+        status: 'in-progress',
+        data: {
+          foundWords,
+          timeRemaining,
+        },
       });
     }
-  }, [status, foundWords, puzzleNumber, allValidWords.size, totalScore, maxPossibleScore]);
+  }, [status, foundWords, timeRemaining, activePuzzleNumber]);
+
+  // Save completion state when game finishes
+  useEffect(() => {
+    if (status === 'finished' && foundWords.length > 0) {
+      savePuzzleState(activePuzzleNumber, {
+        puzzleNumber: activePuzzleNumber,
+        status: 'completed',
+        data: {
+          foundWords,
+          totalPossibleWords: allValidWords.size,
+          score: totalScore,
+          maxPossibleScore,
+        },
+      });
+    }
+  }, [status, foundWords, activePuzzleNumber, allValidWords.size, totalScore, maxPossibleScore]);
 
   // Start game (fresh)
   const startGame = useCallback(() => {
@@ -248,5 +305,6 @@ export function useGameState(): UseGameStateReturn {
     regeneratePuzzle,
     hasInProgress,
     hasCompleted,
+    isArchiveMode,
   };
 }
