@@ -32,12 +32,21 @@ export interface GameBoard {
   size: number;
 }
 
+// Star thresholds for a puzzle (determined by heuristic solver)
+export interface StarThresholds {
+  heuristicMax: number; // Best score found by beam search
+  star1: number;        // Minimum score for 1 star
+  star2: number;        // Minimum score for 2 stars
+  star3: number;        // Minimum score for 3 stars
+}
+
 export interface DailyPuzzle {
   date: string; // YYYY-MM-DD
   board: GameBoard;
   letters: string[];
   seed: number;
   archetype?: string; // Board archetype used for generation (debug info)
+  thresholds?: StarThresholds; // Star thresholds (from pre-generated puzzles)
 }
 
 export interface GameState {

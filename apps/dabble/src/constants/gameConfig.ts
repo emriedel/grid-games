@@ -6,8 +6,8 @@ export const BOARD_SIZE = 9;
 // Maximum number of turns before game ends
 export const MAX_TURNS = 4;
 
-// Board archetypes for variety in daily puzzles
-export const BOARD_ARCHETYPES = ['classic', 'corridor', 'islands', 'diagonal', 'scattered', 'open'] as const;
+// Board archetypes for variety in daily puzzles (4 distinct visual styles)
+export const BOARD_ARCHETYPES = ['diamond', 'corridor', 'scattered', 'open'] as const;
 export type BoardArchetype = typeof BOARD_ARCHETYPES[number];
 
 // Standard Scrabble letter point values
@@ -55,19 +55,90 @@ export const LETTER_CONSTRAINTS = {
   maxDuplicatesPerLetter: 2,  // No letter more than twice
 };
 
-// Common 2-letter words for playability check
-export const COMMON_2_LETTER_WORDS = [
-  'AN', 'AT', 'BE', 'DO', 'GO', 'HE', 'IF', 'IN', 'IS', 'IT',
-  'ME', 'NO', 'OF', 'ON', 'OR', 'SO', 'TO', 'UP', 'WE', 'BY',
-  'MY', 'AM', 'AS', 'AH', 'AW', 'OX', 'OH', 'OW', 'US', 'UM',
-];
-
-// Common 3-letter words for playability check
+// Common 3-letter words for playability check (expanded list)
 export const COMMON_3_LETTER_WORDS = [
+  // High-frequency common words
   'THE', 'AND', 'FOR', 'ARE', 'BUT', 'NOT', 'ALL', 'CAN', 'HER', 'WAS',
   'ONE', 'OUT', 'DAY', 'HAD', 'HAS', 'HOW', 'NEW', 'NOW', 'OLD', 'SEE',
   'WAY', 'MAY', 'SAY', 'SHE', 'TWO', 'GET', 'HIM', 'HIS', 'OUR', 'TOO',
   'ANY', 'MAN', 'BIG', 'RUN', 'SET', 'PUT', 'END', 'FAR', 'TOP', 'TEN',
+  // Additional common 3-letter words
+  'ACE', 'ACT', 'ADD', 'AGE', 'AGO', 'AID', 'AIM', 'AIR', 'APE', 'ARC',
+  'ARK', 'ARM', 'ART', 'ATE', 'BAD', 'BAG', 'BAN', 'BAR', 'BAT', 'BED',
+  'BET', 'BIT', 'BOW', 'BOX', 'BOY', 'BUD', 'BUG', 'BUS', 'BUY', 'CAB',
+  'CAP', 'CAR', 'CAT', 'COB', 'COD', 'COG', 'COP', 'COT', 'COW', 'CRY',
+  'CUB', 'CUD', 'CUP', 'CUT', 'DAB', 'DAD', 'DAM', 'DEN', 'DEW', 'DID',
+  'DIG', 'DIM', 'DIP', 'DOC', 'DOE', 'DOG', 'DOT', 'DRY', 'DUB', 'DUD',
+  'DUE', 'DUG', 'DYE', 'EAR', 'EAT', 'EEL', 'EGG', 'ELF', 'ELM', 'ERA',
+  'EVE', 'EWE', 'EYE', 'FAD', 'FAN', 'FAT', 'FAX', 'FED', 'FEE', 'FEW',
+  'FIG', 'FIN', 'FIT', 'FIX', 'FLY', 'FOB', 'FOE', 'FOG', 'FOP', 'FOR',
+  'FOX', 'FRY', 'FUN', 'FUR', 'GAB', 'GAG', 'GAP', 'GAS', 'GAY', 'GEL',
+  'GEM', 'GOB', 'GOD', 'GOT', 'GUM', 'GUN', 'GUT', 'GUY', 'GYM', 'HAM',
+  'HAP', 'HAT', 'HAY', 'HEM', 'HEN', 'HEW', 'HID', 'HIP', 'HIT', 'HOB',
+  'HOG', 'HOP', 'HOT', 'HUB', 'HUE', 'HUG', 'HUM', 'HUT', 'ICE', 'ICY',
+  'ILL', 'IMP', 'INK', 'INN', 'ION', 'IRE', 'IRK', 'ITS', 'IVY', 'JAB',
+  'JAG', 'JAM', 'JAR', 'JAW', 'JAY', 'JET', 'JIG', 'JOB', 'JOG', 'JOT',
+  'JOY', 'JUG', 'KEG', 'KEN', 'KEY', 'KID', 'KIN', 'KIT', 'LAB', 'LAC',
+  'LAD', 'LAG', 'LAP', 'LAW', 'LAY', 'LEA', 'LED', 'LEG', 'LET', 'LID',
+  'LIE', 'LIP', 'LIT', 'LOG', 'LOT', 'LOW', 'MAD', 'MAP', 'MAR', 'MAT',
+  'MEN', 'MET', 'MIX', 'MOB', 'MOM', 'MOP', 'MOW', 'MUD', 'MUG', 'NAB',
+  'NAG', 'NAP', 'NET', 'NIT', 'NOB', 'NOD', 'NOR', 'NUN', 'NUT', 'OAK',
+  'OAR', 'OAT', 'ODD', 'ODE', 'OFF', 'OFT', 'OIL', 'OPT', 'ORB', 'ORE',
+  'OWE', 'OWL', 'OWN', 'PAD', 'PAL', 'PAN', 'PAP', 'PAR', 'PAT', 'PAW',
+  'PAY', 'PEA', 'PEG', 'PEN', 'PEP', 'PER', 'PET', 'PEW', 'PIE', 'PIG',
+  'PIN', 'PIT', 'PLY', 'POD', 'POP', 'POT', 'POW', 'PRY', 'PUB', 'PUN',
+  'PUP', 'PUS', 'RAG', 'RAM', 'RAN', 'RAP', 'RAT', 'RAW', 'RAY', 'RED',
+  'REF', 'RIB', 'RID', 'RIG', 'RIM', 'RIP', 'ROB', 'ROD', 'ROE', 'ROT',
+  'ROW', 'RUB', 'RUG', 'RUM', 'RUT', 'RYE', 'SAC', 'SAD', 'SAG', 'SAP',
+  'SAT', 'SAW', 'SEA', 'SIP', 'SIR', 'SIS', 'SIT', 'SIX', 'SKI', 'SKY',
+  'SLY', 'SOB', 'SOD', 'SON', 'SOP', 'SOT', 'SOW', 'SOY', 'SPA', 'SPY',
+  'STY', 'SUB', 'SUM', 'SUN', 'SUP', 'TAB', 'TAD', 'TAG', 'TAN', 'TAP',
+  'TAR', 'TAT', 'TAX', 'TEA', 'TEN', 'THE', 'TIC', 'TIE', 'TIN', 'TIP',
+  'TOE', 'TON', 'TOP', 'TOT', 'TOW', 'TOY', 'TRY', 'TUB', 'TUG', 'URN',
+  'USE', 'VAN', 'VAT', 'VET', 'VIA', 'VIE', 'VOW', 'WAD', 'WAG', 'WAR',
+  'WAX', 'WEB', 'WED', 'WET', 'WHO', 'WHY', 'WIG', 'WIN', 'WIT', 'WOE',
+  'WOK', 'WON', 'WOO', 'WOW', 'YAK', 'YAM', 'YAP', 'YAW', 'YEA', 'YEN',
+  'YEP', 'YES', 'YET', 'YEW', 'YIN', 'YIP', 'ZAP', 'ZEN', 'ZIP', 'ZIT',
+];
+
+// Common 4-letter words for playability check
+export const COMMON_4_LETTER_WORDS = [
+  // High-frequency common words
+  'ABLE', 'ALSO', 'AREA', 'BACK', 'BALL', 'BANK', 'BASE', 'BEAR', 'BEAT', 'BEEN',
+  'BEST', 'BIRD', 'BLUE', 'BOAT', 'BODY', 'BOOK', 'BORN', 'BOTH', 'CALL', 'CAME',
+  'CAMP', 'CARD', 'CARE', 'CASE', 'CAST', 'CITY', 'CLUB', 'COLD', 'COME', 'COOL',
+  'COST', 'DARK', 'DATA', 'DATE', 'DEAL', 'DEEP', 'DOES', 'DONE', 'DOOR', 'DOWN',
+  'DRAW', 'DROP', 'DRUG', 'EACH', 'EAST', 'EASY', 'EDGE', 'ELSE', 'EVEN', 'EVER',
+  'FACE', 'FACT', 'FAIL', 'FAIR', 'FALL', 'FARM', 'FAST', 'FEAR', 'FEEL', 'FEET',
+  'FELL', 'FILE', 'FILL', 'FILM', 'FIND', 'FINE', 'FIRE', 'FIRM', 'FISH', 'FIVE',
+  'FOOD', 'FOOT', 'FORM', 'FOUR', 'FREE', 'FROM', 'FULL', 'FUND', 'GAME', 'GAVE',
+  'GIRL', 'GIVE', 'GOAL', 'GOES', 'GOLD', 'GONE', 'GOOD', 'GREW', 'GROW', 'HAIR',
+  'HALF', 'HALL', 'HAND', 'HANG', 'HARD', 'HATE', 'HAVE', 'HEAD', 'HEAR', 'HEAT',
+  'HELD', 'HELP', 'HERE', 'HIGH', 'HILL', 'HOLD', 'HOME', 'HOPE', 'HOST', 'HOUR',
+  'HUGE', 'IDEA', 'INTO', 'ITEM', 'JACK', 'JANE', 'JOHN', 'JOIN', 'JUMP', 'JUST',
+  'KEEP', 'KEPT', 'KIND', 'KING', 'KNEW', 'KNOW', 'LACK', 'LADY', 'LAID', 'LAKE',
+  'LAND', 'LANE', 'LAST', 'LATE', 'LEAD', 'LEFT', 'LESS', 'LIFE', 'LIFT', 'LIKE',
+  'LINE', 'LIST', 'LIVE', 'LOAD', 'LOAN', 'LONG', 'LOOK', 'LOSE', 'LOSS', 'LOST',
+  'LOTS', 'LOVE', 'LUCK', 'MADE', 'MAIL', 'MAIN', 'MAKE', 'MALE', 'MANY', 'MARK',
+  'MASS', 'MEAL', 'MEAN', 'MEET', 'MIND', 'MISS', 'MODE', 'MOON', 'MORE', 'MOST',
+  'MOVE', 'MUCH', 'MUST', 'NAME', 'NEAR', 'NECK', 'NEED', 'NEWS', 'NEXT', 'NICE',
+  'NONE', 'NOTE', 'OKAY', 'ONCE', 'ONLY', 'ONTO', 'OPEN', 'OVER', 'PAGE', 'PAID',
+  'PAIN', 'PAIR', 'PARK', 'PART', 'PASS', 'PAST', 'PATH', 'PICK', 'PLAN', 'PLAY',
+  'PLUS', 'POEM', 'POOL', 'POOR', 'POST', 'PULL', 'PUSH', 'RACE', 'RAIN', 'RATE',
+  'READ', 'REAL', 'REST', 'RICH', 'RIDE', 'RING', 'RISE', 'RISK', 'ROAD', 'ROCK',
+  'ROLE', 'ROLL', 'ROOM', 'ROSE', 'RULE', 'SAFE', 'SAID', 'SAKE', 'SALE', 'SAME',
+  'SAND', 'SAVE', 'SEAT', 'SEEK', 'SEEM', 'SEEN', 'SELF', 'SELL', 'SEND', 'SENT',
+  'SHIP', 'SHOP', 'SHOT', 'SHOW', 'SHUT', 'SICK', 'SIDE', 'SIGN', 'SITE', 'SIZE',
+  'SKIN', 'SLOW', 'SNOW', 'SOFT', 'SOIL', 'SOLD', 'SOME', 'SONG', 'SOON', 'SORT',
+  'SOUL', 'SPOT', 'STAR', 'STAY', 'STEP', 'STOP', 'SUCH', 'SURE', 'TAIL', 'TAKE',
+  'TALK', 'TALL', 'TEAM', 'TELL', 'TERM', 'TEST', 'TEXT', 'THAN', 'THAT', 'THEM',
+  'THEN', 'THEY', 'THIN', 'THIS', 'THUS', 'TIME', 'TINY', 'TOLD', 'TONE', 'TOOK',
+  'TOOL', 'TOWN', 'TREE', 'TRIP', 'TRUE', 'TURN', 'TYPE', 'UNIT', 'UPON', 'USED',
+  'USER', 'VARY', 'VERY', 'VIEW', 'WAIT', 'WAKE', 'WALK', 'WALL', 'WANT', 'WARM',
+  'WASH', 'WAVE', 'WEAK', 'WEAR', 'WEEK', 'WELL', 'WENT', 'WERE', 'WEST', 'WHAT',
+  'WHEN', 'WIDE', 'WIFE', 'WILD', 'WILL', 'WIND', 'WINE', 'WING', 'WIRE', 'WISE',
+  'WISH', 'WITH', 'WOKE', 'WOLF', 'WOOD', 'WORD', 'WORE', 'WORK', 'WORN', 'WRAP',
+  'YARD', 'YEAR', 'ZERO', 'ZONE',
 ];
 
 // Common 5-7 letter words for playability validation
@@ -313,38 +384,14 @@ export const BONUS_MULTIPLIERS = {
 
 // Scoring bonuses - easily tunable
 export const SCORING_CONFIG = {
-  // Per-turn tile bonus: rewards playing more tiles at once
-  // Key is minimum tiles placed, value is bonus points
-  // Encourages longer plays over incremental single-letter additions
-  perTurnTileBonus: {
-    3: 2,   // 3 tiles: +2 bonus
-    4: 5,   // 4 tiles: +5 bonus
-    5: 10,  // 5 tiles: +10 bonus
-    6: 15,  // 6+ tiles: +15 bonus
-  } as Record<number, number>,
-
   // Letter usage bonuses: rewards using more of your letters
   // Key is number of letters used, value is bonus points
   letterUsageBonus: {
-    12: 5,   // 12 letters: +5 bonus
-    13: 10,  // 13 letters: +10 bonus
-    14: 20,  // 14 letters (all): +20 bonus
+    12: 10,  // 12 letters: +10 bonus
+    13: 20,  // 13 letters: +20 bonus
+    14: 50,  // 14 letters (all): +50 bonus
   } as Record<number, number>,
 };
-
-// Helper to calculate per-turn tile bonus
-export function getPerTurnTileBonus(tilesPlaced: number): number {
-  const thresholds = Object.keys(SCORING_CONFIG.perTurnTileBonus)
-    .map(Number)
-    .sort((a, b) => b - a); // Sort descending
-
-  for (const threshold of thresholds) {
-    if (tilesPlaced >= threshold) {
-      return SCORING_CONFIG.perTurnTileBonus[threshold];
-    }
-  }
-  return 0;
-}
 
 // Helper to calculate letter usage bonus (returns bonus for current usage, not cumulative)
 export function getLetterUsageBonus(lettersUsed: number): number {

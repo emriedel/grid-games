@@ -11,7 +11,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal, Modal } from '@grid-games/ui';
 import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
@@ -20,7 +20,7 @@ import { HowToPlayModal } from './HowToPlayModal';
 import { getLetterUsageBonus } from '@/constants/gameConfig';
 import { DragOverlayTile } from './Tile';
 import { useSearchParams } from 'next/navigation';
-import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
+import { generateDailyPuzzle, generateRandomPuzzle, fetchDailyPuzzle } from '@/lib/puzzleGenerator';
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import {
@@ -31,9 +31,23 @@ import {
 } from '@/lib/storage';
 import { dabbleConfig } from '@/config';
 import { MAX_TURNS, PUZZLE_LETTER_COUNT } from '@/constants/gameConfig';
-import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData } from '@/types';
+import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData, StarThresholds } from '@/types';
 
 type GameState = 'landing' | 'playing' | 'finished';
+
+// Calculate star count based on score and thresholds
+function calculateStars(score: number, thresholds?: StarThresholds): number {
+  if (!thresholds) return 0;
+  if (score >= thresholds.star3) return 3;
+  if (score >= thresholds.star2) return 2;
+  if (score >= thresholds.star1) return 1;
+  return 0;
+}
+
+// Format star display string (e.g., "★★☆" for 2 stars)
+function formatStars(stars: number, maxStars: number = 3): string {
+  return '★'.repeat(stars) + '☆'.repeat(maxStars - stars);
+}
 
 // Dabble-specific wrapper for ResultsModal
 interface DabbleResultsModalProps {
@@ -44,6 +58,7 @@ interface DabbleResultsModalProps {
   words: Word[];
   totalScore: number;
   lettersUsed: number;
+  thresholds?: StarThresholds;
 }
 
 function DabbleResultsModal({
@@ -54,14 +69,17 @@ function DabbleResultsModal({
   words,
   totalScore,
   lettersUsed,
+  thresholds,
 }: DabbleResultsModalProps) {
   const displayDate = formatDisplayDate(date);
   const letterBonus = getLetterUsageBonus(lettersUsed);
   const finalScore = totalScore + letterBonus;
   const allLettersUsed = lettersUsed === PUZZLE_LETTER_COUNT;
+  const stars = calculateStars(finalScore, thresholds);
 
-  // Generate share text
+  // Generate share text with stars
   const letterGrid = '🟨'.repeat(lettersUsed) + '⬛'.repeat(PUZZLE_LETTER_COUNT - lettersUsed);
+  const starsDisplay = thresholds ? ` ${formatStars(stars)}` : '';
   const emojiGrid = `${letterGrid} (${lettersUsed}/${PUZZLE_LETTER_COUNT})`;
 
   const extraLines: string[] = [];
@@ -72,7 +90,7 @@ function DabbleResultsModal({
   const shareText = buildShareText({
     gameId: 'dabble',
     gameName: 'Dabble',
-    puzzleId: puzzleNumber ?? displayDate,
+    puzzleId: puzzleNumber ? `#${puzzleNumber}${starsDisplay}` : displayDate,
     score: finalScore,
     emojiGrid,
     extraLines,
@@ -94,6 +112,13 @@ function DabbleResultsModal({
       ]}
       shareConfig={{ text: shareText }}
     >
+      {/* Stars display */}
+      {thresholds && (
+        <div className="text-center mb-4">
+          <span className="text-3xl text-[var(--accent)]">{formatStars(stars)}</span>
+        </div>
+      )}
+
       {/* Letter bonus */}
       {letterBonus > 0 && (
         <div className="text-center mb-4">
@@ -120,6 +145,65 @@ function DabbleResultsModal({
         </div>
       </div>
     </ResultsModal>
+  );
+}
+
+// Score thresholds modal component
+interface ScoreThresholdsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  score: number;
+  thresholds?: StarThresholds;
+}
+
+function ScoreThresholdsModal({ isOpen, onClose, score, thresholds }: ScoreThresholdsModalProps) {
+  const letterBonus = getLetterUsageBonus(PUZZLE_LETTER_COUNT); // Max bonus for reference
+  const stars = calculateStars(score, thresholds);
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Score Breakdown">
+      <div className="space-y-4">
+        {/* Current score */}
+        <div className="text-center">
+          <div className="text-sm text-[var(--muted)] mb-1">Your Score</div>
+          <div className="text-3xl font-bold text-[var(--accent)]">{score}</div>
+          {thresholds && (
+            <div className="text-2xl mt-2">{formatStars(stars)}</div>
+          )}
+        </div>
+
+        {/* Thresholds */}
+        {thresholds ? (
+          <div className="bg-[var(--tile-bg)] rounded-lg p-4 space-y-2">
+            <div className="text-sm text-[var(--muted)] mb-3">Star Thresholds</div>
+            <div className={`flex justify-between ${score >= thresholds.star1 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+              <span>★☆☆ Good</span>
+              <span>{thresholds.star1}+</span>
+            </div>
+            <div className={`flex justify-between ${score >= thresholds.star2 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+              <span>★★☆ Great</span>
+              <span>{thresholds.star2}+</span>
+            </div>
+            <div className={`flex justify-between ${score >= thresholds.star3 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+              <span>★★★ Excellent</span>
+              <span>{thresholds.star3}+</span>
+            </div>
+            <div className="border-t border-[var(--border)] pt-2 mt-2">
+              <div className="flex justify-between text-[var(--muted)] text-sm">
+                <span>Heuristic max</span>
+                <span>~{thresholds.heuristicMax}</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-[var(--tile-bg)] rounded-lg p-4">
+            <div className="text-sm text-[var(--muted)] text-center">
+              Star thresholds not available for this puzzle.
+            </div>
+          </div>
+        )}
+      </div>
+    </Modal>
   );
 }
 
@@ -161,6 +245,7 @@ export function Game() {
   const [isDraggingBoardTile, setIsDraggingBoardTile] = useState(false);
   const [scorePopup, setScorePopup] = useState<{ score: number; key: number } | null>(null);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [showThresholdsModal, setShowThresholdsModal] = useState(false);
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -180,12 +265,12 @@ export function Game() {
     async function init() {
       await loadDictionary();
 
-      // Generate puzzle for the active puzzle number
+      // Fetch puzzle for the active puzzle number (uses pre-generated with thresholds if available)
       // For archive mode, we need to get the date string for that puzzle number
       const puzzleDateString = isArchiveMode
         ? getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, activePuzzleNumber)
         : undefined; // undefined = today
-      const dailyPuzzle = generateDailyPuzzle(puzzleDateString);
+      const dailyPuzzle = await fetchDailyPuzzle(puzzleDateString);
       setPuzzle(dailyPuzzle);
       setRackLetters(dailyPuzzle.letters);
 
@@ -375,7 +460,7 @@ export function Game() {
     if (newTurnCount >= MAX_TURNS) {
       setGameState('finished');
       setShowShareModal(true);
-      // Save completion state with full board
+      // Save completion state with full board and thresholds
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
         status: 'completed',
@@ -385,6 +470,7 @@ export function Game() {
           submittedWords: [...submittedWords, ...result.words],
           lockedRackIndices: Array.from(newLockedIndices),
           totalScore: totalScore + turnScore,
+          thresholds: puzzle?.thresholds,
         },
       });
     }
@@ -409,7 +495,7 @@ export function Game() {
     }
     setGameState('finished');
     setShowShareModal(true);
-    // Save completion state with full board
+    // Save completion state with full board and thresholds
     savePuzzleState(activePuzzleNumber, {
       puzzleNumber: activePuzzleNumber,
       status: 'completed',
@@ -419,6 +505,7 @@ export function Game() {
         submittedWords,
         lockedRackIndices: Array.from(lockedRackIndices),
         totalScore,
+        thresholds: puzzle?.thresholds,
       },
     });
   }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber]);
@@ -598,6 +685,7 @@ export function Game() {
             words={submittedWords}
             totalScore={totalScore}
             lettersUsed={lockedRackIndices.size}
+            thresholds={puzzle.thresholds}
           />
         )}
       </>
@@ -625,10 +713,14 @@ export function Game() {
                 ) : (
                   <div className="text-s text-[var(--muted)]">Turn: {turnCount + 1}/{MAX_TURNS}</div>
                 )}
-                <div className="flex items-center gap-2">
+                <button
+                  onClick={() => gameState === 'finished' && setShowThresholdsModal(true)}
+                  className={`flex items-center gap-2 ${gameState === 'finished' ? 'cursor-pointer hover:opacity-80' : ''}`}
+                  disabled={gameState !== 'finished'}
+                >
                   <span className="text-s text-[var(--muted)]">Score:</span>
                   <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>
-                </div>
+                </button>
               </div>
             }
           />
@@ -762,10 +854,17 @@ export function Game() {
         words={submittedWords}
         totalScore={totalScore}
         lettersUsed={lockedRackIndices.size}
+        thresholds={puzzle.thresholds}
       />
       <HowToPlayModal
         isOpen={showRulesModal}
         onClose={() => setShowRulesModal(false)}
+      />
+      <ScoreThresholdsModal
+        isOpen={showThresholdsModal}
+        onClose={() => setShowThresholdsModal(false)}
+        score={totalScore + getLetterUsageBonus(lockedRackIndices.size)}
+        thresholds={puzzle.thresholds}
       />
 
       {/* Drag Overlay */}

@@ -18,6 +18,8 @@ export interface ArchivePageProps {
   isPuzzleCompleted: (puzzleNumber: number) => boolean;
   /** Function to check if a puzzle number is in progress (optional) */
   isPuzzleInProgress?: (puzzleNumber: number) => boolean;
+  /** Function to get star count for a completed puzzle (optional, 0-3) */
+  getPuzzleStars?: (puzzleNumber: number) => number;
   /** Callback when user selects a puzzle */
   onSelectPuzzle: (puzzleNumber: number) => void;
   /** URL to navigate back to the game */
@@ -29,6 +31,7 @@ interface ArchiveEntry {
   date: string;
   isCompleted: boolean;
   isInProgress: boolean;
+  stars: number;
 }
 
 /**
@@ -42,6 +45,7 @@ export function ArchivePage({
   todayPuzzleNumber,
   isPuzzleCompleted,
   isPuzzleInProgress,
+  getPuzzleStars,
   onSelectPuzzle,
   backHref,
 }: ArchivePageProps) {
@@ -62,16 +66,18 @@ export function ArchivePage({
         year: 'numeric',
       });
 
+      const isCompleted = isPuzzleCompleted(num);
       entries.push({
         number: num,
         date: dateStr,
-        isCompleted: isPuzzleCompleted(num),
+        isCompleted,
         isInProgress: isPuzzleInProgress?.(num) ?? false,
+        stars: isCompleted && getPuzzleStars ? getPuzzleStars(num) : 0,
       });
     }
 
     return entries;
-  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress]);
+  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars]);
 
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
@@ -127,7 +133,13 @@ export function ArchivePage({
                       <span className="text-[var(--foreground,#ededed)]">{entry.date}</span>
                     </div>
                     {entry.isCompleted ? (
-                      <Check size={18} className="text-[var(--success,#22c55e)]" />
+                      entry.stars > 0 ? (
+                        <span className="text-[var(--accent)]">
+                          {'★'.repeat(entry.stars)}{'☆'.repeat(3 - entry.stars)}
+                        </span>
+                      ) : (
+                        <Check size={18} className="text-[var(--success,#22c55e)]" />
+                      )
                     ) : entry.isInProgress ? (
                       <Clock size={18} className="text-[var(--warning,#f59e0b)]" />
                     ) : null}

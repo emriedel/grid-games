@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArchivePage } from '@grid-games/ui';
-import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber } from '@/lib/storage';
+import { isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getTodayPuzzleNumber } from '@/lib/storage';
 
 const PUZZLE_BASE_DATE = '2026-01-01';
 
@@ -22,6 +22,7 @@ export function ArchivePageContent() {
       todayPuzzleNumber={getTodayPuzzleNumber()}
       isPuzzleCompleted={isPuzzleCompleted}
       isPuzzleInProgress={isPuzzleInProgress}
+      getPuzzleStars={getPuzzleStars}
       onSelectPuzzle={handleSelectPuzzle}
       backHref="/"
     />

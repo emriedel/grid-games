@@ -1,5 +1,5 @@
 import { getPuzzleNumber } from '@grid-games/shared';
-import type { GameBoard, PlacedTile, Word } from '@/types';
+import type { GameBoard, PlacedTile, Word, StarThresholds } from '@/types';
 
 // Base date for puzzle numbering (first puzzle date)
 const PUZZLE_BASE_DATE = new Date('2026-01-01');
@@ -27,6 +27,8 @@ export interface DabblePuzzleState {
     placedTiles?: PlacedTile[];
     usedRackIndices?: number[];
     turnCount?: number;
+    // Star thresholds (stored on completion for archive display)
+    thresholds?: StarThresholds;
   };
 }
 
@@ -96,6 +98,23 @@ export function isPuzzleCompleted(puzzleNumber: number): boolean {
 export function isPuzzleInProgress(puzzleNumber: number): boolean {
   const state = getPuzzleState(puzzleNumber);
   return state?.status === 'in-progress';
+}
+
+/**
+ * Get stars for a completed puzzle (0-3)
+ */
+export function getPuzzleStars(puzzleNumber: number): number {
+  const state = getPuzzleState(puzzleNumber);
+  if (state?.status !== 'completed') return 0;
+
+  const thresholds = state.data.thresholds;
+  if (!thresholds) return 0;
+
+  const score = state.data.totalScore;
+  if (score >= thresholds.star3) return 3;
+  if (score >= thresholds.star2) return 2;
+  if (score >= thresholds.star1) return 1;
+  return 0;
 }
 
 // ============ Legacy compatibility wrappers ============

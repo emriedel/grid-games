@@ -5,8 +5,8 @@ import {
   LETTER_DISTRIBUTION,
   VOWELS,
   LETTER_CONSTRAINTS,
-  COMMON_2_LETTER_WORDS,
   COMMON_3_LETTER_WORDS,
+  COMMON_4_LETTER_WORDS,
   COMMON_LONG_WORDS,
   BOARD_SYMMETRY,
   BONUS_PLACEMENT,
@@ -113,96 +113,6 @@ function ensureConnectivity(playable: boolean[][], size: number): void {
 
 // ============ BOARD ARCHETYPE GENERATORS ============
 
-// Classic archetype: Traditional edges-only dead spaces (original algorithm)
-function generateClassicBoard(rng: () => number, size: number): boolean[][] {
-  const playable: boolean[][] = Array(size)
-    .fill(null)
-    .map(() => Array(size).fill(true));
-
-  const totalCells = size * size;
-  const targetPlayable = randInt(
-    rng,
-    Math.floor(totalCells * BOARD_CONFIG.minPlayablePercent),
-    Math.floor(totalCells * BOARD_CONFIG.maxPlayablePercent)
-  );
-  const targetDead = totalCells - targetPlayable;
-
-  const protectionRadius = BOARD_SYMMETRY.centerProtectionRadius;
-
-  // Collect potential dead space seed points (only in first half for symmetry)
-  const seedPoints: [number, number][] = [];
-
-  // Corners (only upper-left quadrant corners)
-  if (rng() < 0.8) seedPoints.push([0, 0]);
-  if (rng() < 0.6) seedPoints.push([0, size - 1]);
-  if (rng() < 0.6) seedPoints.push([size - 1, 0]);
-
-  // Edge points in first half
-  for (let i = 1; i < size - 1; i++) {
-    if (isInFirstHalf(0, i, size) && rng() < 0.25) seedPoints.push([0, i]);
-    if (isInFirstHalf(i, 0, size) && rng() < 0.25) seedPoints.push([i, 0]);
-    if (isInFirstHalf(size - 1, i, size) && rng() < 0.25) seedPoints.push([size - 1, i]);
-    if (isInFirstHalf(i, size - 1, size) && rng() < 0.25) seedPoints.push([i, size - 1]);
-  }
-
-  const shuffledSeeds = shuffle(rng, seedPoints);
-  let deadCount = 0;
-
-  // Grow dead spaces from seed points, always applying symmetry
-  for (const [sr, sc] of shuffledSeeds) {
-    if (deadCount >= targetDead / 2) break;
-
-    if (distFromCenter(sr, sc, size) < protectionRadius) continue;
-    if (!playable[sr][sc]) continue;
-
-    const clusterSize = randInt(rng, 1, 3);
-    const cluster: [number, number][] = [[sr, sc]];
-    const visited = new Set<string>();
-    visited.add(`${sr},${sc}`);
-
-    const queue: [number, number][] = [[sr, sc]];
-
-    while (queue.length > 0 && cluster.length < clusterSize) {
-      const [r, c] = queue.shift()!;
-
-      for (const [nr, nc] of getNeighbors(r, c, size)) {
-        const key = `${nr},${nc}`;
-        if (visited.has(key)) continue;
-        visited.add(key);
-
-        if (distFromCenter(nr, nc, size) < protectionRadius) continue;
-        if (!playable[nr][nc]) continue;
-        const centerR = Math.floor(size / 2);
-        const centerC = Math.floor(size / 2);
-        if (!isInFirstHalf(nr, nc, size) && !(nr === centerR && nc === centerC)) continue;
-
-        if (rng() < 0.4) {
-          cluster.push([nr, nc]);
-          queue.push([nr, nc]);
-        }
-      }
-    }
-
-    for (const [r, c] of cluster) {
-      if (distFromCenter(r, c, size) >= protectionRadius && playable[r][c]) {
-        playable[r][c] = false;
-        deadCount++;
-
-        const [mr, mc] = getRotatedPosition(r, c, size);
-        if (mr !== r || mc !== c) {
-          if (playable[mr][mc] && distFromCenter(mr, mc, size) >= protectionRadius) {
-            playable[mr][mc] = false;
-            deadCount++;
-          }
-        }
-      }
-    }
-  }
-
-  ensureConnectivity(playable, size);
-  return playable;
-}
-
 // Corridor archetype: Narrow central pathways created by dead space channels
 function generateCorridorBoard(rng: () => number, size: number): boolean[][] {
   const playable: boolean[][] = Array(size)
@@ -271,100 +181,8 @@ function generateCorridorBoard(rng: () => number, size: number): boolean[][] {
   return playable;
 }
 
-// Islands archetype: Board divided by thin channels creating connected regions
-function generateIslandsBoard(rng: () => number, size: number): boolean[][] {
-  const playable: boolean[][] = Array(size)
-    .fill(null)
-    .map(() => Array(size).fill(true));
-
-  const protectionRadius = BOARD_SYMMETRY.centerProtectionRadius;
-  const center = Math.floor(size / 2);
-
-  // Create thin channels (1 cell wide) that divide the board
-  // Choose channel pattern
-  const pattern = rng() < 0.5 ? 'plus' : 'corners';
-
-  if (pattern === 'plus') {
-    // Create a + shaped channel through the board (avoiding center)
-    // Horizontal channel at a random row offset from center
-    const hOffset = rng() < 0.5 ? -3 : 3;
-    const hRow = center + hOffset;
-
-    if (hRow >= 0 && hRow < size) {
-      for (let c = 0; c < size; c++) {
-        // Leave gaps for connectivity
-        if (c === 0 || c === size - 1 || c === center) continue;
-        if (rng() < 0.3) continue; // Random gaps
-        playable[hRow][c] = false;
-        // Symmetric row
-        const symRow = center - hOffset;
-        if (symRow >= 0 && symRow < size && symRow !== hRow) {
-          playable[symRow][c] = false;
-        }
-      }
-    }
-
-    // Vertical channel at a random col offset from center
-    const vOffset = rng() < 0.5 ? -3 : 3;
-    const vCol = center + vOffset;
-
-    if (vCol >= 0 && vCol < size) {
-      for (let r = 0; r < size; r++) {
-        if (r === 0 || r === size - 1 || r === center) continue;
-        if (rng() < 0.3) continue;
-        playable[r][vCol] = false;
-        const symCol = center - vOffset;
-        if (symCol >= 0 && symCol < size && symCol !== vCol) {
-          playable[r][symCol] = false;
-        }
-      }
-    }
-  } else {
-    // Create L-shaped dead zones in corners, leaving center open
-    const armLength = randInt(rng, 2, 3);
-
-    // Process each corner
-    const corners = [[0, 0], [0, size-1], [size-1, 0], [size-1, size-1]];
-    for (const [cornerR, cornerC] of corners) {
-      // Create small L-shape extending from corner
-      for (let i = 1; i <= armLength; i++) {
-        // Horizontal arm
-        const hc = cornerC === 0 ? i : size - 1 - i;
-        if (hc >= 0 && hc < size && distFromCenter(cornerR, hc, size) >= protectionRadius) {
-          if (rng() < 0.7) playable[cornerR][hc] = false;
-        }
-        // Vertical arm
-        const vr = cornerR === 0 ? i : size - 1 - i;
-        if (vr >= 0 && vr < size && distFromCenter(vr, cornerC, size) >= protectionRadius) {
-          if (rng() < 0.7) playable[vr][cornerC] = false;
-        }
-      }
-      // Corner itself
-      playable[cornerR][cornerC] = false;
-    }
-
-    // Add a few scattered interior dead cells for variety
-    const scatterCount = randInt(rng, 2, 4);
-    for (let i = 0; i < scatterCount; i++) {
-      const r = randInt(rng, 2, size - 3);
-      const c = randInt(rng, 2, size - 3);
-      if (distFromCenter(r, c, size) >= protectionRadius && playable[r][c]) {
-        playable[r][c] = false;
-        // Apply symmetry
-        const [mr, mc] = getRotatedPosition(r, c, size);
-        if (mr !== r || mc !== c) {
-          playable[mr][mc] = false;
-        }
-      }
-    }
-  }
-
-  ensureConnectivity(playable, size);
-  return playable;
-}
-
-// Diagonal archetype: Diamond-shaped playable area
-function generateDiagonalBoard(rng: () => number, size: number): boolean[][] {
+// Diamond archetype: Diamond-shaped playable area with strong 45° visual
+function generateDiamondBoard(rng: () => number, size: number): boolean[][] {
   const playable: boolean[][] = Array(size)
     .fill(null)
     .map(() => Array(size).fill(true));
@@ -562,24 +380,18 @@ function generateBoardShape(rng: () => number, size: number): BoardShapeResult {
   // Dispatch to the appropriate generator
   let playable: boolean[][];
   switch (archetype) {
+    case 'diamond':
+      playable = generateDiamondBoard(rng, size);
+      break;
     case 'corridor':
       playable = generateCorridorBoard(rng, size);
-      break;
-    case 'islands':
-      playable = generateIslandsBoard(rng, size);
-      break;
-    case 'diagonal':
-      playable = generateDiagonalBoard(rng, size);
       break;
     case 'scattered':
       playable = generateScatteredBoard(rng, size);
       break;
     case 'open':
-      playable = generateOpenBoard(rng, size);
-      break;
-    case 'classic':
     default:
-      playable = generateClassicBoard(rng, size);
+      playable = generateOpenBoard(rng, size);
       break;
   }
 
@@ -792,10 +604,11 @@ function countFormableWords(letters: string[], wordList: string[]): number {
 }
 
 // Check if letters meet playability requirements
+// Requires: 3+ common 3-letter words, 2+ common 4-letter words
 function isPlayable(letters: string[]): boolean {
-  const twoLetterCount = countFormableWords(letters, COMMON_2_LETTER_WORDS);
   const threeLetterCount = countFormableWords(letters, COMMON_3_LETTER_WORDS);
-  return twoLetterCount >= 3 && threeLetterCount >= 2;
+  const fourLetterCount = countFormableWords(letters, COMMON_4_LETTER_WORDS);
+  return threeLetterCount >= 3 && fourLetterCount >= 2;
 }
 
 // Check if at least one 5+ letter word can be formed
@@ -983,7 +796,101 @@ export function getTodayDateString(): string {
   return pacificDate; // Returns YYYY-MM-DD format
 }
 
-// Generate the daily puzzle
+// Pre-generated puzzle format (from scripts/generatePuzzles.ts)
+interface PreGeneratedPuzzle {
+  date: string;
+  archetype: string;
+  letters: string[];
+  board: {
+    size: number;
+    cells: {
+      row: number;
+      col: number;
+      bonus: BonusType;
+      isPlayable: boolean;
+    }[][];
+  };
+  thresholds: {
+    heuristicMax: number;
+    star1: number;
+    star2: number;
+    star3: number;
+  };
+}
+
+interface MonthFile {
+  generatedAt: string;
+  puzzles: Record<string, PreGeneratedPuzzle>;
+}
+
+// Cache for loaded month files
+const monthFileCache: Map<string, MonthFile | null> = new Map();
+
+// Get month key from date string (YYYY-MM)
+function getMonthKey(dateString: string): string {
+  return dateString.substring(0, 7);
+}
+
+// Fetch pre-generated puzzles for a month
+async function fetchMonthFile(monthKey: string): Promise<MonthFile | null> {
+  // Check cache first
+  if (monthFileCache.has(monthKey)) {
+    return monthFileCache.get(monthKey) ?? null;
+  }
+
+  try {
+    const response = await fetch(`/puzzles/${monthKey}.json`);
+    if (!response.ok) {
+      monthFileCache.set(monthKey, null);
+      return null;
+    }
+    const data = await response.json() as MonthFile;
+    monthFileCache.set(monthKey, data);
+    return data;
+  } catch (error) {
+    console.warn(`[dabble] Failed to fetch pre-generated puzzles for ${monthKey}:`, error);
+    monthFileCache.set(monthKey, null);
+    return null;
+  }
+}
+
+// Convert pre-generated puzzle to DailyPuzzle format
+function convertPreGeneratedPuzzle(preGen: PreGeneratedPuzzle): DailyPuzzle {
+  const cells: Cell[][] = preGen.board.cells.map(row =>
+    row.map(cell => ({
+      ...cell,
+      letter: null,
+      isLocked: false,
+    }))
+  );
+
+  return {
+    date: preGen.date,
+    board: { cells, size: preGen.board.size },
+    letters: preGen.letters,
+    seed: Date.parse(preGen.date),
+    archetype: preGen.archetype,
+    thresholds: preGen.thresholds,
+  };
+}
+
+// Fetch pre-generated puzzle, falling back to client-side generation
+export async function fetchDailyPuzzle(dateString?: string): Promise<DailyPuzzle> {
+  const date = dateString || getTodayDateString();
+  const monthKey = getMonthKey(date);
+
+  // Try to fetch pre-generated puzzle
+  const monthFile = await fetchMonthFile(monthKey);
+  if (monthFile?.puzzles[date]) {
+    return convertPreGeneratedPuzzle(monthFile.puzzles[date]);
+  }
+
+  // Fall back to client-side generation (no thresholds)
+  console.log(`[dabble] No pre-generated puzzle for ${date}, generating client-side`);
+  return generateDailyPuzzle(date);
+}
+
+// Generate the daily puzzle (synchronous, no thresholds)
 export function generateDailyPuzzle(dateString?: string): DailyPuzzle {
   const date = dateString || getTodayDateString();
   const seed = Date.parse(date);
