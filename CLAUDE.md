@@ -39,11 +39,12 @@ Check `packages/ui/` before creating components:
 |-----------|---------|
 | `Modal` | Dialogs (results, settings, how-to-play) |
 | `Button` | Buttons (variants: primary/secondary/ghost) |
-| `LandingScreen` | Pre-game landing page (pass `gameId` for menu highlighting) |
+| `LandingScreen` | Pre-game landing page (pass `gameId` for menu highlighting, `archiveHref` for archive link) |
 | `NavBar` | Top navigation with hamburger menu (pass `gameId` to highlight current game) |
-| `HamburgerMenu` | Slide-out game navigation menu |
+| `HamburgerMenu` | Slide-out game navigation menu (auto-expands current game) |
 | `GameContainer` | Game layout wrapper |
 | `ResultsModal` | End-game results with share button and "try other games" CTA |
+| `ArchivePage` | Full-page archive listing for past puzzles |
 | `ToastProvider` / `useToast` | Toast notifications |
 | `Skeleton` | Loading placeholders |
 | `DebugPanel` | Fixed debug info panel (purple styling) |
@@ -66,6 +67,7 @@ Games use: `landing` → `playing` → `finished`
   onPlay={handlePlay}
   onResume={handleResume}
   onSeeResults={handleSeeResults}
+  archiveHref="/archive"  // Link to archive page (relative to basePath)
 />
 ```
 

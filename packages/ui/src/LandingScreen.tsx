@@ -29,6 +29,8 @@ interface LandingScreenProps {
   onRules?: () => void;
   /** Handler for Archive button (opens archive modal) */
   onArchive?: () => void;
+  /** URL for Archive page (alternative to onArchive) */
+  archiveHref?: string;
   /** Additional buttons (stats, etc.) */
   children?: ReactNode;
   /** URL for home/all games link (deprecated, menu now used instead) */
@@ -58,6 +60,7 @@ export function LandingScreen({
   onSeeResults,
   onRules,
   onArchive,
+  archiveHref,
   children,
   gameId,
   mode = 'fresh',
@@ -68,6 +71,32 @@ export function LandingScreen({
     : mode === 'in-progress'
     ? 'You have a game in progress'
     : "Great job on today's game!";
+
+  // Check if archive is available (either as href or click handler)
+  const hasArchive = onArchive || archiveHref;
+
+  // Render archive button/link
+  const renderArchiveButton = (label: string) => {
+    const className = "w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-[var(--tile-bg,#1a1a2e)] text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg-selected,#2a2a4e)] transition-colors";
+
+    if (archiveHref) {
+      return (
+        <a href={archiveHref} className={className}>
+          <Archive size={16} />
+          <span className="text-sm font-medium">{label}</span>
+        </a>
+      );
+    }
+    if (onArchive) {
+      return (
+        <button onClick={onArchive} className={className}>
+          <Archive size={16} />
+          <span className="text-sm font-medium">{label}</span>
+        </button>
+      );
+    }
+    return null;
+  };
 
   // Render action buttons based on mode
   const renderActionButtons = () => {
@@ -83,14 +112,10 @@ export function LandingScreen({
             >
               View Game
             </Button>
-            {onArchive && (
-              <button
-                onClick={onArchive}
-                className="flex items-center justify-center gap-2 w-full py-2 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
-              >
-                <Archive size={16} />
-                <span className="text-sm">Play Past Puzzles</span>
-              </button>
+            {hasArchive && (
+              <div className="flex w-full">
+                {renderArchiveButton('Play Past Puzzles')}
+              </div>
             )}
           </>
         );
@@ -111,23 +136,15 @@ export function LandingScreen({
       default:
         return (
           <>
+            <Button variant="primary" size="lg" fullWidth onClick={onPlay}>
+              Play
+            </Button>
             {onRules && (
               <Button variant="secondary" fullWidth onClick={onRules}>
                 How to Play
               </Button>
             )}
-            <Button variant="primary" size="lg" fullWidth onClick={onPlay}>
-              Play
-            </Button>
-            {onArchive && (
-              <button
-                onClick={onArchive}
-                className="flex items-center justify-center gap-2 w-full py-2 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
-              >
-                <Archive size={16} />
-                <span className="text-sm">Archive</span>
-              </button>
-            )}
+            {hasArchive && renderArchiveButton('Archive')}
           </>
         );
     }

@@ -3,21 +3,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal, ArchiveModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
 import { formatDisplayDate, shareOrCopy, getPuzzleNumber, getDateForPuzzleNumber } from '@grid-games/shared';
 import { caromConfig } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { getDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
 import {
-  saveGameCompletion,
   getCompletionState,
   getInProgressState,
-  isTodayCompleted,
-  hasInProgressGame,
   getPuzzleState,
   savePuzzleState,
-  isPuzzleCompleted,
-  isPuzzleInProgress,
   getTodayPuzzleNumber,
 } from '@/lib/storage';
 import { Board } from './Board';
@@ -82,7 +77,6 @@ const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
 export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
-  const showArchiveParam = searchParams.get('archive') === 'true';
   const puzzleParam = searchParams.get('puzzle');
 
   // Determine if this is archive mode
@@ -98,7 +92,6 @@ export function Game() {
   const [isLoading, setIsLoading] = useState(true);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
-  const [showArchiveModal, setShowArchiveModal] = useState(showArchiveParam);
 
   // Initialize puzzle on mount
   useEffect(() => {
@@ -248,22 +241,6 @@ export function Game() {
     startGame(newPuzzle);
   }, [startGame]);
 
-  // Handle archive puzzle selection
-  const handleSelectArchivePuzzle = useCallback((puzzleNumber: number) => {
-    // Navigate to the archive puzzle (use relative URL for local/production compatibility)
-    window.location.href = `?puzzle=${puzzleNumber}`;
-  }, []);
-
-  // Check if an archive puzzle is completed
-  const isArchivePuzzleCompleted = useCallback((pn: number) => {
-    return isPuzzleCompleted(pn);
-  }, []);
-
-  // Check if an archive puzzle is in progress
-  const isArchivePuzzleInProgress = useCallback((pn: number) => {
-    return isPuzzleInProgress(pn);
-  }, []);
-
   // Loading state - show while puzzle is being fetched
   if (isLoading || !puzzle) {
     return (
@@ -292,20 +269,10 @@ export function Game() {
           onResume={handleResume}
           onSeeResults={handleSeeResults}
           onRules={() => setShowRules(true)}
-          onArchive={() => setShowArchiveModal(true)}
+          archiveHref="/archive"
           gameId="carom"
         />
         <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
-        <ArchiveModal
-          isOpen={showArchiveModal}
-          onClose={() => setShowArchiveModal(false)}
-          gameName="Carom"
-          baseDate={PUZZLE_BASE_DATE}
-          todayPuzzleNumber={todayPuzzleNumber}
-          isPuzzleCompleted={isArchivePuzzleCompleted}
-          isPuzzleInProgress={isArchivePuzzleInProgress}
-          onSelectPuzzle={handleSelectArchivePuzzle}
-        />
       </>
     );
   }

@@ -4,6 +4,7 @@ export interface GameInfo {
   description: string;
   accentColor: string;
   href: string;
+  hasArchive?: boolean;
 }
 
 export const GAMES: GameInfo[] = [
@@ -13,6 +14,7 @@ export const GAMES: GameInfo[] = [
     description: 'Place tiles to form words and get a high score on a unique daily board',
     accentColor: '#c41e3a',
     href: '/dabble',
+    hasArchive: true,
   },
   {
     id: 'jumble',
@@ -20,6 +22,7 @@ export const GAMES: GameInfo[] = [
     description: 'Find as many words as you can before time runs out',
     accentColor: '#4a5d7a',
     href: '/jumble',
+    hasArchive: true,
   },
   {
     id: 'edgewise',
@@ -27,6 +30,7 @@ export const GAMES: GameInfo[] = [
     description: 'Rotate tiles to match words with their categories',
     accentColor: '#a855f7',
     href: '/edgewise',
+    hasArchive: false,
   },
   {
     id: 'carom',
@@ -34,6 +38,7 @@ export const GAMES: GameInfo[] = [
     description: 'Navigate pieces across the board to reach the goal in the fewest moves',
     accentColor: '#f59e0b',
     href: '/carom',
+    hasArchive: true,
   },
 ];
 

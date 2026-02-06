@@ -2,9 +2,9 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton, ResultsModal, ArchiveModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
 import { formatDisplayDate, getTodayDateString, getDateForPuzzleNumber } from '@grid-games/shared';
-import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber } from '@/lib/storage';
+import { getTodayPuzzleNumber } from '@/lib/storage';
 import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
 import { jumbleConfig } from '@/config';
@@ -144,7 +144,6 @@ const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
 export default function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
-  const showArchiveParam = searchParams.get('archive') === 'true';
   const puzzleParam = searchParams.get('puzzle');
 
   // Determine if this is archive mode
@@ -179,7 +178,6 @@ export default function Game() {
   const [viewingCompletedGame, setViewingCompletedGame] = useState(false);
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
   const hasAutoShownResultsRef = useRef(false);
-  const [showArchiveModal, setShowArchiveModal] = useState(showArchiveParam);
 
   // Determine landing mode after mount to avoid hydration mismatch
   useEffect(() => {
@@ -233,22 +231,6 @@ export default function Game() {
     setCurrentPath([]);
   }, [submitWord, currentWord, showFeedback, setCurrentPath]);
 
-  // Handle archive puzzle selection
-  const handleSelectArchivePuzzle = useCallback((puzzleNumber: number) => {
-    // Navigate to the archive puzzle (use relative URL for local/production compatibility)
-    window.location.href = `?puzzle=${puzzleNumber}`;
-  }, []);
-
-  // Check if an archive puzzle is completed
-  const isArchivePuzzleCompleted = useCallback((pn: number) => {
-    return isPuzzleCompleted(pn);
-  }, []);
-
-  // Check if an archive puzzle is in progress
-  const isArchivePuzzleInProgress = useCallback((pn: number) => {
-    return isPuzzleInProgress(pn);
-  }, []);
-
   // Get puzzle info for display (use puzzleNumber from hook for archive mode)
   const puzzleInfo = isArchiveMode
     ? {
@@ -279,20 +261,10 @@ export default function Game() {
           onPlay={startGame}
           onResume={resumeGame}
           onRules={() => setShowHowToPlay(true)}
-          onArchive={() => setShowArchiveModal(true)}
+          archiveHref="/archive"
           gameId="jumble"
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
-        <ArchiveModal
-          isOpen={showArchiveModal}
-          onClose={() => setShowArchiveModal(false)}
-          gameName="Jumble"
-          baseDate={PUZZLE_BASE_DATE}
-          todayPuzzleNumber={todayPuzzleNumber}
-          isPuzzleCompleted={isArchivePuzzleCompleted}
-          isPuzzleInProgress={isArchivePuzzleInProgress}
-          onSelectPuzzle={handleSelectArchivePuzzle}
-        />
       </>
     );
   }
@@ -308,7 +280,7 @@ export default function Game() {
           puzzleInfo={puzzleInfo}
           mode="completed"
           onSeeResults={() => setViewingCompletedGame(true)}
-          onArchive={() => setShowArchiveModal(true)}
+          archiveHref="/archive"
           gameId="jumble"
         />
         <JumbleResultsModal
@@ -317,16 +289,6 @@ export default function Game() {
           foundWords={foundWords}
           score={totalScore}
           puzzleNumber={puzzleInfo.number}
-        />
-        <ArchiveModal
-          isOpen={showArchiveModal}
-          onClose={() => setShowArchiveModal(false)}
-          gameName="Jumble"
-          baseDate={PUZZLE_BASE_DATE}
-          todayPuzzleNumber={todayPuzzleNumber}
-          isPuzzleCompleted={isArchivePuzzleCompleted}
-          isPuzzleInProgress={isArchivePuzzleInProgress}
-          onSelectPuzzle={handleSelectArchivePuzzle}
         />
       </>
     );

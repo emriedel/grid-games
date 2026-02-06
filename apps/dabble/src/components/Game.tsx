@@ -11,7 +11,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal, ArchiveModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
 import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
@@ -24,17 +24,8 @@ import { generateDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import {
-  getCompletionState,
-  saveCompletionState,
-  getInProgressState,
-  saveInProgressState,
-  clearInProgressState,
-  hasCompletedToday,
-  hasInProgressGame,
   getPuzzleState,
   savePuzzleState,
-  isPuzzleCompleted,
-  isPuzzleInProgress,
   getTodayPuzzleNumber,
 } from '@/lib/storage';
 import { dabbleConfig } from '@/config';
@@ -138,7 +129,6 @@ const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
 export function Game() {
   const searchParams = useSearchParams();
   const debugMode = searchParams.get('debug') === 'true';
-  const showArchiveParam = searchParams.get('archive') === 'true';
   const puzzleParam = searchParams.get('puzzle');
 
   // Determine if this is archive mode
@@ -170,7 +160,6 @@ export function Game() {
   const [isDraggingBoardTile, setIsDraggingBoardTile] = useState(false);
   const [scorePopup, setScorePopup] = useState<{ score: number; key: number } | null>(null);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
-  const [showArchiveModal, setShowArchiveModal] = useState(showArchiveParam);
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -536,22 +525,6 @@ export function Game() {
     setGameState('finished');
   }, []);
 
-  // Handle archive puzzle selection
-  const handleSelectArchivePuzzle = useCallback((puzzleNumber: number) => {
-    // Navigate to the archive puzzle (use relative URL for local/production compatibility)
-    window.location.href = `?puzzle=${puzzleNumber}`;
-  }, []);
-
-  // Check if an archive puzzle is completed
-  const isArchivePuzzleCompleted = useCallback((puzzleNumber: number) => {
-    return isPuzzleCompleted(puzzleNumber);
-  }, []);
-
-  // Check if an archive puzzle is in progress
-  const isArchivePuzzleInProgress = useCallback((puzzleNumber: number) => {
-    return isPuzzleInProgress(puzzleNumber);
-  }, []);
-
   // Get puzzle info for display (use activePuzzleNumber for archive mode)
   const puzzleInfo = isArchiveMode
     ? {
@@ -583,23 +556,12 @@ export function Game() {
           onResume={handleResume}
           onSeeResults={handleSeeResults}
           onRules={() => setShowRulesModal(true)}
-          onArchive={() => setShowArchiveModal(true)}
+          archiveHref="/archive"
           gameId="dabble"
         />
         <HowToPlayModal
           isOpen={showRulesModal}
           onClose={() => setShowRulesModal(false)}
-        />
-        {/* Archive modal */}
-        <ArchiveModal
-          isOpen={showArchiveModal}
-          onClose={() => setShowArchiveModal(false)}
-          gameName="Dabble"
-          baseDate={PUZZLE_BASE_DATE}
-          todayPuzzleNumber={todayPuzzleNumber}
-          isPuzzleCompleted={isArchivePuzzleCompleted}
-          isPuzzleInProgress={isArchivePuzzleInProgress}
-          onSelectPuzzle={handleSelectArchivePuzzle}
         />
         {/* Results modal accessible from landing when completed */}
         {landingMode === 'completed' && puzzle && (

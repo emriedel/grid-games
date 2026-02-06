@@ -295,6 +295,112 @@ function NewGameResultsModal({
 - Show loading screen while determining initial state
 - LandingScreen receives mode prop and appropriate handlers
 
+## Step 6b: Add Archive Support (Optional)
+
+If your game supports past puzzles (archive), add these files:
+
+### Create Archive Route
+
+Create `apps/new-game/src/app/archive/page.tsx`:
+```tsx
+import { Suspense } from 'react';
+import { ArchivePageContent } from '@/components/ArchivePageContent';
+
+function Loading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+      <div className="text-[var(--foreground)] text-lg">Loading...</div>
+    </div>
+  );
+}
+
+export default function ArchivePage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ArchivePageContent />
+    </Suspense>
+  );
+}
+```
+
+### Create ArchivePageContent
+
+Create `apps/new-game/src/components/ArchivePageContent.tsx`:
+```tsx
+'use client';
+
+import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArchivePage } from '@grid-games/ui';
+import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber } from '@/lib/storage';
+
+// Match your game's launch date
+const PUZZLE_BASE_DATE = '2026-01-01';
+
+export function ArchivePageContent() {
+  const router = useRouter();
+
+  const handleSelectPuzzle = useCallback((puzzleNumber: number) => {
+    router.push(`/?puzzle=${puzzleNumber}`);
+  }, [router]);
+
+  return (
+    <ArchivePage
+      gameName="New Game"
+      gameId="new-game"
+      baseDate={PUZZLE_BASE_DATE}
+      todayPuzzleNumber={getTodayPuzzleNumber()}
+      isPuzzleCompleted={isPuzzleCompleted}
+      isPuzzleInProgress={isPuzzleInProgress}
+      onSelectPuzzle={handleSelectPuzzle}
+      backHref="/"
+    />
+  );
+}
+```
+
+### Update Storage Module
+
+Ensure your storage module exports these functions:
+```tsx
+export function isPuzzleCompleted(puzzleNumber: number): boolean {
+  const state = getPuzzleState(puzzleNumber);
+  return state?.status === 'completed';
+}
+
+export function isPuzzleInProgress(puzzleNumber: number): boolean {
+  const state = getPuzzleState(puzzleNumber);
+  return state?.status === 'in-progress';
+}
+
+export function getTodayPuzzleNumber(): number {
+  return getPuzzleNumber(PUZZLE_BASE_DATE);
+}
+```
+
+### Update LandingScreen
+
+In Game.tsx, add `archiveHref` prop to LandingScreen:
+```tsx
+<LandingScreen
+  icon={newGameConfig.icon}
+  name={newGameConfig.name}
+  description={newGameConfig.description}
+  puzzleInfo={newGameConfig.getPuzzleInfo()}
+  mode={landingMode}
+  onPlay={handlePlay}
+  onResume={handleResume}
+  onSeeResults={handleSeeResults}
+  onRules={() => setShowRules(true)}
+  archiveHref="/archive"  // Add this (relative to basePath)
+  gameId="new-game"
+/>
+```
+
+### Update GAMES config
+
+In `packages/config/src/games.ts`, set `hasArchive: true` for your game.
+
 ## Step 7: Add to Landing Page
 
 Edit `apps/web/src/app/page.tsx`:
@@ -373,6 +479,11 @@ The web app will automatically redeploy with the new rewrites.
   - [ ] `landingMode` uses state + useEffect (hydration safe)
   - [ ] All hooks defined before early returns
   - [ ] Loading screen shown while data loads
+- [ ] **Archive support (if applicable):**
+  - [ ] Archive page created at `src/app/archive/page.tsx`
+  - [ ] ArchivePageContent component created
+  - [ ] LandingScreen uses `archiveHref` prop
+  - [ ] `hasArchive: true` set in GAMES config
 - [ ] Added to landing page in apps/web
 - [ ] Deployed to Vercel
 - [ ] Rewrites added to apps/web/next.config.ts

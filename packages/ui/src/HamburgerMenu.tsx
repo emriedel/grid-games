@@ -15,7 +15,7 @@ interface HamburgerMenuProps {
  */
 export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [expandedGame, setExpandedGame] = useState<string | null>(null);
+  const [expandedGame, setExpandedGame] = useState<string | null>(currentGameId ?? null);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -24,6 +24,13 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
   const toggleExpanded = useCallback((gameId: string) => {
     setExpandedGame(prev => prev === gameId ? null : gameId);
   }, []);
+
+  // Update expanded game when currentGameId changes
+  useEffect(() => {
+    if (currentGameId) {
+      setExpandedGame(currentGameId);
+    }
+  }, [currentGameId]);
 
   // Handle escape key
   useEffect(() => {
@@ -156,14 +163,14 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                     </button>
                   </div>
 
-                  {/* Archive link (collapsed section) */}
-                  {isExpanded && (
+                  {/* Archive link (collapsed section) - only show for games with archive */}
+                  {isExpanded && game.hasArchive && (
                     <a
-                      href={isCurrent ? '?archive=true' : `${game.href}?archive=true`}
+                      href={`${game.href}/archive`}
                       className="flex items-center gap-3 pl-14 pr-4 py-2 text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
                     >
                       <Archive size={14} />
-                      <span className="text-sm">Archive</span>
+                      <span className="text-sm">{game.name} Archive</span>
                     </a>
                   )}
                 </div>
