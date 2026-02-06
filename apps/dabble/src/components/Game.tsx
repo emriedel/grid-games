@@ -258,9 +258,10 @@ export function Game() {
     }
   }, [debugMode, puzzle]);
 
-  // Save in-progress state when playing
+  // Save in-progress state when playing (only if meaningful progress made)
   useEffect(() => {
-    if (gameState === 'playing' && board && !debugMode) {
+    const hasMeaningfulProgress = placedTiles.length > 0 || submittedWords.length > 0;
+    if (gameState === 'playing' && board && !debugMode && hasMeaningfulProgress) {
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
         status: 'in-progress',

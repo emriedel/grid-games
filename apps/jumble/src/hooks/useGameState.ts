@@ -175,9 +175,9 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
     init();
   }, [isArchiveMode, activePuzzleNumber]);
 
-  // Save in-progress state when playing
+  // Save in-progress state when playing (only if meaningful progress made)
   useEffect(() => {
-    if (status === 'playing') {
+    if (status === 'playing' && foundWords.length > 0) {
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
         status: 'in-progress',

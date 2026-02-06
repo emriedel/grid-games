@@ -136,9 +136,9 @@ export function useGameState(props?: UseGameStateProps) {
   const activePuzzleNumber = props?.puzzleNumber ?? getTodayPuzzleNumber();
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
-  // Save in-progress state whenever pieces or moves change
+  // Save in-progress state whenever pieces or moves change (only if meaningful progress made)
   useEffect(() => {
-    if (state.phase === 'playing' && state.pieces.length > 0) {
+    if (state.phase === 'playing' && state.pieces.length > 0 && state.moveCount > 0) {
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
         status: 'in-progress',
