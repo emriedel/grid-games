@@ -9,6 +9,14 @@ export interface GameInfo {
 
 export const GAMES: GameInfo[] = [
   {
+    id: 'carom',
+    name: 'Carom',
+    description: 'Navigate pieces across the board to reach the goal in the fewest moves',
+    accentColor: '#f59e0b',
+    href: '/carom',
+    hasArchive: true,
+  },
+  {
     id: 'dabble',
     name: 'Dabble',
     description: 'Place tiles to form words and get a high score on a unique daily board',
@@ -24,22 +32,15 @@ export const GAMES: GameInfo[] = [
     href: '/jumble',
     hasArchive: true,
   },
-  {
-    id: 'edgewise',
-    name: 'Edgewise',
-    description: 'Rotate tiles to match words with their categories',
-    accentColor: '#a855f7',
-    href: '/edgewise',
-    hasArchive: false,
-  },
-  {
-    id: 'carom',
-    name: 'Carom',
-    description: 'Navigate pieces across the board to reach the goal in the fewest moves',
-    accentColor: '#f59e0b',
-    href: '/carom',
-    hasArchive: true,
-  },
+  // Edgewise hidden from navigation (project still exists)
+  // {
+  //   id: 'edgewise',
+  //   name: 'Edgewise',
+  //   description: 'Rotate tiles to match words with their categories',
+  //   accentColor: '#a855f7',
+  //   href: '/edgewise',
+  //   hasArchive: false,
+  // },
 ];
 
 export function getIconUrl(gameId: string): string {
