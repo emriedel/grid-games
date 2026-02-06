@@ -26,7 +26,7 @@ export function NavBar({
 }: NavBarProps) {
   return (
     <nav className="sticky top-0 z-40 w-full bg-[var(--background,#0a0a0a)] border-b border-[var(--border,#27272a)] pt-2">
-      <div className="flex items-center justify-between px-4 py-3 max-w-lg mx-auto">
+      <div className="flex items-center justify-between px-4 py-3 max-w-md mx-auto">
         {/* Left: Menu button + Title */}
         <div className="flex items-center gap-3">
           <HamburgerMenu currentGameId={gameId} />

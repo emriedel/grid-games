@@ -109,7 +109,7 @@ export function LandingScreen({
             >
               View Game
             </Button>
-            {hasArchive && renderArchiveButton('Play Past Puzzles')}
+            {hasArchive && renderArchiveButton(`${name} Archive`)}
           </>
         );
 

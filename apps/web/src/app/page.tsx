@@ -1,26 +1,33 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { GAMES, getIconUrl } from '@grid-games/config';
+import { HamburgerMenu } from '@grid-games/ui';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] relative">
+      {/* Menu button */}
+      <div className="absolute top-4 left-4 z-10">
+        <HamburgerMenu />
+      </div>
+
       <div className="max-w-xl mx-auto px-4 py-12">
         {/* Header */}
         <header className="mb-10 text-center">
-          {/* Icon with subtle glow */}
+          {/* Icon */}
           <div className="mb-3 flex justify-center">
             <Image
               src="/icon.png"
               alt="Nerdcube"
               width={56}
               height={56}
-              className="drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]"
             />
           </div>
 
-          {/* Title with subtle text glow */}
-          <h1 className="text-4xl font-bold tracking-tight [text-shadow:0_0_20px_rgba(147,51,234,0.35)]">
+          {/* Title */}
+          <h1 className="text-4xl font-bold tracking-tight">
             Nerdcube Games
           </h1>
 

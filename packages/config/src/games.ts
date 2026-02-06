@@ -44,5 +44,5 @@ export const GAMES: GameInfo[] = [
 ];
 
 export function getIconUrl(gameId: string): string {
-  return `https://nerdcube.games/icons/${gameId}.png`;
+  return `/icons/${gameId}.png`;
 }

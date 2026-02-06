@@ -76,7 +76,7 @@ export function ArchivePage({
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
       {/* Header */}
-      <div className="w-full flex items-center justify-between px-4 py-3 border-b border-[var(--border,#27272a)]">
+      <div className="w-full max-w-md mx-auto flex items-center justify-between px-4 py-3 border-b border-[var(--border,#27272a)]">
         {/* Menu button */}
         <HamburgerMenu currentGameId={gameId} />
 
@@ -112,11 +112,6 @@ export function ArchivePage({
             </div>
           ) : (
             <>
-              {/* Count */}
-              <p className="text-sm text-[var(--muted,#a1a1aa)] mb-4">
-                {archiveEntries.length} past {archiveEntries.length === 1 ? 'puzzle' : 'puzzles'} available
-              </p>
-
               {/* Puzzle list */}
               <div className="space-y-2">
                 {archiveEntries.map((entry) => (

@@ -98,7 +98,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
           <div className="flex items-center justify-between px-4 py-4 border-b border-[var(--border,#27272a)]">
             <div className="flex items-center gap-2">
               <img
-                src="https://nerdcube.games/icon.png"
+                src="/icon.png"
                 alt="Nerdcube"
                 className="w-7 h-7"
               />
@@ -142,7 +142,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                     }`}
                   >
                     <a
-                      href={`https://nerdcube.games${game.href}`}
+                      href={game.href}
                       className="flex items-center gap-3 flex-1"
                     >
                       <img
@@ -159,14 +159,14 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                       className="w-10 h-10 flex items-center justify-center rounded text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--border,#27272a)] transition-colors"
                       aria-label={isExpanded ? 'Collapse' : 'Expand'}
                     >
-                      {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                      {isExpanded ? <ChevronDown size={18} strokeWidth={2.5} /> : <ChevronRight size={18} strokeWidth={2.5} />}
                     </button>
                   </div>
 
                   {/* Archive link (collapsed section) - only show for games with archive */}
                   {isExpanded && game.hasArchive && (
                     <a
-                      href={`https://nerdcube.games${game.href}/archive`}
+                      href={`${game.href}/archive`}
                       className="block pl-[4.25rem] pr-4 py-2 text-sm text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
                     >
                       {game.name} Archive
@@ -180,28 +180,14 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
           {/* Footer link */}
           <div className="absolute bottom-0 left-0 right-0 border-t border-[var(--border,#27272a)]">
             <a
-              href="https://nerdcube.games/"
+              href="/"
               className="flex items-center gap-3 px-4 py-4 hover:bg-[var(--tile-bg,#27272a)] transition-colors"
             >
-              <div className="w-10 h-10 rounded-lg bg-[var(--tile-bg,#27272a)] flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-[var(--muted,#a1a1aa)]"
-                >
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>
-              </div>
+              <img
+                src="/icon.png"
+                alt="All Games"
+                className="w-10 h-10 rounded-lg"
+              />
               <span className="font-medium text-[var(--muted,#a1a1aa)]">
                 All Games
               </span>
