@@ -142,7 +142,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                     }`}
                   >
                     <a
-                      href={game.href}
+                      href={`https://nerdcube.games${game.href}`}
                       className="flex items-center gap-3 flex-1"
                     >
                       <img
@@ -166,7 +166,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                   {/* Archive link (collapsed section) - only show for games with archive */}
                   {isExpanded && game.hasArchive && (
                     <a
-                      href={`${game.href}/archive`}
+                      href={`https://nerdcube.games${game.href}/archive`}
                       className="flex items-center gap-3 pl-14 pr-4 py-2 text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
                     >
                       <Archive size={14} />
@@ -181,7 +181,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
           {/* Footer link */}
           <div className="absolute bottom-0 left-0 right-0 border-t border-[var(--border,#27272a)]">
             <a
-              href="/"
+              href="https://nerdcube.games/"
               className="flex items-center gap-3 px-4 py-4 hover:bg-[var(--tile-bg,#27272a)] transition-colors"
             >
               <div className="w-10 h-10 rounded-lg bg-[var(--tile-bg,#27272a)] flex items-center justify-center">
