@@ -1,7 +1,6 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { Archive } from 'lucide-react';
 import { Button } from './Button';
 import { HamburgerMenu } from './HamburgerMenu';
 
@@ -77,22 +76,20 @@ export function LandingScreen({
 
   // Render archive button/link
   const renderArchiveButton = (label: string) => {
-    const className = "w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-[var(--tile-bg,#1a1a2e)] text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg-selected,#2a2a4e)] transition-colors";
-
     if (archiveHref) {
       return (
-        <a href={archiveHref} className={className}>
-          <Archive size={16} />
-          <span className="text-sm font-medium">{label}</span>
+        <a href={archiveHref} className="w-full">
+          <Button variant="secondary" fullWidth>
+            {label}
+          </Button>
         </a>
       );
     }
     if (onArchive) {
       return (
-        <button onClick={onArchive} className={className}>
-          <Archive size={16} />
-          <span className="text-sm font-medium">{label}</span>
-        </button>
+        <Button variant="secondary" fullWidth onClick={onArchive}>
+          {label}
+        </Button>
       );
     }
     return null;
@@ -112,11 +109,7 @@ export function LandingScreen({
             >
               View Game
             </Button>
-            {hasArchive && (
-              <div className="flex w-full">
-                {renderArchiveButton('Play Past Puzzles')}
-              </div>
-            )}
+            {hasArchive && renderArchiveButton('Play Past Puzzles')}
           </>
         );
 

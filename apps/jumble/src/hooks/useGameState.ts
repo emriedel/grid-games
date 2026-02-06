@@ -14,6 +14,7 @@ import {
   getInProgressState,
   saveInProgressState,
   clearInProgressState,
+  clearPuzzleState,
   hasInProgressGame,
   getPuzzleState,
   savePuzzleState,
@@ -48,6 +49,7 @@ interface UseGameStateReturn {
   startGame: () => void;
   resumeGame: () => void;
   endGame: () => void;
+  resetGame: () => void;
   isWordAlreadyFound: (word: string) => boolean;
   regeneratePuzzle: () => void;
   hasInProgress: boolean;
@@ -238,6 +240,23 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
     // Note: saveDailyResult is called by the effect that watches status === 'finished'
   }, [status]);
 
+  // Reset game (replay from scratch)
+  const resetGame = useCallback(() => {
+    // Clear saved state for this puzzle
+    clearPuzzleState(activePuzzleNumber);
+
+    // Reset game state
+    setFoundWords([]);
+    setCurrentPath([]);
+    setHasCompleted(false);
+    setHasInProgress(false);
+
+    // Reset timer and start playing
+    resetTimer(TIMER_DURATION);
+    setStatus('playing');
+    startTimer();
+  }, [activePuzzleNumber, resetTimer, startTimer]);
+
   // Regenerate puzzle with random date (debug mode)
   const regeneratePuzzle = useCallback(async () => {
     // Generate a random date for a new puzzle
@@ -301,6 +320,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
     startGame,
     resumeGame,
     endGame,
+    resetGame,
     isWordAlreadyFound,
     regeneratePuzzle,
     hasInProgress,

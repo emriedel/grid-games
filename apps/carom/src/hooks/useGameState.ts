@@ -4,7 +4,7 @@ import { useReducer, useCallback, useEffect } from 'react';
 import { GameState, Puzzle, Piece, Direction, Move, Position } from '@/types';
 import { simulateSlide, applyMove, isTargetOnGoal, wouldPieceMove } from '@/lib/gameLogic';
 import { SLIDE_ANIMATION_DURATION } from '@/constants/gameConfig';
-import { savePuzzleState, getTodayPuzzleNumber } from '@/lib/storage';
+import { savePuzzleState, clearPuzzleState, getTodayPuzzleNumber } from '@/lib/storage';
 
 type GameAction =
   | { type: 'START_GAME'; puzzle: Puzzle }
@@ -220,6 +220,13 @@ export function useGameState(props?: UseGameStateProps) {
     dispatch({ type: 'RESET' });
   }, []);
 
+  const replay = useCallback(() => {
+    // Clear saved state for this puzzle
+    clearPuzzleState(activePuzzleNumber);
+    // Reset to initial state
+    dispatch({ type: 'RESET' });
+  }, [activePuzzleNumber]);
+
   const setFinished = useCallback(() => {
     dispatch({ type: 'SET_FINISHED' });
   }, []);
@@ -239,6 +246,7 @@ export function useGameState(props?: UseGameStateProps) {
     deselectPiece,
     movePiece,
     reset,
+    replay,
     setFinished,
     undo,
     canUndo,

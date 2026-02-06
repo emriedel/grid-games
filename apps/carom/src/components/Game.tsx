@@ -85,7 +85,7 @@ export function Game() {
   const todayPuzzleNumber = getTodayPuzzleNumber();
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
 
-  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber });
+  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, replay, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber });
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -241,6 +241,13 @@ export function Game() {
     startGame(newPuzzle);
   }, [startGame]);
 
+  // Handle replay - reset game state and start fresh
+  const handleReplay = useCallback(() => {
+    setShowResults(false);
+    setWasPlayingThisSession(true);
+    replay();
+  }, [replay]);
+
   // Loading state - show while puzzle is being fetched
   if (isLoading || !puzzle) {
     return (
@@ -332,15 +339,24 @@ export function Game() {
             </div>
           )}
 
-          {/* See Results button - show when finished */}
+          {/* See Results and Play Again buttons - show when finished */}
           {state.phase === 'finished' && (
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => setShowResults(true)}
-            >
-              See Results
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => setShowResults(true)}
+              >
+                See Results
+              </Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={handleReplay}
+              >
+                Play Again
+              </Button>
+            </div>
           )}
 
           {/* Debug Panel */}

@@ -26,6 +26,7 @@ import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import {
   getPuzzleState,
   savePuzzleState,
+  clearPuzzleState,
   getTodayPuzzleNumber,
 } from '@/lib/storage';
 import { dabbleConfig } from '@/config';
@@ -440,6 +441,29 @@ export function Game() {
     setGameState('playing');
   }, []);
 
+  // Replay the same puzzle (clear state and start fresh)
+  const handleReplay = useCallback(() => {
+    if (!puzzle) return;
+
+    // Clear saved state for this puzzle
+    clearPuzzleState(activePuzzleNumber);
+
+    // Reset to initial puzzle state
+    setBoard(puzzle.board);
+    setRackLetters(puzzle.letters);
+    setPlacedTiles([]);
+    setUsedRackIndices(new Set());
+    setLockedRackIndices(new Set());
+    setSelectedRackIndex(null);
+    setSelectedCell(null);
+    setSubmittedWords([]);
+    setTurnCount(0);
+    setTotalScore(0);
+    setError(null);
+    setShowShareModal(false);
+    setGameState('playing');
+  }, [puzzle, activePuzzleNumber]);
+
   // Handle drag start
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const data = event.active.data.current as DragData;
@@ -705,17 +729,26 @@ export function Game() {
             </Button>
           )}
 
-          {/* See Results button - show when finished and modal is closed */}
+          {/* See Results and Play Again buttons - show when finished and modal is closed */}
           {gameState === 'finished' && !showShareModal && (
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth
-              onClick={() => setShowShareModal(true)}
-              className="max-w-xs"
-            >
-              See Results
-            </Button>
+            <div className="flex gap-2 w-full max-w-xs">
+              <Button
+                variant="primary"
+                size="lg"
+                fullWidth
+                onClick={() => setShowShareModal(true)}
+              >
+                See Results
+              </Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                fullWidth
+                onClick={handleReplay}
+              >
+                Play Again
+              </Button>
+            </div>
           )}
         </div>
       </GameContainer>

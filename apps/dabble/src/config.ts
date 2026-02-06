@@ -8,7 +8,7 @@ export const dabbleConfig = defineGameConfig({
   id: 'dabble',
   name: 'Dabble',
   icon: 'https://nerdcube.games/icons/dabble.png',
-  description: 'Place tiles to form words and maximize your score',
+  description: 'Build the highest-scoring words in four turns',
   theme: dabbleTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {

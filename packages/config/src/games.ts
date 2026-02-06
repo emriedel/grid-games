@@ -11,7 +11,7 @@ export const GAMES: GameInfo[] = [
   {
     id: 'carom',
     name: 'Carom',
-    description: 'Navigate pieces across the board to reach the goal in the fewest moves',
+    description: 'Slide pieces around a grid to reach the goal in the fewest moves',
     accentColor: '#f59e0b',
     href: '/carom',
     hasArchive: true,
@@ -19,7 +19,7 @@ export const GAMES: GameInfo[] = [
   {
     id: 'dabble',
     name: 'Dabble',
-    description: 'Place tiles to form words and get a high score on a unique daily board',
+    description: 'Build the highest-scoring words on a unique daily board',
     accentColor: '#c41e3a',
     href: '/dabble',
     hasArchive: true,
@@ -27,7 +27,7 @@ export const GAMES: GameInfo[] = [
   {
     id: 'jumble',
     name: 'Jumble',
-    description: 'Find as many words as you can before time runs out',
+    description: 'Find words in a grid of letters before time runs out',
     accentColor: '#4a5d7a',
     href: '/jumble',
     hasArchive: true,

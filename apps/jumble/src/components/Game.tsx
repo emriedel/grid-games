@@ -164,6 +164,7 @@ export default function Game() {
     submitWord,
     startGame,
     resumeGame,
+    resetGame,
     isWordAlreadyFound,
     regeneratePuzzle,
     hasInProgress,
@@ -230,6 +231,15 @@ export default function Game() {
     }
     setCurrentPath([]);
   }, [submitWord, currentWord, showFeedback, setCurrentPath]);
+
+  // Handle replay - reset game state and start fresh
+  const handleReplay = useCallback(() => {
+    setShowResults(false);
+    setViewingCompletedGame(false);
+    hasAutoShownResultsRef.current = false;
+    setWasPlayingThisSession(true);
+    resetGame();
+  }, [resetGame]);
 
   // Get puzzle info for display (use puzzleNumber from hook for archive mode)
   const puzzleInfo = isArchiveMode
@@ -346,14 +356,20 @@ export default function Game() {
         <FoundWordsList foundWords={foundWords} totalScore={totalScore} />
       </div>
 
-      {/* See Results button - show when viewing completed game */}
+      {/* See Results and Play Again buttons - show when viewing completed game */}
       {isViewingCompleted && (
-        <div className="w-full max-w-xs mx-auto">
+        <div className="flex gap-2 w-full max-w-xs mx-auto">
           <button
             onClick={() => setShowResults(true)}
-            className="w-full py-3 px-6 rounded-lg bg-[var(--accent)] text-white font-semibold hover:opacity-90 transition-opacity"
+            className="flex-1 py-3 px-6 rounded-lg bg-[var(--accent)] text-white font-semibold hover:opacity-90 transition-opacity"
           >
             See Results
+          </button>
+          <button
+            onClick={handleReplay}
+            className="flex-1 py-3 px-6 rounded-lg bg-[var(--tile-bg)] text-[var(--foreground)] font-semibold hover:bg-[var(--tile-bg-selected)] transition-colors"
+          >
+            Play Again
           </button>
         </div>
       )}

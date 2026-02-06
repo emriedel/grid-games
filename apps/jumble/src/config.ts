@@ -8,7 +8,7 @@ export const jumbleConfig = defineGameConfig({
   id: 'jumble',
   name: 'Jumble',
   icon: 'https://nerdcube.games/icons/jumble.png',
-  description: 'Find words in a letter grid before time runs out',
+  description: 'Find as many words as you can before time runs out',
   theme: jumbleTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {

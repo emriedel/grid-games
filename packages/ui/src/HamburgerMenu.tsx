@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ChevronDown, ChevronRight, Archive } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { GAMES, getIconUrl } from '@grid-games/config';
 
 interface HamburgerMenuProps {
@@ -156,7 +156,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                     </a>
                     <button
                       onClick={() => toggleExpanded(game.id)}
-                      className="p-1 rounded text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--border,#27272a)] transition-colors"
+                      className="w-10 h-10 flex items-center justify-center rounded text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--border,#27272a)] transition-colors"
                       aria-label={isExpanded ? 'Collapse' : 'Expand'}
                     >
                       {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
@@ -167,10 +167,9 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                   {isExpanded && game.hasArchive && (
                     <a
                       href={`https://nerdcube.games${game.href}/archive`}
-                      className="flex items-center gap-3 pl-14 pr-4 py-2 text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
+                      className="block pl-[4.25rem] pr-4 py-2 text-sm text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
                     >
-                      <Archive size={14} />
-                      <span className="text-sm">{game.name} Archive</span>
+                      {game.name} Archive
                     </a>
                   )}
                 </div>

@@ -17,7 +17,7 @@ export const caromConfig = defineGameConfig({
   id: 'carom',
   name: 'Carom',
   icon: 'https://nerdcube.games/icons/carom.png',
-  description: 'Slide pieces to reach the goal. A daily sliding puzzle.',
+  description: 'Reach the goal in the fewest moves',
   theme: caromTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {
