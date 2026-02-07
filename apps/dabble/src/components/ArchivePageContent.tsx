@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArchivePage } from '@grid-games/ui';
 import { isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getTodayPuzzleNumber } from '@/lib/storage';
 
-const PUZZLE_BASE_DATE = '2026-01-01';
+const PUZZLE_BASE_DATE = '2026-02-01';
 
 export function ArchivePageContent() {
   const router = useRouter();

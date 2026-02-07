@@ -1021,22 +1021,12 @@ function solveWithBeamSearch(puzzle: DailyPuzzle): { bestScore: number; states: 
 
 interface StarThresholds {
   heuristicMax: number;
-  star1: number;
-  star2: number;
-  star3: number;
 }
 
 function calculateStarThresholds(heuristicMax: number): StarThresholds {
-  // Star thresholds as percentages of heuristic max
-  // 1★: ~25-30% of heuristic max
-  // 2★: ~50-55% of heuristic max
-  // 3★: ~75-80% of heuristic max
-  return {
-    heuristicMax,
-    star1: Math.round(heuristicMax * 0.28),
-    star2: Math.round(heuristicMax * 0.52),
-    star3: Math.round(heuristicMax * 0.78),
-  };
+  // Only store heuristicMax - star thresholds are calculated at runtime
+  // using configurable percentages in src/constants/gameConfig.ts
+  return { heuristicMax };
 }
 
 async function main() {
@@ -1068,10 +1058,12 @@ async function main() {
   }
 
   const thresholds = calculateStarThresholds(bestScore);
-  console.log(`\nStar Thresholds:`);
-  console.log(`  ★      (Good): ${thresholds.star1}+`);
-  console.log(`  ★★     (Great): ${thresholds.star2}+`);
-  console.log(`  ★★★    (Excellent): ${thresholds.star3}+`);
+  // Star thresholds are now calculated at runtime using config percentages
+  // Default percentages: 22% for 1★, 40% for 2★, 65% for 3★
+  console.log(`\nStar Thresholds (using default percentages):`);
+  console.log(`  ★      (Good): ${Math.round(bestScore * 0.22)}+`);
+  console.log(`  ★★     (Great): ${Math.round(bestScore * 0.40)}+`);
+  console.log(`  ★★★    (Excellent): ${Math.round(bestScore * 0.65)}+`);
   console.log(`  Heuristic max: ${thresholds.heuristicMax}`);
 
   // Output JSON for use by generatePuzzles.ts

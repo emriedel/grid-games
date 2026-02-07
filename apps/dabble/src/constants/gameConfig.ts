@@ -393,6 +393,14 @@ export const SCORING_CONFIG = {
   } as Record<number, number>,
 };
 
+// Star threshold percentages - configurable for easy tuning
+// These are calculated as percentages of the puzzle's heuristicMax
+export const STAR_THRESHOLDS = {
+  star1Percent: 0.22,  // 22% of heuristicMax for 1 star (Good)
+  star2Percent: 0.40,  // 40% of heuristicMax for 2 stars (Great)
+  star3Percent: 0.65,  // 65% of heuristicMax for 3 stars (Excellent)
+};
+
 // Helper to calculate letter usage bonus (returns bonus for current usage, not cumulative)
 export function getLetterUsageBonus(lettersUsed: number): number {
   return SCORING_CONFIG.letterUsageBonus[lettersUsed] || 0;

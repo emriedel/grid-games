@@ -1,25 +1,29 @@
 /**
  * Dabble Puzzle Pre-Generation Script
  *
- * Pre-generates puzzles with star thresholds for a date range.
- * Output is organized by month: public/puzzles/YYYY-MM.json
+ * Generates puzzles into pool.json. Each puzzle gets a unique ID.
+ * Use assignPuzzles.ts to assign puzzles from the pool to specific dates.
  *
  * Usage:
- *   npx tsx scripts/generatePuzzles.ts [startDate] [days]
+ *   npx tsx scripts/generatePuzzles.ts [count]
  *
  * Examples:
- *   npx tsx scripts/generatePuzzles.ts                        # Generate 30 days from today
- *   npx tsx scripts/generatePuzzles.ts 2026-01-01 365         # Generate year from Jan 1
- *   npx tsx scripts/generatePuzzles.ts 2026-02-01 28          # Generate February
+ *   npx tsx scripts/generatePuzzles.ts           # Generate 100 puzzles
+ *   npx tsx scripts/generatePuzzles.ts 200       # Generate 200 puzzles
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import { generateDailyPuzzle, solveWithBeamSearch, calculateStarThresholds, loadDictionary } from './solver';
 import type { StarThresholds } from './solver';
 
-interface PreGeneratedPuzzle {
-  date: string;
+// Quality filtering thresholds - reject puzzles outside this range
+const MIN_HEURISTIC_MAX = 80;
+const MAX_HEURISTIC_MAX = 200;
+
+export interface PoolPuzzle {
+  id: string;
   archetype: string;
   letters: string[];
   board: {
@@ -34,90 +38,68 @@ interface PreGeneratedPuzzle {
   thresholds: StarThresholds;
 }
 
-interface MonthFile {
+interface PoolFile {
   generatedAt: string;
-  puzzles: Record<string, PreGeneratedPuzzle>;
+  puzzles: PoolPuzzle[];
 }
 
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-
-function getMonthKey(dateString: string): string {
-  return dateString.substring(0, 7); // YYYY-MM
+function generateId(): string {
+  return crypto.randomBytes(8).toString('hex');
 }
 
 async function main() {
-  const startDateArg = process.argv[2];
-  const daysArg = process.argv[3];
+  const countArg = process.argv[2];
+  const count = countArg ? parseInt(countArg, 10) : 100;
 
-  const startDate = startDateArg ? new Date(startDateArg + 'T00:00:00') : new Date();
-  const days = daysArg ? parseInt(daysArg, 10) : 30;
-
-  console.log(`\nDabble Puzzle Pre-Generator`);
-  console.log(`===========================\n`);
-  console.log(`Start date: ${formatDate(startDate)}`);
-  console.log(`Days to generate: ${days}\n`);
+  console.log(`\nDabble Puzzle Pool Generator`);
+  console.log(`============================\n`);
+  console.log(`Puzzles to generate: ${count}\n`);
 
   await loadDictionary();
-
-  // Group puzzles by month
-  const monthFiles: Map<string, MonthFile> = new Map();
 
   const outputDir = path.join(__dirname, '../public/puzzles');
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Load existing month files to preserve data
-  for (let i = 0; i < days; i++) {
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + i);
-    const dateString = formatDate(date);
-    const monthKey = getMonthKey(dateString);
-
-    if (!monthFiles.has(monthKey)) {
-      const monthFilePath = path.join(outputDir, `${monthKey}.json`);
-      if (fs.existsSync(monthFilePath)) {
-        try {
-          const existing = JSON.parse(fs.readFileSync(monthFilePath, 'utf-8'));
-          monthFiles.set(monthKey, existing);
-        } catch {
-          monthFiles.set(monthKey, { generatedAt: '', puzzles: {} });
-        }
-      } else {
-        monthFiles.set(monthKey, { generatedAt: '', puzzles: {} });
-      }
+  // Load existing pool
+  const poolPath = path.join(outputDir, 'pool.json');
+  let pool: PoolFile;
+  if (fs.existsSync(poolPath)) {
+    try {
+      pool = JSON.parse(fs.readFileSync(poolPath, 'utf-8'));
+      console.log(`Loaded existing pool with ${pool.puzzles.length} puzzles\n`);
+    } catch {
+      pool = { generatedAt: '', puzzles: [] };
     }
+  } else {
+    pool = { generatedAt: '', puzzles: [] };
   }
 
-  // Generate puzzles
-  let generated = 0;
-  let skipped = 0;
+  const startingCount = pool.puzzles.length;
 
-  for (let i = 0; i < days; i++) {
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + i);
-    const dateString = formatDate(date);
-    const monthKey = getMonthKey(dateString);
+  // Generate new puzzles using random seeds
+  let rejectedCount = 0;
+  for (let i = 0; i < count; i++) {
+    const seed = `puzzle-${Date.now()}-${i}-${Math.random()}-${rejectedCount}`;
 
-    const monthFile = monthFiles.get(monthKey)!;
+    process.stdout.write(`Generating puzzle ${i + 1}/${count}...`);
 
-    // Skip if already generated
-    if (monthFile.puzzles[dateString]) {
-      skipped++;
+    const puzzle = generateDailyPuzzle(seed);
+    const { bestScore } = solveWithBeamSearch(puzzle);
+
+    // Quality filtering: reject puzzles outside acceptable range
+    if (bestScore < MIN_HEURISTIC_MAX || bestScore > MAX_HEURISTIC_MAX) {
+      console.log(` REJECTED (score ${bestScore} outside ${MIN_HEURISTIC_MAX}-${MAX_HEURISTIC_MAX})`);
+      rejectedCount++;
+      i--; // Retry this slot
       continue;
     }
 
-    process.stdout.write(`Generating ${dateString}...`);
-
-    const puzzle = generateDailyPuzzle(dateString);
-    const { bestScore } = solveWithBeamSearch(puzzle);
     const thresholds = calculateStarThresholds(bestScore);
 
-    // Store puzzle with minimal board representation
-    const preGenerated: PreGeneratedPuzzle = {
-      date: dateString,
+    const poolPuzzle: PoolPuzzle = {
+      id: generateId(),
       archetype: puzzle.archetype,
       letters: puzzle.letters,
       board: {
@@ -134,51 +116,38 @@ async function main() {
       thresholds,
     };
 
-    monthFile.puzzles[dateString] = preGenerated;
-    generated++;
-
-    console.log(` ${puzzle.archetype}, max=${bestScore}`);
+    pool.puzzles.push(poolPuzzle);
+    console.log(` ${puzzle.archetype}, max=${bestScore}, id=${poolPuzzle.id}`);
   }
 
-  // Save month files
-  for (const [monthKey, monthFile] of monthFiles) {
-    monthFile.generatedAt = new Date().toISOString();
-
-    // Sort puzzles by date
-    const sortedPuzzles: Record<string, PreGeneratedPuzzle> = {};
-    const dates = Object.keys(monthFile.puzzles).sort();
-    for (const date of dates) {
-      sortedPuzzles[date] = monthFile.puzzles[date];
-    }
-    monthFile.puzzles = sortedPuzzles;
-
-    const monthFilePath = path.join(outputDir, `${monthKey}.json`);
-    fs.writeFileSync(monthFilePath, JSON.stringify(monthFile, null, 2));
-    console.log(`\nSaved ${Object.keys(monthFile.puzzles).length} puzzles to ${monthFilePath}`);
+  if (rejectedCount > 0) {
+    console.log(`\nRejected ${rejectedCount} puzzles outside quality range (${MIN_HEURISTIC_MAX}-${MAX_HEURISTIC_MAX})`);
   }
 
-  console.log(`\nSummary:`);
-  console.log(`  Generated: ${generated} puzzles`);
-  console.log(`  Skipped (already exist): ${skipped} puzzles`);
+  // Save pool
+  pool.generatedAt = new Date().toISOString();
+  fs.writeFileSync(poolPath, JSON.stringify(pool, null, 2));
 
-  // Print sample stats
-  if (generated > 0) {
-    const allPuzzles = Array.from(monthFiles.values()).flatMap(m => Object.values(m.puzzles));
-    const archetypeCounts: Record<string, number> = {};
-    let totalMax = 0;
+  console.log(`\nSaved pool to ${poolPath}`);
+  console.log(`  Previous count: ${startingCount}`);
+  console.log(`  Added: ${count}`);
+  console.log(`  Total: ${pool.puzzles.length}`);
 
-    for (const p of allPuzzles) {
-      archetypeCounts[p.archetype] = (archetypeCounts[p.archetype] || 0) + 1;
-      totalMax += p.thresholds.heuristicMax;
-    }
+  // Print stats
+  const archetypeCounts: Record<string, number> = {};
+  let totalMax = 0;
 
-    console.log(`\nArchetype distribution:`);
-    for (const [arch, count] of Object.entries(archetypeCounts)) {
-      console.log(`  ${arch}: ${count}`);
-    }
-
-    console.log(`\nAverage heuristic max: ${Math.round(totalMax / allPuzzles.length)}`);
+  for (const p of pool.puzzles) {
+    archetypeCounts[p.archetype] = (archetypeCounts[p.archetype] || 0) + 1;
+    totalMax += p.thresholds.heuristicMax;
   }
+
+  console.log(`\nArchetype distribution (full pool):`);
+  for (const [arch, cnt] of Object.entries(archetypeCounts).sort()) {
+    console.log(`  ${arch}: ${cnt}`);
+  }
+
+  console.log(`\nAverage heuristic max: ${Math.round(totalMax / pool.puzzles.length)}`);
 }
 
 main().catch(console.error);

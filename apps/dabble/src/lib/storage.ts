@@ -1,8 +1,9 @@
 import { getPuzzleNumber } from '@grid-games/shared';
 import type { GameBoard, PlacedTile, Word, StarThresholds } from '@/types';
+import { STAR_THRESHOLDS } from '@/constants/gameConfig';
 
 // Base date for puzzle numbering (first puzzle date)
-const PUZZLE_BASE_DATE = new Date('2026-01-01');
+const PUZZLE_BASE_DATE = new Date('2026-02-01');
 
 /**
  * Get today's puzzle number
@@ -102,6 +103,7 @@ export function isPuzzleInProgress(puzzleNumber: number): boolean {
 
 /**
  * Get stars for a completed puzzle (0-3)
+ * Calculates star thresholds at runtime using config percentages
  */
 export function getPuzzleStars(puzzleNumber: number): number {
   const state = getPuzzleState(puzzleNumber);
@@ -110,10 +112,15 @@ export function getPuzzleStars(puzzleNumber: number): number {
   const thresholds = state.data.thresholds;
   if (!thresholds) return 0;
 
+  const { heuristicMax } = thresholds;
+  const star1 = Math.round(heuristicMax * STAR_THRESHOLDS.star1Percent);
+  const star2 = Math.round(heuristicMax * STAR_THRESHOLDS.star2Percent);
+  const star3 = Math.round(heuristicMax * STAR_THRESHOLDS.star3Percent);
+
   const score = state.data.totalScore;
-  if (score >= thresholds.star3) return 3;
-  if (score >= thresholds.star2) return 2;
-  if (score >= thresholds.star1) return 1;
+  if (score >= star3) return 3;
+  if (score >= star2) return 2;
+  if (score >= star1) return 1;
   return 0;
 }
 

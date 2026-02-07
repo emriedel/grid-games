@@ -797,8 +797,8 @@ export function getTodayDateString(): string {
 }
 
 // Pre-generated puzzle format (from scripts/generatePuzzles.ts)
-interface PreGeneratedPuzzle {
-  date: string;
+interface AssignedPuzzle {
+  id: string;
   archetype: string;
   letters: string[];
   board: {
@@ -818,45 +818,60 @@ interface PreGeneratedPuzzle {
   };
 }
 
-interface MonthFile {
-  generatedAt: string;
-  puzzles: Record<string, PreGeneratedPuzzle>;
+interface MonthlyAssignedFile {
+  gameId: string;
+  baseDate: string;
+  puzzles: Record<string, AssignedPuzzle>; // Key: puzzle number (string), Value: full puzzle data
 }
 
-// Cache for loaded month files
-const monthFileCache: Map<string, MonthFile | null> = new Map();
+// Cache for loaded monthly files (keyed by month string YYYY-MM)
+const monthlyFileCache: Map<string, MonthlyAssignedFile | null> = new Map();
 
-// Get month key from date string (YYYY-MM)
-function getMonthKey(dateString: string): string {
-  return dateString.substring(0, 7);
+// Base date for puzzle numbering (must match storage.ts)
+const PUZZLE_BASE_DATE = new Date('2026-02-01T00:00:00');
+
+// Get puzzle number for a date
+function getPuzzleNumberForDate(dateString: string): number {
+  const date = new Date(dateString + 'T00:00:00');
+  const diffTime = date.getTime() - PUZZLE_BASE_DATE.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays + 1;
 }
 
-// Fetch pre-generated puzzles for a month
-async function fetchMonthFile(monthKey: string): Promise<MonthFile | null> {
+// Get the month key (YYYY-MM) for a puzzle number
+function getMonthForPuzzleNumber(puzzleNumber: number): string {
+  const puzzleDate = new Date(PUZZLE_BASE_DATE.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  const year = puzzleDate.getFullYear();
+  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
+// Fetch a monthly assigned file
+async function fetchMonthlyFile(month: string): Promise<MonthlyAssignedFile | null> {
   // Check cache first
-  if (monthFileCache.has(monthKey)) {
-    return monthFileCache.get(monthKey) ?? null;
+  if (monthlyFileCache.has(month)) {
+    return monthlyFileCache.get(month)!;
   }
 
   try {
-    const response = await fetch(`/puzzles/${monthKey}.json`);
+    const response = await fetch(`/puzzles/assigned/${month}.json`);
     if (!response.ok) {
-      monthFileCache.set(monthKey, null);
+      monthlyFileCache.set(month, null);
       return null;
     }
-    const data = await response.json() as MonthFile;
-    monthFileCache.set(monthKey, data);
-    return data;
+    const file = await response.json() as MonthlyAssignedFile;
+    monthlyFileCache.set(month, file);
+    return file;
   } catch (error) {
-    console.warn(`[dabble] Failed to fetch pre-generated puzzles for ${monthKey}:`, error);
-    monthFileCache.set(monthKey, null);
+    console.warn(`[dabble] Failed to fetch ${month}.json:`, error);
+    monthlyFileCache.set(month, null);
     return null;
   }
 }
 
-// Convert pre-generated puzzle to DailyPuzzle format
-function convertPreGeneratedPuzzle(preGen: PreGeneratedPuzzle): DailyPuzzle {
-  const cells: Cell[][] = preGen.board.cells.map(row =>
+// Convert assigned puzzle to DailyPuzzle format
+function convertAssignedPuzzle(puzzle: AssignedPuzzle, dateString: string): DailyPuzzle {
+  const cells: Cell[][] = puzzle.board.cells.map(row =>
     row.map(cell => ({
       ...cell,
       letter: null,
@@ -865,28 +880,33 @@ function convertPreGeneratedPuzzle(preGen: PreGeneratedPuzzle): DailyPuzzle {
   );
 
   return {
-    date: preGen.date,
-    board: { cells, size: preGen.board.size },
-    letters: preGen.letters,
-    seed: Date.parse(preGen.date),
-    archetype: preGen.archetype,
-    thresholds: preGen.thresholds,
+    date: dateString,
+    board: { cells, size: puzzle.board.size },
+    letters: puzzle.letters,
+    seed: Date.parse(dateString),
+    archetype: puzzle.archetype,
+    thresholds: puzzle.thresholds,
   };
 }
 
-// Fetch pre-generated puzzle, falling back to client-side generation
+// Fetch pre-generated puzzle by puzzle number, falling back to client-side generation
 export async function fetchDailyPuzzle(dateString?: string): Promise<DailyPuzzle> {
   const date = dateString || getTodayDateString();
-  const monthKey = getMonthKey(date);
+  const puzzleNumber = getPuzzleNumberForDate(date);
+  const month = getMonthForPuzzleNumber(puzzleNumber);
 
-  // Try to fetch pre-generated puzzle
-  const monthFile = await fetchMonthFile(monthKey);
-  if (monthFile?.puzzles[date]) {
-    return convertPreGeneratedPuzzle(monthFile.puzzles[date]);
+  // Fetch only the relevant monthly file
+  const monthlyFile = await fetchMonthlyFile(month);
+
+  if (monthlyFile) {
+    const puzzle = monthlyFile.puzzles[String(puzzleNumber)];
+    if (puzzle) {
+      return convertAssignedPuzzle(puzzle, date);
+    }
   }
 
   // Fall back to client-side generation (no thresholds)
-  console.log(`[dabble] No pre-generated puzzle for ${date}, generating client-side`);
+  console.log(`[dabble] No pre-generated puzzle for ${date} (#${puzzleNumber}), generating client-side`);
   return generateDailyPuzzle(date);
 }
 

@@ -2,7 +2,7 @@ import { defineGameConfig, dabbleTheme } from '@grid-games/config';
 import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-games/shared';
 
 // Base date for puzzle numbering (first puzzle date)
-const PUZZLE_BASE_DATE = new Date('2026-01-01');
+const PUZZLE_BASE_DATE = new Date('2026-02-01');
 
 export const dabbleConfig = defineGameConfig({
   id: 'dabble',

@@ -17,7 +17,7 @@ import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
 import { WordList } from './WordList';
 import { HowToPlayModal } from './HowToPlayModal';
-import { getLetterUsageBonus } from '@/constants/gameConfig';
+import { getLetterUsageBonus, STAR_THRESHOLDS } from '@/constants/gameConfig';
 import { DragOverlayTile } from './Tile';
 import { useSearchParams } from 'next/navigation';
 import { generateDailyPuzzle, generateRandomPuzzle, fetchDailyPuzzle } from '@/lib/puzzleGenerator';
@@ -35,12 +35,24 @@ import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragDat
 
 type GameState = 'landing' | 'playing' | 'finished';
 
+// Calculate star thresholds at runtime from heuristicMax and config percentages
+function getStarThresholdValues(thresholds?: StarThresholds): { star1: number; star2: number; star3: number } | null {
+  if (!thresholds) return null;
+  const { heuristicMax } = thresholds;
+  return {
+    star1: Math.round(heuristicMax * STAR_THRESHOLDS.star1Percent),
+    star2: Math.round(heuristicMax * STAR_THRESHOLDS.star2Percent),
+    star3: Math.round(heuristicMax * STAR_THRESHOLDS.star3Percent),
+  };
+}
+
 // Calculate star count based on score and thresholds
 function calculateStars(score: number, thresholds?: StarThresholds): number {
-  if (!thresholds) return 0;
-  if (score >= thresholds.star3) return 3;
-  if (score >= thresholds.star2) return 2;
-  if (score >= thresholds.star1) return 1;
+  const values = getStarThresholdValues(thresholds);
+  if (!values) return 0;
+  if (score >= values.star3) return 3;
+  if (score >= values.star2) return 2;
+  if (score >= values.star1) return 1;
   return 0;
 }
 
@@ -157,8 +169,8 @@ interface ScoreThresholdsModalProps {
 }
 
 function ScoreThresholdsModal({ isOpen, onClose, score, thresholds }: ScoreThresholdsModalProps) {
-  const letterBonus = getLetterUsageBonus(PUZZLE_LETTER_COUNT); // Max bonus for reference
   const stars = calculateStars(score, thresholds);
+  const thresholdValues = getStarThresholdValues(thresholds);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Score Breakdown">
@@ -173,25 +185,25 @@ function ScoreThresholdsModal({ isOpen, onClose, score, thresholds }: ScoreThres
         </div>
 
         {/* Thresholds */}
-        {thresholds ? (
+        {thresholdValues ? (
           <div className="bg-[var(--tile-bg)] rounded-lg p-4 space-y-2">
             <div className="text-sm text-[var(--muted)] mb-3">Star Thresholds</div>
-            <div className={`flex justify-between ${score >= thresholds.star1 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+            <div className={`flex justify-between ${score >= thresholdValues.star1 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
               <span>★☆☆ Good</span>
-              <span>{thresholds.star1}+</span>
+              <span>{thresholdValues.star1}+</span>
             </div>
-            <div className={`flex justify-between ${score >= thresholds.star2 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+            <div className={`flex justify-between ${score >= thresholdValues.star2 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
               <span>★★☆ Great</span>
-              <span>{thresholds.star2}+</span>
+              <span>{thresholdValues.star2}+</span>
             </div>
-            <div className={`flex justify-between ${score >= thresholds.star3 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+            <div className={`flex justify-between ${score >= thresholdValues.star3 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
               <span>★★★ Excellent</span>
-              <span>{thresholds.star3}+</span>
+              <span>{thresholdValues.star3}+</span>
             </div>
             <div className="border-t border-[var(--border)] pt-2 mt-2">
               <div className="flex justify-between text-[var(--muted)] text-sm">
                 <span>Heuristic max</span>
-                <span>~{thresholds.heuristicMax}</span>
+                <span>~{thresholds?.heuristicMax}</span>
               </div>
             </div>
           </div>
@@ -208,7 +220,7 @@ function ScoreThresholdsModal({ isOpen, onClose, score, thresholds }: ScoreThres
 }
 
 // Base date for puzzle numbering (must match config.ts)
-const PUZZLE_BASE_DATE = '2026-01-01';
+const PUZZLE_BASE_DATE = '2026-02-01';
 const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
 
 export function Game() {
@@ -337,10 +349,19 @@ export function Game() {
     init();
   }, [debugMode, isArchiveMode, activePuzzleNumber]);
 
-  // Log puzzle archetype in debug mode
+  // Log puzzle info in debug mode
   useEffect(() => {
-    if (debugMode && puzzle?.archetype) {
+    if (debugMode && puzzle) {
       console.log(`[Dabble Debug] Board archetype: ${puzzle.archetype}`);
+      if (puzzle.thresholds) {
+        const thresholdValues = getStarThresholdValues(puzzle.thresholds);
+        console.log(`[Dabble Debug] Thresholds:`, {
+          heuristicMax: puzzle.thresholds.heuristicMax,
+          ...(thresholdValues || {}),
+        });
+      } else {
+        console.log(`[Dabble Debug] No thresholds (client-generated puzzle)`);
+      }
     }
   }, [debugMode, puzzle]);
 
@@ -714,9 +735,8 @@ export function Game() {
                   <div className="text-s text-[var(--muted)]">Turn: {turnCount + 1}/{MAX_TURNS}</div>
                 )}
                 <button
-                  onClick={() => gameState === 'finished' && setShowThresholdsModal(true)}
-                  className={`flex items-center gap-2 ${gameState === 'finished' ? 'cursor-pointer hover:opacity-80' : ''}`}
-                  disabled={gameState !== 'finished'}
+                  onClick={() => setShowThresholdsModal(true)}
+                  className="flex items-center gap-2 cursor-pointer hover:opacity-80"
                 >
                   <span className="text-s text-[var(--muted)]">Score:</span>
                   <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>

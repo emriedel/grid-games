@@ -99,9 +99,15 @@ src/
 ├── hooks/               # Custom React hooks
 scripts/
 ├── solver.ts            # Beam search heuristic solver
-└── generatePuzzles.ts   # Pre-generate puzzles with star thresholds
+├── generatePuzzles.ts   # Generate puzzles into pool.json
+└── assignPuzzles.ts     # Move puzzles from pool to monthly assigned files
 public/
-└── puzzles/             # Pre-generated puzzle JSON files (YYYY-MM.json)
+└── puzzles/
+    ├── pool.json              # UNASSIGNED puzzles only (safe to regenerate)
+    └── assigned/
+        ├── 2026-02.json       # Full puzzle data for Feb 2026
+        ├── 2026-03.json       # Full puzzle data for Mar 2026
+        └── ...                # One file per month
 ```
 
 ## Key Configuration
@@ -116,14 +122,54 @@ public/
 
 ## Pre-Generated Puzzles
 
-Puzzles can be pre-generated with star thresholds using the solver:
+Uses a pool/assigned architecture for stable archives while allowing algorithm improvements:
+
+### Architecture
+
+```
+public/puzzles/
+├── pool.json              # Only UNASSIGNED puzzles (can be regenerated anytime)
+└── assigned/
+    ├── 2026-02.json       # Full puzzle data for Feb 2026 (stable, never change)
+    ├── 2026-03.json       # Full puzzle data for Mar 2026
+    └── ...
+```
+
+**pool.json** - Contains only unassigned puzzles. Safe to delete and regenerate with improved algorithms.
+
+**assigned/{YYYY-MM}.json** - Contains full puzzle data for each month. Once assigned, puzzles are immutable to preserve archive history. Each file has:
+- `gameId`: "dabble"
+- `baseDate`: First day of the month
+- `puzzles`: Object keyed by puzzle number with full puzzle data
+
+### Commands
 
 ```bash
-# Generate puzzles for a date range
-npx tsx scripts/generatePuzzles.ts 2026-02-01 30
+# Generate new puzzles into the pool (adds to existing)
+npx tsx scripts/generatePuzzles.ts           # 100 puzzles (default)
+npx tsx scripts/generatePuzzles.ts 200       # 200 puzzles
 
-# Output: public/puzzles/2026-02.json
+# Assign puzzles from pool to monthly files
+npx tsx scripts/assignPuzzles.ts             # Assign up to today
+npx tsx scripts/assignPuzzles.ts 100         # Ensure puzzles 1-100 are assigned
 ```
+
+### Workflow
+
+1. **Generate puzzles** into pool (can regenerate with improved algorithms anytime)
+2. **Assign puzzles** to numbers - this MOVES puzzles from pool to assigned/ files
+3. **Game fetches** puzzle by number from the appropriate monthly file
+
+### Safe to Regenerate Pool
+
+Because assigned puzzles are stored separately with full data:
+```bash
+# This is always safe - won't affect any assigned puzzles
+rm public/puzzles/pool.json
+npx tsx scripts/generatePuzzles.ts 100
+```
+
+### What's Stored
 
 Pre-generated puzzles include:
 - Board layout and bonuses

@@ -33,11 +33,10 @@ export interface GameBoard {
 }
 
 // Star thresholds for a puzzle (determined by heuristic solver)
+// Only stores heuristicMax - star1/star2/star3 are calculated at runtime
+// using STAR_THRESHOLDS percentages from constants/gameConfig.ts
 export interface StarThresholds {
   heuristicMax: number; // Best score found by beam search
-  star1: number;        // Minimum score for 1 star
-  star2: number;        // Minimum score for 2 stars
-  star3: number;        // Minimum score for 3 stars
 }
 
 export interface DailyPuzzle {
