@@ -98,7 +98,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
           <div className="flex items-center justify-between px-4 py-4 border-b border-[var(--border,#27272a)]">
             <div className="flex items-center gap-2">
               <img
-                src="/icon.png"
+                src="https://nerdcube.games/icon.png"
                 alt="Nerdcube"
                 className="w-7 h-7"
               />
@@ -184,7 +184,7 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
               className="flex items-center gap-3 px-4 py-4 hover:bg-[var(--tile-bg,#27272a)] transition-colors"
             >
               <img
-                src="/icon.png"
+                src="https://nerdcube.games/icon.png"
                 alt="All Games"
                 className="w-10 h-10 rounded-lg"
               />
