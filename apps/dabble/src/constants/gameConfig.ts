@@ -387,9 +387,9 @@ export const SCORING_CONFIG = {
   // Letter usage bonuses: rewards using more of your letters
   // Key is number of letters used, value is bonus points
   letterUsageBonus: {
-    12: 10,  // 12 letters: +10 bonus
-    13: 20,  // 13 letters: +20 bonus
-    14: 50,  // 14 letters (all): +50 bonus
+    12: 5,   // 12 letters: +5 bonus
+    13: 10,  // 13 letters: +10 bonus
+    14: 20,  // 14 letters (all): +20 bonus
   } as Record<number, number>,
 };
 

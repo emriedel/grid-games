@@ -739,7 +739,9 @@ export function Game() {
                   className="flex items-center gap-2 cursor-pointer hover:opacity-80"
                 >
                   <span className="text-s text-[var(--muted)]">Score:</span>
-                  <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>
+                  <span className="text-2xl font-bold text-[var(--accent)]">
+                    {gameState === 'finished' ? totalScore + getLetterUsageBonus(lockedRackIndices.size) : totalScore}
+                  </span>
                 </button>
               </div>
             }

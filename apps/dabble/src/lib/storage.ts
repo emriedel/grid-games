@@ -1,6 +1,6 @@
 import { getPuzzleNumber } from '@grid-games/shared';
 import type { GameBoard, PlacedTile, Word, StarThresholds } from '@/types';
-import { STAR_THRESHOLDS } from '@/constants/gameConfig';
+import { STAR_THRESHOLDS, getLetterUsageBonus } from '@/constants/gameConfig';
 
 // Base date for puzzle numbering (first puzzle date)
 const PUZZLE_BASE_DATE = new Date('2026-02-01');
@@ -117,7 +117,11 @@ export function getPuzzleStars(puzzleNumber: number): number {
   const star2 = Math.round(heuristicMax * STAR_THRESHOLDS.star2Percent);
   const star3 = Math.round(heuristicMax * STAR_THRESHOLDS.star3Percent);
 
-  const score = state.data.totalScore;
+  // Include letter usage bonus in score calculation (matches results modal)
+  const lettersUsed = state.data.lockedRackIndices?.length ?? 0;
+  const letterBonus = getLetterUsageBonus(lettersUsed);
+  const score = state.data.totalScore + letterBonus;
+
   if (score >= star3) return 3;
   if (score >= star2) return 2;
   if (score >= star1) return 1;
