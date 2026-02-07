@@ -48,7 +48,7 @@ Then open http://localhost:3001
   - TL (Triple Letter) - dark blue
   - DW (Double Word) - pink/rose
   - TW (Triple Word) - orange
-  - ★ (Start) - amber, acts as Double Word
+  - ★ (Start) - amber, required for first word (no bonus)
 
 ### Letter Rack
 - Players receive 14 letters per puzzle (configurable)

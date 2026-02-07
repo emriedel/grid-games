@@ -379,7 +379,7 @@ export const BONUS_MULTIPLIERS = {
   TL: { letter: 3, word: 1 },
   DW: { letter: 1, word: 2 },
   TW: { letter: 1, word: 3 },
-  START: { letter: 1, word: 2 }, // Start square acts as double word
+  START: { letter: 1, word: 1 }, // Start square - no bonus, just required for first word
 };
 
 // Scoring bonuses - easily tunable
