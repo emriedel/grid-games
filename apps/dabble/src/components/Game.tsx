@@ -477,8 +477,8 @@ export function Game() {
     const newTurnCount = turnCount + 1;
     setTurnCount(newTurnCount);
 
-    // Check if game should end
-    if (newTurnCount >= MAX_TURNS) {
+    // Check if game should end (out of turns OR all tiles used)
+    if (newTurnCount >= MAX_TURNS || newLockedIndices.size === PUZZLE_LETTER_COUNT) {
       setGameState('finished');
       setShowShareModal(true);
       // Save completion state with full board and thresholds
