@@ -17,7 +17,7 @@ import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
 import { WordList } from './WordList';
 import { HowToPlayModal } from './HowToPlayModal';
-import { getLetterUsageBonus, STAR_THRESHOLDS } from '@/constants/gameConfig';
+import { getLetterUsageBonus, STAR_THRESHOLDS, LETTER_POINTS } from '@/constants/gameConfig';
 import { DragOverlayTile } from './Tile';
 import { useSearchParams } from 'next/navigation';
 import { generateDailyPuzzle, generateRandomPuzzle, fetchDailyPuzzle } from '@/lib/puzzleGenerator';
@@ -61,6 +61,30 @@ function formatStars(stars: number, maxStars: number = 3): string {
   return '★'.repeat(stars) + '☆'.repeat(maxStars - stars);
 }
 
+// Bonus type to Tailwind color class mapping for best word display
+function getBonusColorClass(bonus: string | null): string {
+  switch (bonus) {
+    case 'DL': return 'bg-sky-600 text-white';
+    case 'TL': return 'bg-purple-600 text-white';
+    case 'DW': return 'bg-rose-600 text-white';
+    case 'TW': return 'bg-orange-600 text-white';
+    case 'START': return 'bg-amber-500 text-amber-900';
+    default: return 'bg-zinc-600 text-white';
+  }
+}
+
+// Bonus type to emoji mapping for share text
+function getBonusEmoji(bonus: string | null): string {
+  switch (bonus) {
+    case 'DL': return '🟦';
+    case 'TL': return '🟪';
+    case 'DW': return '🟥';
+    case 'TW': return '🟧';
+    case 'START': return '🟨';
+    default: return '⬜';
+  }
+}
+
 // Dabble-specific wrapper for ResultsModal
 interface DabbleResultsModalProps {
   isOpen: boolean;
@@ -71,6 +95,7 @@ interface DabbleResultsModalProps {
   totalScore: number;
   lettersUsed: number;
   thresholds?: StarThresholds;
+  board: GameBoardType;
 }
 
 function DabbleResultsModal({
@@ -82,21 +107,29 @@ function DabbleResultsModal({
   totalScore,
   lettersUsed,
   thresholds,
+  board,
 }: DabbleResultsModalProps) {
   const displayDate = formatDisplayDate(date);
   const letterBonus = getLetterUsageBonus(lettersUsed);
   const finalScore = totalScore + letterBonus;
-  const allLettersUsed = lettersUsed === PUZZLE_LETTER_COUNT;
   const stars = calculateStars(finalScore, thresholds);
 
-  // Generate share text with stars
-  const letterGrid = '🟨'.repeat(lettersUsed) + '⬛'.repeat(PUZZLE_LETTER_COUNT - lettersUsed);
+  // Find the highest-scoring word
+  const bestWord = words.length > 0
+    ? words.reduce((a, b) => a.score > b.score ? a : b)
+    : null;
+
+  // Generate emoji grid for best word based on bonuses
+  const bestWordEmojis = bestWord && bestWord.tiles
+    ? bestWord.tiles.map(tile => getBonusEmoji(board.cells[tile.row][tile.col].bonus)).join('')
+    : '';
+
   const starsDisplay = thresholds ? ` ${formatStars(stars)}` : '';
-  const emojiGrid = `${letterGrid} (${lettersUsed}/${PUZZLE_LETTER_COUNT})`;
+  const emojiGrid = bestWordEmojis || '⬜'.repeat(3); // Fallback if no tiles
 
   const extraLines: string[] = [];
-  if (letterBonus > 0) {
-    extraLines.push(`+${letterBonus} letter bonus!`);
+  if (bestWord) {
+    extraLines.push(`Best word: ${bestWord.score} pts`);
   }
 
   const shareText = buildShareText({
@@ -118,44 +151,38 @@ function DabbleResultsModal({
       date={displayDate}
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: finalScore, label: 'points' }}
-      secondaryStats={[
-        { label: 'words', value: words.length },
-        { label: 'letters', value: `${lettersUsed}/${PUZZLE_LETTER_COUNT}` },
-      ]}
       shareConfig={{ text: shareText }}
     >
       {/* Stars display */}
       {thresholds && (
         <div className="text-center mb-4">
-          <span className="text-3xl text-[var(--accent)]">{formatStars(stars)}</span>
+          <span className="text-3xl text-[var(--foreground)]">{formatStars(stars)}</span>
         </div>
       )}
 
-      {/* Letter bonus */}
-      {letterBonus > 0 && (
-        <div className="text-center mb-4">
-          <span className="text-[var(--success)] font-semibold">
-            +{letterBonus} letter bonus!
-          </span>
-          {allLettersUsed && (
-            <span className="block text-[var(--success)] text-sm mt-1">
-              All letters used!
-            </span>
-          )}
+      {/* Highest-scoring word display */}
+      {bestWord && bestWord.tiles && (
+        <div className="text-center">
+          <div className="text-sm text-[var(--muted)] mb-2">Best Word ({bestWord.score} pts)</div>
+          <div className="flex justify-center gap-1">
+            {bestWord.tiles.map((tile, i) => {
+              const bonus = board.cells[tile.row][tile.col].bonus;
+              const points = LETTER_POINTS[tile.letter] || 1;
+              return (
+                <div
+                  key={i}
+                  className={`w-10 h-10 rounded flex items-center justify-center font-bold relative ${getBonusColorClass(bonus)}`}
+                >
+                  {tile.letter}
+                  <span className="absolute bottom-0.5 right-1 text-[8px] opacity-80">
+                    {points}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
-
-      {/* Word breakdown */}
-      <div className="bg-[var(--tile-bg)] rounded-lg p-4 max-h-40 overflow-y-auto">
-        <div className="space-y-1">
-          {words.map((word, index) => (
-            <div key={index} className="flex justify-between text-sm">
-              <span className="font-medium text-[var(--foreground)]">{word.word}</span>
-              <span className="text-[var(--accent)]">{word.score}</span>
-            </div>
-          ))}
-        </div>
-      </div>
     </ResultsModal>
   );
 }
@@ -173,44 +200,30 @@ function ScoreThresholdsModal({ isOpen, onClose, score, thresholds }: ScoreThres
   const thresholdValues = getStarThresholdValues(thresholds);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Score Breakdown">
+    <Modal isOpen={isOpen} onClose={onClose} title="Score">
       <div className="space-y-4">
         {/* Current score */}
         <div className="text-center">
-          <div className="text-sm text-[var(--muted)] mb-1">Your Score</div>
-          <div className="text-3xl font-bold text-[var(--accent)]">{score}</div>
+          <div className="text-4xl font-bold text-[var(--accent)]">{score}</div>
           {thresholds && (
             <div className="text-2xl mt-2">{formatStars(stars)}</div>
           )}
         </div>
 
-        {/* Thresholds */}
-        {thresholdValues ? (
-          <div className="bg-[var(--tile-bg)] rounded-lg p-4 space-y-2">
-            <div className="text-sm text-[var(--muted)] mb-3">Star Thresholds</div>
-            <div className={`flex justify-between ${score >= thresholdValues.star1 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
-              <span>★☆☆ Good</span>
-              <span>{thresholdValues.star1}+</span>
+        {/* Thresholds - horizontal layout */}
+        {thresholdValues && (
+          <div className="flex justify-center gap-6 text-sm">
+            <div className={`text-center ${score >= thresholdValues.star1 ? 'text-[var(--foreground)]' : 'text-[var(--muted)]'}`}>
+              <div className="text-lg">★</div>
+              <div>{thresholdValues.star1}+</div>
             </div>
-            <div className={`flex justify-between ${score >= thresholdValues.star2 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
-              <span>★★☆ Great</span>
-              <span>{thresholdValues.star2}+</span>
+            <div className={`text-center ${score >= thresholdValues.star2 ? 'text-[var(--foreground)]' : 'text-[var(--muted)]'}`}>
+              <div className="text-lg">★★</div>
+              <div>{thresholdValues.star2}+</div>
             </div>
-            <div className={`flex justify-between ${score >= thresholdValues.star3 ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
-              <span>★★★ Excellent</span>
-              <span>{thresholdValues.star3}+</span>
-            </div>
-            <div className="border-t border-[var(--border)] pt-2 mt-2">
-              <div className="flex justify-between text-[var(--muted)] text-sm">
-                <span>Heuristic max</span>
-                <span>~{thresholds?.heuristicMax}</span>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-[var(--tile-bg)] rounded-lg p-4">
-            <div className="text-sm text-[var(--muted)] text-center">
-              Star thresholds not available for this puzzle.
+            <div className={`text-center ${score >= thresholdValues.star3 ? 'text-[var(--foreground)]' : 'text-[var(--muted)]'}`}>
+              <div className="text-lg">★★★</div>
+              <div>{thresholdValues.star3}+</div>
             </div>
           </div>
         )}
@@ -707,6 +720,7 @@ export function Game() {
             totalScore={totalScore}
             lettersUsed={lockedRackIndices.size}
             thresholds={puzzle.thresholds}
+            board={board}
           />
         )}
       </>
@@ -843,7 +857,12 @@ export function Game() {
           )}
 
           {/* Word list */}
-          <WordList words={submittedWords} />
+          <WordList
+            words={submittedWords}
+            letterBonus={gameState === 'finished' ? getLetterUsageBonus(lockedRackIndices.size) : undefined}
+            lettersUsed={lockedRackIndices.size}
+            totalLetters={PUZZLE_LETTER_COUNT}
+          />
 
           {/* Finish button - only show when playing and have words */}
           {gameState === 'playing' && submittedWords.length > 0 && (
@@ -892,6 +911,7 @@ export function Game() {
         totalScore={totalScore}
         lettersUsed={lockedRackIndices.size}
         thresholds={puzzle.thresholds}
+        board={board}
       />
       <HowToPlayModal
         isOpen={showRulesModal}

@@ -45,7 +45,7 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
               <span>Double Letter</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded bg-blue-700 flex items-center justify-center text-xs font-bold text-white">TL</span>
+              <span className="w-6 h-6 rounded bg-purple-600 flex items-center justify-center text-xs font-bold text-white">TL</span>
               <span>Triple Letter</span>
             </div>
             <div className="flex items-center gap-2">

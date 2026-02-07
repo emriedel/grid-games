@@ -409,7 +409,7 @@ export function getLetterUsageBonus(lettersUsed: number): number {
 // Visual styling for bonus squares
 export const BONUS_COLORS: Record<string, { bg: string; text: string; label: string }> = {
   DL: { bg: 'bg-sky-600', text: 'text-sky-100', label: 'DL' },
-  TL: { bg: 'bg-blue-700', text: 'text-blue-100', label: 'TL' },
+  TL: { bg: 'bg-purple-600', text: 'text-purple-100', label: 'TL' },
   DW: { bg: 'bg-rose-600', text: 'text-rose-100', label: 'DW' },
   TW: { bg: 'bg-orange-600', text: 'text-orange-100', label: 'TW' },
   START: { bg: 'bg-amber-500', text: 'text-amber-900', label: '★' },
