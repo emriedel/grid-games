@@ -70,6 +70,7 @@ interface DabbleResultsModalProps {
   totalScore: number;
   lettersUsed: number;
   thresholds?: StarThresholds;
+  isArchive?: boolean;
 }
 
 function DabbleResultsModal({
@@ -80,6 +81,7 @@ function DabbleResultsModal({
   totalScore,
   lettersUsed,
   thresholds,
+  isArchive,
 }: DabbleResultsModalProps) {
   const displayDate = formatDisplayDate(date);
   const letterBonus = getLetterUsageBonus(lettersUsed);
@@ -89,13 +91,17 @@ function DabbleResultsModal({
   const starsDisplay = thresholds ? ` ${formatStars(stars)}` : '';
   const emojiGrid = thresholds ? formatStars(stars) : '';
 
+  const shareUrl = isArchive && puzzleNumber
+    ? `https://nerdcube.games/dabble?puzzle=${puzzleNumber}`
+    : 'https://nerdcube.games/dabble';
+
   const shareText = buildShareText({
     gameId: 'dabble',
     gameName: 'Dabble',
     puzzleId: puzzleNumber ? `#${puzzleNumber}` : displayDate,
     score: finalScore,
     emojiGrid,
-    shareUrl: 'https://nerdcube.games/dabble',
+    shareUrl,
   });
 
   return (
@@ -635,6 +641,7 @@ export function Game() {
             totalScore={totalScore}
             lettersUsed={lockedRackIndices.size}
             thresholds={puzzle.thresholds}
+            isArchive={isArchiveMode}
           />
         )}
       </>
@@ -825,6 +832,7 @@ export function Game() {
         totalScore={totalScore}
         lettersUsed={lockedRackIndices.size}
         thresholds={puzzle.thresholds}
+        isArchive={isArchiveMode}
       />
       <HowToPlayModal
         isOpen={showRulesModal}

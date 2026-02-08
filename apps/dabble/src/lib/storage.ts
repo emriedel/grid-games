@@ -100,6 +100,17 @@ export function isPuzzleInProgress(puzzleNumber: number): boolean {
 }
 
 /**
+ * Get score for a completed puzzle (including letter bonus)
+ */
+export function getPuzzleScore(puzzleNumber: number): number | null {
+  const state = getPuzzleState(puzzleNumber);
+  if (state?.status !== 'completed') return null;
+  const lettersUsed = state.data.lockedRackIndices?.length ?? 0;
+  const letterBonus = getLetterUsageBonus(lettersUsed);
+  return state.data.totalScore + letterBonus;
+}
+
+/**
  * Get stars for a completed puzzle (0-3)
  * Calculates star thresholds at runtime using config percentages
  */

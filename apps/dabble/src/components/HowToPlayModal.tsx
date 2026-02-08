@@ -9,31 +9,21 @@ interface HowToPlayModalProps {
 
 export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="How to Play" size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title="How to Play Dabble" size="lg">
       <div className="space-y-4 text-sm">
         <section>
           <h3 className="font-semibold text-[var(--foreground)] mb-2">Goal</h3>
           <p className="text-[var(--muted)]">
-            Score as many points as possible by placing letter tiles on the board to form valid words
+            Score as many points as possible in <strong>4 turns</strong> by forming valid words on the board.
           </p>
-        </section>
-
-        <section>
-          <h3 className="font-semibold text-[var(--foreground)] mb-2">Gameplay</h3>
-          <ul className="text-[var(--muted)] space-y-1 list-disc list-inside">
-            <li>Drag letters onto the board to form words</li>
-            <li>Tap a placed tile to return it to your rack</li>
-            <li>Tap <strong>Submit</strong> after each word to score</li>
-            <li>After <strong>4 turns</strong>, the game ends automatically</li>
-          </ul>
         </section>
 
         <section>
           <h3 className="font-semibold text-[var(--foreground)] mb-2">Rules</h3>
           <ul className="text-[var(--muted)] space-y-1 list-disc list-inside">
+            <li>Drag letters onto the board, tap to return them</li>
             <li>First word must cover the center star</li>
             <li>New words must connect to existing ones</li>
-            <li>Only valid dictionary words are accepted</li>
           </ul>
         </section>
 
