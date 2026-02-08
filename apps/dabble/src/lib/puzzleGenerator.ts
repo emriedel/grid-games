@@ -16,6 +16,7 @@ import {
 } from '@/constants/gameConfig';
 import type { BoardArchetype } from '@/constants/gameConfig';
 import type { GameBoard, Cell, BonusType, DailyPuzzle } from '@/types';
+import { PUZZLE_BASE_DATE } from '@/config';
 
 // Create a seeded random number generator for a given date
 function createRng(dateString: string): () => number {
@@ -826,9 +827,6 @@ interface MonthlyAssignedFile {
 
 // Cache for loaded monthly files (keyed by month string YYYY-MM)
 const monthlyFileCache: Map<string, MonthlyAssignedFile | null> = new Map();
-
-// Base date for puzzle numbering (must match storage.ts)
-const PUZZLE_BASE_DATE = new Date('2026-02-01T00:00:00');
 
 // Get puzzle number for a date
 function getPuzzleNumberForDate(dateString: string): number {

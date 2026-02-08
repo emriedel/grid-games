@@ -29,7 +29,7 @@ import {
   clearPuzzleState,
   getTodayPuzzleNumber,
 } from '@/lib/storage';
-import { dabbleConfig } from '@/config';
+import { dabbleConfig, PUZZLE_BASE_DATE } from '@/config';
 import { MAX_TURNS, PUZZLE_LETTER_COUNT } from '@/constants/gameConfig';
 import type { DailyPuzzle, GameBoard as GameBoardType, PlacedTile, Word, DragData, StarThresholds } from '@/types';
 
@@ -232,9 +232,6 @@ function ScoreThresholdsModal({ isOpen, onClose, score, thresholds }: ScoreThres
   );
 }
 
-// Base date for puzzle numbering (must match config.ts)
-const PUZZLE_BASE_DATE = '2026-02-01';
-const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -293,7 +290,7 @@ export function Game() {
       // Fetch puzzle for the active puzzle number (uses pre-generated with thresholds if available)
       // For archive mode, we need to get the date string for that puzzle number
       const puzzleDateString = isArchiveMode
-        ? getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, activePuzzleNumber)
+        ? getDateForPuzzleNumber(PUZZLE_BASE_DATE, activePuzzleNumber)
         : undefined; // undefined = today
       const dailyPuzzle = await fetchDailyPuzzle(puzzleDateString);
       setPuzzle(dailyPuzzle);
@@ -675,7 +672,7 @@ export function Game() {
   const puzzleInfo = isArchiveMode
     ? {
         number: activePuzzleNumber,
-        date: formatDisplayDate(getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, activePuzzleNumber)),
+        date: formatDisplayDate(getDateForPuzzleNumber(PUZZLE_BASE_DATE, activePuzzleNumber)),
       }
     : dabbleConfig.getPuzzleInfo();
 

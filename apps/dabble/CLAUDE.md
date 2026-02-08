@@ -6,7 +6,7 @@ Part of **Nerdcube Games** monorepo. Uses shared packages: `@grid-games/ui`, `@g
 
 Dabble is a daily Scrabble-style word puzzle game where players receive a randomly-generated board with unique shapes and bonus squares, along with a set of letters. The goal is to score the highest possible Scrabble score using valid words.
 
-- **Accent Color:** Amber (#f59e0b)
+- **Accent Color:** Red (#c41e3a)
 - **Dev Port:** 3001
 - **Package Name:** `@grid-games/dabble`
 
@@ -61,14 +61,14 @@ Then open http://localhost:3001
 - Bonus squares multiply letter or word scores
 - Bonuses only apply to newly placed tiles
 - **Letter usage bonus**: Using more letters earns milestone bonuses
-  - 12 letters: +10, 13 letters: +20, 14 letters (all): +50
+  - 12 letters: +5, 13 letters: +10, 14 letters (all): +20
 - Bonuses are configurable in `src/constants/gameConfig.ts`
 
 ### Star Rating System
 Puzzles have heuristically-determined star thresholds:
-- ★ Good: ~28% of heuristic max
-- ★★ Great: ~52% of heuristic max
-- ★★★ Excellent: ~78% of heuristic max
+- ★ Good: ~22% of heuristic max
+- ★★ Great: ~40% of heuristic max
+- ★★★ Excellent: ~65% of heuristic max
 
 Stars are displayed in share text, results modal, and archive list.
 

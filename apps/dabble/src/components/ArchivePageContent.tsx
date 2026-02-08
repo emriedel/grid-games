@@ -4,8 +4,7 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArchivePage } from '@grid-games/ui';
 import { isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getTodayPuzzleNumber } from '@/lib/storage';
-
-const PUZZLE_BASE_DATE = '2026-02-01';
+import { PUZZLE_BASE_DATE_STRING } from '@/config';
 
 export function ArchivePageContent() {
   const router = useRouter();
@@ -18,7 +17,7 @@ export function ArchivePageContent() {
     <ArchivePage
       gameName="Dabble"
       gameId="dabble"
-      baseDate={PUZZLE_BASE_DATE}
+      baseDate={PUZZLE_BASE_DATE_STRING}
       todayPuzzleNumber={getTodayPuzzleNumber()}
       isPuzzleCompleted={isPuzzleCompleted}
       isPuzzleInProgress={isPuzzleInProgress}

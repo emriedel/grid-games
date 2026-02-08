@@ -81,42 +81,6 @@ interface RackTileProps {
   onClick?: () => void;
 }
 
-export function RackTile({
-  letter,
-  isSelected = false,
-  isUsed = false,
-  isLocked = false,
-  onClick
-}: RackTileProps) {
-  const points = LETTER_POINTS[letter] || 0;
-  const disabled = isUsed || isLocked;
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`
-        w-10 h-10 sm:w-11 sm:h-11 rounded-md font-bold text-base sm:text-lg relative flex items-center justify-center
-        transition-all duration-100
-        ${
-          isLocked
-            ? 'bg-neutral-900 text-neutral-700 cursor-default opacity-40'
-            : isUsed
-            ? 'bg-neutral-700 text-neutral-500 cursor-default'
-            : isSelected
-            ? 'bg-amber-300 text-amber-900 ring-2 ring-white scale-110 -translate-y-1'
-            : 'bg-amber-100 text-amber-900 hover:bg-amber-200 active:scale-95'
-        }
-      `}
-    >
-      <span>{letter}</span>
-      <span className="absolute bottom-0.5 right-1 text-[8px] sm:text-[9px] font-normal opacity-70">
-        {points}
-      </span>
-    </button>
-  );
-}
-
 // Draggable version of RackTile for drag-and-drop
 interface DraggableRackTileProps extends RackTileProps {
   index: number;
