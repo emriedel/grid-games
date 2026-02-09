@@ -34,8 +34,21 @@ const BONUS_MULTIPLIERS: Record<string, { letter: number; word: number }> = {
   TL: { letter: 3, word: 1 },
   DW: { letter: 1, word: 2 },
   TW: { letter: 1, word: 3 },
-  START: { letter: 1, word: 2 },
+  START: { letter: 1, word: 1 }, // No bonus, just required for first word
 };
+
+// Letter usage bonus scoring (same as gameConfig.ts)
+const SCORING_CONFIG = {
+  letterUsageBonus: {
+    12: 5,   // 12 letters: +5 bonus
+    13: 10,  // 13 letters: +10 bonus
+    14: 20,  // 14 letters (all): +20 bonus
+  } as Record<number, number>,
+};
+
+function getLetterUsageBonus(lettersUsed: number): number {
+  return SCORING_CONFIG.letterUsageBonus[lettersUsed] || 0;
+}
 
 // ============ Types ============
 
@@ -135,7 +148,7 @@ const DIFFICULT_LETTER_RULES: Record<string, { requires: string[] }> = {
 const BOARD_CONFIG = {
   minPlayablePercent: 0.65,
   maxPlayablePercent: 0.85,
-  bonusCounts: { DL: 4, TL: 4, DW: 3, TW: 2 },
+  bonusCounts: { DL: 3, TL: 3, DW: 2, TW: 2 },
 };
 const BOARD_SYMMETRY = {
   centerProtectionRadius: 2,
@@ -144,7 +157,7 @@ const BONUS_PLACEMENT = {
   TW: { edgePreference: 0.8, minDistFromCenter: 3, allowAdjacent: false },
   DW: { edgePreference: 0.5, minDistFromCenter: 2, allowAdjacent: false },
   TL: { edgePreference: 0.6, minDistFromCenter: 2, allowAdjacent: false },
-  DL: { edgePreference: 0.5, minDistFromCenter: 1, allowAdjacent: true },
+  DL: { edgePreference: 0.5, minDistFromCenter: 1, allowAdjacent: false },
 };
 
 // Common word lists for validation
@@ -385,9 +398,11 @@ function getEdgeDistance(r: number, c: number, size: number): number {
   return Math.min(r, size - 1 - r, c, size - 1 - c);
 }
 
+// Check if any adjacent cell has a bonus (START doesn't count as adjacent bonus)
 function hasAdjacentBonus(r: number, c: number, bonuses: BonusType[][], size: number): boolean {
   for (const [nr, nc] of getNeighbors(r, c, size)) {
-    if (bonuses[nr][nc] !== null) return true;
+    const bonus = bonuses[nr][nc];
+    if (bonus !== null && bonus !== 'START') return true;
   }
   return false;
 }
@@ -1013,8 +1028,16 @@ function solveWithBeamSearch(puzzle: DailyPuzzle): { bestScore: number; states: 
     if (states.length === 0) break;
   }
 
-  const bestScore = states.length > 0 ? states[0].score : 0;
-  return { bestScore, states };
+  // Calculate best score including letter usage bonus
+  if (states.length > 0) {
+    const bestState = states[0];
+    const lettersUsed = puzzle.letters.length - bestState.availableLetters.length;
+    const letterBonus = getLetterUsageBonus(lettersUsed);
+    const bestScore = bestState.score + letterBonus;
+    return { bestScore, states };
+  }
+
+  return { bestScore: 0, states };
 }
 
 // ============ Main ============
@@ -1059,11 +1082,11 @@ async function main() {
 
   const thresholds = calculateStarThresholds(bestScore);
   // Star thresholds are now calculated at runtime using config percentages
-  // Default percentages: 22% for 1★, 40% for 2★, 65% for 3★
+  // Default percentages: 25% for 1★, 45% for 2★, 70% for 3★
   console.log(`\nStar Thresholds (using default percentages):`);
-  console.log(`  ★      (Good): ${Math.round(bestScore * 0.22)}+`);
-  console.log(`  ★★     (Great): ${Math.round(bestScore * 0.40)}+`);
-  console.log(`  ★★★    (Excellent): ${Math.round(bestScore * 0.65)}+`);
+  console.log(`  ★      (Good): ${Math.round(bestScore * 0.25)}+`);
+  console.log(`  ★★     (Great): ${Math.round(bestScore * 0.45)}+`);
+  console.log(`  ★★★    (Excellent): ${Math.round(bestScore * 0.70)}+`);
   console.log(`  Heuristic max: ${thresholds.heuristicMax}`);
 
   // Output JSON for use by generatePuzzles.ts

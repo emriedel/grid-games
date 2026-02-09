@@ -351,9 +351,9 @@ export const BOARD_CONFIG = {
 
   // Bonus square counts for a 9x9 board (asymmetric placement allowed)
   bonusCounts: {
-    DL: 4,  // Double Letter
-    TL: 4,  // Triple Letter
-    DW: 3,  // Double Word
+    DL: 3,  // Double Letter
+    TL: 3,  // Triple Letter
+    DW: 2,  // Double Word
     TW: 2,  // Triple Word
   },
 };
@@ -370,7 +370,7 @@ export const BONUS_PLACEMENT = {
   TW: { edgePreference: 0.8, minDistFromCenter: 3, allowAdjacent: false },  // Edges only
   DW: { edgePreference: 0.5, minDistFromCenter: 2, allowAdjacent: false },  // Mid-range spread
   TL: { edgePreference: 0.6, minDistFromCenter: 2, allowAdjacent: false },  // Mid-range spread
-  DL: { edgePreference: 0.5, minDistFromCenter: 1, allowAdjacent: true },   // Balanced spread
+  DL: { edgePreference: 0.5, minDistFromCenter: 1, allowAdjacent: false },  // Balanced spread
 };
 
 // Bonus multipliers
@@ -396,9 +396,9 @@ export const SCORING_CONFIG = {
 // Star threshold percentages - configurable for easy tuning
 // These are calculated as percentages of the puzzle's heuristicMax
 export const STAR_THRESHOLDS = {
-  star1Percent: 0.22,  // 22% of heuristicMax for 1 star (Good)
-  star2Percent: 0.40,  // 40% of heuristicMax for 2 stars (Great)
-  star3Percent: 0.65,  // 65% of heuristicMax for 3 stars (Excellent)
+  star1Percent: 0.25,  // 25% of heuristicMax for 1 star (Good)
+  star2Percent: 0.45,  // 45% of heuristicMax for 2 stars (Great)
+  star3Percent: 0.70,  // 70% of heuristicMax for 3 stars (Excellent)
 };
 
 // Helper to calculate letter usage bonus (returns bonus for current usage, not cumulative)

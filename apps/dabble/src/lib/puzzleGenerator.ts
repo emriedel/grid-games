@@ -408,10 +408,11 @@ function getEdgeDistance(r: number, c: number, size: number): number {
   return Math.min(distTop, distBottom, distLeft, distRight);
 }
 
-// Check if any adjacent cell has a bonus
+// Check if any adjacent cell has a bonus (START doesn't count as adjacent bonus)
 function hasAdjacentBonus(r: number, c: number, bonuses: BonusType[][], size: number): boolean {
   for (const [nr, nc] of getNeighbors(r, c, size)) {
-    if (bonuses[nr][nc] !== null) return true;
+    const bonus = bonuses[nr][nc];
+    if (bonus !== null && bonus !== 'START') return true;
   }
   return false;
 }

@@ -19,7 +19,7 @@ import { generateDailyPuzzle, solveWithBeamSearch, calculateStarThresholds, load
 import type { StarThresholds } from './solver';
 
 // Quality filtering thresholds - reject puzzles outside this range
-const MIN_HEURISTIC_MAX = 80;
+const MIN_HEURISTIC_MAX = 60;
 const MAX_HEURISTIC_MAX = 200;
 
 export interface PoolPuzzle {
