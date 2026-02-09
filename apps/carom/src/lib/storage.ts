@@ -2,7 +2,7 @@ import { getPuzzleNumber } from '@grid-games/shared';
 import { Piece, Move } from '@/types';
 
 // Launch date for Carom - puzzle #1 starts on this date
-const PUZZLE_BASE_DATE = new Date('2026-01-30');
+const PUZZLE_BASE_DATE = new Date('2026-02-01');
 
 /**
  * Get today's puzzle number
@@ -24,6 +24,7 @@ export interface CaromPuzzleState {
     pieces?: Piece[];
     // Completed only
     optimalMoves?: number;
+    achievedOptimal?: boolean;
   };
 }
 
@@ -95,6 +96,25 @@ export function isPuzzleInProgress(puzzleNumber: number): boolean {
   return state?.status === 'in-progress';
 }
 
+/**
+ * Check if a puzzle was solved optimally (achieved optimal move count)
+ */
+export function didAchieveOptimal(puzzleNumber: number): boolean {
+  const state = getPuzzleState(puzzleNumber);
+  return state?.status === 'completed' && state.data.achievedOptimal === true;
+}
+
+/**
+ * Get the move count for a completed puzzle
+ */
+export function getCompletedMoveCount(puzzleNumber: number): number | null {
+  const state = getPuzzleState(puzzleNumber);
+  if (state?.status === 'completed') {
+    return state.data.moveCount;
+  }
+  return null;
+}
+
 // ============ Legacy compatibility wrappers ============
 
 /** Legacy completion state interface */
@@ -125,6 +145,7 @@ export function saveGameCompletion(moveCount: number, optimalMoves: number, move
       moveCount,
       optimalMoves,
       moveHistory,
+      achievedOptimal: moveCount === optimalMoves,
     },
   });
 }

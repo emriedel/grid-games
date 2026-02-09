@@ -2,12 +2,21 @@
  * Offline puzzle generation script for Carom
  *
  * Generates a pool of pre-computed puzzles with quality validation.
- * Run with: npm run generate-puzzles -w @grid-games/carom
+ *
+ * Usage:
+ *   npm run generate-puzzles -w @grid-games/carom           # Generate 200 puzzles (default)
+ *   npm run generate-puzzles -w @grid-games/carom -- 100    # Generate 100 puzzles
+ *
+ * Output:
+ *   public/puzzles/pool.json - Contains only UNASSIGNED puzzles
+ *
+ * Use assignPuzzles.ts to assign puzzles from the pool to specific dates.
  */
 
 import seedrandom from 'seedrandom';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 
 // Types (duplicated to avoid module resolution issues in script)
 type Direction = 'up' | 'right' | 'down' | 'left';
@@ -45,11 +54,18 @@ interface Move {
   to: Position;
 }
 
-interface PrecomputedPuzzle {
+// Pool puzzle format with unique ID
+export interface PoolPuzzle {
+  id: string;
   walls: WallFlags[][];
   goal: { row: number; col: number };
   pieces: { id: string; type: PieceType; row: number; col: number }[];
   optimalMoves: number;
+}
+
+interface PoolFile {
+  generatedAt: string;
+  puzzles: PoolPuzzle[];
 }
 
 // Configuration
@@ -59,14 +75,15 @@ const MIN_OPTIMAL_SOLUTION = 10;
 const MAX_OPTIMAL_SOLUTION = 20;
 const L_WALLS_TOTAL_MIN = 6;
 const L_WALLS_TOTAL_MAX = 8;
-const PIECE_PLACEMENT_ATTEMPTS = 30; // Balance between quality and speed
-const BOARD_GENERATION_ATTEMPTS = 15; // Balance between quality and speed
-const TARGET_PUZZLES = 20; // Start small, increase later
+const PIECE_PLACEMENT_ATTEMPTS = 30;
+const BOARD_GENERATION_ATTEMPTS = 15;
+const TARGET_PUZZLES = 200;
+const EARLY_EXIT_THRESHOLD = 18; // Raised from 12 to allow harder puzzles
 
 type RNG = () => number;
 
 // =====================
-// Game Logic (from gameLogic.ts)
+// Game Logic
 // =====================
 
 function hasWallInDirection(board: Board, pos: Position, direction: Direction): boolean {
@@ -151,7 +168,7 @@ function isTargetOnGoal(pieces: Piece[], goal: Position): boolean {
 }
 
 // =====================
-// Solver (from solver.ts)
+// Solver
 // =====================
 
 interface SolverState {
@@ -226,7 +243,7 @@ function getSolutionPath(board: Board, initialPieces: Piece[], maxMoves: number 
 }
 
 // =====================
-// Board Generation (from puzzleGenerator.ts)
+// Board Generation
 // =====================
 
 function createEmptyBoard(size: number): Board {
@@ -425,7 +442,7 @@ function scoreSolution(path: Move[]): { score: number; piecesUsed: Set<string> }
 
   let score = 0;
   score += piecesUsed.size * 10;
-  score += Math.min(path.length, 15) * 2;
+  score += path.length * 3; // No cap, increased weight to favor longer solutions
 
   const blockersUsed = [...piecesUsed].filter((id) => id !== 'target').length;
   score += blockersUsed * 15;
@@ -502,7 +519,8 @@ function tryGeneratePuzzle(
         score,
       };
 
-      if (piecesUsed.size >= 3 && solution.length >= 12) {
+      // Raised early exit threshold from 12 to 18
+      if (piecesUsed.size >= 3 && solution.length >= EARLY_EXIT_THRESHOLD) {
         break;
       }
     }
@@ -511,7 +529,7 @@ function tryGeneratePuzzle(
   return bestResult;
 }
 
-function generatePuzzle(seed: string): PrecomputedPuzzle | null {
+function generatePuzzle(seed: string): PoolPuzzle | null {
   for (let boardAttempt = 0; boardAttempt < BOARD_GENERATION_ATTEMPTS; boardAttempt++) {
     const attemptSeed = `${seed}-board-${boardAttempt}`;
     const rng = seedrandom(attemptSeed);
@@ -523,6 +541,7 @@ function generatePuzzle(seed: string): PrecomputedPuzzle | null {
 
     if (result) {
       return {
+        id: crypto.randomBytes(8).toString('hex'),
         walls: board.walls,
         goal: { row: board.goal.row, col: board.goal.col },
         pieces: result.pieces.map((p) => ({
@@ -543,20 +562,18 @@ function generatePuzzle(seed: string): PrecomputedPuzzle | null {
 // Main Generation Logic
 // =====================
 
-async function main() {
-  console.log('Generating Carom puzzle pool...');
-  console.log(`Target: ${TARGET_PUZZLES} puzzles`);
-  console.log(`Difficulty: ${MIN_OPTIMAL_SOLUTION}-${MAX_OPTIMAL_SOLUTION} moves`);
-  console.log('');
-
-  const puzzles: PrecomputedPuzzle[] = [];
+async function generatePuzzles(
+  targetCount: number,
+  existingCount: number
+): Promise<{ puzzles: PoolPuzzle[]; failures: number }> {
+  const puzzles: PoolPuzzle[] = [];
   let failures = 0;
   let seedOffset = 0;
 
   const startTime = Date.now();
 
-  while (puzzles.length < TARGET_PUZZLES) {
-    const puzzleNumber = puzzles.length + 1;
+  while (puzzles.length < targetCount) {
+    const puzzleNumber = existingCount + puzzles.length + 1;
     const seed = `carom-puzzle-${puzzleNumber + seedOffset}`;
 
     const puzzle = generatePuzzle(seed);
@@ -568,28 +585,69 @@ async function main() {
       if (puzzles.length % 10 === 0) {
         const elapsedSec = (Date.now() - startTime) / 1000;
         const rate = puzzles.length / elapsedSec;
-        const remaining = (TARGET_PUZZLES - puzzles.length) / rate;
+        const remaining = (targetCount - puzzles.length) / rate;
         console.log(
-          `  ${puzzles.length}/${TARGET_PUZZLES} puzzles, ${failures} failures, ~${Math.ceil(remaining)}s remaining`
+          `  ${puzzles.length}/${targetCount} puzzles, ${failures} failures, ~${Math.ceil(remaining)}s remaining`
         );
       }
     } else {
       failures++;
-      seedOffset++; // Try a different seed
-      if (failures > TARGET_PUZZLES * 2) {
+      seedOffset++;
+      if (failures > targetCount * 2) {
         console.error('\nToo many failures, aborting.');
-        process.exit(1);
+        break;
       }
     }
   }
 
+  return { puzzles, failures };
+}
+
+async function main() {
+  const countArg = process.argv[2];
+  const targetCount = countArg ? parseInt(countArg, 10) : TARGET_PUZZLES;
+
+  console.log('Generating Carom puzzle pool...');
+  console.log(`Target: ${targetCount} puzzles`);
+  console.log(`Difficulty: ${MIN_OPTIMAL_SOLUTION}-${MAX_OPTIMAL_SOLUTION} moves`);
+  console.log(`Early exit threshold: ${EARLY_EXIT_THRESHOLD} moves`);
+  console.log('');
+
+  const outputDir = path.join(__dirname, '..', 'public', 'puzzles');
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  // Load existing pool
+  const poolPath = path.join(outputDir, 'pool.json');
+  let pool: PoolFile;
+  if (fs.existsSync(poolPath)) {
+    try {
+      pool = JSON.parse(fs.readFileSync(poolPath, 'utf-8'));
+      console.log(`Loaded existing pool with ${pool.puzzles.length} puzzles\n`);
+    } catch {
+      pool = { generatedAt: '', puzzles: [] };
+    }
+  } else {
+    pool = { generatedAt: '', puzzles: [] };
+  }
+
+  const startingCount = pool.puzzles.length;
+  const startTime = Date.now();
+
+  const result = await generatePuzzles(targetCount, startingCount);
+
+  pool.puzzles.push(...result.puzzles);
+
+  const elapsed = (Date.now() - startTime) / 1000;
   console.log('\n');
   console.log('Generation complete!');
-  console.log(`Total puzzles: ${puzzles.length}`);
-  console.log(`Total failures: ${failures}`);
+  console.log(`Time: ${elapsed.toFixed(1)}s`);
+  console.log(`New puzzles: ${result.puzzles.length}`);
+  console.log(`Total failures: ${result.failures}`);
 
   // Stats
-  const moves = puzzles.map((p) => p.optimalMoves);
+  const moves = pool.puzzles.map((p) => p.optimalMoves);
   const avgMoves = moves.reduce((a, b) => a + b, 0) / moves.length;
   const minMoves = Math.min(...moves);
   const maxMoves = Math.max(...moves);
@@ -608,13 +666,16 @@ async function main() {
     console.log(`  ${i.toString().padStart(2)}: ${count.toString().padStart(3)} ${bar}`);
   }
 
-  // Write to file
-  const outputPath = path.join(__dirname, '..', 'public', 'puzzles.json');
-  fs.writeFileSync(outputPath, JSON.stringify(puzzles, null, 0));
+  // Save pool
+  pool.generatedAt = new Date().toISOString();
+  fs.writeFileSync(poolPath, JSON.stringify(pool, null, 2));
 
-  const fileSizeKB = (fs.statSync(outputPath).size / 1024).toFixed(1);
-  console.log(`\nWritten to: ${outputPath}`);
-  console.log(`File size: ${fileSizeKB} KB`);
+  const fileSizeKB = (fs.statSync(poolPath).size / 1024).toFixed(1);
+  console.log(`\nSaved pool to: ${poolPath}`);
+  console.log(`  Previous count: ${startingCount}`);
+  console.log(`  Added: ${result.puzzles.length}`);
+  console.log(`  Total: ${pool.puzzles.length}`);
+  console.log(`  File size: ${fileSizeKB} KB`);
 }
 
 main().catch((err) => {

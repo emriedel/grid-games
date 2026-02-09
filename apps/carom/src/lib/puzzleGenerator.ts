@@ -18,31 +18,62 @@ import {
   NUM_BLOCKERS,
 } from '@/constants/gameConfig';
 import { hasObstacle, hasPieceAt } from './gameLogic';
-import { CAROM_LAUNCH_DATE } from '@/config';
+import { CAROM_LAUNCH_DATE, CAROM_LAUNCH_DATE_STRING } from '@/config';
 
-// Cache for loaded puzzles
-let puzzlePoolCache: PrecomputedPuzzle[] | null = null;
+// Cache for monthly puzzle files
+const monthlyFileCache: Map<string, Record<string, PrecomputedPuzzle>> = new Map();
 
 /**
- * Load the puzzle pool from JSON
+ * Get the month key (YYYY-MM) for a puzzle number
  */
-async function loadPuzzlePool(): Promise<PrecomputedPuzzle[]> {
-  if (puzzlePoolCache) {
-    return puzzlePoolCache;
+function getMonthForPuzzleNumber(puzzleNumber: number): string {
+  const baseDate = new Date(CAROM_LAUNCH_DATE_STRING + 'T00:00:00');
+  const puzzleDate = new Date(baseDate.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  const year = puzzleDate.getFullYear();
+  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
+/**
+ * Load a monthly puzzle file
+ */
+async function loadMonthlyFile(month: string): Promise<Record<string, PrecomputedPuzzle> | null> {
+  // Check cache first
+  if (monthlyFileCache.has(month)) {
+    return monthlyFileCache.get(month)!;
   }
 
   try {
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const response = await fetch(`${basePath}/puzzles.json`);
+    const response = await fetch(`${basePath}/puzzles/assigned/${month}.json`);
     if (!response.ok) {
-      throw new Error(`Failed to load puzzles: ${response.status}`);
+      console.warn(`Monthly file not found: ${month}.json (status ${response.status})`);
+      return null;
     }
-    puzzlePoolCache = await response.json();
-    return puzzlePoolCache!;
+    const data = await response.json();
+    const puzzles = data.puzzles as Record<string, PrecomputedPuzzle>;
+
+    // Cache the result
+    monthlyFileCache.set(month, puzzles);
+    return puzzles;
   } catch (error) {
-    console.error('Failed to load puzzle pool:', error);
-    throw error;
+    console.warn(`Failed to load monthly file ${month}.json:`, error);
+    return null;
   }
+}
+
+/**
+ * Get a puzzle by its puzzle number from monthly files
+ */
+async function getPuzzleByNumber(puzzleNumber: number): Promise<PrecomputedPuzzle | null> {
+  const month = getMonthForPuzzleNumber(puzzleNumber);
+  const puzzles = await loadMonthlyFile(month);
+
+  if (!puzzles) {
+    return null;
+  }
+
+  return puzzles[String(puzzleNumber)] || null;
 }
 
 /**
@@ -80,34 +111,51 @@ export async function getDailyPuzzle(dateStr?: string): Promise<Puzzle> {
   const puzzleNumber = getPuzzleNumber(CAROM_LAUNCH_DATE, parseDateString(date));
 
   try {
-    const pool = await loadPuzzlePool();
-    // Use modulo to cycle through puzzles if we go beyond the pool
-    const index = (puzzleNumber - 1) % pool.length;
-    const precomputed = pool[index];
-    return hydratePuzzle(precomputed, date, puzzleNumber);
+    // Try to load from monthly assigned files first
+    const precomputed = await getPuzzleByNumber(puzzleNumber);
+    if (precomputed) {
+      return hydratePuzzle(precomputed, date, puzzleNumber);
+    }
+
+    // Fallback to runtime generation if not found in assigned files
+    console.warn(`Puzzle #${puzzleNumber} not found in assigned files, using fallback generation`);
+    return generateFallbackPuzzle(date);
   } catch (error) {
     // Fallback to runtime generation if loading fails
-    console.warn('Using fallback puzzle generation');
+    console.warn('Using fallback puzzle generation:', error);
     return generateFallbackPuzzle(date);
   }
 }
 
 /**
  * Generate a random puzzle (for debug mode)
- * Still uses runtime generation for variety
+ * Picks a random puzzle from the monthly files
  */
 export async function generateRandomPuzzle(): Promise<Puzzle> {
   try {
-    const pool = await loadPuzzlePool();
-    const randomIndex = Math.floor(Math.random() * pool.length);
-    const precomputed = pool[randomIndex];
-    const randomDate = `random-${Date.now()}`;
-    return hydratePuzzle(precomputed, randomDate, randomIndex + 1);
+    // Get current month and try to load those puzzles
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const monthKey = `${year}-${month}`;
+
+    const puzzles = await loadMonthlyFile(monthKey);
+    if (puzzles) {
+      const puzzleNumbers = Object.keys(puzzles);
+      if (puzzleNumbers.length > 0) {
+        const randomNum = puzzleNumbers[Math.floor(Math.random() * puzzleNumbers.length)];
+        const precomputed = puzzles[randomNum];
+        const randomDate = `random-${Date.now()}`;
+        return hydratePuzzle(precomputed, randomDate, parseInt(randomNum, 10));
+      }
+    }
   } catch {
-    // Fallback
-    const randomSeed = `random-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    return generateFallbackPuzzle(randomSeed);
+    // Fall through to fallback
   }
+
+  // Fallback
+  const randomSeed = `random-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return generateFallbackPuzzle(randomSeed);
 }
 
 // =====================================================

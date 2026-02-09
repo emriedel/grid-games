@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
 import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, shareOrCopy, getPuzzleNumber, getDateForPuzzleNumber } from '@grid-games/shared';
-import { caromConfig } from '@/config';
+import { formatDisplayDate, getDateForPuzzleNumber } from '@grid-games/shared';
+import { caromConfig, CAROM_LAUNCH_DATE_STRING } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { getDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
 import {
@@ -14,42 +14,45 @@ import {
   getPuzzleState,
   savePuzzleState,
   getTodayPuzzleNumber,
+  didAchieveOptimal,
 } from '@/lib/storage';
+import { getSolutionPath } from '@/lib/solver';
 import { Board } from './Board';
 import { HeaderMoveCounter } from './HeaderMoveCounter';
 import { HowToPlayModal } from './HowToPlayModal';
-import { Direction, Puzzle, Move } from '@/types';
-
-const directionArrows: Record<Direction, string> = {
-  up: '⬆️',
-  down: '⬇️',
-  left: '⬅️',
-  right: '➡️',
-};
+import { OptimalInfoModal } from './OptimalInfoModal';
+import { Direction, Puzzle, Piece } from '@/types';
 
 // Carom-specific wrapper for ResultsModal
 interface CaromResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
   moveCount: number;
+  optimalMoves: number;
+  achievedOptimal: boolean;
   date: string;
   puzzleNumber: number;
-  moveHistory: Move[];
+  isArchive: boolean;
 }
 
 function CaromResultsModal({
   isOpen,
   onClose,
   moveCount,
+  optimalMoves,
+  achievedOptimal,
   date,
   puzzleNumber,
-  moveHistory,
+  isArchive,
 }: CaromResultsModalProps) {
   const displayDate = formatDisplayDate(date);
   const movesText = moveCount === 1 ? 'move' : 'moves';
-  const arrowSequence = moveHistory.map((m) => directionArrows[m.direction]).join('');
 
-  const shareText = `Carom #${puzzleNumber}\n${arrowSequence}\n${moveCount} ${movesText}\n\nhttps://nerdcube.games/carom`;
+  // Build share text - no arrow emojis, include trophy if optimal
+  const trophyPart = achievedOptimal ? ' 🏆' : '';
+  const baseUrl = 'https://nerdcube.games/carom';
+  const puzzleUrl = isArchive ? `${baseUrl}?puzzle=${puzzleNumber}` : baseUrl;
+  const shareText = `Carom #${puzzleNumber}${trophyPart}\n${moveCount} ${movesText}\n\n${puzzleUrl}`;
 
   return (
     <ResultsModal
@@ -62,17 +65,24 @@ function CaromResultsModal({
       primaryStat={{ value: moveCount, label: movesText }}
       shareConfig={{ text: shareText }}
     >
-      {/* Arrow sequence visualization */}
-      <div className="text-center">
-        <div className="text-2xl tracking-wider">{arrowSequence}</div>
-      </div>
+      {/* Trophy display if optimal */}
+      {achievedOptimal && (
+        <div className="text-center">
+          <div className="text-4xl mb-2">🏆</div>
+          <div className="text-[var(--accent)] font-medium">Optimal Solution!</div>
+        </div>
+      )}
+      {!achievedOptimal && (
+        <div className="text-center text-[var(--muted)] text-sm">
+          Optimal: {optimalMoves} moves
+        </div>
+      )}
     </ResultsModal>
   );
 }
 
-// Base date for puzzle numbering (Carom launched Jan 30, 2026)
-const PUZZLE_BASE_DATE = '2026-01-30';
-const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
+// Base date for puzzle numbering
+const PUZZLE_BASE_DATE_OBJ = new Date(CAROM_LAUNCH_DATE_STRING);
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -88,10 +98,12 @@ export function Game() {
   const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, replay, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber });
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [showOptimalInfo, setShowOptimalInfo] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
+  const [achievedOptimal, setAchievedOptimal] = useState(false);
 
   // Initialize puzzle on mount
   useEffect(() => {
@@ -106,11 +118,28 @@ export function Game() {
         const loadedPuzzle = await getDailyPuzzle(puzzleDateString);
         setPuzzle(loadedPuzzle);
 
+        // Debug logging
+        if (isDebug) {
+          console.log('[Carom Debug] Puzzle #' + loadedPuzzle.puzzleNumber);
+          console.log('[Carom Debug] Optimal moves:', loadedPuzzle.optimalMoves);
+
+          // Get solution path for debug output
+          const initialPieces: Piece[] = loadedPuzzle.pieces.map(p => ({ ...p }));
+          const solution = getSolutionPath(loadedPuzzle.board, initialPieces);
+          if (solution) {
+            console.log('[Carom Debug] Optimal solution:',
+              solution.map(m => `${m.pieceId} ${m.direction}`).join(' -> '));
+          }
+        }
+
         // Check saved state using unified storage (skip in debug mode)
         if (!isDebug) {
           const puzzleState = getPuzzleState(activePuzzleNumber);
 
           if (puzzleState?.status === 'completed') {
+            // Check if optimal was achieved
+            setAchievedOptimal(puzzleState.data.achievedOptimal ?? false);
+
             if (isArchiveMode) {
               // Archive: go directly to finished (skip landing)
               // Reconstruct final piece positions from move history
@@ -188,6 +217,9 @@ export function Game() {
 
     const completion = getCompletionState();
     if (completion) {
+      // Check if optimal was achieved
+      setAchievedOptimal(didAchieveOptimal(activePuzzleNumber));
+
       // Reconstruct final piece positions from move history
       const finalPieces = puzzle.pieces.map(p => ({ ...p }));
       for (const move of completion.moveHistory) {
@@ -201,7 +233,7 @@ export function Game() {
       restoreGame(puzzle, finalPieces, completion.moveCount, completion.moveHistory);
       setFinished();
     }
-  }, [puzzle, restoreGame, setFinished]);
+  }, [puzzle, restoreGame, setFinished, activePuzzleNumber]);
 
   // Handle move
   const handleMove = useCallback(
@@ -216,6 +248,9 @@ export function Game() {
   // Handle win condition - only auto-show results if player was playing this session
   useEffect(() => {
     if (state.phase === 'finished' && state.puzzle && wasPlayingThisSession) {
+      const isOptimal = state.moveCount === state.puzzle.optimalMoves;
+      setAchievedOptimal(isOptimal);
+
       // Save using puzzle-number-based storage
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
@@ -224,6 +259,7 @@ export function Game() {
           moveCount: state.moveCount,
           optimalMoves: state.puzzle.optimalMoves,
           moveHistory: state.moveHistory,
+          achievedOptimal: isOptimal,
         },
       });
       // Small delay before showing results
@@ -238,15 +274,36 @@ export function Game() {
   const handleNewPuzzle = useCallback(async () => {
     const newPuzzle = await generateRandomPuzzle();
     setPuzzle(newPuzzle);
+    setAchievedOptimal(false);
+
+    // Debug logging for new puzzle
+    if (isDebug) {
+      console.log('[Carom Debug] Puzzle #' + newPuzzle.puzzleNumber);
+      console.log('[Carom Debug] Optimal moves:', newPuzzle.optimalMoves);
+
+      const initialPieces: Piece[] = newPuzzle.pieces.map(p => ({ ...p }));
+      const solution = getSolutionPath(newPuzzle.board, initialPieces);
+      if (solution) {
+        console.log('[Carom Debug] Optimal solution:',
+          solution.map(m => `${m.pieceId} ${m.direction}`).join(' -> '));
+      }
+    }
+
     startGame(newPuzzle);
-  }, [startGame]);
+  }, [startGame, isDebug]);
 
   // Handle replay - reset game state and start fresh
   const handleReplay = useCallback(() => {
     setShowResults(false);
     setWasPlayingThisSession(true);
+    setAchievedOptimal(false);
     replay();
   }, [replay]);
+
+  // Handle optimal info click
+  const handleOptimalInfoClick = useCallback(() => {
+    setShowOptimalInfo(true);
+  }, []);
 
   // Loading state - show while puzzle is being fetched
   if (isLoading || !puzzle) {
@@ -285,6 +342,8 @@ export function Game() {
   }
 
   // Playing / Finished states
+  const isFinished = state.phase === 'finished';
+
   return (
     <>
       <GameContainer
@@ -301,7 +360,10 @@ export function Game() {
             rightContent={
               <HeaderMoveCounter
                 moves={state.moveCount}
-                optimalMoves={isDebug ? state.puzzle?.optimalMoves : undefined}
+                optimalMoves={state.puzzle?.optimalMoves}
+                achievedOptimal={achievedOptimal}
+                isFinished={isFinished}
+                onClick={handleOptimalInfoClick}
               />
             }
           />
@@ -317,7 +379,7 @@ export function Game() {
               onPieceSelect={selectPiece}
               onDeselect={deselectPiece}
               onMove={handleMove}
-              disabled={state.isAnimating || state.phase === 'finished'}
+              disabled={state.isAnimating || isFinished}
             />
           )}
 
@@ -340,7 +402,7 @@ export function Game() {
           )}
 
           {/* See Results and Play Again buttons - show when finished */}
-          {state.phase === 'finished' && (
+          {isFinished && (
             <div className="flex gap-2">
               <Button
                 variant="primary"
@@ -374,14 +436,23 @@ export function Game() {
       <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
 
       {state.puzzle && (
-        <CaromResultsModal
-          isOpen={showResults}
-          onClose={() => setShowResults(false)}
-          moveCount={state.moveCount}
-          date={state.puzzle.date}
-          puzzleNumber={state.puzzle.puzzleNumber ?? getPuzzleNumber(new Date('2026-01-30'), new Date(state.puzzle.date))}
-          moveHistory={state.moveHistory}
-        />
+        <>
+          <CaromResultsModal
+            isOpen={showResults}
+            onClose={() => setShowResults(false)}
+            moveCount={state.moveCount}
+            optimalMoves={state.puzzle.optimalMoves}
+            achievedOptimal={achievedOptimal}
+            date={state.puzzle.date}
+            puzzleNumber={state.puzzle.puzzleNumber ?? activePuzzleNumber}
+            isArchive={isArchiveMode}
+          />
+          <OptimalInfoModal
+            isOpen={showOptimalInfo}
+            onClose={() => setShowOptimalInfo(false)}
+            optimalMoves={state.puzzle.optimalMoves}
+          />
+        </>
       )}
     </>
   );

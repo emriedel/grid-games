@@ -11,7 +11,8 @@ export const caromTheme = {
 };
 
 // Launch date for Carom - puzzle #1 starts on this date
-export const CAROM_LAUNCH_DATE = new Date('2026-01-30');
+export const CAROM_LAUNCH_DATE_STRING = '2026-02-01';
+export const CAROM_LAUNCH_DATE = new Date(CAROM_LAUNCH_DATE_STRING);
 
 export const caromConfig = defineGameConfig({
   id: 'carom',

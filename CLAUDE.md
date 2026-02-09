@@ -138,6 +138,52 @@ Use `seedrandom` with date string for deterministic puzzles:
 const rng = seedrandom(new Date().toISOString().split('T')[0]);
 ```
 
+### Pre-Generated Puzzles (Archive-Enabled Games)
+
+Games with archive support (Dabble, Carom) use a pool/assigned architecture:
+
+```
+public/puzzles/
+├── pool.json              # UNASSIGNED puzzles only (safe to regenerate)
+└── assigned/
+    ├── 2026-02.json       # Full puzzle data for Feb 2026 (stable)
+    ├── 2026-03.json       # Full puzzle data for Mar 2026
+    └── ...
+```
+
+**Workflow:**
+1. Generate puzzles into `pool.json` (can regenerate with improved algorithms)
+2. Run assignment script to MOVE puzzles from pool to `assigned/{YYYY-MM}.json`
+3. Runtime loads from monthly files with caching
+
+**Monthly File Format:**
+```typescript
+interface MonthlyAssignedFile {
+  gameId: string;           // e.g., "dabble", "carom"
+  baseDate: string;         // First day of month "YYYY-MM-01"
+  puzzles: Record<string, PuzzleData>;  // Keyed by puzzle number
+}
+```
+
+**Storage Pattern (Puzzle-Number Keyed):**
+```typescript
+// Key format: {gameId}-{puzzleNumber}
+interface PuzzleState {
+  puzzleNumber: number;
+  status: 'in-progress' | 'completed';
+  data: GameSpecificData;
+}
+```
+
+**Commands:**
+```bash
+# Generate puzzles into pool
+npm run generate-puzzles -w @grid-games/[game]
+
+# Assign from pool to monthly files
+npm run assign-puzzles -w @grid-games/[game]
+```
+
 ---
 
 ## File Structure

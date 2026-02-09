@@ -14,6 +14,7 @@
 - **Movement:** Pieces slide until blocked by wall, edge, or piece
 - **Goal:** Get the target piece to the goal square (marked with star)
 - **Completion:** Track number of moves used to solve
+- **Optimal Bonus:** 🏆 trophy earned when solving in optimal move count
 
 ## Commands
 
@@ -27,8 +28,13 @@ npx turbo type-check --filter=@grid-games/carom
 # Build
 npx turbo build --filter=@grid-games/carom
 
-# Generate more puzzles (edit TARGET_PUZZLES in script first)
+# Generate puzzles into pool
 npm run generate-puzzles -w @grid-games/carom
+npm run generate-puzzles -w @grid-games/carom -- 200  # Generate 200 puzzles
+
+# Assign puzzles from pool to monthly files
+npm run assign-puzzles -w @grid-games/carom
+npm run assign-puzzles -w @grid-games/carom -- 100  # Ensure puzzles 1-100 assigned
 ```
 
 ## Key Files
@@ -37,12 +43,18 @@ npm run generate-puzzles -w @grid-games/carom
 |------|---------|
 | `src/components/Game.tsx` | Main game orchestrator (includes CaromResultsModal wrapper) |
 | `src/components/Board.tsx` | Grid rendering with pieces and directional arrows |
+| `src/components/HeaderMoveCounter.tsx` | Move counter with trophy display |
+| `src/components/OptimalInfoModal.tsx` | Modal showing optimal move count |
+| `src/components/ArchivePageContent.tsx` | Archive page with 🏆/✓ status |
 | `src/lib/gameLogic.ts` | Move simulation, collision detection |
 | `src/lib/solver.ts` | BFS solver for optimal solution |
-| `src/lib/puzzleGenerator.ts` | Loads pre-computed puzzles from JSON |
+| `src/lib/puzzleGenerator.ts` | Loads puzzles from monthly assigned files |
+| `src/lib/storage.ts` | LocalStorage persistence with achievedOptimal tracking |
 | `src/types/index.ts` | Type definitions |
-| `public/puzzles.json` | Pre-computed puzzle pool |
+| `public/puzzles/pool.json` | Unassigned puzzle pool |
+| `public/puzzles/assigned/YYYY-MM.json` | Monthly assigned puzzles |
 | `scripts/generatePuzzles.ts` | Offline puzzle generation script |
+| `scripts/assignPuzzles.ts` | Assigns puzzles from pool to monthly files |
 
 ## Architecture
 
@@ -76,23 +88,49 @@ State = positions of all 4 pieces. Explores all (piece, direction) combinations.
 
 ## Puzzle System
 
-### Pre-computed Puzzles
+### Pool/Assigned Architecture
 
-Puzzles are **pre-generated offline** and stored in `public/puzzles.json`. This eliminates runtime computation and ensures instant puzzle loading.
+Uses a pool/assigned architecture for stable archives while allowing algorithm improvements:
 
-**Launch date:** January 30, 2026 (defined in `src/config.ts` as `CAROM_LAUNCH_DATE`)
+```
+public/puzzles/
+├── pool.json              # Only UNASSIGNED puzzles (can be regenerated anytime)
+└── assigned/
+    ├── 2026-02.json       # Full puzzle data for Feb 2026 (stable, never change)
+    ├── 2026-03.json       # Full puzzle data for Mar 2026
+    └── ...
+```
+
+**pool.json** - Contains only unassigned puzzles. Safe to delete and regenerate with improved algorithms.
+
+**assigned/{YYYY-MM}.json** - Contains full puzzle data for each month. Once assigned, puzzles are immutable to preserve archive history.
+
+### Workflow
+
+1. **Generate puzzles** into pool (can regenerate with improved algorithms anytime)
+2. **Assign puzzles** to numbers - this MOVES puzzles from pool to assigned/ files
+3. **Game fetches** puzzle by number from the appropriate monthly file
+
+**Launch date:** February 1, 2026 (defined in `src/config.ts` as `CAROM_LAUNCH_DATE`)
 
 ### Generating More Puzzles
 
 ```bash
-# Edit TARGET_PUZZLES in scripts/generatePuzzles.ts, then:
+# Generate 200 puzzles into pool (default)
 npm run generate-puzzles -w @grid-games/carom
+
+# Generate specific number of puzzles
+npm run generate-puzzles -w @grid-games/carom -- 100
+
+# Assign from pool to monthly files
+npm run assign-puzzles -w @grid-games/carom
 ```
 
 The script generates puzzles with:
 - 10-20 optimal moves
 - Must use 2+ pieces in solution
 - Quality scoring favors multi-piece solutions
+- Early exit at 18 moves for harder puzzles
 
 ### Puzzle Quality Criteria
 
@@ -105,6 +143,18 @@ The script generates puzzles with:
 - **L-walls (6-8):** Create corner "traps" requiring bounces
 - **Edge walls (1 per edge):** Single-segment walls in middle third
 - **Goal placement:** Always at center of an L-wall
+
+---
+
+## Optimal Move Bonus System
+
+- **Trophy:** 🏆 displayed when user solves in optimal moves
+- **Binary system:** Either achieved optimal or didn't
+- **Display locations:**
+  - Header move counter (after completion)
+  - Results modal (prominently if achieved)
+  - Archive page (🏆 for optimal, ✓ for completed)
+- **Share text:** Includes 🏆 if optimal, no arrow emojis
 
 ---
 
@@ -133,6 +183,10 @@ Add `?debug=true` to URL:
 - Shows puzzle date
 - Shows selected piece ID
 - Purple "New Puzzle" button to regenerate random puzzles
+- Console logging:
+  - `[Carom Debug] Puzzle #X`
+  - `[Carom Debug] Optimal moves: X`
+  - `[Carom Debug] Optimal solution: target up -> blocker-0 right -> ...`
 
 ## UI Components
 
@@ -140,29 +194,33 @@ Add `?debug=true` to URL:
 - **Directional arrows:** Appear on edges of selected piece, only for valid moves
 - **Goal star:** Large (w-8 h-8), amber, 60% opacity
 - **Walls:** White (#ffffff) 3px borders with corner fills where walls meet
-- **Move counter:** Compact display in NavBar header
+- **Move counter:** Clickable in NavBar header, opens OptimalInfoModal
+- **Trophy:** 🏆 appears next to move count when optimal achieved
 
 ## State Persistence
 
 Storage module: `src/lib/storage.ts`
 
-**In-progress state:**
-- `date` - puzzle date
-- `pieces` - current positions of all pieces
-- `moveCount` - number of moves made
-- `moveHistory` - array of moves for undo functionality
-
-**Completion state:**
-- `date` - puzzle date
-- `moveCount` - total moves to solve
-- `optimalMoves` - optimal solution length
-- `moveHistory` - full sequence of moves made
-
-**Auto-persistence:** Uses `useEffect` to watch state changes and auto-save:
-```tsx
-useEffect(() => {
-  if (gameState === 'playing') {
-    saveInProgressState({ date, pieces, moveCount, moveHistory });
-  }
-}, [pieces, moveCount, moveHistory, gameState]);
+**Unified puzzle state** (keyed by puzzle number: `carom-{puzzleNumber}`):
+```typescript
+interface CaromPuzzleState {
+  puzzleNumber: number;
+  status: 'in-progress' | 'completed';
+  data: {
+    moveCount: number;
+    moveHistory: Move[];
+    pieces?: Piece[];           // In-progress only
+    optimalMoves?: number;      // Completed only
+    achievedOptimal?: boolean;  // Completed only: true if moveCount === optimalMoves
+  };
+}
 ```
+
+**Helper functions:**
+- `getPuzzleState(puzzleNumber)` - Get state for any puzzle
+- `savePuzzleState(puzzleNumber, state)` - Save state
+- `isPuzzleCompleted(puzzleNumber)` - Check if completed
+- `isPuzzleInProgress(puzzleNumber)` - Check if in progress
+- `didAchieveOptimal(puzzleNumber)` - Check if achieved optimal
+
+**Auto-persistence:** Uses `useEffect` to watch state changes and auto-save.
