@@ -10,7 +10,7 @@ interface OptimalInfoModalProps {
 
 export function OptimalInfoModal({ isOpen, onClose, optimalMoves }: OptimalInfoModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Best Solution">
+    <Modal isOpen={isOpen} onClose={onClose} title="Perfect Solution">
       <div className="flex flex-col items-center gap-4 py-4">
         <div className="text-4xl">🏆</div>
         <div className="text-center">

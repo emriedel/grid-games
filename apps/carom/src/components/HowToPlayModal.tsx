@@ -35,7 +35,7 @@ function WallIcon() {
 
 export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="How to Play">
+    <Modal isOpen={isOpen} onClose={onClose} title="How to Play Carom">
       <div className="space-y-5 text-[var(--foreground)]">
         {/* Goal Section */}
         <section className="bg-[var(--accent)]/10 rounded-lg p-4 border border-[var(--accent)]/30">

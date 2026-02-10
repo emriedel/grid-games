@@ -69,12 +69,12 @@ function CaromResultsModal({
       {achievedOptimal && (
         <div className="text-center">
           <div className="text-4xl mb-2">🏆</div>
-          <div className="text-[var(--accent)] font-medium">Optimal Solution!</div>
+          <div className="text-[var(--accent)] font-medium">Perfect Solution!</div>
         </div>
       )}
       {!achievedOptimal && (
         <div className="text-center text-[var(--muted)] text-sm">
-          Optimal: {optimalMoves} moves
+          Perfect solution: {optimalMoves} moves
         </div>
       )}
     </ResultsModal>
