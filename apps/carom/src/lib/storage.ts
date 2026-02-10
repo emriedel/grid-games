@@ -1,21 +1,11 @@
-import { getPuzzleNumber } from '@grid-games/shared';
+import { createArchiveStorage, type BasePuzzleState } from '@grid-games/shared';
 import { Piece, Move } from '@/types';
-
-// Launch date for Carom - puzzle #1 starts on this date
-// IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
-const PUZZLE_BASE_DATE = new Date('2026-02-01T00:00:00');
-
-/**
- * Get today's puzzle number
- */
-export function getTodayPuzzleNumber(): number {
-  return getPuzzleNumber(PUZZLE_BASE_DATE);
-}
+import { CAROM_LAUNCH_DATE } from '@/config';
 
 /**
  * Unified puzzle state - works for both daily and archive puzzles
  */
-export interface CaromPuzzleState {
+export interface CaromPuzzleState extends BasePuzzleState {
   puzzleNumber: number;
   puzzleId?: string; // Unique puzzle identifier (for key generation)
   status: 'in-progress' | 'completed';
@@ -30,134 +20,28 @@ export interface CaromPuzzleState {
   };
 }
 
-/**
- * Get storage key for a puzzle
- * If puzzleId is provided, uses new format: carom-{puzzleNumber}-{puzzleId}
- * Otherwise uses legacy format: carom-{puzzleNumber}
- */
-function getStorageKey(puzzleNumber: number, puzzleId?: string): string {
-  if (puzzleId) {
-    return `carom-${puzzleNumber}-${puzzleId}`;
-  }
-  return `carom-${puzzleNumber}`;
-}
+// Create the storage instance using the shared factory
+const storage = createArchiveStorage<CaromPuzzleState>({
+  gameId: 'carom',
+  launchDate: CAROM_LAUNCH_DATE,
+});
 
-/**
- * Get puzzle state by puzzle number and optional puzzleId
- * If puzzleId is provided, looks for new key format first
- */
-export function getPuzzleState(puzzleNumber: number, puzzleId?: string): CaromPuzzleState | null {
-  if (typeof window === 'undefined') return null;
+// Re-export all shared functions
+export const {
+  getStorageKey,
+  getPuzzleState,
+  findPuzzleState,
+  savePuzzleState,
+  clearPuzzleState,
+  isPuzzleCompleted,
+  isPuzzleCompletedAny,
+  getSavedPuzzleId,
+  isPuzzleInProgress,
+  isPuzzleInProgressAny,
+  getTodayPuzzleNumber,
+} = storage;
 
-  try {
-    const key = getStorageKey(puzzleNumber, puzzleId);
-    const stored = localStorage.getItem(key);
-    if (!stored) return null;
-    return JSON.parse(stored) as CaromPuzzleState;
-  } catch (error) {
-    console.warn('[carom] Failed to load puzzle state:', error);
-    return null;
-  }
-}
-
-/**
- * Find puzzle state by scanning localStorage for any matching key pattern
- * Used by archive pages to check completion status regardless of puzzleId
- */
-export function findPuzzleState(puzzleNumber: number): CaromPuzzleState | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    // Look for keys matching carom-{puzzleNumber} or carom-{puzzleNumber}-*
-    const prefix = `carom-${puzzleNumber}`;
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && (key === prefix || key.startsWith(`${prefix}-`))) {
-        const stored = localStorage.getItem(key);
-        if (stored) {
-          return JSON.parse(stored) as CaromPuzzleState;
-        }
-      }
-    }
-    return null;
-  } catch (error) {
-    console.warn('[carom] Failed to find puzzle state:', error);
-    return null;
-  }
-}
-
-/**
- * Save puzzle state
- */
-export function savePuzzleState(puzzleNumber: number, state: CaromPuzzleState, puzzleId?: string): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    const key = getStorageKey(puzzleNumber, puzzleId);
-    // Include puzzleId in state for consistency
-    const stateWithId = { ...state, puzzleId };
-    localStorage.setItem(key, JSON.stringify(stateWithId));
-  } catch (error) {
-    console.warn('[carom] Failed to save puzzle state:', error);
-  }
-}
-
-/**
- * Clear puzzle state
- */
-export function clearPuzzleState(puzzleNumber: number, puzzleId?: string): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    const key = getStorageKey(puzzleNumber, puzzleId);
-    localStorage.removeItem(key);
-  } catch (error) {
-    console.warn('[carom] Failed to clear puzzle state:', error);
-  }
-}
-
-/**
- * Check if a puzzle is completed (with specific puzzleId)
- */
-export function isPuzzleCompleted(puzzleNumber: number, puzzleId?: string): boolean {
-  const state = getPuzzleState(puzzleNumber, puzzleId);
-  return state?.status === 'completed';
-}
-
-/**
- * Check if a puzzle is completed (scanning for any matching key)
- * @deprecated Use isPuzzleCompleted with specific puzzleId for accuracy after puzzle regeneration
- */
-export function isPuzzleCompletedAny(puzzleNumber: number): boolean {
-  const state = findPuzzleState(puzzleNumber);
-  return state?.status === 'completed';
-}
-
-/**
- * Check if saved puzzleId matches the current puzzle's id
- * Used by archive pages to verify completion is for the current puzzle version
- */
-export function getSavedPuzzleId(puzzleNumber: number): string | undefined {
-  const state = findPuzzleState(puzzleNumber);
-  return state?.puzzleId;
-}
-
-/**
- * Check if a puzzle is in progress (with specific puzzleId)
- */
-export function isPuzzleInProgress(puzzleNumber: number, puzzleId?: string): boolean {
-  const state = getPuzzleState(puzzleNumber, puzzleId);
-  return state?.status === 'in-progress';
-}
-
-/**
- * Check if a puzzle is in progress (scanning for any matching key)
- * @deprecated Use isPuzzleInProgress with specific puzzleId for accuracy after puzzle regeneration
- */
-export function isPuzzleInProgressAny(puzzleNumber: number): boolean {
-  const state = findPuzzleState(puzzleNumber);
-  return state?.status === 'in-progress';
-}
+// ============ Game-Specific Functions ============
 
 /**
  * Check if a puzzle was solved optimally (achieved optimal move count)
@@ -187,7 +71,8 @@ export function getCompletedMoveCount(puzzleNumber: number): number | null {
   return null;
 }
 
-// ============ Legacy compatibility wrappers ============
+// ============ Legacy Compatibility Wrappers ============
+// These are used by Game.tsx for loading/saving daily puzzle state
 
 /** Legacy completion state interface */
 interface CompletionState {

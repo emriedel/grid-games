@@ -1,5 +1,13 @@
 import seedrandom from 'seedrandom';
-import { getTodayDateString, getPuzzleNumber, parseDateString } from '@grid-games/shared';
+import {
+  getTodayDateString,
+  getPuzzleNumber,
+  parseDateString,
+  getMonthForPuzzleNumber,
+  loadMonthlyFile,
+  getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
+  type PuzzleWithId,
+} from '@grid-games/shared';
 import {
   Board,
   Piece,
@@ -20,11 +28,8 @@ import {
 import { hasObstacle, hasPieceAt } from './gameLogic';
 import { CAROM_LAUNCH_DATE, CAROM_LAUNCH_DATE_STRING } from '@/config';
 
-// Cache for monthly puzzle files
-const monthlyFileCache: Map<string, Record<string, AssignedPuzzle>> = new Map();
-
 // Assigned puzzle with ID (matches monthly file format)
-interface AssignedPuzzle extends PrecomputedPuzzle {
+interface AssignedPuzzle extends PrecomputedPuzzle, PuzzleWithId {
   id: string;
 }
 
@@ -42,50 +47,19 @@ interface PoolFile {
 let poolCache: PoolFile | null = null;
 
 /**
- * Get the month key (YYYY-MM) for a puzzle number
+ * Helper to load monthly file using shared utility
  */
-function getMonthForPuzzleNumber(puzzleNumber: number): string {
-  const baseDate = new Date(CAROM_LAUNCH_DATE_STRING + 'T00:00:00');
-  const puzzleDate = new Date(baseDate.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
-  const year = puzzleDate.getFullYear();
-  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
-  return `${year}-${month}`;
-}
-
-/**
- * Load a monthly puzzle file
- */
-async function loadMonthlyFile(month: string): Promise<Record<string, AssignedPuzzle> | null> {
-  // Check cache first
-  if (monthlyFileCache.has(month)) {
-    return monthlyFileCache.get(month)!;
-  }
-
-  try {
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const response = await fetch(`${basePath}/puzzles/assigned/${month}.json`);
-    if (!response.ok) {
-      console.warn(`Monthly file not found: ${month}.json (status ${response.status})`);
-      return null;
-    }
-    const data = await response.json();
-    const puzzles = data.puzzles as Record<string, AssignedPuzzle>;
-
-    // Cache the result
-    monthlyFileCache.set(month, puzzles);
-    return puzzles;
-  } catch (error) {
-    console.warn(`Failed to load monthly file ${month}.json:`, error);
-    return null;
-  }
+async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedPuzzle> | null> {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return loadMonthlyFile<AssignedPuzzle>(month, 'carom', basePath);
 }
 
 /**
  * Get a puzzle by its puzzle number from monthly files
  */
 async function getPuzzleByNumber(puzzleNumber: number): Promise<AssignedPuzzle | null> {
-  const month = getMonthForPuzzleNumber(puzzleNumber);
-  const puzzles = await loadMonthlyFile(month);
+  const month = getMonthForPuzzleNumber(puzzleNumber, CAROM_LAUNCH_DATE_STRING);
+  const puzzles = await fetchMonthlyFile(month);
 
   if (!puzzles) {
     return null;
@@ -159,7 +133,7 @@ export async function generateRandomPuzzle(): Promise<Puzzle> {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const monthKey = `${year}-${month}`;
 
-    const puzzles = await loadMonthlyFile(monthKey);
+    const puzzles = await fetchMonthlyFile(monthKey);
     if (puzzles) {
       const puzzleNumbers = Object.keys(puzzles);
       if (puzzleNumbers.length > 0) {
@@ -234,32 +208,8 @@ export async function getPoolPuzzles(): Promise<PoolPuzzle[]> {
  * Returns a Map of puzzleNumber -> puzzleId
  */
 export async function getPuzzleIdsForRange(startNum: number, endNum: number): Promise<Map<number, string>> {
-  const result = new Map<number, string>();
-
-  // Group puzzle numbers by month to minimize file loads
-  const monthGroups = new Map<string, number[]>();
-  for (let num = startNum; num <= endNum; num++) {
-    const month = getMonthForPuzzleNumber(num);
-    if (!monthGroups.has(month)) {
-      monthGroups.set(month, []);
-    }
-    monthGroups.get(month)!.push(num);
-  }
-
-  // Load each month's file and extract puzzleIds
-  for (const [month, puzzleNumbers] of monthGroups) {
-    const puzzles = await loadMonthlyFile(month);
-    if (puzzles) {
-      for (const num of puzzleNumbers) {
-        const puzzle = puzzles[String(num)];
-        if (puzzle?.id) {
-          result.set(num, puzzle.id);
-        }
-      }
-    }
-  }
-
-  return result;
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return sharedGetPuzzleIdsForRange(startNum, endNum, CAROM_LAUNCH_DATE_STRING, 'carom', basePath);
 }
 
 /**
@@ -277,7 +227,7 @@ export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number
     const month = String(checkDate.getMonth() + 1).padStart(2, '0');
     const monthKey = `${year}-${month}`;
 
-    const puzzles = await loadMonthlyFile(monthKey);
+    const puzzles = await fetchMonthlyFile(monthKey);
     if (puzzles) {
       for (const [numStr, puzzle] of Object.entries(puzzles)) {
         const num = parseInt(numStr, 10);

@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
 import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
-import { caromConfig, CAROM_LAUNCH_DATE_STRING } from '@/config';
+import { caromConfig, CAROM_LAUNCH_DATE } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { getDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleGenerator';
 import {
@@ -80,8 +80,7 @@ function CaromResultsModal({
   );
 }
 
-// Base date for puzzle numbering
-const PUZZLE_BASE_DATE_OBJ = new Date(CAROM_LAUNCH_DATE_STRING);
+// Use the correctly-parsed launch date from config (includes T00:00:00 for local timezone)
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -101,7 +100,7 @@ export function Game() {
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
     if (isArchiveMode && !isDebug && archivePuzzleNumber !== null) {
-      if (!isValidPuzzleNumber(PUZZLE_BASE_DATE_OBJ, archivePuzzleNumber)) {
+      if (!isValidPuzzleNumber(CAROM_LAUNCH_DATE, archivePuzzleNumber)) {
         router.replace('/');
       }
     }
@@ -138,7 +137,7 @@ export function Game() {
         } else {
           // For archive mode, convert puzzle number to date string
           const puzzleDateString = isArchiveMode
-            ? getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, activePuzzleNumber)
+            ? getDateForPuzzleNumber(CAROM_LAUNCH_DATE, activePuzzleNumber)
             : undefined; // undefined = today
 
           loadedPuzzle = await getDailyPuzzle(puzzleDateString);

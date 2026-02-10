@@ -163,23 +163,75 @@ interface MonthlyAssignedFile {
 }
 ```
 
-**Storage Pattern (PuzzleId-Keyed for Regeneration Safety):**
+### Archive Storage Pattern (Shared Utilities)
+
+Games with archive support use the shared `createArchiveStorage` factory:
+
 ```typescript
-// Key format: {gameId}-{puzzleNumber}-{puzzleId}
-// Example: dabble-5-a1b2c3d4, carom-12-xyz789
-interface PuzzleState {
+import { createArchiveStorage, type BasePuzzleState } from '@grid-games/shared';
+
+// Define game-specific state extending BasePuzzleState
+interface MyPuzzleState extends BasePuzzleState {
   puzzleNumber: number;
-  puzzleId?: string;  // Unique ID from pre-generated puzzle
+  puzzleId?: string;
   status: 'in-progress' | 'completed';
-  data: GameSpecificData;
+  data: { score: number; /* game-specific fields */ };
 }
+
+// Create storage instance
+const storage = createArchiveStorage<MyPuzzleState>({
+  gameId: 'mygame',
+  launchDate: new Date('2026-02-01T00:00:00'),
+});
+
+// Re-export shared functions
+export const {
+  getPuzzleState,
+  findPuzzleState,
+  savePuzzleState,
+  clearPuzzleState,
+  isPuzzleCompleted,
+  isPuzzleInProgress,
+  getSavedPuzzleId,
+  getTodayPuzzleNumber,
+  // Deprecated but kept for legacy support
+  isPuzzleCompletedAny,
+  isPuzzleInProgressAny,
+} = storage;
 ```
+
+**Storage Key Format:** `{gameId}-{puzzleNumber}-{puzzleId}` (e.g., `dabble-5-a1b2c3d4`)
 
 **Why puzzleId matters:**
 - Each pre-generated puzzle has a unique `id` field
 - When puzzles are regenerated, ids change
 - Archive pages must check completion using the **current puzzleId**
 - This prevents showing old completion status for regenerated puzzles
+
+### Archive Puzzle Loading (Shared Utilities)
+
+Use shared utilities to load puzzles from monthly files:
+
+```typescript
+import {
+  getMonthForPuzzleNumber,
+  loadMonthlyFile,
+  getPuzzleIdsForRange,
+  verifyPuzzleIdMatch,
+} from '@grid-games/shared';
+
+// Get month key for a puzzle number
+const month = getMonthForPuzzleNumber(puzzleNumber, '2026-02-01'); // '2026-02'
+
+// Load monthly file (cached)
+const puzzles = await loadMonthlyFile<MyPuzzle>('2026-02', 'mygame');
+
+// Load puzzleIds for archive page
+const ids = await getPuzzleIdsForRange(1, 30, '2026-02-01', 'mygame');
+
+// Verify completion matches current puzzle version
+const isValid = verifyPuzzleIdMatch(currentPuzzleId, savedPuzzleId);
+```
 
 **Archive Page Pattern:**
 ```tsx
@@ -193,7 +245,8 @@ useEffect(() => {
 // 2. Check completion using specific puzzleId
 const currentPuzzleId = puzzleIds.get(puzzleNumber);
 const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
-const isCompleted = currentPuzzleId === savedPuzzleId && isPuzzleCompleted(num, currentPuzzleId);
+const isCompleted = verifyPuzzleIdMatch(currentPuzzleId, savedPuzzleId)
+  && isPuzzleCompleted(num, currentPuzzleId);
 ```
 
 **Commands:**
@@ -304,6 +357,8 @@ npm install <pkg> -w @grid-games/dabble      # Add dep to specific app
 | `packages/ui/src/` | Shared UI components |
 | `packages/config/src/theme.ts` | Theme interface |
 | `packages/shared/src/share.ts` | Share utilities |
+| `packages/shared/src/archiveStorage.ts` | Archive storage factory (`createArchiveStorage`) |
+| `packages/shared/src/archivePuzzles.ts` | Monthly file loading utilities |
 | `packages/dictionary/src/` | Shared word dictionary (Trie + validation) |
 | `apps/[game]/src/app/globals.css` | Per-game theme variables |
 | `apps/[game]/src/components/Game.tsx` | Main game component |

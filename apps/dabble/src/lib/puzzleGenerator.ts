@@ -1,5 +1,11 @@
 import seedrandom from 'seedrandom';
 import {
+  getMonthForPuzzleNumber,
+  loadMonthlyFile,
+  getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
+  type PuzzleWithId,
+} from '@grid-games/shared';
+import {
   BOARD_SIZE,
   BOARD_CONFIG,
   LETTER_DISTRIBUTION,
@@ -16,7 +22,7 @@ import {
 } from '@/constants/gameConfig';
 import type { BoardArchetype } from '@/constants/gameConfig';
 import type { GameBoard, Cell, BonusType, DailyPuzzle } from '@/types';
-import { PUZZLE_BASE_DATE } from '@/config';
+import { PUZZLE_BASE_DATE, PUZZLE_BASE_DATE_STRING } from '@/config';
 
 // Create a seeded random number generator for a given date
 function createRng(dateString: string): () => number {
@@ -799,7 +805,7 @@ export function getTodayDateString(): string {
 }
 
 // Pre-generated puzzle format (from scripts/generatePuzzles.ts)
-interface AssignedPuzzle {
+interface AssignedPuzzle extends PuzzleWithId {
   id: string;
   archetype: string;
   letters: string[];
@@ -820,15 +826,6 @@ interface AssignedPuzzle {
   };
 }
 
-interface MonthlyAssignedFile {
-  gameId: string;
-  baseDate: string;
-  puzzles: Record<string, AssignedPuzzle>; // Key: puzzle number (string), Value: full puzzle data
-}
-
-// Cache for loaded monthly files (keyed by month string YYYY-MM)
-const monthlyFileCache: Map<string, MonthlyAssignedFile | null> = new Map();
-
 // Get puzzle number for a date
 function getPuzzleNumberForDate(dateString: string): number {
   const date = new Date(dateString + 'T00:00:00');
@@ -837,35 +834,9 @@ function getPuzzleNumberForDate(dateString: string): number {
   return diffDays + 1;
 }
 
-// Get the month key (YYYY-MM) for a puzzle number
-function getMonthForPuzzleNumber(puzzleNumber: number): string {
-  const puzzleDate = new Date(PUZZLE_BASE_DATE.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
-  const year = puzzleDate.getFullYear();
-  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
-  return `${year}-${month}`;
-}
-
-// Fetch a monthly assigned file
-async function fetchMonthlyFile(month: string): Promise<MonthlyAssignedFile | null> {
-  // Check cache first
-  if (monthlyFileCache.has(month)) {
-    return monthlyFileCache.get(month)!;
-  }
-
-  try {
-    const response = await fetch(`/puzzles/assigned/${month}.json`);
-    if (!response.ok) {
-      monthlyFileCache.set(month, null);
-      return null;
-    }
-    const file = await response.json() as MonthlyAssignedFile;
-    monthlyFileCache.set(month, file);
-    return file;
-  } catch (error) {
-    console.warn(`[dabble] Failed to fetch ${month}.json:`, error);
-    monthlyFileCache.set(month, null);
-    return null;
-  }
+// Helper to load monthly file using shared utility
+async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedPuzzle> | null> {
+  return loadMonthlyFile<AssignedPuzzle>(month, 'dabble');
 }
 
 // Convert assigned puzzle to DailyPuzzle format
@@ -893,13 +864,13 @@ function convertAssignedPuzzle(puzzle: AssignedPuzzle, dateString: string): Dail
 export async function fetchDailyPuzzle(dateString?: string): Promise<DailyPuzzle> {
   const date = dateString || getTodayDateString();
   const puzzleNumber = getPuzzleNumberForDate(date);
-  const month = getMonthForPuzzleNumber(puzzleNumber);
+  const month = getMonthForPuzzleNumber(puzzleNumber, PUZZLE_BASE_DATE_STRING);
 
   // Fetch only the relevant monthly file
-  const monthlyFile = await fetchMonthlyFile(month);
+  const puzzles = await fetchMonthlyFile(month);
 
-  if (monthlyFile) {
-    const puzzle = monthlyFile.puzzles[String(puzzleNumber)];
+  if (puzzles) {
+    const puzzle = puzzles[String(puzzleNumber)];
     if (puzzle) {
       return convertAssignedPuzzle(puzzle, date);
     }
@@ -1021,32 +992,7 @@ export async function getPoolPuzzles(): Promise<PoolPuzzle[]> {
  * Returns a Map of puzzleNumber -> puzzleId
  */
 export async function getPuzzleIdsForRange(startNum: number, endNum: number): Promise<Map<number, string>> {
-  const result = new Map<number, string>();
-
-  // Group puzzle numbers by month to minimize file loads
-  const monthGroups = new Map<string, number[]>();
-  for (let num = startNum; num <= endNum; num++) {
-    const month = getMonthForPuzzleNumber(num);
-    if (!monthGroups.has(month)) {
-      monthGroups.set(month, []);
-    }
-    monthGroups.get(month)!.push(num);
-  }
-
-  // Load each month's file and extract puzzleIds
-  for (const [month, puzzleNumbers] of monthGroups) {
-    const monthlyFile = await fetchMonthlyFile(month);
-    if (monthlyFile) {
-      for (const num of puzzleNumbers) {
-        const puzzle = monthlyFile.puzzles[String(num)];
-        if (puzzle?.id) {
-          result.set(num, puzzle.id);
-        }
-      }
-    }
-  }
-
-  return result;
+  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'dabble');
 }
 
 /**
@@ -1064,9 +1010,9 @@ export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number
     const month = String(checkDate.getMonth() + 1).padStart(2, '0');
     const monthKey = `${year}-${month}`;
 
-    const monthlyFile = await fetchMonthlyFile(monthKey);
-    if (monthlyFile) {
-      for (const [numStr, puzzle] of Object.entries(monthlyFile.puzzles)) {
+    const puzzles = await fetchMonthlyFile(monthKey);
+    if (puzzles) {
+      for (const [numStr, puzzle] of Object.entries(puzzles)) {
         const num = parseInt(numStr, 10);
         if (num > todayPuzzleNumber) {
           results.push({ puzzleNumber: num, puzzle });
