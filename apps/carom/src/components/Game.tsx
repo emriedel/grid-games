@@ -44,11 +44,11 @@ function CaromResultsModal({
 }: CaromResultsModalProps) {
   const movesText = moveCount === 1 ? 'move' : 'moves';
 
-  // Build share text - no arrow emojis, include trophy if optimal (next to moves)
-  const trophyPart = achievedOptimal ? ' 🏆' : '';
+  // Build share text - no arrow emojis, include trophy if optimal, checkmark otherwise
+  const resultEmoji = achievedOptimal ? ' 🏆' : ' ✅';
   const baseUrl = 'https://nerdcube.games/carom';
   const puzzleUrl = isArchive ? `${baseUrl}?puzzle=${puzzleNumber}` : baseUrl;
-  const shareText = `Carom #${puzzleNumber}\n${moveCount} ${movesText}${trophyPart}\n\n${puzzleUrl}`;
+  const shareText = `Carom #${puzzleNumber}\n${moveCount} ${movesText}${resultEmoji}\n\n${puzzleUrl}`;
 
   return (
     <ResultsModal
