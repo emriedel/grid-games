@@ -26,7 +26,8 @@ import { TIMER_DURATION } from '@/constants/gameConfig';
 import { useTimer } from './useTimer';
 
 // Base date for puzzle numbering
-const PUZZLE_BASE_DATE = new Date('2026-01-01');
+// IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
+const PUZZLE_BASE_DATE = new Date('2026-01-01T00:00:00');
 
 interface UseGameStateProps {
   /** Optional puzzle number for archive mode */

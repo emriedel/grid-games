@@ -208,6 +208,17 @@ apps/[game]/
 
 ## Common Gotchas
 
+**Date parsing for puzzle base dates - ALWAYS include 'T00:00:00':**
+```tsx
+// BAD - JavaScript interprets as UTC midnight, which is PREVIOUS day in US timezones!
+const PUZZLE_BASE_DATE = new Date('2026-02-01');  // Actually Jan 31 in PST!
+
+// GOOD - Forces local timezone interpretation
+const PUZZLE_BASE_DATE = new Date('2026-02-01T00:00:00');
+```
+
+This causes off-by-one puzzle numbering bugs. When `new Date('2026-02-01')` is normalized to local midnight, it becomes Jan 31st, making Feb 9 = puzzle #10 instead of #9.
+
 **useSearchParams needs Suspense:**
 ```tsx
 <Suspense fallback={<Loading />}><Game /></Suspense>

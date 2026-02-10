@@ -2,7 +2,8 @@ import { getPuzzleNumber } from '@grid-games/shared';
 import { Piece, Move } from '@/types';
 
 // Launch date for Carom - puzzle #1 starts on this date
-const PUZZLE_BASE_DATE = new Date('2026-02-01');
+// IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
+const PUZZLE_BASE_DATE = new Date('2026-02-01T00:00:00');
 
 /**
  * Get today's puzzle number

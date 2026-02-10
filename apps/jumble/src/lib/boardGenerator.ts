@@ -22,7 +22,8 @@ function dateToSeed(date: Date): number {
 
 // Get puzzle number (days since epoch date)
 export function getPuzzleNumber(date: Date = new Date()): number {
-  const epoch = new Date('2024-01-01');
+  // IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
+  const epoch = new Date('2024-01-01T00:00:00');
   const diffTime = date.getTime() - epoch.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   return diffDays + 1;

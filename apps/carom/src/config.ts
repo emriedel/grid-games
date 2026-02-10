@@ -11,8 +11,9 @@ export const caromTheme = {
 };
 
 // Launch date for Carom - puzzle #1 starts on this date
+// IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
 export const CAROM_LAUNCH_DATE_STRING = '2026-02-01';
-export const CAROM_LAUNCH_DATE = new Date(CAROM_LAUNCH_DATE_STRING);
+export const CAROM_LAUNCH_DATE = new Date(CAROM_LAUNCH_DATE_STRING + 'T00:00:00');
 
 export const caromConfig = defineGameConfig({
   id: 'carom',

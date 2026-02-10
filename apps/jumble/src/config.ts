@@ -2,7 +2,8 @@ import { defineGameConfig, jumbleTheme } from '@grid-games/config';
 import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-games/shared';
 
 // Base date for puzzle numbering (first puzzle date)
-const PUZZLE_BASE_DATE = new Date('2026-01-01');
+// IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
+const PUZZLE_BASE_DATE = new Date('2026-01-01T00:00:00');
 
 export const jumbleConfig = defineGameConfig({
   id: 'jumble',

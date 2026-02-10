@@ -126,7 +126,10 @@ Create `apps/new-game/src/config.ts`:
 import { defineGameConfig } from '@grid-games/config';
 import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-games/shared';
 
-const PUZZLE_BASE_DATE = new Date('2026-01-01');
+// CRITICAL: Always include 'T00:00:00' when creating Date objects from date strings!
+// Without it, JavaScript interprets the date as UTC midnight, which becomes the
+// PREVIOUS day in US timezones, causing off-by-one errors in puzzle numbering.
+const PUZZLE_BASE_DATE = new Date('2026-01-01T00:00:00');
 
 // Base path for assets (set via NEXT_PUBLIC_BASE_PATH on Vercel)
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -335,6 +338,8 @@ import { ArchivePage } from '@grid-games/ui';
 import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber } from '@/lib/storage';
 
 // Match your game's launch date
+// NOTE: This is a string, not a Date object. When converting to Date,
+// always use: new Date(PUZZLE_BASE_DATE + 'T00:00:00')
 const PUZZLE_BASE_DATE = '2026-01-01';
 
 export function ArchivePageContent() {
@@ -472,6 +477,7 @@ The web app will automatically redeploy with the new rewrites.
 - [ ] Theme CSS variables defined in globals.css
 - [ ] Storage module created (`src/lib/storage.ts`)
 - [ ] Game config created in src/config.ts
+- [ ] **Date parsing uses 'T00:00:00' suffix** (e.g., `new Date('2026-01-01T00:00:00')`)
 - [ ] Game.tsx uses shared LandingScreen, NavBar, GameContainer, ResultsModal
 - [ ] **State persistence verified:**
   - [ ] In-progress state saves/restores correctly
