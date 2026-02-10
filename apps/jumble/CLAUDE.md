@@ -46,11 +46,15 @@ Then open http://localhost:3002
 ### Scoring
 | Word Length | Points |
 |-------------|--------|
-| 3-4 letters | 1 |
-| 5 letters | 2 |
-| 6 letters | 3 |
-| 7 letters | 5 |
-| 8+ letters | 11 |
+| 3 letters | 1 |
+| 4 letters | 2 |
+| 5 letters | 4 |
+| 6+ letters | 8 |
+
+### Star Thresholds
+- 15+ points = 1 star
+- 30+ points = 2 stars
+- 45+ points = 3 stars
 
 ## File Structure
 

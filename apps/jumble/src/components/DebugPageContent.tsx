@@ -39,12 +39,12 @@ function isLocalhost(): boolean {
   return hostname === 'localhost' || hostname === '127.0.0.1';
 }
 
-// Calculate star threshold values from maxPossibleScore
-function getStarThresholdValues(maxPossibleScore: number): { star1: number; star2: number; star3: number } {
+// Get fixed star threshold values
+function getStarThresholdValues(): { star1: number; star2: number; star3: number } {
   return {
-    star1: Math.round(maxPossibleScore * STAR_THRESHOLDS.star1Percent),
-    star2: Math.round(maxPossibleScore * STAR_THRESHOLDS.star2Percent),
-    star3: Math.round(maxPossibleScore * STAR_THRESHOLDS.star3Percent),
+    star1: STAR_THRESHOLDS.star1,
+    star2: STAR_THRESHOLDS.star2,
+    star3: STAR_THRESHOLDS.star3,
   };
 }
 
@@ -166,7 +166,7 @@ export function DebugPageContent() {
 
   const currentEntry = puzzles[currentIndex];
   const puzzle = currentEntry.puzzle;
-  const thresholdValues = getStarThresholdValues(puzzle.maxPossibleScore);
+  const thresholdValues = getStarThresholdValues();
 
   return (
     <GameContainer

@@ -4,11 +4,9 @@ export const MIN_WORD_LENGTH = 3;
 
 export const SCORING_TABLE: Record<number, number> = {
   3: 1,
-  4: 1,
-  5: 2,
-  6: 3,
-  7: 5,
-  8: 11,
+  4: 2,
+  5: 4,
+  6: 8,
 };
 
 // Standard Big Boggle dice (25 dice for 5x5 grid)
@@ -43,25 +41,20 @@ export const BOGGLE_DICE = [
 // For display purposes, Qu is shown as a single tile
 export const QU_DISPLAY = 'Qu';
 
-// Star thresholds - percentage of max possible score needed for each star
-// Jumble's maxPossibleScore is the sum of ALL valid word scores on the board
-// More lenient thresholds make 3 stars attainable for dedicated players
-// In 90 seconds, even expert players rarely exceed 60% of possible words
+// Star thresholds - fixed score values for each star level
 export const STAR_THRESHOLDS = {
-  star1Percent: 0.15, // 15% of max possible score
-  star2Percent: 0.35, // 35% of max possible score
-  star3Percent: 0.55, // 55% of max possible score
+  star1: 15,
+  star2: 30,
+  star3: 45,
 };
 
 /**
- * Calculate star rating based on score and max possible score
+ * Calculate star rating based on score
  */
-export function calculateStars(score: number, maxPossibleScore: number): number {
-  if (maxPossibleScore === 0) return 0;
-  const percentage = score / maxPossibleScore;
-  if (percentage >= STAR_THRESHOLDS.star3Percent) return 3;
-  if (percentage >= STAR_THRESHOLDS.star2Percent) return 2;
-  if (percentage >= STAR_THRESHOLDS.star1Percent) return 1;
+export function calculateStars(score: number): number {
+  if (score >= STAR_THRESHOLDS.star3) return 3;
+  if (score >= STAR_THRESHOLDS.star2) return 2;
+  if (score >= STAR_THRESHOLDS.star1) return 1;
   return 0;
 }
 

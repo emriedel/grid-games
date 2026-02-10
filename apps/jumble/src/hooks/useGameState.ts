@@ -18,7 +18,7 @@ import {
   getPuzzleFromPool,
   type DailyPuzzle,
 } from '@/lib/puzzleGenerator';
-import { TIMER_DURATION, calculateStars } from '@/constants/gameConfig';
+import { TIMER_DURATION, calculateStars, STAR_THRESHOLDS } from '@/constants/gameConfig';
 import { useTimer } from './useTimer';
 
 interface UseGameStateProps {
@@ -93,8 +93,8 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
 
   // Calculate stars based on score
   const stars = useMemo(() => {
-    return calculateStars(totalScore, maxPossibleScore);
-  }, [totalScore, maxPossibleScore]);
+    return calculateStars(totalScore);
+  }, [totalScore]);
 
   // Check if word already found
   const isWordAlreadyFound = useCallback(
@@ -141,11 +141,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
           console.log('[Jumble Debug] Puzzle ID:', puzzle.puzzleId);
           console.log('[Jumble Debug] Max possible score:', puzzle.maxPossibleScore);
           console.log('[Jumble Debug] Total words:', validWords.size);
-          console.log('[Jumble Debug] Star thresholds:', {
-            star1: Math.round(puzzle.maxPossibleScore * 0.15),
-            star2: Math.round(puzzle.maxPossibleScore * 0.35),
-            star3: Math.round(puzzle.maxPossibleScore * 0.55),
-          });
+          console.log('[Jumble Debug] Star thresholds:', STAR_THRESHOLDS);
           console.log('[Jumble Debug] Pre-generated:', puzzle.isPreGenerated);
         }
 
@@ -233,7 +229,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
   // Save completion state when game finishes
   useEffect(() => {
     if (status === 'finished' && foundWords.length > 0 && puzzleId) {
-      const finalStars = calculateStars(totalScore, maxPossibleScore);
+      const finalStars = calculateStars(totalScore);
       savePuzzleState(
         puzzleNumber || activePuzzleNumber,
         {
