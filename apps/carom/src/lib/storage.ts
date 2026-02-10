@@ -109,10 +109,11 @@ export function saveGameCompletion(moveCount: number, optimalMoves: number, move
 
 /**
  * Get today's completion state (legacy compatibility)
+ * Uses findPuzzleState to scan for any matching key pattern
  */
 export function getCompletionState(): CompletionState | null {
   const puzzleNumber = getTodayPuzzleNumber();
-  const state = getPuzzleState(puzzleNumber);
+  const state = findPuzzleState(puzzleNumber);
   if (state?.status === 'completed') {
     return {
       date: '', // Date is not stored in new format
@@ -142,10 +143,11 @@ export function saveInProgressState(pieces: Piece[], moveCount: number, moveHist
 
 /**
  * Get today's in-progress state (legacy compatibility)
+ * Uses findPuzzleState to scan for any matching key pattern
  */
 export function getInProgressState(): InProgressState | null {
   const puzzleNumber = getTodayPuzzleNumber();
-  const state = getPuzzleState(puzzleNumber);
+  const state = findPuzzleState(puzzleNumber);
   if (state?.status === 'in-progress') {
     return {
       date: '', // Date is not stored in new format
@@ -166,16 +168,18 @@ export function clearInProgressState(): void {
 
 /**
  * Check if today's puzzle was already completed (legacy compatibility)
+ * Uses isPuzzleCompletedAny to scan for any matching key pattern
  */
 export function isTodayCompleted(): boolean {
-  return isPuzzleCompleted(getTodayPuzzleNumber());
+  return isPuzzleCompletedAny(getTodayPuzzleNumber());
 }
 
 /**
  * Check if there's an in-progress game for today (legacy compatibility)
+ * Uses isPuzzleInProgressAny to scan for any matching key pattern
  */
 export function hasInProgressGame(): boolean {
-  return isPuzzleInProgress(getTodayPuzzleNumber());
+  return isPuzzleInProgressAny(getTodayPuzzleNumber());
 }
 
 /**
