@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, getDateForPuzzleNumber } from '@grid-games/shared';
+import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
 import { caromConfig, CAROM_LAUNCH_DATE_STRING } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { getDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleGenerator';
@@ -95,6 +95,17 @@ export function Game() {
   const isPoolMode = isDebug && poolIdParam !== null;
   const todayPuzzleNumber = getTodayPuzzleNumber();
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
+
+  const router = useRouter();
+
+  // Block access to future puzzles (unless in debug mode)
+  useEffect(() => {
+    if (isArchiveMode && !isDebug && archivePuzzleNumber !== null) {
+      if (!isValidPuzzleNumber(PUZZLE_BASE_DATE_OBJ, archivePuzzleNumber)) {
+        router.replace('/');
+      }
+    }
+  }, [isArchiveMode, isDebug, archivePuzzleNumber, router]);
 
   const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
   const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, replay, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber, puzzleId: activePuzzleId });

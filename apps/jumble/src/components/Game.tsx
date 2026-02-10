@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, getTodayDateString, getDateForPuzzleNumber } from '@grid-games/shared';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { LandingScreen, NavBar, GameContainer, ResultsModal } from '@grid-games/ui';
+import { formatDisplayDate, getTodayDateString, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
 import { getTodayPuzzleNumber } from '@/lib/storage';
 import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
@@ -149,6 +149,17 @@ export default function Game() {
   // Determine if this is archive mode
   const archivePuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : null;
   const todayPuzzleNumber = getTodayPuzzleNumber();
+
+  const router = useRouter();
+
+  // Block access to future puzzles (unless in debug mode)
+  useEffect(() => {
+    if (archivePuzzleNumber !== null && !isDebug) {
+      if (!isValidPuzzleNumber(PUZZLE_BASE_DATE_OBJ, archivePuzzleNumber)) {
+        router.replace('/');
+      }
+    }
+  }, [archivePuzzleNumber, isDebug, router]);
 
   const {
     board,
@@ -386,10 +397,15 @@ export default function Game() {
 
       {/* Debug Panel */}
       {isDebug && (
-        <DebugPanel>
+        <div className="fixed bottom-4 left-4 p-4 bg-black/80 rounded-lg text-sm text-white space-y-2">
           <div>Words: {allValidWords.size} | Max: {maxPossibleScore}pts</div>
-          <DebugButton onClick={regeneratePuzzle} />
-        </DebugPanel>
+          <button
+            onClick={regeneratePuzzle}
+            className="px-3 py-1 bg-[var(--accent)] rounded text-white text-sm hover:opacity-90"
+          >
+            Regenerate
+          </button>
+        </div>
       )}
     </GameContainer>
   );

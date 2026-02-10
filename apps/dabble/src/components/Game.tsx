@@ -12,14 +12,14 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal } from '@grid-games/ui';
-import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber } from '@grid-games/shared';
+import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
 import { WordList } from './WordList';
 import { HowToPlayModal } from './HowToPlayModal';
 import { getLetterUsageBonus, STAR_THRESHOLDS } from '@/constants/gameConfig';
 import { DragOverlayTile } from './Tile';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { fetchDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleGenerator';
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
@@ -172,6 +172,17 @@ export function Game() {
 
   // Get the puzzle number to use (archive or today)
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
+
+  const router = useRouter();
+
+  // Block access to future puzzles (unless in debug mode)
+  useEffect(() => {
+    if (isArchiveMode && !debugMode && archivePuzzleNumber !== null) {
+      if (!isValidPuzzleNumber(PUZZLE_BASE_DATE, archivePuzzleNumber)) {
+        router.replace('/');
+      }
+    }
+  }, [isArchiveMode, debugMode, archivePuzzleNumber, router]);
 
   const [gameState, setGameState] = useState<GameState>('landing');
   const [puzzle, setPuzzle] = useState<DailyPuzzle | null>(null);
