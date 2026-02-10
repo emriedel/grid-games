@@ -47,8 +47,6 @@ Check `packages/ui/` before creating components:
 | `ArchivePage` | Full-page archive listing for past puzzles |
 | `ToastProvider` / `useToast` | Toast notifications |
 | `Skeleton` | Loading placeholders |
-| `DebugPanel` | Fixed debug info panel (purple styling) |
-| `DebugButton` | Debug action button (purple styling) |
 
 ```tsx
 import { Modal, Button, LandingScreen, NavBar, GameContainer } from '@grid-games/ui';
@@ -229,25 +227,28 @@ import { loadDictionary, isValidWord } from '@grid-games/dictionary';
 
 All games support debug mode via `?debug=true` query parameter. Debug mode:
 - Bypasses localStorage saved state (start fresh every time)
-- Shows a purple debug panel with:
-  - Game-specific info (optimal moves, word counts, etc.)
-  - "New Puzzle" button to regenerate with random puzzle
+- Outputs debug info to browser console only (no on-screen panel)
 
 ```
 http://localhost:3001?debug=true
 ```
 
-Use shared debug components:
-```tsx
-import { DebugPanel, DebugButton } from '@grid-games/ui';
+Console output includes game-specific info like puzzle number, optimal moves, thresholds, etc.
 
-{isDebug && (
-  <DebugPanel>
-    <div>Debug info here</div>
-    <DebugButton onClick={handleNewPuzzle} />
-  </DebugPanel>
-)}
+### Debug Page (Puzzle Browser)
+
+Each game has a `/debug` page for browsing unpublished puzzles (localhost only):
+
 ```
+http://localhost:3001/debug    # Dabble puzzle browser
+http://localhost:3004/debug    # Carom puzzle browser
+```
+
+Features:
+- Browse pool puzzles (unassigned) and future assigned puzzles
+- View puzzle details (optimal moves, solution path, thresholds, etc.)
+- "Play This Puzzle" button to test any puzzle
+- Only available on localhost - shows "not available" on production
 
 ---
 

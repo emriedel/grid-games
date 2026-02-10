@@ -186,9 +186,20 @@ Uses `@dnd-kit/core` for tile dragging:
 - `TouchSensor` with 150ms hold delay (allows normal taps)
 
 ### Debug Mode
-Add `?debug=true` to URL to enable:
-- "New Puzzle" button for testing different boards
-- Board archetype logging
+
+Add `?debug=true` to URL:
+- Bypasses localStorage saved state (start fresh every time)
+- Console-only output (no on-screen panel):
+  - `[Dabble Debug] Board archetype: X`
+  - `[Dabble Debug] Thresholds: { heuristicMax, star1, star2, star3 }`
+
+### Debug Page (Puzzle Browser)
+
+Visit `http://localhost:3001/debug` to browse unpublished puzzles:
+- Shows pool puzzles (unassigned) and future assigned puzzles
+- Displays puzzle info: archetype, letters, heuristic max, star thresholds
+- "Play This Puzzle" button navigates to `/?debug=true&poolId=X` or `/?puzzle=X&debug=true`
+- Only available on localhost
 
 ### Puzzle Generation
 - Uses `seedrandom` with date string as seed

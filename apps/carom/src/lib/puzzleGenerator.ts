@@ -23,6 +23,19 @@ import { CAROM_LAUNCH_DATE, CAROM_LAUNCH_DATE_STRING } from '@/config';
 // Cache for monthly puzzle files
 const monthlyFileCache: Map<string, Record<string, PrecomputedPuzzle>> = new Map();
 
+// Pool puzzle interface (matches script output)
+interface PoolPuzzle extends PrecomputedPuzzle {
+  id: string;
+}
+
+interface PoolFile {
+  generatedAt: string;
+  puzzles: PoolPuzzle[];
+}
+
+// Cache for pool file
+let poolCache: PoolFile | null = null;
+
 /**
  * Get the month key (YYYY-MM) for a puzzle number
  */
@@ -99,6 +112,7 @@ function hydratePuzzle(precomputed: PrecomputedPuzzle, date: string, puzzleNumbe
     optimalMoves: precomputed.optimalMoves,
     date,
     puzzleNumber,
+    solutionPath: precomputed.solutionPath,
   };
 }
 
@@ -156,6 +170,86 @@ export async function generateRandomPuzzle(): Promise<Puzzle> {
   // Fallback
   const randomSeed = `random-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   return generateFallbackPuzzle(randomSeed);
+}
+
+/**
+ * Load the puzzle pool file
+ */
+async function loadPool(): Promise<PoolFile | null> {
+  if (poolCache) {
+    return poolCache;
+  }
+
+  try {
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const response = await fetch(`${basePath}/puzzles/pool.json`);
+    if (!response.ok) {
+      console.warn(`Pool file not found (status ${response.status})`);
+      return null;
+    }
+    const data = await response.json() as PoolFile;
+    poolCache = data;
+    return data;
+  } catch (error) {
+    console.warn('Failed to load pool file:', error);
+    return null;
+  }
+}
+
+/**
+ * Get a puzzle from the pool by its ID (for debug page)
+ */
+export async function getPuzzleFromPool(poolId: string): Promise<Puzzle | null> {
+  const pool = await loadPool();
+  if (!pool) {
+    return null;
+  }
+
+  const poolPuzzle = pool.puzzles.find((p) => p.id === poolId);
+  if (!poolPuzzle) {
+    return null;
+  }
+
+  // Use a synthetic date for pool puzzles
+  const date = `pool-${poolId}`;
+  return hydratePuzzle(poolPuzzle, date, 0);
+}
+
+/**
+ * Get all pool puzzles (for debug page)
+ */
+export async function getPoolPuzzles(): Promise<PoolPuzzle[]> {
+  const pool = await loadPool();
+  return pool?.puzzles || [];
+}
+
+/**
+ * Get future assigned puzzles (puzzle numbers greater than today's)
+ */
+export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number; puzzle: PrecomputedPuzzle }[]> {
+  const todayPuzzleNumber = getPuzzleNumber(CAROM_LAUNCH_DATE, new Date());
+  const results: { puzzleNumber: number; puzzle: PrecomputedPuzzle }[] = [];
+
+  // Check current and next few months
+  const today = new Date();
+  for (let monthOffset = 0; monthOffset <= 3; monthOffset++) {
+    const checkDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+    const year = checkDate.getFullYear();
+    const month = String(checkDate.getMonth() + 1).padStart(2, '0');
+    const monthKey = `${year}-${month}`;
+
+    const puzzles = await loadMonthlyFile(monthKey);
+    if (puzzles) {
+      for (const [numStr, puzzle] of Object.entries(puzzles)) {
+        const num = parseInt(numStr, 10);
+        if (num > todayPuzzleNumber) {
+          results.push({ puzzleNumber: num, puzzle });
+        }
+      }
+    }
+  }
+
+  return results.sort((a, b) => a.puzzleNumber - b.puzzleNumber);
 }
 
 // =====================================================

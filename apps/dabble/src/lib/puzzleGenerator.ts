@@ -948,3 +948,98 @@ export function generateRandomPuzzle(): DailyPuzzle {
     archetype,
   };
 }
+
+// =====================================================
+// Debug page functions
+// =====================================================
+
+// Pool puzzle format (from scripts/generatePuzzles.ts)
+interface PoolPuzzle extends AssignedPuzzle {
+  // Same structure as AssignedPuzzle
+}
+
+interface PoolFile {
+  generatedAt: string;
+  puzzles: PoolPuzzle[];
+}
+
+// Cache for pool file
+let poolCache: PoolFile | null = null;
+
+/**
+ * Load the puzzle pool file
+ */
+async function loadPool(): Promise<PoolFile | null> {
+  if (poolCache) {
+    return poolCache;
+  }
+
+  try {
+    const response = await fetch('/puzzles/pool.json');
+    if (!response.ok) {
+      console.warn(`Pool file not found (status ${response.status})`);
+      return null;
+    }
+    const data = await response.json() as PoolFile;
+    poolCache = data;
+    return data;
+  } catch (error) {
+    console.warn('Failed to load pool file:', error);
+    return null;
+  }
+}
+
+/**
+ * Get a puzzle from the pool by its ID (for debug page)
+ */
+export async function getPuzzleFromPool(poolId: string): Promise<DailyPuzzle | null> {
+  const pool = await loadPool();
+  if (!pool) {
+    return null;
+  }
+
+  const poolPuzzle = pool.puzzles.find((p) => p.id === poolId);
+  if (!poolPuzzle) {
+    return null;
+  }
+
+  // Convert to DailyPuzzle format
+  return convertAssignedPuzzle(poolPuzzle, `pool-${poolId}`);
+}
+
+/**
+ * Get all pool puzzles (for debug page)
+ */
+export async function getPoolPuzzles(): Promise<PoolPuzzle[]> {
+  const pool = await loadPool();
+  return pool?.puzzles || [];
+}
+
+/**
+ * Get future assigned puzzles (puzzle numbers greater than today's)
+ */
+export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number; puzzle: AssignedPuzzle }[]> {
+  const todayPuzzleNumber = getPuzzleNumberForDate(getTodayDateString());
+  const results: { puzzleNumber: number; puzzle: AssignedPuzzle }[] = [];
+
+  // Check current and next few months
+  const today = new Date();
+  for (let monthOffset = 0; monthOffset <= 3; monthOffset++) {
+    const checkDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+    const year = checkDate.getFullYear();
+    const month = String(checkDate.getMonth() + 1).padStart(2, '0');
+    const monthKey = `${year}-${month}`;
+
+    const monthlyFile = await fetchMonthlyFile(monthKey);
+    if (monthlyFile) {
+      for (const [numStr, puzzle] of Object.entries(monthlyFile.puzzles)) {
+        const num = parseInt(numStr, 10);
+        if (num > todayPuzzleNumber) {
+          results.push({ puzzleNumber: num, puzzle });
+        }
+      }
+    }
+  }
+
+  return results.sort((a, b) => a.puzzleNumber - b.puzzleNumber);
+}

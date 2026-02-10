@@ -179,14 +179,29 @@ The script generates puzzles with:
 ## Debug Mode
 
 Add `?debug=true` to URL:
-- Shows optimal move count in header
-- Shows puzzle date
-- Shows selected piece ID
-- Purple "New Puzzle" button to regenerate random puzzles
-- Console logging:
+- Bypasses localStorage saved state (start fresh every time)
+- Console-only output (no on-screen panel):
   - `[Carom Debug] Puzzle #X`
+  - `[Carom Debug] Date: YYYY-MM-DD`
   - `[Carom Debug] Optimal moves: X`
   - `[Carom Debug] Optimal solution: target up -> blocker-0 right -> ...`
+
+### Debug Page (Puzzle Browser)
+
+Visit `http://localhost:3004/debug` to browse unpublished puzzles:
+- Shows pool puzzles (unassigned) and future assigned puzzles
+- Displays puzzle info: optimal moves, solution path, piece positions
+- "Play This Puzzle" button navigates to `/?debug=true&poolId=X` or `/?puzzle=X&debug=true`
+- Only available on localhost
+
+### Solution Path
+
+Puzzles now include pre-computed solution paths (`solutionPath` field):
+```typescript
+solutionPath?: { pieceId: string; direction: Direction }[];
+```
+
+This avoids re-computing the solution at runtime for debug output.
 
 ## UI Components
 

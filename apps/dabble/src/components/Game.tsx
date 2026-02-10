@@ -11,7 +11,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal, Modal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal } from '@grid-games/ui';
 import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
@@ -20,7 +20,7 @@ import { HowToPlayModal } from './HowToPlayModal';
 import { getLetterUsageBonus, STAR_THRESHOLDS } from '@/constants/gameConfig';
 import { DragOverlayTile } from './Tile';
 import { useSearchParams } from 'next/navigation';
-import { generateDailyPuzzle, generateRandomPuzzle, fetchDailyPuzzle } from '@/lib/puzzleGenerator';
+import { fetchDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleGenerator';
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import {
@@ -162,10 +162,12 @@ export function Game() {
   const searchParams = useSearchParams();
   const debugMode = searchParams.get('debug') === 'true';
   const puzzleParam = searchParams.get('puzzle');
+  const poolIdParam = searchParams.get('poolId');
 
-  // Determine if this is archive mode
+  // Determine if this is archive mode or pool mode
   const archivePuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : null;
   const isArchiveMode = archivePuzzleNumber !== null && !isNaN(archivePuzzleNumber) && archivePuzzleNumber >= 1;
+  const isPoolMode = debugMode && poolIdParam !== null;
   const todayPuzzleNumber = getTodayPuzzleNumber();
 
   // Get the puzzle number to use (archive or today)
@@ -212,12 +214,27 @@ export function Game() {
     async function init() {
       await loadDictionary();
 
-      // Fetch puzzle for the active puzzle number (uses pre-generated with thresholds if available)
-      // For archive mode, we need to get the date string for that puzzle number
-      const puzzleDateString = isArchiveMode
-        ? getDateForPuzzleNumber(PUZZLE_BASE_DATE, activePuzzleNumber)
-        : undefined; // undefined = today
-      const dailyPuzzle = await fetchDailyPuzzle(puzzleDateString);
+      let dailyPuzzle: DailyPuzzle;
+
+      // Pool mode: load from pool by ID (debug only)
+      if (isPoolMode && poolIdParam) {
+        const poolPuzzle = await getPuzzleFromPool(poolIdParam);
+        if (poolPuzzle) {
+          dailyPuzzle = poolPuzzle;
+        } else {
+          console.error('Pool puzzle not found:', poolIdParam);
+          // Fall back to daily puzzle
+          dailyPuzzle = await fetchDailyPuzzle();
+        }
+      } else {
+        // Fetch puzzle for the active puzzle number (uses pre-generated with thresholds if available)
+        // For archive mode, we need to get the date string for that puzzle number
+        const puzzleDateString = isArchiveMode
+          ? getDateForPuzzleNumber(PUZZLE_BASE_DATE, activePuzzleNumber)
+          : undefined; // undefined = today
+        dailyPuzzle = await fetchDailyPuzzle(puzzleDateString);
+      }
+
       setPuzzle(dailyPuzzle);
       setRackLetters(dailyPuzzle.letters);
 
@@ -277,12 +294,16 @@ export function Game() {
         }
       } else {
         setBoard(dailyPuzzle.board);
+        if (isPoolMode) {
+          // Pool mode: start game immediately
+          setGameState('playing');
+        }
       }
 
       setIsLoading(false);
     }
     init();
-  }, [debugMode, isArchiveMode, activePuzzleNumber]);
+  }, [debugMode, isArchiveMode, isPoolMode, poolIdParam, activePuzzleNumber]);
 
   // Log puzzle info in debug mode
   useEffect(() => {
@@ -465,24 +486,6 @@ export function Game() {
       },
     });
   }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber]);
-
-  // Generate a new random puzzle (debug mode only)
-  const handleNewPuzzle = useCallback(() => {
-    const newPuzzle = generateRandomPuzzle();
-    setPuzzle(newPuzzle);
-    setBoard(newPuzzle.board);
-    setRackLetters(newPuzzle.letters);
-    setPlacedTiles([]);
-    setUsedRackIndices(new Set());
-    setLockedRackIndices(new Set());
-    setSelectedRackIndex(null);
-    setSelectedCell(null);
-    setSubmittedWords([]);
-    setTurnCount(0);
-    setTotalScore(0);
-    setError(null);
-    setGameState('playing');
-  }, []);
 
   // Replay the same puzzle (clear state and start fresh)
   const handleReplay = useCallback(() => {
@@ -702,13 +705,6 @@ export function Game() {
           />
         }
       >
-        {/* Debug Panel */}
-        {debugMode && (
-          <DebugPanel>
-            <DebugButton onClick={handleNewPuzzle} />
-          </DebugPanel>
-        )}
-
         {/* Main game area */}
         <div className="flex flex-col items-center gap-4 w-full py-2">
           {/* Game Board with score popup */}

@@ -3,11 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
 import { formatDisplayDate, getDateForPuzzleNumber } from '@grid-games/shared';
 import { caromConfig, CAROM_LAUNCH_DATE_STRING } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
-import { getDailyPuzzle, generateRandomPuzzle } from '@/lib/puzzleGenerator';
+import { getDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleGenerator';
 import {
   getCompletionState,
   getInProgressState,
@@ -16,12 +16,11 @@ import {
   getTodayPuzzleNumber,
   didAchieveOptimal,
 } from '@/lib/storage';
-import { getSolutionPath } from '@/lib/solver';
 import { Board } from './Board';
 import { HeaderMoveCounter } from './HeaderMoveCounter';
 import { HowToPlayModal } from './HowToPlayModal';
 import { OptimalInfoModal } from './OptimalInfoModal';
-import { Direction, Puzzle, Piece } from '@/types';
+import { Direction, Puzzle } from '@/types';
 
 // Carom-specific wrapper for ResultsModal
 interface CaromResultsModalProps {
@@ -88,10 +87,12 @@ export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
   const puzzleParam = searchParams.get('puzzle');
+  const poolIdParam = searchParams.get('poolId');
 
   // Determine if this is archive mode
   const archivePuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : null;
   const isArchiveMode = archivePuzzleNumber !== null && !isNaN(archivePuzzleNumber) && archivePuzzleNumber >= 1;
+  const isPoolMode = isDebug && poolIdParam !== null;
   const todayPuzzleNumber = getTodayPuzzleNumber();
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
 
@@ -110,25 +111,39 @@ export function Game() {
     async function loadPuzzle() {
       setIsLoading(true);
       try {
-        // For archive mode, convert puzzle number to date string
-        const puzzleDateString = isArchiveMode
-          ? getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, activePuzzleNumber)
-          : undefined; // undefined = today
+        let loadedPuzzle: Puzzle;
 
-        const loadedPuzzle = await getDailyPuzzle(puzzleDateString);
+        // Pool mode: load from pool by ID (debug only)
+        if (isPoolMode && poolIdParam) {
+          const poolPuzzle = await getPuzzleFromPool(poolIdParam);
+          if (poolPuzzle) {
+            loadedPuzzle = poolPuzzle;
+          } else {
+            console.error('Pool puzzle not found:', poolIdParam);
+            // Fall back to daily puzzle
+            loadedPuzzle = await getDailyPuzzle();
+          }
+        } else {
+          // For archive mode, convert puzzle number to date string
+          const puzzleDateString = isArchiveMode
+            ? getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, activePuzzleNumber)
+            : undefined; // undefined = today
+
+          loadedPuzzle = await getDailyPuzzle(puzzleDateString);
+        }
+
         setPuzzle(loadedPuzzle);
 
-        // Debug logging
+        // Debug logging - console only
         if (isDebug) {
           console.log('[Carom Debug] Puzzle #' + loadedPuzzle.puzzleNumber);
+          console.log('[Carom Debug] Date:', loadedPuzzle.date);
           console.log('[Carom Debug] Optimal moves:', loadedPuzzle.optimalMoves);
 
-          // Get solution path for debug output
-          const initialPieces: Piece[] = loadedPuzzle.pieces.map(p => ({ ...p }));
-          const solution = getSolutionPath(loadedPuzzle.board, initialPieces);
-          if (solution) {
+          // Use pre-computed solution path if available
+          if (loadedPuzzle.solutionPath) {
             console.log('[Carom Debug] Optimal solution:',
-              solution.map(m => `${m.pieceId} ${m.direction}`).join(' -> '));
+              loadedPuzzle.solutionPath.map(m => `${m.pieceId} ${m.direction}`).join(' -> '));
           }
         }
 
@@ -179,6 +194,10 @@ export function Game() {
             }
             // Today: stay on landing (fresh)
           }
+        } else if (isPoolMode) {
+          // Pool mode in debug: start game immediately
+          setWasPlayingThisSession(true);
+          startGame(loadedPuzzle);
         }
       } catch (error) {
         console.error('Failed to load puzzle:', error);
@@ -188,7 +207,7 @@ export function Game() {
     }
 
     loadPuzzle();
-  }, [isDebug, isArchiveMode, activePuzzleNumber]);
+  }, [isDebug, isArchiveMode, isPoolMode, poolIdParam, activePuzzleNumber]);
 
   // Handle game start (fresh)
   const handlePlay = useCallback(() => {
@@ -269,28 +288,6 @@ export function Game() {
       return () => clearTimeout(timer);
     }
   }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession, activePuzzleNumber]);
-
-  // Handle new random puzzle (debug mode)
-  const handleNewPuzzle = useCallback(async () => {
-    const newPuzzle = await generateRandomPuzzle();
-    setPuzzle(newPuzzle);
-    setAchievedOptimal(false);
-
-    // Debug logging for new puzzle
-    if (isDebug) {
-      console.log('[Carom Debug] Puzzle #' + newPuzzle.puzzleNumber);
-      console.log('[Carom Debug] Optimal moves:', newPuzzle.optimalMoves);
-
-      const initialPieces: Piece[] = newPuzzle.pieces.map(p => ({ ...p }));
-      const solution = getSolutionPath(newPuzzle.board, initialPieces);
-      if (solution) {
-        console.log('[Carom Debug] Optimal solution:',
-          solution.map(m => `${m.pieceId} ${m.direction}`).join(' -> '));
-      }
-    }
-
-    startGame(newPuzzle);
-  }, [startGame, isDebug]);
 
   // Handle replay - reset game state and start fresh
   const handleReplay = useCallback(() => {
@@ -421,15 +418,6 @@ export function Game() {
             </div>
           )}
 
-          {/* Debug Panel */}
-          {isDebug && state.puzzle && (
-            <DebugPanel>
-              <div>Optimal: {state.puzzle.optimalMoves} moves</div>
-              <div>Date: {state.puzzle.date}</div>
-              <div>Selected: {state.selectedPieceId || 'none'}</div>
-              <DebugButton onClick={handleNewPuzzle} />
-            </DebugPanel>
-          )}
         </div>
       </GameContainer>
 

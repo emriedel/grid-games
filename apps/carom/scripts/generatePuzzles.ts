@@ -61,6 +61,7 @@ export interface PoolPuzzle {
   goal: { row: number; col: number };
   pieces: { id: string; type: PieceType; row: number; col: number }[];
   optimalMoves: number;
+  solutionPath?: { pieceId: string; direction: Direction }[];
 }
 
 interface PoolFile {
@@ -454,7 +455,7 @@ function tryGeneratePuzzle(
   board: Board,
   lWallPlacements: LWallPlacement[],
   rng: RNG
-): { pieces: Piece[]; optimalMoves: number; piecesUsed: number } | null {
+): { pieces: Piece[]; optimalMoves: number; piecesUsed: number; solutionPath: Move[] } | null {
   if (lWallPlacements.length === 0) return null;
 
   const shuffledLWalls = [...lWallPlacements].sort(() => rng() - 0.5);
@@ -466,6 +467,7 @@ function tryGeneratePuzzle(
     optimalMoves: number;
     piecesUsed: number;
     score: number;
+    solutionPath: Move[];
   } | null = null;
 
   for (let attempt = 0; attempt < PIECE_PLACEMENT_ATTEMPTS; attempt++) {
@@ -517,6 +519,7 @@ function tryGeneratePuzzle(
         optimalMoves: solution.length,
         piecesUsed: piecesUsed.size,
         score,
+        solutionPath: solution,
       };
 
       // Raised early exit threshold from 12 to 18
@@ -551,6 +554,10 @@ function generatePuzzle(seed: string): PoolPuzzle | null {
           col: p.position.col,
         })),
         optimalMoves: result.optimalMoves,
+        solutionPath: result.solutionPath.map((m) => ({
+          pieceId: m.pieceId,
+          direction: m.direction,
+        })),
       };
     }
   }

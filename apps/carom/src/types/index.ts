@@ -40,6 +40,7 @@ export interface Puzzle {
   optimalMoves: number;
   date: string;
   puzzleNumber?: number;
+  solutionPath?: { pieceId: string; direction: Direction }[];
 }
 
 export interface GameState {
@@ -85,4 +86,5 @@ export interface PrecomputedPuzzle {
   goal: { row: number; col: number };
   pieces: { id: string; type: PieceType; row: number; col: number }[];
   optimalMoves: number;
+  solutionPath?: { pieceId: string; direction: Direction }[];
 }
