@@ -128,11 +128,20 @@ export function isPuzzleCompleted(puzzleNumber: number, puzzleId?: string): bool
 
 /**
  * Check if a puzzle is completed (scanning for any matching key)
- * Used by archive pages to check completion status regardless of puzzleId
+ * @deprecated Use isPuzzleCompleted with specific puzzleId for accuracy after puzzle regeneration
  */
 export function isPuzzleCompletedAny(puzzleNumber: number): boolean {
   const state = findPuzzleState(puzzleNumber);
   return state?.status === 'completed';
+}
+
+/**
+ * Check if saved puzzleId matches the current puzzle's id
+ * Used by archive pages to verify completion is for the current puzzle version
+ */
+export function getSavedPuzzleId(puzzleNumber: number): string | undefined {
+  const state = findPuzzleState(puzzleNumber);
+  return state?.puzzleId;
 }
 
 /**
@@ -145,7 +154,7 @@ export function isPuzzleInProgress(puzzleNumber: number, puzzleId?: string): boo
 
 /**
  * Check if a puzzle is in progress (scanning for any matching key)
- * Used by archive pages to check in-progress status regardless of puzzleId
+ * @deprecated Use isPuzzleInProgress with specific puzzleId for accuracy after puzzle regeneration
  */
 export function isPuzzleInProgressAny(puzzleNumber: number): boolean {
   const state = findPuzzleState(puzzleNumber);

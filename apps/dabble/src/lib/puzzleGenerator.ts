@@ -1017,6 +1017,39 @@ export async function getPoolPuzzles(): Promise<PoolPuzzle[]> {
 }
 
 /**
+ * Get puzzleIds for a range of puzzle numbers (for archive page)
+ * Returns a Map of puzzleNumber -> puzzleId
+ */
+export async function getPuzzleIdsForRange(startNum: number, endNum: number): Promise<Map<number, string>> {
+  const result = new Map<number, string>();
+
+  // Group puzzle numbers by month to minimize file loads
+  const monthGroups = new Map<string, number[]>();
+  for (let num = startNum; num <= endNum; num++) {
+    const month = getMonthForPuzzleNumber(num);
+    if (!monthGroups.has(month)) {
+      monthGroups.set(month, []);
+    }
+    monthGroups.get(month)!.push(num);
+  }
+
+  // Load each month's file and extract puzzleIds
+  for (const [month, puzzleNumbers] of monthGroups) {
+    const monthlyFile = await fetchMonthlyFile(month);
+    if (monthlyFile) {
+      for (const num of puzzleNumbers) {
+        const puzzle = monthlyFile.puzzles[String(num)];
+        if (puzzle?.id) {
+          result.set(num, puzzle.id);
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
  * Get future assigned puzzles (puzzle numbers greater than today's)
  */
 export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number; puzzle: AssignedPuzzle }[]> {

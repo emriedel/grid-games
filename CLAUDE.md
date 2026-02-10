@@ -163,14 +163,37 @@ interface MonthlyAssignedFile {
 }
 ```
 
-**Storage Pattern (Puzzle-Number Keyed):**
+**Storage Pattern (PuzzleId-Keyed for Regeneration Safety):**
 ```typescript
-// Key format: {gameId}-{puzzleNumber}
+// Key format: {gameId}-{puzzleNumber}-{puzzleId}
+// Example: dabble-5-a1b2c3d4, carom-12-xyz789
 interface PuzzleState {
   puzzleNumber: number;
+  puzzleId?: string;  // Unique ID from pre-generated puzzle
   status: 'in-progress' | 'completed';
   data: GameSpecificData;
 }
+```
+
+**Why puzzleId matters:**
+- Each pre-generated puzzle has a unique `id` field
+- When puzzles are regenerated, ids change
+- Archive pages must check completion using the **current puzzleId**
+- This prevents showing old completion status for regenerated puzzles
+
+**Archive Page Pattern:**
+```tsx
+// 1. Load puzzleIds from monthly files
+const [puzzleIds, setPuzzleIds] = useState<Map<number, string>>(new Map());
+useEffect(() => {
+  const ids = await getPuzzleIdsForRange(1, todayPuzzleNumber - 1);
+  setPuzzleIds(ids);
+}, [todayPuzzleNumber]);
+
+// 2. Check completion using specific puzzleId
+const currentPuzzleId = puzzleIds.get(puzzleNumber);
+const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
+const isCompleted = currentPuzzleId === savedPuzzleId && isPuzzleCompleted(num, currentPuzzleId);
 ```
 
 **Commands:**

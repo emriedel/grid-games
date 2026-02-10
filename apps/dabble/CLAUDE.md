@@ -219,7 +219,30 @@ Visit `http://localhost:3001/debug` to browse unpublished puzzles:
 
 Storage module: `src/lib/storage.ts`
 
-**In-progress state:**
+**Storage Key Format:** `dabble-{puzzleNumber}-{puzzleId}`
+
+Each pre-generated puzzle has a unique `id`. When puzzles are regenerated with new IDs,
+old completion states won't match the new puzzles. The archive page loads current puzzleIds
+from monthly files and verifies saved state matches before showing completion status.
+
+**Puzzle State Interface:**
+```typescript
+interface DabblePuzzleState {
+  puzzleNumber: number;
+  puzzleId?: string;  // Unique ID from pre-generated puzzle
+  status: 'in-progress' | 'completed';
+  data: { ... };
+}
+```
+
+**Helper functions:**
+- `getPuzzleState(puzzleNumber, puzzleId?)` - Get state for specific puzzle version
+- `savePuzzleState(puzzleNumber, state, puzzleId?)` - Save state with puzzleId
+- `isPuzzleCompleted(puzzleNumber, puzzleId?)` - Check if completed
+- `getSavedPuzzleId(puzzleNumber)` - Get the puzzleId of saved state (for archive)
+- `getPuzzleIdsForRange(start, end)` - Load puzzleIds from monthly files (for archive)
+
+**In-progress state data:**
 - `board` - current board state with placed tiles
 - `rackLetters` - remaining letters
 - `placedTiles` - tiles placed on board (positions and letters)
@@ -227,7 +250,7 @@ Storage module: `src/lib/storage.ts`
 - `turnCount` - number of turns taken
 - `totalScore` - current score
 
-**Completion state:**
+**Completion state data:**
 - `board` - final board state
 - `submittedWords` - all submitted words with scores
 - `lockedRackIndices` - indices of used letters

@@ -216,10 +216,11 @@ This avoids re-computing the solution at runtime for debug output.
 
 Storage module: `src/lib/storage.ts`
 
-**Unified puzzle state** (keyed by puzzle number: `carom-{puzzleNumber}`):
+**Unified puzzle state** (keyed by puzzleId: `carom-{puzzleNumber}-{puzzleId}`):
 ```typescript
 interface CaromPuzzleState {
   puzzleNumber: number;
+  puzzleId?: string;            // Unique ID from pre-generated puzzle
   status: 'in-progress' | 'completed';
   data: {
     moveCount: number;
@@ -232,10 +233,17 @@ interface CaromPuzzleState {
 ```
 
 **Helper functions:**
-- `getPuzzleState(puzzleNumber)` - Get state for any puzzle
-- `savePuzzleState(puzzleNumber, state)` - Save state
-- `isPuzzleCompleted(puzzleNumber)` - Check if completed
-- `isPuzzleInProgress(puzzleNumber)` - Check if in progress
-- `didAchieveOptimal(puzzleNumber)` - Check if achieved optimal
+- `getPuzzleState(puzzleNumber, puzzleId?)` - Get state for specific puzzle version
+- `savePuzzleState(puzzleNumber, state, puzzleId?)` - Save state with puzzleId
+- `isPuzzleCompleted(puzzleNumber, puzzleId?)` - Check if completed
+- `isPuzzleInProgress(puzzleNumber, puzzleId?)` - Check if in progress
+- `didAchieveOptimal(puzzleNumber, puzzleId?)` - Check if achieved optimal
+- `getSavedPuzzleId(puzzleNumber)` - Get the puzzleId of saved state (for archive)
+- `getPuzzleIdsForRange(start, end)` - Load puzzleIds from monthly files (for archive)
+
+**Archive Pattern:**
+The archive page loads puzzleIds from monthly files, then verifies that saved completion
+states match the current puzzleId. This ensures regenerated puzzles don't show stale
+completion status. See `ArchivePageContent.tsx` for implementation.
 
 **Auto-persistence:** Uses `useEffect` to watch state changes and auto-save.
