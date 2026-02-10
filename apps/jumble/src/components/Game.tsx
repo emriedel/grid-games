@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, getTodayDateString, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
+import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
 import { getTodayPuzzleNumber } from '@/lib/storage';
 import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
@@ -41,8 +41,6 @@ function JumbleResultsModal({
   score,
   puzzleNumber,
 }: JumbleResultsModalProps) {
-  const displayDate = formatDisplayDate(getTodayDateString());
-
   // Group words by length for share text
   const wordsByLength: Record<number, FoundWord[]> = {};
   for (const fw of foundWords) {
@@ -99,7 +97,6 @@ function JumbleResultsModal({
       onClose={onClose}
       gameId="jumble"
       gameName="Jumble"
-      date={displayDate}
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: score, label: 'points' }}
       secondaryStats={[

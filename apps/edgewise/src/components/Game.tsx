@@ -89,7 +89,6 @@ function EdgewiseResultsModal({
       onClose={onClose}
       gameId="edgewise"
       gameName="Edgewise"
-      date={puzzleDate}
       puzzleNumber={puzzleNumber}
       primaryStat={{
         value: solved ? guessesUsed : '❌',

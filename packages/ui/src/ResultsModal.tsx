@@ -38,8 +38,6 @@ export interface ResultsModalProps {
   gameId: string;
   /** Game name for display (e.g., "Carom", "Dabble") */
   gameName: string;
-  /** Display date (formatted, e.g., "February 4, 2026") */
-  date: string;
   /** Optional puzzle number for display (e.g., 35 for "#35") */
   puzzleNumber?: number;
   /** Primary stat shown prominently */
@@ -57,20 +55,17 @@ export interface ResultsModalProps {
 /**
  * Shared results modal component for end-game screens.
  * Provides consistent UX across all games with:
- * - Date display
  * - Primary stat (large, accent-colored)
  * - Secondary stats row
  * - Children slot for game-specific breakdown
  * - Share button
  * - "Try another game" section
- * - Close link
  */
 export function ResultsModal({
   isOpen,
   onClose,
   gameId,
   gameName,
-  date,
   puzzleNumber,
   primaryStat,
   secondaryStats,
@@ -110,13 +105,13 @@ export function ResultsModal({
           <X size={20} />
         </button>
 
-        {/* Congrats + Game name + Puzzle number + Date */}
+        {/* Congrats + Game name + Puzzle number */}
         <div className="text-center mb-6">
           <p className="text-lg font-semibold text-[var(--foreground)] mb-1">
             {congratsMessage}
           </p>
           <p className="text-[var(--muted)]">
-            {gameName}{puzzleNumber ? ` #${puzzleNumber}` : ''} · {date}
+            {gameName}{puzzleNumber ? ` #${puzzleNumber}` : ''}
           </p>
         </div>
 
@@ -167,7 +162,7 @@ export function ResultsModal({
         <div className="border-t border-[var(--border)] mb-6" />
 
         {/* Try another game */}
-        <div className="text-center mb-6">
+        <div className="text-center">
           <p className="text-sm text-[var(--muted)] mb-3">Try another game</p>
           <div className="flex justify-center gap-4">
             {otherGames.map((game) => (
@@ -191,15 +186,6 @@ export function ResultsModal({
           </div>
         </div>
 
-        {/* Close button */}
-        <div className="text-center">
-          <button
-            onClick={onClose}
-            className="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors px-4 py-2 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)]"
-          >
-            Close
-          </button>
-        </div>
       </div>
     </Modal>
   );

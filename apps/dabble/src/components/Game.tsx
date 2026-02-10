@@ -65,7 +65,6 @@ function formatStars(stars: number, maxStars: number = 3): string {
 interface DabbleResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  date: string;
   puzzleNumber?: number;
   totalScore: number;
   lettersUsed: number;
@@ -76,14 +75,12 @@ interface DabbleResultsModalProps {
 function DabbleResultsModal({
   isOpen,
   onClose,
-  date,
   puzzleNumber,
   totalScore,
   lettersUsed,
   thresholds,
   isArchive,
 }: DabbleResultsModalProps) {
-  const displayDate = formatDisplayDate(date);
   const letterBonus = getLetterUsageBonus(lettersUsed);
   const finalScore = totalScore + letterBonus;
   const stars = calculateStars(finalScore, thresholds);
@@ -98,7 +95,7 @@ function DabbleResultsModal({
   const shareText = buildShareText({
     gameId: 'dabble',
     gameName: 'Dabble',
-    puzzleId: puzzleNumber ? `#${puzzleNumber}` : displayDate,
+    puzzleId: puzzleNumber ? `#${puzzleNumber}` : '',
     score: finalScore,
     emojiGrid,
     shareUrl,
@@ -110,7 +107,6 @@ function DabbleResultsModal({
       onClose={onClose}
       gameId="dabble"
       gameName="Dabble"
-      date={displayDate}
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: finalScore, label: 'points' }}
       shareConfig={{ text: shareText }}
@@ -652,7 +648,6 @@ export function Game() {
           <DabbleResultsModal
             isOpen={showShareModal}
             onClose={() => setShowShareModal(false)}
-            date={puzzle.date}
             puzzleNumber={puzzleInfo.number}
             totalScore={totalScore}
             lettersUsed={lockedRackIndices.size}
@@ -836,7 +831,6 @@ export function Game() {
       <DabbleResultsModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
-        date={puzzle.date}
         puzzleNumber={puzzleInfo.number}
         totalScore={totalScore}
         lettersUsed={lockedRackIndices.size}

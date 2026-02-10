@@ -29,7 +29,6 @@ interface CaromResultsModalProps {
   moveCount: number;
   optimalMoves: number;
   achievedOptimal: boolean;
-  date: string;
   puzzleNumber: number;
   isArchive: boolean;
 }
@@ -40,11 +39,9 @@ function CaromResultsModal({
   moveCount,
   optimalMoves,
   achievedOptimal,
-  date,
   puzzleNumber,
   isArchive,
 }: CaromResultsModalProps) {
-  const displayDate = formatDisplayDate(date);
   const movesText = moveCount === 1 ? 'move' : 'moves';
 
   // Build share text - no arrow emojis, include trophy if optimal (next to moves)
@@ -59,7 +56,6 @@ function CaromResultsModal({
       onClose={onClose}
       gameId="carom"
       gameName="Carom"
-      date={displayDate}
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: moveCount, label: movesText }}
       shareConfig={{ text: shareText }}
@@ -69,11 +65,6 @@ function CaromResultsModal({
         <div className="text-center">
           <div className="text-4xl mb-2">🏆</div>
           <div className="text-[var(--accent)] font-medium">Perfect Solution!</div>
-        </div>
-      )}
-      {!achievedOptimal && (
-        <div className="text-center text-[var(--muted)] text-sm">
-          Perfect solution: {optimalMoves} moves
         </div>
       )}
     </ResultsModal>
@@ -443,7 +434,6 @@ export function Game() {
             moveCount={state.moveCount}
             optimalMoves={state.puzzle.optimalMoves}
             achievedOptimal={achievedOptimal}
-            date={state.puzzle.date}
             puzzleNumber={state.puzzle.puzzleNumber ?? activePuzzleNumber}
             isArchive={isArchiveMode}
           />
