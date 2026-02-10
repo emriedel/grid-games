@@ -220,8 +220,10 @@ export function useGameState(props?: UseGameStateProps) {
   );
 
   const reset = useCallback(() => {
+    // Clear saved state so reset persists when leaving
+    clearPuzzleState(activePuzzleNumber, activePuzzleId);
     dispatch({ type: 'RESET' });
-  }, []);
+  }, [activePuzzleNumber, activePuzzleId]);
 
   const replay = useCallback(() => {
     // Clear saved state for this puzzle
