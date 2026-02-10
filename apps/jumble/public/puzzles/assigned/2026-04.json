@@ -1,0 +1,110 @@
+{
+  "gameId": "jumble",
+  "baseDate": "2026-04-01",
+  "puzzles": {
+    "60": {
+      "id": "mb3439qm",
+      "board": [
+        [
+          "R",
+          "T",
+          "E",
+          "E",
+          "B"
+        ],
+        [
+          "M",
+          "O",
+          "T",
+          "A",
+          "E"
+        ],
+        [
+          "E",
+          "F",
+          "I",
+          "H",
+          "W"
+        ],
+        [
+          "F",
+          "N",
+          "Y",
+          "Y",
+          "T"
+        ],
+        [
+          "A",
+          "H",
+          "E",
+          "E",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 383,
+      "debug": {
+        "totalValidWords": 274,
+        "wordsByLength": {
+          "3": 96,
+          "4": 112,
+          "5": 43,
+          "6": 16,
+          "7": 6,
+          "8": 1
+        },
+        "longestWords": [
+          "THEBAINE",
+          "BETAINE",
+          "BEATIFY",
+          "TIFFANY",
+          "ABETTOR",
+          "THWAITE",
+          "RETWEET"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    }
+  }
+}

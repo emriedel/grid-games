@@ -1,4 +1,5418 @@
 {
-  "generatedAt": "",
-  "puzzles": []
+  "generatedAt": "2026-02-10T22:50:40.507Z",
+  "puzzles": [
+    {
+      "id": "r3xxmcso",
+      "board": [
+        [
+          "E",
+          "O",
+          "N",
+          "QU",
+          "E"
+        ],
+        [
+          "W",
+          "I",
+          "P",
+          "S",
+          "L"
+        ],
+        [
+          "P",
+          "S",
+          "L",
+          "T",
+          "T"
+        ],
+        [
+          "R",
+          "R",
+          "O",
+          "N",
+          "E"
+        ],
+        [
+          "U",
+          "E",
+          "G",
+          "E",
+          "L"
+        ]
+      ],
+      "maxPossibleScore": 652,
+      "debug": {
+        "totalValidWords": 365,
+        "wordsByLength": {
+          "3": 97,
+          "4": 123,
+          "5": 85,
+          "6": 40,
+          "7": 13,
+          "8": 7
+        },
+        "longestWords": [
+          "OILSTONE",
+          "PLOSIONS",
+          "SNOWSLIP",
+          "STENTORS",
+          "TORSIONS",
+          "EROSIONS",
+          "GENTLEST",
+          "PLOSION",
+          "STORERS",
+          "STENTOR"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "qgi631nu",
+      "board": [
+        [
+          "U",
+          "L",
+          "R",
+          "P",
+          "A"
+        ],
+        [
+          "S",
+          "N",
+          "F",
+          "J",
+          "T"
+        ],
+        [
+          "I",
+          "R",
+          "T",
+          "T",
+          "G"
+        ],
+        [
+          "E",
+          "N",
+          "L",
+          "T",
+          "R"
+        ],
+        [
+          "C",
+          "S",
+          "U",
+          "E",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 301,
+      "debug": {
+        "totalValidWords": 183,
+        "wordsByLength": {
+          "3": 50,
+          "4": 60,
+          "5": 44,
+          "6": 24,
+          "7": 4,
+          "8": 1
+        },
+        "longestWords": [
+          "INSULTER",
+          "UNREINS",
+          "SNIRTLE",
+          "LETTRES",
+          "RETUNES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "u4d1pcf1",
+      "board": [
+        [
+          "C",
+          "L",
+          "S",
+          "T",
+          "F"
+        ],
+        [
+          "A",
+          "E",
+          "N",
+          "L",
+          "O"
+        ],
+        [
+          "E",
+          "K",
+          "I",
+          "N",
+          "O"
+        ],
+        [
+          "E",
+          "H",
+          "S",
+          "R",
+          "H"
+        ],
+        [
+          "R",
+          "E",
+          "D",
+          "O",
+          "A"
+        ]
+      ],
+      "maxPossibleScore": 1563,
+      "debug": {
+        "totalValidWords": 666,
+        "wordsByLength": {
+          "3": 116,
+          "4": 202,
+          "5": 169,
+          "6": 93,
+          "7": 53,
+          "8": 26,
+          "9": 7
+        },
+        "longestWords": [
+          "STONISHED",
+          "SNEAKERED",
+          "FOOLISHER",
+          "ROOFLINES",
+          "DRISHEENS",
+          "DROOLIEST",
+          "DROSHKIES",
+          "LENSLIKE",
+          "SNEAKISH",
+          "FLORIEST"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o639b727",
+      "board": [
+        [
+          "D",
+          "A",
+          "U",
+          "P",
+          "E"
+        ],
+        [
+          "QU",
+          "I",
+          "A",
+          "O",
+          "C"
+        ],
+        [
+          "T",
+          "O",
+          "O",
+          "S",
+          "L"
+        ],
+        [
+          "L",
+          "A",
+          "H",
+          "O",
+          "E"
+        ],
+        [
+          "S",
+          "I",
+          "E",
+          "E",
+          "Y"
+        ]
+      ],
+      "maxPossibleScore": 472,
+      "debug": {
+        "totalValidWords": 318,
+        "wordsByLength": {
+          "3": 104,
+          "4": 114,
+          "5": 68,
+          "6": 24,
+          "7": 7,
+          "8": 1
+        },
+        "longestWords": [
+          "DIASCOPE",
+          "UPCLOSE",
+          "COAITAS",
+          "TOOSHIE",
+          "TAIHOAS",
+          "SHEILAS",
+          "SIALOID",
+          "EYESHOT"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "qvulnsgv",
+      "board": [
+        [
+          "E",
+          "E",
+          "G",
+          "QU",
+          "O"
+        ],
+        [
+          "N",
+          "F",
+          "O",
+          "A",
+          "R"
+        ],
+        [
+          "O",
+          "C",
+          "E",
+          "C",
+          "O"
+        ],
+        [
+          "Y",
+          "R",
+          "A",
+          "E",
+          "C"
+        ],
+        [
+          "G",
+          "R",
+          "E",
+          "O",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 319,
+      "debug": {
+        "totalValidWords": 178,
+        "wordsByLength": {
+          "3": 60,
+          "4": 56,
+          "5": 37,
+          "6": 13,
+          "7": 7,
+          "8": 4,
+          "9": 1
+        },
+        "longestWords": [
+          "CONFERREE",
+          "CONFEREE",
+          "COAGENCY",
+          "REAGENCY",
+          "ACCORAGE",
+          "ENFORCE",
+          "FORECAR",
+          "CARRYON",
+          "COGENCE",
+          "COGENCY"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "otgqisr0",
+      "board": [
+        [
+          "C",
+          "S",
+          "Y",
+          "N",
+          "Y"
+        ],
+        [
+          "R",
+          "O",
+          "N",
+          "S",
+          "M"
+        ],
+        [
+          "H",
+          "T",
+          "I",
+          "U",
+          "N"
+        ],
+        [
+          "S",
+          "I",
+          "J",
+          "O",
+          "E"
+        ],
+        [
+          "L",
+          "M",
+          "O",
+          "N",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 554,
+      "debug": {
+        "totalValidWords": 338,
+        "wordsByLength": {
+          "3": 99,
+          "4": 121,
+          "5": 76,
+          "6": 26,
+          "7": 12,
+          "8": 3,
+          "9": 1
+        },
+        "longestWords": [
+          "SCONTIONS",
+          "SCONTION",
+          "MUNITION",
+          "NONSUITS",
+          "CORTINS",
+          "CONIUMS",
+          "COITION",
+          "RONIONS",
+          "NOTIONS",
+          "SUITORS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "82l0njrr",
+      "board": [
+        [
+          "T",
+          "T",
+          "A",
+          "O",
+          "E"
+        ],
+        [
+          "N",
+          "D",
+          "I",
+          "E",
+          "U"
+        ],
+        [
+          "T",
+          "N",
+          "F",
+          "R",
+          "F"
+        ],
+        [
+          "E",
+          "V",
+          "X",
+          "E",
+          "T"
+        ],
+        [
+          "R",
+          "U",
+          "O",
+          "D",
+          "S"
+        ]
+      ],
+      "maxPossibleScore": 427,
+      "debug": {
+        "totalValidWords": 265,
+        "wordsByLength": {
+          "3": 84,
+          "4": 90,
+          "5": 48,
+          "6": 32,
+          "7": 10,
+          "8": 1
+        },
+        "longestWords": [
+          "INFEFTED",
+          "INFEFTS",
+          "FEINTER",
+          "REINTER",
+          "REFINER",
+          "ENFIRED",
+          "ENFIRES",
+          "VENIRES",
+          "ESTREAT",
+          "OESTRIN"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "55yj2xtt",
+      "board": [
+        [
+          "S",
+          "E",
+          "O",
+          "U",
+          "I"
+        ],
+        [
+          "N",
+          "S",
+          "V",
+          "A",
+          "X"
+        ],
+        [
+          "L",
+          "L",
+          "T",
+          "S",
+          "E"
+        ],
+        [
+          "C",
+          "Y",
+          "R",
+          "R",
+          "E"
+        ],
+        [
+          "N",
+          "I",
+          "N",
+          "T",
+          "H"
+        ]
+      ],
+      "maxPossibleScore": 431,
+      "debug": {
+        "totalValidWords": 233,
+        "wordsByLength": {
+          "3": 70,
+          "4": 64,
+          "5": 58,
+          "6": 27,
+          "7": 9,
+          "8": 4,
+          "9": 1
+        },
+        "longestWords": [
+          "INTERESTS",
+          "INTREATS",
+          "INTERSEX",
+          "INTEREST",
+          "THREAVES",
+          "OESTRIN",
+          "SATYRIC",
+          "EXSERTS",
+          "RESEAUX",
+          "RESEATS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "p1vrbksa",
+      "board": [
+        [
+          "X",
+          "O",
+          "E",
+          "E",
+          "C"
+        ],
+        [
+          "D",
+          "O",
+          "N",
+          "I",
+          "F"
+        ],
+        [
+          "A",
+          "N",
+          "I",
+          "R",
+          "T"
+        ],
+        [
+          "E",
+          "I",
+          "H",
+          "E",
+          "U"
+        ],
+        [
+          "H",
+          "T",
+          "P",
+          "N",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 653,
+      "debug": {
+        "totalValidWords": 323,
+        "wordsByLength": {
+          "3": 93,
+          "4": 94,
+          "5": 60,
+          "6": 44,
+          "7": 23,
+          "8": 8,
+          "9": 1
+        },
+        "longestWords": [
+          "NONRETURN",
+          "AETHERIC",
+          "TRIENNIA",
+          "TREPHINE",
+          "ETHERION",
+          "ERIONITE",
+          "THEANINE",
+          "NEUTRINO",
+          "RETURNEE",
+          "CITRINE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "epjqm2v4",
+      "board": [
+        [
+          "T",
+          "G",
+          "O",
+          "S",
+          "T"
+        ],
+        [
+          "A",
+          "I",
+          "E",
+          "R",
+          "S"
+        ],
+        [
+          "QU",
+          "W",
+          "O",
+          "A",
+          "F"
+        ],
+        [
+          "O",
+          "I",
+          "R",
+          "D",
+          "E"
+        ],
+        [
+          "S",
+          "A",
+          "E",
+          "A",
+          "M"
+        ]
+      ],
+      "maxPossibleScore": 970,
+      "debug": {
+        "totalValidWords": 510,
+        "wordsByLength": {
+          "3": 111,
+          "4": 158,
+          "5": 142,
+          "6": 69,
+          "7": 20,
+          "8": 7,
+          "9": 2,
+          "10": 1
+        },
+        "longestWords": [
+          "MEADOWIEST",
+          "AERODARTS",
+          "MEADOWIER",
+          "AWEARIED",
+          "FROWIEST",
+          "DOWAGERS",
+          "DEARESTS",
+          "DEFROSTS",
+          "AERODART",
+          "MADEIRAS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "eslp2stt",
+      "board": [
+        [
+          "B",
+          "I",
+          "I",
+          "E",
+          "C"
+        ],
+        [
+          "P",
+          "F",
+          "U",
+          "N",
+          "S"
+        ],
+        [
+          "N",
+          "L",
+          "T",
+          "H",
+          "U"
+        ],
+        [
+          "N",
+          "A",
+          "O",
+          "F",
+          "O"
+        ],
+        [
+          "T",
+          "E",
+          "I",
+          "E",
+          "N"
+        ]
+      ],
+      "maxPossibleScore": 381,
+      "debug": {
+        "totalValidWords": 238,
+        "wordsByLength": {
+          "3": 76,
+          "4": 92,
+          "5": 45,
+          "6": 16,
+          "7": 4,
+          "8": 5
+        },
+        "longestWords": [
+          "FUNHOUSE",
+          "NUTHOUSE",
+          "SCENTFUL",
+          "FOUNTFUL",
+          "ENOUNCES",
+          "BIPLANE",
+          "FLOTANT",
+          "UNHOUSE",
+          "ENOUNCE"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "dwd3e10a",
+      "board": [
+        [
+          "Y",
+          "A",
+          "A",
+          "L",
+          "O"
+        ],
+        [
+          "O",
+          "T",
+          "D",
+          "R",
+          "D"
+        ],
+        [
+          "F",
+          "V",
+          "C",
+          "G",
+          "R"
+        ],
+        [
+          "Z",
+          "M",
+          "E",
+          "A",
+          "D"
+        ],
+        [
+          "H",
+          "I",
+          "S",
+          "S",
+          "U"
+        ]
+      ],
+      "maxPossibleScore": 372,
+      "debug": {
+        "totalValidWords": 234,
+        "wordsByLength": {
+          "3": 79,
+          "4": 77,
+          "5": 48,
+          "6": 24,
+          "7": 3,
+          "8": 2,
+          "9": 1
+        },
+        "longestWords": [
+          "TOADGRASS",
+          "TARRASES",
+          "GRADUSES",
+          "ARRASES",
+          "LARGESS",
+          "SAGRADA"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "0yk0xbkj",
+      "board": [
+        [
+          "I",
+          "E",
+          "S",
+          "O",
+          "X"
+        ],
+        [
+          "P",
+          "E",
+          "I",
+          "S",
+          "A"
+        ],
+        [
+          "L",
+          "H",
+          "V",
+          "U",
+          "N"
+        ],
+        [
+          "D",
+          "Y",
+          "E",
+          "O",
+          "U"
+        ],
+        [
+          "N",
+          "N",
+          "T",
+          "A",
+          "A"
+        ]
+      ],
+      "maxPossibleScore": 292,
+      "debug": {
+        "totalValidWords": 214,
+        "wordsByLength": {
+          "3": 82,
+          "4": 82,
+          "5": 38,
+          "6": 7,
+          "7": 4,
+          "8": 1
+        },
+        "longestWords": [
+          "PHYLESIS",
+          "SEVENTY",
+          "PHYTONS",
+          "NOUVEAU",
+          "ENDLESS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ekn5d51k",
+      "board": [
+        [
+          "A",
+          "M",
+          "E",
+          "U",
+          "I"
+        ],
+        [
+          "O",
+          "Y",
+          "T",
+          "N",
+          "M"
+        ],
+        [
+          "T",
+          "D",
+          "O",
+          "A",
+          "I"
+        ],
+        [
+          "QU",
+          "E",
+          "I",
+          "N",
+          "E"
+        ],
+        [
+          "I",
+          "O",
+          "I",
+          "T",
+          "H"
+        ]
+      ],
+      "maxPossibleScore": 556,
+      "debug": {
+        "totalValidWords": 319,
+        "wordsByLength": {
+          "3": 97,
+          "4": 114,
+          "5": 57,
+          "6": 33,
+          "7": 11,
+          "8": 6,
+          "10": 1
+        },
+        "longestWords": [
+          "UNINITIATE",
+          "UINTAITE",
+          "TAENIOID",
+          "TOMENTUM",
+          "ANTIDOTE",
+          "INITIATE",
+          "THEANINE",
+          "AMENTUM",
+          "ETAMINE",
+          "ENAMINE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "xt453f9f",
+      "board": [
+        [
+          "O",
+          "S",
+          "T",
+          "G",
+          "R"
+        ],
+        [
+          "R",
+          "T",
+          "E",
+          "T",
+          "D"
+        ],
+        [
+          "I",
+          "B",
+          "O",
+          "A",
+          "R"
+        ],
+        [
+          "C",
+          "O",
+          "R",
+          "N",
+          "T"
+        ],
+        [
+          "E",
+          "F",
+          "A",
+          "F",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 831,
+      "debug": {
+        "totalValidWords": 469,
+        "wordsByLength": {
+          "3": 110,
+          "4": 173,
+          "5": 112,
+          "6": 50,
+          "7": 15,
+          "8": 7,
+          "9": 2
+        },
+        "longestWords": [
+          "BICORNATE",
+          "CORONATES",
+          "TRICORNE",
+          "ORNATEST",
+          "ATTESTOR",
+          "ANOESTRI",
+          "COROTATE",
+          "CORONATE",
+          "FOOTGEAR",
+          "SORBITE"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1g4tau2t",
+      "board": [
+        [
+          "T",
+          "S",
+          "O",
+          "O",
+          "S"
+        ],
+        [
+          "N",
+          "I",
+          "N",
+          "E",
+          "I"
+        ],
+        [
+          "N",
+          "U",
+          "I",
+          "S",
+          "I"
+        ],
+        [
+          "A",
+          "L",
+          "E",
+          "S",
+          "A"
+        ],
+        [
+          "N",
+          "N",
+          "V",
+          "E",
+          "QU"
+        ]
+      ],
+      "maxPossibleScore": 701,
+      "debug": {
+        "totalValidWords": 323,
+        "wordsByLength": {
+          "3": 65,
+          "4": 91,
+          "5": 72,
+          "6": 64,
+          "7": 22,
+          "8": 8,
+          "9": 1
+        },
+        "longestWords": [
+          "UNIONISES",
+          "NOESISES",
+          "ENOSISES",
+          "UNSONSIE",
+          "UNIONISE",
+          "UNSELVES",
+          "ALIENIST",
+          "LUNINESS",
+          "ELISIONS",
+          "SINLESS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "o2ca3s7x",
+      "board": [
+        [
+          "E",
+          "D",
+          "U",
+          "P",
+          "E"
+        ],
+        [
+          "R",
+          "S",
+          "S",
+          "H",
+          "QU"
+        ],
+        [
+          "R",
+          "O",
+          "W",
+          "I",
+          "N"
+        ],
+        [
+          "E",
+          "R",
+          "W",
+          "N",
+          "A"
+        ],
+        [
+          "R",
+          "E",
+          "T",
+          "S",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 629,
+      "debug": {
+        "totalValidWords": 320,
+        "wordsByLength": {
+          "3": 79,
+          "4": 100,
+          "5": 75,
+          "6": 48,
+          "7": 7,
+          "8": 8,
+          "9": 3
+        },
+        "longestWords": [
+          "WINTERERS",
+          "INTERWORD",
+          "ANSWERERS",
+          "RESORTER",
+          "WINTERER",
+          "INTRORSE",
+          "INTERROW",
+          "ANTRORSE",
+          "ANSWERER",
+          "RETRORSE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "5yznyfel",
+      "board": [
+        [
+          "I",
+          "R",
+          "I",
+          "E",
+          "U"
+        ],
+        [
+          "G",
+          "T",
+          "A",
+          "D",
+          "R"
+        ],
+        [
+          "C",
+          "U",
+          "T",
+          "E",
+          "J"
+        ],
+        [
+          "H",
+          "A",
+          "Y",
+          "O",
+          "Y"
+        ],
+        [
+          "C",
+          "T",
+          "U",
+          "R",
+          "F"
+        ]
+      ],
+      "maxPossibleScore": 748,
+      "debug": {
+        "totalValidWords": 390,
+        "wordsByLength": {
+          "3": 97,
+          "4": 122,
+          "5": 82,
+          "6": 61,
+          "7": 21,
+          "8": 6,
+          "9": 1
+        },
+        "longestWords": [
+          "TUTOYERED",
+          "GUTTERED",
+          "REATTACH",
+          "CHATTIER",
+          "ACTUATED",
+          "ACTUATOR",
+          "FOEDARIE",
+          "RATTIER",
+          "GRITTED",
+          "GRITTER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "2m97shr8",
+      "board": [
+        [
+          "T",
+          "M",
+          "L",
+          "C",
+          "S"
+        ],
+        [
+          "R",
+          "A",
+          "N",
+          "C",
+          "J"
+        ],
+        [
+          "F",
+          "I",
+          "T",
+          "N",
+          "E"
+        ],
+        [
+          "R",
+          "R",
+          "T",
+          "F",
+          "T"
+        ],
+        [
+          "L",
+          "D",
+          "E",
+          "A",
+          "C"
+        ]
+      ],
+      "maxPossibleScore": 609,
+      "debug": {
+        "totalValidWords": 296,
+        "wordsByLength": {
+          "3": 74,
+          "4": 78,
+          "5": 63,
+          "6": 58,
+          "7": 16,
+          "8": 6,
+          "9": 1
+        },
+        "longestWords": [
+          "ENTERTAIN",
+          "INCENTRE",
+          "INCENTER",
+          "INCENTED",
+          "RETIRANT",
+          "REATTAIN",
+          "DETRITAL",
+          "LATITAT",
+          "CLATTER",
+          "CLATTED"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "u4bgdq9i",
+      "board": [
+        [
+          "B",
+          "A",
+          "A",
+          "A",
+          "D"
+        ],
+        [
+          "D",
+          "D",
+          "C",
+          "N",
+          "S"
+        ],
+        [
+          "I",
+          "O",
+          "C",
+          "P",
+          "E"
+        ],
+        [
+          "E",
+          "S",
+          "T",
+          "A",
+          "G"
+        ],
+        [
+          "T",
+          "L",
+          "I",
+          "C",
+          "T"
+        ]
+      ],
+      "maxPossibleScore": 641,
+      "debug": {
+        "totalValidWords": 376,
+        "wordsByLength": {
+          "3": 106,
+          "4": 127,
+          "5": 79,
+          "6": 44,
+          "7": 17,
+          "8": 3
+        },
+        "longestWords": [
+          "DISCAGES",
+          "COELIACS",
+          "SOCCAGES",
+          "BADDIES",
+          "BACCOES",
+          "ASEPTIC",
+          "DISCAGE",
+          "DOTAGES",
+          "CADDIES",
+          "COCTILE"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "upv068e4",
+      "board": [
+        [
+          "L",
+          "O",
+          "R",
+          "U",
+          "R"
+        ],
+        [
+          "R",
+          "R",
+          "I",
+          "P",
+          "A"
+        ],
+        [
+          "T",
+          "N",
+          "S",
+          "A",
+          "M"
+        ],
+        [
+          "K",
+          "T",
+          "E",
+          "E",
+          "G"
+        ],
+        [
+          "R",
+          "R",
+          "T",
+          "D",
+          "T"
+        ]
+      ],
+      "maxPossibleScore": 1324,
+      "debug": {
+        "totalValidWords": 590,
+        "wordsByLength": {
+          "3": 96,
+          "4": 173,
+          "5": 160,
+          "6": 101,
+          "7": 38,
+          "8": 19,
+          "9": 2,
+          "10": 1
+        },
+        "longestWords": [
+          "UPSTREAMED",
+          "PINSETTER",
+          "TRIPMETER",
+          "UPSTREAM",
+          "UPSETTER",
+          "RAMPAGES",
+          "RAMPAGED",
+          "INTRORSE",
+          "INSEAMED",
+          "INSETTED"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6n52xpd4",
+      "board": [
+        [
+          "R",
+          "E",
+          "T",
+          "A",
+          "O"
+        ],
+        [
+          "L",
+          "A",
+          "L",
+          "N",
+          "N"
+        ],
+        [
+          "Y",
+          "C",
+          "B",
+          "O",
+          "H"
+        ],
+        [
+          "R",
+          "T",
+          "D",
+          "U",
+          "E"
+        ],
+        [
+          "E",
+          "A",
+          "T",
+          "E",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 647,
+      "debug": {
+        "totalValidWords": 374,
+        "wordsByLength": {
+          "3": 105,
+          "4": 125,
+          "5": 85,
+          "6": 36,
+          "7": 19,
+          "8": 4
+        },
+        "longestWords": [
+          "LACTATED",
+          "LOBATELY",
+          "OBLATELY",
+          "OUTTRADE",
+          "RETABLO",
+          "LACTARY",
+          "LACTATE",
+          "LYRATED",
+          "ABUTTER",
+          "LATERAL"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ts8xikmj",
+      "board": [
+        [
+          "O",
+          "S",
+          "U",
+          "E",
+          "H"
+        ],
+        [
+          "L",
+          "T",
+          "P",
+          "I",
+          "O"
+        ],
+        [
+          "E",
+          "T",
+          "N",
+          "N",
+          "E"
+        ],
+        [
+          "O",
+          "I",
+          "A",
+          "U",
+          "C"
+        ],
+        [
+          "Z",
+          "A",
+          "W",
+          "E",
+          "P"
+        ]
+      ],
+      "maxPossibleScore": 470,
+      "debug": {
+        "totalValidWords": 295,
+        "wordsByLength": {
+          "3": 93,
+          "4": 88,
+          "5": 73,
+          "6": 34,
+          "7": 6,
+          "8": 1
+        },
+        "longestWords": [
+          "SUPINATE",
+          "SPINATE",
+          "HEPTANE",
+          "PINTANO",
+          "PINNATE",
+          "ANOINTS",
+          "WITTOLS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "nq06rz2q",
+      "board": [
+        [
+          "E",
+          "F",
+          "I",
+          "N",
+          "U"
+        ],
+        [
+          "E",
+          "N",
+          "T",
+          "QU",
+          "N"
+        ],
+        [
+          "E",
+          "U",
+          "Y",
+          "C",
+          "A"
+        ],
+        [
+          "W",
+          "I",
+          "T",
+          "O",
+          "O"
+        ],
+        [
+          "S",
+          "S",
+          "R",
+          "E",
+          "L"
+        ]
+      ],
+      "maxPossibleScore": 383,
+      "debug": {
+        "totalValidWords": 234,
+        "wordsByLength": {
+          "3": 70,
+          "4": 88,
+          "5": 35,
+          "6": 31,
+          "7": 8,
+          "8": 2
+        },
+        "longestWords": [
+          "COLORIST",
+          "TRIUNITY",
+          "INTUITS",
+          "NEUTERS",
+          "COTERIE",
+          "COOLERS",
+          "CORSITE",
+          "COOTERS",
+          "TOOLERS",
+          "LOOTERS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "0s865caj",
+      "board": [
+        [
+          "C",
+          "R",
+          "E",
+          "L",
+          "N"
+        ],
+        [
+          "A",
+          "O",
+          "R",
+          "E",
+          "C"
+        ],
+        [
+          "M",
+          "X",
+          "T",
+          "M",
+          "L"
+        ],
+        [
+          "T",
+          "E",
+          "F",
+          "E",
+          "N"
+        ],
+        [
+          "N",
+          "A",
+          "W",
+          "D",
+          "C"
+        ]
+      ],
+      "maxPossibleScore": 573,
+      "debug": {
+        "totalValidWords": 353,
+        "wordsByLength": {
+          "3": 115,
+          "4": 114,
+          "5": 72,
+          "6": 39,
+          "7": 10,
+          "9": 2,
+          "10": 1
+        },
+        "longestWords": [
+          "ANTEMORTEM",
+          "AREOMETER",
+          "NEMERTEAN",
+          "CREELED",
+          "CORMLET",
+          "REELMEN",
+          "RAMENTA",
+          "EROTEME",
+          "EROTEMA",
+          "ACROTER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "8pmtt1l8",
+      "board": [
+        [
+          "E",
+          "E",
+          "O",
+          "D",
+          "E"
+        ],
+        [
+          "M",
+          "E",
+          "P",
+          "N",
+          "E"
+        ],
+        [
+          "L",
+          "O",
+          "F",
+          "N",
+          "R"
+        ],
+        [
+          "I",
+          "T",
+          "I",
+          "R",
+          "A"
+        ],
+        [
+          "Z",
+          "L",
+          "F",
+          "R",
+          "N"
+        ]
+      ],
+      "maxPossibleScore": 332,
+      "debug": {
+        "totalValidWords": 231,
+        "wordsByLength": {
+          "3": 80,
+          "4": 91,
+          "5": 37,
+          "6": 17,
+          "7": 5,
+          "8": 1
+        },
+        "longestWords": [
+          "INFRARED",
+          "ELOINED",
+          "ELOINER",
+          "POTLINE",
+          "OLEFINE",
+          "TINFOIL"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6ez5wbwd",
+      "board": [
+        [
+          "Y",
+          "I",
+          "M",
+          "M",
+          "R"
+        ],
+        [
+          "E",
+          "A",
+          "E",
+          "S",
+          "W"
+        ],
+        [
+          "D",
+          "E",
+          "F",
+          "U",
+          "D"
+        ],
+        [
+          "I",
+          "N",
+          "P",
+          "H",
+          "T"
+        ],
+        [
+          "K",
+          "E",
+          "T",
+          "O",
+          "O"
+        ]
+      ],
+      "maxPossibleScore": 393,
+      "debug": {
+        "totalValidWords": 284,
+        "wordsByLength": {
+          "3": 106,
+          "4": 106,
+          "5": 49,
+          "6": 19,
+          "7": 3,
+          "8": 1
+        },
+        "longestWords": [
+          "INFAMIES",
+          "DEFAMES",
+          "ENTHUSE",
+          "INFAMES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ct5enjcr",
+      "board": [
+        [
+          "H",
+          "Y",
+          "N",
+          "U",
+          "T"
+        ],
+        [
+          "H",
+          "I",
+          "A",
+          "I",
+          "C"
+        ],
+        [
+          "E",
+          "E",
+          "M",
+          "N",
+          "P"
+        ],
+        [
+          "O",
+          "U",
+          "R",
+          "O",
+          "A"
+        ],
+        [
+          "I",
+          "E",
+          "C",
+          "G",
+          "J"
+        ]
+      ],
+      "maxPossibleScore": 539,
+      "debug": {
+        "totalValidWords": 333,
+        "wordsByLength": {
+          "3": 110,
+          "4": 106,
+          "5": 66,
+          "6": 38,
+          "7": 11,
+          "8": 1,
+          "10": 1
+        },
+        "longestWords": [
+          "HEMIANOPIC",
+          "MINUTIAE",
+          "NIMONIC",
+          "MINUTIA",
+          "MEROPIA",
+          "MEROPIC",
+          "REMANIE",
+          "ORGANIC",
+          "ANAEMIC",
+          "APOMICT"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "g8zuolix",
+      "board": [
+        [
+          "D",
+          "E",
+          "I",
+          "O",
+          "L"
+        ],
+        [
+          "P",
+          "R",
+          "H",
+          "E",
+          "A"
+        ],
+        [
+          "T",
+          "N",
+          "L",
+          "P",
+          "B"
+        ],
+        [
+          "M",
+          "S",
+          "A",
+          "U",
+          "I"
+        ],
+        [
+          "N",
+          "U",
+          "G",
+          "I",
+          "O"
+        ]
+      ],
+      "maxPossibleScore": 362,
+      "debug": {
+        "totalValidWords": 270,
+        "wordsByLength": {
+          "3": 91,
+          "4": 110,
+          "5": 52,
+          "6": 14,
+          "7": 3
+        },
+        "longestWords": [
+          "ELUANTS",
+          "PULSANT",
+          "BELUGAS"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "i6h9mswy",
+      "board": [
+        [
+          "T",
+          "L",
+          "E",
+          "R",
+          "L"
+        ],
+        [
+          "R",
+          "W",
+          "I",
+          "N",
+          "I"
+        ],
+        [
+          "M",
+          "M",
+          "E",
+          "A",
+          "Z"
+        ],
+        [
+          "T",
+          "N",
+          "S",
+          "E",
+          "E"
+        ],
+        [
+          "D",
+          "I",
+          "C",
+          "O",
+          "S"
+        ]
+      ],
+      "maxPossibleScore": 691,
+      "debug": {
+        "totalValidWords": 389,
+        "wordsByLength": {
+          "3": 89,
+          "4": 137,
+          "5": 88,
+          "6": 58,
+          "7": 12,
+          "8": 4,
+          "9": 1
+        },
+        "longestWords": [
+          "LENIENCES",
+          "LENIENCE",
+          "LINIMENT",
+          "AIRLINES",
+          "SINEWIER",
+          "TWEEZES",
+          "LENIENT",
+          "LIERNES",
+          "LIENEES",
+          "RELINES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "j3aubw6a",
+      "board": [
+        [
+          "W",
+          "O",
+          "N",
+          "A",
+          "E"
+        ],
+        [
+          "T",
+          "R",
+          "N",
+          "O",
+          "U"
+        ],
+        [
+          "Y",
+          "H",
+          "I",
+          "D",
+          "T"
+        ],
+        [
+          "T",
+          "S",
+          "R",
+          "P",
+          "E"
+        ],
+        [
+          "E",
+          "N",
+          "QU",
+          "R",
+          "I"
+        ]
+      ],
+      "maxPossibleScore": 515,
+      "debug": {
+        "totalValidWords": 308,
+        "wordsByLength": {
+          "3": 91,
+          "4": 95,
+          "5": 73,
+          "6": 34,
+          "7": 14,
+          "9": 1
+        },
+        "longestWords": [
+          "NONRIOTER",
+          "ONANIST",
+          "NONDRIP",
+          "ANODISE",
+          "ANDIRON",
+          "TONNISH",
+          "TRIDUAN",
+          "TRIPIER",
+          "THRISTY",
+          "THIRSTY"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "xwfjajk9",
+      "board": [
+        [
+          "L",
+          "O",
+          "T",
+          "W",
+          "N"
+        ],
+        [
+          "N",
+          "R",
+          "E",
+          "E",
+          "E"
+        ],
+        [
+          "E",
+          "I",
+          "N",
+          "N",
+          "F"
+        ],
+        [
+          "I",
+          "P",
+          "P",
+          "O",
+          "J"
+        ],
+        [
+          "T",
+          "F",
+          "E",
+          "I",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 492,
+      "debug": {
+        "totalValidWords": 263,
+        "wordsByLength": {
+          "3": 70,
+          "4": 92,
+          "5": 49,
+          "6": 32,
+          "7": 14,
+          "8": 6
+        },
+        "longestWords": [
+          "NINETEEN",
+          "ROTENONE",
+          "RONEPIPE",
+          "NONINERT",
+          "PEPERONI",
+          "PEPERINO",
+          "TWEENIE",
+          "TWEENER",
+          "TEENIER",
+          "TENONER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3zfh19xp",
+      "board": [
+        [
+          "S",
+          "O",
+          "A",
+          "U",
+          "T"
+        ],
+        [
+          "S",
+          "N",
+          "N",
+          "E",
+          "S"
+        ],
+        [
+          "U",
+          "O",
+          "T",
+          "V",
+          "C"
+        ],
+        [
+          "S",
+          "A",
+          "C",
+          "I",
+          "E"
+        ],
+        [
+          "N",
+          "O",
+          "L",
+          "K",
+          "H"
+        ]
+      ],
+      "maxPossibleScore": 1026,
+      "debug": {
+        "totalValidWords": 481,
+        "wordsByLength": {
+          "3": 93,
+          "4": 155,
+          "5": 121,
+          "6": 66,
+          "7": 28,
+          "8": 13,
+          "9": 4,
+          "10": 1
+        },
+        "longestWords": [
+          "CICLATOUNS",
+          "CICLATONS",
+          "CICLATOUN",
+          "CONSONANT",
+          "LOCATIVES",
+          "SONANTAL",
+          "SONANTIC",
+          "ANTICOUS",
+          "ANTILOCK",
+          "NONVITAL"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "m0rq0ah1",
+      "board": [
+        [
+          "O",
+          "R",
+          "I",
+          "F",
+          "T"
+        ],
+        [
+          "S",
+          "O",
+          "E",
+          "O",
+          "N"
+        ],
+        [
+          "D",
+          "S",
+          "Z",
+          "H",
+          "P"
+        ],
+        [
+          "A",
+          "E",
+          "A",
+          "Y",
+          "R"
+        ],
+        [
+          "A",
+          "E",
+          "O",
+          "A",
+          "A"
+        ]
+      ],
+      "maxPossibleScore": 388,
+      "debug": {
+        "totalValidWords": 280,
+        "wordsByLength": {
+          "3": 108,
+          "4": 95,
+          "5": 54,
+          "6": 19,
+          "7": 4
+        },
+        "longestWords": [
+          "SOREHON",
+          "PHASORS",
+          "PHASERS",
+          "YARPHAS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "v9gi72jb",
+      "board": [
+        [
+          "A",
+          "O",
+          "O",
+          "E",
+          "O"
+        ],
+        [
+          "N",
+          "T",
+          "A",
+          "R",
+          "N"
+        ],
+        [
+          "T",
+          "E",
+          "E",
+          "Z",
+          "R"
+        ],
+        [
+          "M",
+          "O",
+          "U",
+          "T",
+          "A"
+        ],
+        [
+          "D",
+          "Y",
+          "A",
+          "U",
+          "O"
+        ]
+      ],
+      "maxPossibleScore": 395,
+      "debug": {
+        "totalValidWords": 252,
+        "wordsByLength": {
+          "3": 82,
+          "4": 91,
+          "5": 47,
+          "6": 25,
+          "7": 4,
+          "8": 3
+        },
+        "longestWords": [
+          "ANTEATER",
+          "AEROTONE",
+          "OUTEATEN",
+          "ATEMOYA",
+          "TOMENTA",
+          "ENTERON",
+          "OUTEARN"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "jjij27om",
+      "board": [
+        [
+          "N",
+          "T",
+          "I",
+          "E",
+          "P"
+        ],
+        [
+          "O",
+          "R",
+          "E",
+          "R",
+          "A"
+        ],
+        [
+          "E",
+          "C",
+          "K",
+          "A",
+          "F"
+        ],
+        [
+          "F",
+          "E",
+          "O",
+          "E",
+          "P"
+        ],
+        [
+          "S",
+          "O",
+          "D",
+          "R",
+          "L"
+        ]
+      ],
+      "maxPossibleScore": 995,
+      "debug": {
+        "totalValidWords": 522,
+        "wordsByLength": {
+          "3": 112,
+          "4": 173,
+          "5": 111,
+          "6": 95,
+          "7": 23,
+          "8": 6,
+          "9": 2
+        },
+        "longestWords": [
+          "PRERECORD",
+          "RETROCEDE",
+          "PRECODES",
+          "RETIREES",
+          "RERECORD",
+          "RECORKED",
+          "DREARIER",
+          "REPARKED",
+          "TIERCES",
+          "TIERCED"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "gm17499q",
+      "board": [
+        [
+          "N",
+          "I",
+          "U",
+          "H",
+          "A"
+        ],
+        [
+          "A",
+          "L",
+          "T",
+          "Z",
+          "N"
+        ],
+        [
+          "E",
+          "N",
+          "A",
+          "U",
+          "E"
+        ],
+        [
+          "A",
+          "O",
+          "T",
+          "O",
+          "T"
+        ],
+        [
+          "L",
+          "I",
+          "A",
+          "V",
+          "P"
+        ]
+      ],
+      "maxPossibleScore": 375,
+      "debug": {
+        "totalValidWords": 235,
+        "wordsByLength": {
+          "3": 69,
+          "4": 97,
+          "5": 38,
+          "6": 20,
+          "7": 8,
+          "8": 1,
+          "9": 1,
+          "10": 1
+        },
+        "longestWords": [
+          "NUTATIONAL",
+          "OVATIONAL",
+          "NUTATION",
+          "AILANTO",
+          "ALATION",
+          "AEOLIAN",
+          "ELATION",
+          "ANTLIAE",
+          "TOENAIL",
+          "OUTLAIN"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "bcclf3xb",
+      "board": [
+        [
+          "R",
+          "E",
+          "U",
+          "N",
+          "A"
+        ],
+        [
+          "P",
+          "T",
+          "O",
+          "L",
+          "R"
+        ],
+        [
+          "R",
+          "H",
+          "QU",
+          "S",
+          "T"
+        ],
+        [
+          "F",
+          "N",
+          "R",
+          "F",
+          "O"
+        ],
+        [
+          "U",
+          "I",
+          "E",
+          "T",
+          "I"
+        ]
+      ],
+      "maxPossibleScore": 288,
+      "debug": {
+        "totalValidWords": 212,
+        "wordsByLength": {
+          "3": 71,
+          "4": 84,
+          "5": 42,
+          "6": 13,
+          "7": 2
+        },
+        "longestWords": [
+          "SOLUNAR",
+          "STOITER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "nn5zks4g",
+      "board": [
+        [
+          "I",
+          "I",
+          "C",
+          "N",
+          "A"
+        ],
+        [
+          "K",
+          "I",
+          "F",
+          "T",
+          "A"
+        ],
+        [
+          "T",
+          "V",
+          "C",
+          "O",
+          "H"
+        ],
+        [
+          "E",
+          "S",
+          "L",
+          "L",
+          "A"
+        ],
+        [
+          "S",
+          "T",
+          "H",
+          "E",
+          "M"
+        ]
+      ],
+      "maxPossibleScore": 341,
+      "debug": {
+        "totalValidWords": 232,
+        "wordsByLength": {
+          "3": 60,
+          "4": 98,
+          "5": 55,
+          "6": 14,
+          "7": 4,
+          "8": 1
+        },
+        "longestWords": [
+          "TESTICLE",
+          "KITSETS",
+          "TICTOCS",
+          "SHELVES",
+          "THELVES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tbwqefht",
+      "board": [
+        [
+          "V",
+          "C",
+          "A",
+          "C",
+          "A"
+        ],
+        [
+          "A",
+          "D",
+          "I",
+          "E",
+          "O"
+        ],
+        [
+          "K",
+          "I",
+          "I",
+          "O",
+          "E"
+        ],
+        [
+          "I",
+          "I",
+          "N",
+          "H",
+          "A"
+        ],
+        [
+          "N",
+          "U",
+          "A",
+          "T",
+          "S"
+        ]
+      ],
+      "maxPossibleScore": 264,
+      "debug": {
+        "totalValidWords": 191,
+        "wordsByLength": {
+          "3": 69,
+          "4": 71,
+          "5": 37,
+          "6": 10,
+          "7": 4
+        },
+        "longestWords": [
+          "AECIDIA",
+          "CICADAE",
+          "ANTHOID",
+          "THIONIN"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ay6o1uun",
+      "board": [
+        [
+          "I",
+          "N",
+          "T",
+          "D",
+          "O"
+        ],
+        [
+          "D",
+          "N",
+          "E",
+          "M",
+          "E"
+        ],
+        [
+          "A",
+          "N",
+          "N",
+          "N",
+          "O"
+        ],
+        [
+          "QU",
+          "N",
+          "R",
+          "I",
+          "E"
+        ],
+        [
+          "A",
+          "E",
+          "S",
+          "R",
+          "U"
+        ]
+      ],
+      "maxPossibleScore": 399,
+      "debug": {
+        "totalValidWords": 214,
+        "wordsByLength": {
+          "3": 58,
+          "4": 61,
+          "5": 47,
+          "6": 36,
+          "7": 9,
+          "8": 3
+        },
+        "longestWords": [
+          "DEMONISE",
+          "ANTENNAE",
+          "ANSERINE",
+          "TENNERS",
+          "TENNESI",
+          "DENIERS",
+          "NANDINE",
+          "ANTENNA",
+          "ANEMONE",
+          "NEURINE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "gt9jws03",
+      "board": [
+        [
+          "C",
+          "P",
+          "N",
+          "N",
+          "A"
+        ],
+        [
+          "I",
+          "A",
+          "S",
+          "I",
+          "D"
+        ],
+        [
+          "A",
+          "S",
+          "P",
+          "W",
+          "E"
+        ],
+        [
+          "O",
+          "G",
+          "O",
+          "B",
+          "I"
+        ],
+        [
+          "E",
+          "M",
+          "A",
+          "Y",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 540,
+      "debug": {
+        "totalValidWords": 373,
+        "wordsByLength": {
+          "3": 127,
+          "4": 144,
+          "5": 65,
+          "6": 29,
+          "7": 6,
+          "8": 2
+        },
+        "longestWords": [
+          "ADIPSIAS",
+          "RIBOSOME",
+          "CASSINA",
+          "PANSIED",
+          "PASSAGE",
+          "ADIPSIA",
+          "SAPSAGO",
+          "MOPANIS"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "23brle87",
+      "board": [
+        [
+          "E",
+          "C",
+          "O",
+          "N",
+          "A"
+        ],
+        [
+          "G",
+          "I",
+          "C",
+          "O",
+          "N"
+        ],
+        [
+          "E",
+          "T",
+          "L",
+          "E",
+          "Y"
+        ],
+        [
+          "Y",
+          "P",
+          "U",
+          "R",
+          "O"
+        ],
+        [
+          "E",
+          "A",
+          "J",
+          "E",
+          "O"
+        ]
+      ],
+      "maxPossibleScore": 486,
+      "debug": {
+        "totalValidWords": 292,
+        "wordsByLength": {
+          "3": 90,
+          "4": 98,
+          "5": 58,
+          "6": 33,
+          "7": 10,
+          "8": 3
+        },
+        "longestWords": [
+          "NONELITE",
+          "ERUPTION",
+          "ERECTION",
+          "CONNECT",
+          "COCTILE",
+          "OCTUPLE",
+          "NOCTULE",
+          "ANNOYER",
+          "LECTION",
+          "LECTURE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "pk690od5",
+      "board": [
+        [
+          "P",
+          "O",
+          "T",
+          "I",
+          "A"
+        ],
+        [
+          "E",
+          "E",
+          "D",
+          "N",
+          "U"
+        ],
+        [
+          "E",
+          "S",
+          "A",
+          "A",
+          "X"
+        ],
+        [
+          "E",
+          "I",
+          "S",
+          "E",
+          "H"
+        ],
+        [
+          "S",
+          "T",
+          "R",
+          "R",
+          "N"
+        ]
+      ],
+      "maxPossibleScore": 917,
+      "debug": {
+        "totalValidWords": 453,
+        "wordsByLength": {
+          "3": 101,
+          "4": 142,
+          "5": 106,
+          "6": 59,
+          "7": 35,
+          "8": 8,
+          "9": 2
+        },
+        "longestWords": [
+          "ANDESITES",
+          "HANDSIEST",
+          "ANDESITE",
+          "EPEEISTS",
+          "DESIRERS",
+          "DESSERTS",
+          "HANDSETS",
+          "HEADSETS",
+          "HESSITES",
+          "STRESSED"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "d866on7x",
+      "board": [
+        [
+          "R",
+          "T",
+          "W",
+          "K",
+          "C"
+        ],
+        [
+          "D",
+          "I",
+          "I",
+          "E",
+          "C"
+        ],
+        [
+          "H",
+          "M",
+          "M",
+          "E",
+          "R"
+        ],
+        [
+          "I",
+          "E",
+          "I",
+          "D",
+          "Y"
+        ],
+        [
+          "E",
+          "N",
+          "U",
+          "S",
+          "I"
+        ]
+      ],
+      "maxPossibleScore": 469,
+      "debug": {
+        "totalValidWords": 278,
+        "wordsByLength": {
+          "3": 81,
+          "4": 94,
+          "5": 57,
+          "6": 31,
+          "7": 13,
+          "8": 2
+        },
+        "longestWords": [
+          "MEUNIERE",
+          "SIMMERED",
+          "TRIMMER",
+          "TRIMMED",
+          "TIMIDER",
+          "TIERCED",
+          "DIRTIER",
+          "DIRTIED",
+          "DHIMMIS",
+          "CREMINI"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "9c6wl95k",
+      "board": [
+        [
+          "S",
+          "L",
+          "G",
+          "E",
+          "A"
+        ],
+        [
+          "R",
+          "R",
+          "H",
+          "I",
+          "Y"
+        ],
+        [
+          "L",
+          "A",
+          "R",
+          "A",
+          "O"
+        ],
+        [
+          "J",
+          "E",
+          "O",
+          "N",
+          "E"
+        ],
+        [
+          "H",
+          "S",
+          "I",
+          "I",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 444,
+      "debug": {
+        "totalValidWords": 299,
+        "wordsByLength": {
+          "3": 87,
+          "4": 112,
+          "5": 75,
+          "6": 18,
+          "7": 6,
+          "8": 1
+        },
+        "longestWords": [
+          "NOSHERIE",
+          "IRONIES",
+          "IRONISE",
+          "IONISER",
+          "ALERION",
+          "ROINISH",
+          "HEROINE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "j000tp67",
+      "board": [
+        [
+          "I",
+          "O",
+          "O",
+          "E",
+          "D"
+        ],
+        [
+          "E",
+          "E",
+          "A",
+          "E",
+          "P"
+        ],
+        [
+          "F",
+          "F",
+          "P",
+          "E",
+          "S"
+        ],
+        [
+          "O",
+          "E",
+          "S",
+          "S",
+          "M"
+        ],
+        [
+          "K",
+          "L",
+          "H",
+          "A",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 383,
+      "debug": {
+        "totalValidWords": 237,
+        "wordsByLength": {
+          "3": 62,
+          "4": 85,
+          "5": 50,
+          "6": 32,
+          "7": 8
+        },
+        "longestWords": [
+          "PEDESES",
+          "PELHAMS",
+          "SEAFOLK",
+          "SMASHES",
+          "MARSHES",
+          "LOESSES",
+          "LESSEES",
+          "ASEPSES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "xao0yina",
+      "board": [
+        [
+          "P",
+          "R",
+          "E",
+          "C",
+          "U"
+        ],
+        [
+          "A",
+          "O",
+          "R",
+          "I",
+          "G"
+        ],
+        [
+          "K",
+          "T",
+          "I",
+          "E",
+          "I"
+        ],
+        [
+          "I",
+          "C",
+          "A",
+          "H",
+          "N"
+        ],
+        [
+          "H",
+          "U",
+          "A",
+          "O",
+          "N"
+        ]
+      ],
+      "maxPossibleScore": 575,
+      "debug": {
+        "totalValidWords": 326,
+        "wordsByLength": {
+          "3": 98,
+          "4": 106,
+          "5": 65,
+          "6": 34,
+          "7": 19,
+          "8": 1,
+          "9": 3
+        },
+        "longestWords": [
+          "INHERITOR",
+          "NONHEROIC",
+          "NONEROTIC",
+          "PARRITCH",
+          "PRERIOT",
+          "PAROTIC",
+          "PATRICK",
+          "EROTICA",
+          "ERRATIC",
+          "CEROTIC"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6o9zr8oj",
+      "board": [
+        [
+          "T",
+          "S",
+          "N",
+          "N",
+          "E"
+        ],
+        [
+          "E",
+          "E",
+          "I",
+          "A",
+          "M"
+        ],
+        [
+          "C",
+          "T",
+          "N",
+          "A",
+          "Z"
+        ],
+        [
+          "L",
+          "R",
+          "L",
+          "G",
+          "O"
+        ],
+        [
+          "E",
+          "T",
+          "Y",
+          "N",
+          "S"
+        ]
+      ],
+      "maxPossibleScore": 1003,
+      "debug": {
+        "totalValidWords": 411,
+        "wordsByLength": {
+          "3": 85,
+          "4": 120,
+          "5": 80,
+          "6": 65,
+          "7": 38,
+          "8": 16,
+          "9": 7
+        },
+        "longestWords": [
+          "STEENINGS",
+          "MEANINGLY",
+          "MAGNESIAN",
+          "MAGNESITE",
+          "MAGNETIST",
+          "MAGNETISE",
+          "LAMANTINS",
+          "TENANTRY",
+          "STEENING",
+          "STENNING"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "odqj4jz5",
+      "board": [
+        [
+          "U",
+          "F",
+          "T",
+          "N",
+          "D"
+        ],
+        [
+          "O",
+          "G",
+          "I",
+          "S",
+          "O"
+        ],
+        [
+          "E",
+          "R",
+          "N",
+          "E",
+          "N"
+        ],
+        [
+          "D",
+          "C",
+          "B",
+          "R",
+          "E"
+        ],
+        [
+          "A",
+          "E",
+          "E",
+          "A",
+          "W"
+        ]
+      ],
+      "maxPossibleScore": 1110,
+      "debug": {
+        "totalValidWords": 564,
+        "wordsByLength": {
+          "3": 117,
+          "4": 183,
+          "5": 138,
+          "6": 81,
+          "7": 34,
+          "8": 8,
+          "9": 3
+        },
+        "longestWords": [
+          "NONSIGNER",
+          "INBREEDER",
+          "RENESTING",
+          "FORNENST",
+          "CROFTING",
+          "BREINGED",
+          "BREENGED",
+          "BARNIEST",
+          "REESTING",
+          "ACERBEST"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    }
+  ]
 }

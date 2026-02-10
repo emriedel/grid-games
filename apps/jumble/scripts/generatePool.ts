@@ -2,10 +2,10 @@
  * Jumble Pool Generation Script
  *
  * Generates a pool of puzzles for the archive system.
- * Each puzzle includes the board and debug info.
+ * Uses a Trie-based word finder for fast prefix pruning.
  *
  * Usage: npx tsx scripts/generatePool.ts [count]
- *   count: Number of puzzles to generate (default: 365)
+ *   count: Number of puzzles to generate (default: 200)
  *
  * Output: public/puzzles/pool.json
  */
@@ -14,6 +14,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const BOARD_SIZE = 5;
+const MIN_WORD_LENGTH = 3;
+const MAX_WORD_LENGTH = 10; // Cap for performance
 
 // Standard Big Boggle dice (25 dice for 5x5 grid)
 const BOGGLE_DICE = [
@@ -26,16 +28,82 @@ const BOGGLE_DICE = [
 
 type Board = string[][];
 
-// Load dictionary for word validation
-const DICTIONARY_PATH = path.join(__dirname, '../public/dict/words.txt');
-let DICTIONARY: Set<string> | null = null;
+// ============ TRIE IMPLEMENTATION ============
 
-function loadDictionary(): Set<string> {
-  if (DICTIONARY) return DICTIONARY;
+interface TrieNode {
+  children: Map<string, TrieNode>;
+  isWord: boolean;
+}
+
+function createTrieNode(): TrieNode {
+  return { children: new Map(), isWord: false };
+}
+
+class Trie {
+  root: TrieNode;
+
+  constructor() {
+    this.root = createTrieNode();
+  }
+
+  insert(word: string): void {
+    let node = this.root;
+    for (const char of word) {
+      if (!node.children.has(char)) {
+        node.children.set(char, createTrieNode());
+      }
+      node = node.children.get(char)!;
+    }
+    node.isWord = true;
+  }
+
+  // Check if prefix exists in trie
+  hasPrefix(prefix: string): boolean {
+    let node = this.root;
+    for (const char of prefix) {
+      if (!node.children.has(char)) {
+        return false;
+      }
+      node = node.children.get(char)!;
+    }
+    return true;
+  }
+
+  // Check if exact word exists
+  isWord(word: string): boolean {
+    let node = this.root;
+    for (const char of word) {
+      if (!node.children.has(char)) {
+        return false;
+      }
+      node = node.children.get(char)!;
+    }
+    return node.isWord;
+  }
+
+  // Get node for a prefix (for incremental checking)
+  getNode(prefix: string): TrieNode | null {
+    let node = this.root;
+    for (const char of prefix) {
+      if (!node.children.has(char)) {
+        return null;
+      }
+      node = node.children.get(char)!;
+    }
+    return node;
+  }
+}
+
+// ============ DICTIONARY ============
+
+const DICTIONARY_PATH = path.join(__dirname, '../public/dict/words.txt');
+let trie: Trie | null = null;
+
+function loadDictionary(): Trie {
+  if (trie) return trie;
 
   if (!fs.existsSync(DICTIONARY_PATH)) {
     console.error(`Dictionary not found at ${DICTIONARY_PATH}`);
-    console.error('Make sure the dictionary file exists.');
     process.exit(1);
   }
 
@@ -43,14 +111,19 @@ function loadDictionary(): Set<string> {
   const words = content
     .split('\n')
     .map(w => w.trim().toUpperCase())
-    .filter(w => w.length >= 3);
+    .filter(w => w.length >= MIN_WORD_LENGTH && w.length <= MAX_WORD_LENGTH);
 
-  DICTIONARY = new Set(words);
-  console.log(`Loaded dictionary with ${DICTIONARY.size} words`);
-  return DICTIONARY;
+  trie = new Trie();
+  for (const word of words) {
+    trie.insert(word);
+  }
+
+  console.log(`Loaded dictionary with ${words.length} words into Trie`);
+  return trie;
 }
 
-// Seeded random number generator (Mulberry32)
+// ============ RANDOM UTILITIES ============
+
 function createSeededRandom(seed: number): () => number {
   return function () {
     let t = (seed += 0x6d2b79f5);
@@ -60,7 +133,6 @@ function createSeededRandom(seed: number): () => number {
   };
 }
 
-// Fisher-Yates shuffle with seeded random
 function shuffle<T>(array: T[], random: () => number): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -70,17 +142,16 @@ function shuffle<T>(array: T[], random: () => number): T[] {
   return shuffled;
 }
 
-// Check if a letter is a vowel
+// ============ BOARD VALIDATION ============
+
 function isVowel(letter: string): boolean {
   return 'AEIOU'.includes(letter.charAt(0));
 }
 
-// Check if a letter is rare
 function isRareLetter(letter: string): boolean {
   return 'QZXJK'.includes(letter.charAt(0));
 }
 
-// Get quadrant for a position
 function getQuadrant(row: number, col: number): number {
   const isTop = row <= 2;
   const isLeft = col <= 2;
@@ -90,10 +161,8 @@ function getQuadrant(row: number, col: number): number {
   return 3;
 }
 
-// Validate that each quadrant has at least one vowel
 function validateVowelQuadrants(board: Board): boolean {
   const quadrantsWithVowels = new Set<number>();
-
   for (let row = 0; row < BOARD_SIZE; row++) {
     for (let col = 0; col < BOARD_SIZE; col++) {
       if (isVowel(board[row][col])) {
@@ -101,11 +170,9 @@ function validateVowelQuadrants(board: Board): boolean {
       }
     }
   }
-
   return quadrantsWithVowels.size === 4;
 }
 
-// Validate board meets playability criteria
 function validateBoard(board: Board): boolean {
   const vowelPositions: { row: number; col: number }[] = [];
   let rareCount = 0;
@@ -122,24 +189,18 @@ function validateBoard(board: Board): boolean {
     }
   }
 
-  // At least 4 vowels
   if (vowelPositions.length < 4) return false;
-
-  // Vowels spread across at least 3 different rows
   const vowelRows = new Set(vowelPositions.map(p => p.row));
   if (vowelRows.size < 3) return false;
-
-  // Vowels spread across at least 3 different columns
   const vowelCols = new Set(vowelPositions.map(p => p.col));
   if (vowelCols.size < 3) return false;
-
-  // Max 2 rare letters
   if (rareCount > 2) return false;
 
   return true;
 }
 
-// Generate a board from shuffled dice
+// ============ BOARD GENERATION ============
+
 function createBoardFromDice(shuffledDice: string[], random: () => number): Board {
   const board: Board = [];
   let diceIndex = 0;
@@ -150,12 +211,9 @@ function createBoardFromDice(shuffledDice: string[], random: () => number): Boar
       const die = shuffledDice[diceIndex++];
       const faceIndex = Math.floor(random() * 6);
       let letter = die[faceIndex];
-
-      // Handle 'Q' -> 'Qu' conversion
       if (letter === 'Q') {
         letter = 'QU';
       }
-
       rowLetters.push(letter);
     }
     board.push(rowLetters);
@@ -164,113 +222,126 @@ function createBoardFromDice(shuffledDice: string[], random: () => number): Boar
   return board;
 }
 
-// Find all valid words on the board (simplified BFS)
-function findAllValidWords(board: Board): Map<string, { path: [number, number][] }> {
-  const dictionary = loadDictionary();
-  const validWords = new Map<string, { path: [number, number][] }>();
+// ============ FAST WORD FINDING WITH TRIE ============
 
-  // Get all adjacent positions
-  const getAdjacent = (row: number, col: number): [number, number][] => {
-    const adjacent: [number, number][] = [];
-    for (let dr = -1; dr <= 1; dr++) {
-      for (let dc = -1; dc <= 1; dc++) {
-        if (dr === 0 && dc === 0) continue;
-        const nr = row + dr;
-        const nc = col + dc;
-        if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
-          adjacent.push([nr, nc]);
+// Pre-compute adjacency list for the board
+function buildAdjacencyList(): number[][][] {
+  const adj: number[][][] = [];
+  for (let r = 0; r < BOARD_SIZE; r++) {
+    adj[r] = [];
+    for (let c = 0; c < BOARD_SIZE; c++) {
+      adj[r][c] = [];
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue;
+          const nr = r + dr;
+          const nc = c + dc;
+          if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
+            adj[r][c].push(nr * BOARD_SIZE + nc);
+          }
         }
       }
     }
-    return adjacent;
-  };
+  }
+  return adj;
+}
 
-  // DFS to find words
-  const dfs = (
-    row: number,
-    col: number,
-    path: [number, number][],
-    word: string,
-    visited: Set<string>
-  ) => {
-    const key = `${row},${col}`;
-    if (visited.has(key)) return;
+const ADJACENCY = buildAdjacencyList();
 
-    visited.add(key);
+function findAllValidWordsFast(board: Board, dictionary: Trie): Set<string> {
+  const validWords = new Set<string>();
+  const visited = new Array(BOARD_SIZE * BOARD_SIZE).fill(false);
+
+  function dfs(row: number, col: number, node: TrieNode, word: string): void {
+    const idx = row * BOARD_SIZE + col;
+    if (visited[idx]) return;
+
     const letter = board[row][col];
-    word += letter;
-    path = [...path, [row, col]];
 
-    // Check if this is a valid word
-    if (word.length >= 3 && dictionary.has(word) && !validWords.has(word)) {
-      validWords.set(word, { path: [...path] });
+    // Check if this letter continues a valid prefix
+    const nextNode = node.children.get(letter);
+    if (!nextNode) return; // Prune: no words start with this prefix
+
+    visited[idx] = true;
+    const newWord = word + letter;
+
+    // Check if we found a valid word
+    if (newWord.length >= MIN_WORD_LENGTH && nextNode.isWord) {
+      validWords.add(newWord);
     }
 
-    // Continue search if word is not too long
-    if (word.length < 12) {
-      for (const [nr, nc] of getAdjacent(row, col)) {
-        dfs(nr, nc, path, word, visited);
+    // Continue searching if word isn't too long
+    if (newWord.length < MAX_WORD_LENGTH) {
+      for (const neighborIdx of ADJACENCY[row][col]) {
+        const nr = Math.floor(neighborIdx / BOARD_SIZE);
+        const nc = neighborIdx % BOARD_SIZE;
+        dfs(nr, nc, nextNode, newWord);
       }
     }
 
-    visited.delete(key);
-  };
+    visited[idx] = false;
+  }
 
-  // Start from each cell
+  // Start DFS from each cell
   for (let row = 0; row < BOARD_SIZE; row++) {
     for (let col = 0; col < BOARD_SIZE; col++) {
-      dfs(row, col, [], '', new Set());
+      dfs(row, col, dictionary.root, '');
     }
   }
 
   return validWords;
 }
 
-interface BoardQuality {
-  totalWords: number;
-  words6Plus: number;
-  words7Plus: number;
-  wordsByLength: Record<number, number>;
-  longestWords: string[];
-}
+// ============ SCORING ============
 
-// Evaluate board quality
-function evaluateBoardQuality(board: Board): BoardQuality {
-  const allWords = findAllValidWords(board);
-  const wordsByLength: Record<number, number> = {};
-  const longestWords: string[] = [];
+const SCORING_TABLE: Record<number, number> = {
+  3: 1,
+  4: 1,
+  5: 2,
+  6: 3,
+  7: 5,
+  8: 11,
+};
 
-  for (const word of allWords.keys()) {
-    const length = word.replace('QU', 'Q').length;
-    wordsByLength[length] = (wordsByLength[length] || 0) + 1;
-
-    if (length >= 7) {
-      longestWords.push(word);
+function calculateWordScore(word: string): number {
+  // Get effective length (QU counts as 2 letters)
+  let length = 0;
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] === 'Q' && i + 1 < word.length && word[i + 1] === 'U') {
+      length += 2;
+      i++;
+    } else {
+      length += 1;
     }
   }
 
-  // Sort longest words by length descending
-  longestWords.sort((a, b) => b.length - a.length);
+  const scoringLengths = Object.keys(SCORING_TABLE)
+    .map(Number)
+    .sort((a, b) => b - a);
 
-  let words6Plus = 0;
-  let words7Plus = 0;
-  for (const [len, count] of Object.entries(wordsByLength)) {
-    if (parseInt(len) >= 6) words6Plus += count;
-    if (parseInt(len) >= 7) words7Plus += count;
+  for (const bracketLength of scoringLengths) {
+    if (length >= bracketLength) {
+      return SCORING_TABLE[bracketLength];
+    }
   }
 
-  return {
-    totalWords: allWords.size,
-    words6Plus,
-    words7Plus,
-    wordsByLength,
-    longestWords: longestWords.slice(0, 10), // Top 10 longest
-  };
+  return 0;
 }
 
-interface JumblePoolPuzzle {
+function calculateMaxPossibleScore(words: Set<string>): number {
+  let total = 0;
+  for (const word of words) {
+    total += calculateWordScore(word);
+  }
+  return total;
+}
+
+// ============ PUZZLE GENERATION ============
+
+export interface JumblePoolPuzzle {
   id: string;
   board: Board;
+  maxPossibleScore: number;
   debug: {
     totalValidWords: number;
     wordsByLength: Record<number, number>;
@@ -289,7 +360,7 @@ function generatePuzzleId(): string {
   return Math.random().toString(36).substring(2, 10);
 }
 
-function generatePuzzle(seed: number): JumblePoolPuzzle | null {
+function generatePuzzle(seed: number, dictionary: Trie): JumblePoolPuzzle | null {
   const maxAttempts = 100;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -299,13 +370,30 @@ function generatePuzzle(seed: number): JumblePoolPuzzle | null {
 
     // Basic validation
     if (!validateBoard(board)) continue;
-
-    // Quadrant validation
     if (!validateVowelQuadrants(board)) continue;
 
+    // Find all words using fast Trie-based search
+    const allWords = findAllValidWordsFast(board, dictionary);
+
     // Quality check
-    const quality = evaluateBoardQuality(board);
-    if (quality.totalWords >= 50 && quality.words6Plus >= 5) {
+    const wordsByLength: Record<number, number> = {};
+    const longestWords: string[] = [];
+
+    for (const word of allWords) {
+      const length = word.replace('QU', 'Q').length;
+      wordsByLength[length] = (wordsByLength[length] || 0) + 1;
+      if (length >= 7) {
+        longestWords.push(word);
+      }
+    }
+
+    let words6Plus = 0;
+    for (const [len, count] of Object.entries(wordsByLength)) {
+      if (parseInt(len) >= 6) words6Plus += count;
+    }
+
+    // Require at least 50 words and 5 words of 6+ letters
+    if (allWords.size >= 50 && words6Plus >= 5) {
       // Collect debug info
       const vowelPositions: [number, number][] = [];
       let rareLetterCount = 0;
@@ -322,13 +410,16 @@ function generatePuzzle(seed: number): JumblePoolPuzzle | null {
         }
       }
 
+      longestWords.sort((a, b) => b.length - a.length);
+
       return {
         id: generatePuzzleId(),
         board,
+        maxPossibleScore: calculateMaxPossibleScore(allWords),
         debug: {
-          totalValidWords: quality.totalWords,
-          wordsByLength: quality.wordsByLength,
-          longestWords: quality.longestWords,
+          totalValidWords: allWords.size,
+          wordsByLength,
+          longestWords: longestWords.slice(0, 10),
           rareLetterCount,
           vowelPositions,
         },
@@ -339,12 +430,14 @@ function generatePuzzle(seed: number): JumblePoolPuzzle | null {
   return null;
 }
 
+// ============ MAIN ============
+
 async function main() {
-  const count = parseInt(process.argv[2] || '365', 10);
+  const count = parseInt(process.argv[2] || '200', 10);
   console.log(`Generating ${count} Jumble puzzles...`);
 
-  // Pre-load dictionary
-  loadDictionary();
+  const startTime = Date.now();
+  const dictionary = loadDictionary();
 
   const puzzles: JumblePoolPuzzle[] = [];
   const usedIds = new Set<string>();
@@ -352,10 +445,9 @@ async function main() {
 
   for (let i = 0; i < count; i++) {
     const seed = Date.now() + i * 1000 + Math.floor(Math.random() * 1000);
-    const puzzle = generatePuzzle(seed);
+    const puzzle = generatePuzzle(seed, dictionary);
 
     if (puzzle) {
-      // Ensure unique IDs
       while (usedIds.has(puzzle.id)) {
         puzzle.id = generatePuzzleId();
       }
@@ -363,15 +455,16 @@ async function main() {
       puzzles.push(puzzle);
     } else {
       failedAttempts++;
-      i--; // Retry
+      i--;
       if (failedAttempts > 1000) {
         console.error('Too many failed attempts, stopping.');
         break;
       }
     }
 
-    if ((puzzles.length) % 50 === 0) {
-      console.log(`  Generated ${puzzles.length}/${count} puzzles...`);
+    if ((puzzles.length) % 25 === 0 && puzzles.length > 0) {
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+      console.log(`  Generated ${puzzles.length}/${count} puzzles... (${elapsed}s)`);
     }
   }
 
@@ -383,15 +476,19 @@ async function main() {
   const outputPath = path.join(__dirname, '../public/puzzles/pool.json');
   fs.writeFileSync(outputPath, JSON.stringify(poolFile, null, 2));
 
+  const totalTime = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\nGenerated ${puzzles.length} puzzles to ${outputPath}`);
+  console.log(`Total time: ${totalTime}s`);
 
   // Print summary stats
-  const avgWords = Math.round(puzzles.reduce((sum, p) => sum + p.debug.totalValidWords, 0) / puzzles.length);
-  const avgLong = Math.round(puzzles.reduce((sum, p) => sum + p.debug.longestWords.length, 0) / puzzles.length);
+  if (puzzles.length > 0) {
+    const avgWords = Math.round(puzzles.reduce((sum, p) => sum + p.debug.totalValidWords, 0) / puzzles.length);
+    const avgScore = Math.round(puzzles.reduce((sum, p) => sum + p.maxPossibleScore, 0) / puzzles.length);
 
-  console.log('\nStatistics:');
-  console.log(`  Average valid words: ${avgWords}`);
-  console.log(`  Average 7+ letter words: ${avgLong}`);
+    console.log('\nStatistics:');
+    console.log(`  Average valid words: ${avgWords}`);
+    console.log(`  Average max score: ${avgScore}`);
+  }
 }
 
 main().catch(console.error);

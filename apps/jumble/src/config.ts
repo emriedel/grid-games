@@ -3,7 +3,8 @@ import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-ga
 
 // Base date for puzzle numbering (first puzzle date)
 // IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
-const PUZZLE_BASE_DATE = new Date('2026-01-01T00:00:00');
+export const PUZZLE_BASE_DATE_STRING = '2026-02-01';
+export const PUZZLE_BASE_DATE = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
 
 export const jumbleConfig = defineGameConfig({
   id: 'jumble',

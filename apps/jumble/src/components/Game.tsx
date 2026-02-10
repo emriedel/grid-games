@@ -3,11 +3,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
+import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber, buildShareText } from '@grid-games/shared';
 import { getTodayPuzzleNumber } from '@/lib/storage';
 import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
-import { jumbleConfig } from '@/config';
+import { jumbleConfig, PUZZLE_BASE_DATE } from '@/config';
+import { formatStars } from '@/constants/gameConfig';
 import BoggleGrid from './BoggleGrid';
 import Timer from './Timer';
 import CurrentWord from './CurrentWord';
@@ -25,43 +26,8 @@ const numberEmojis: Record<number, string> = {
   9: '9️⃣',
 };
 
-// Jumble-specific wrapper for ResultsModal
-interface JumbleResultsModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  foundWords: FoundWord[];
-  score: number;
-  puzzleNumber?: number;
-}
-
-function JumbleResultsModal({
-  isOpen,
-  onClose,
-  foundWords,
-  score,
-  puzzleNumber,
-}: JumbleResultsModalProps) {
-  // Group words by length for share text
-  const wordsByLength: Record<number, FoundWord[]> = {};
-  for (const fw of foundWords) {
-    const len = fw.word.length;
-    if (!wordsByLength[len]) {
-      wordsByLength[len] = [];
-    }
-    wordsByLength[len].push(fw);
-  }
-
-  // Sort words within each length group alphabetically
-  for (const len in wordsByLength) {
-    wordsByLength[len].sort((a, b) => a.word.localeCompare(b.word));
-  }
-
-  // Get sorted lengths
-  const lengths = Object.keys(wordsByLength)
-    .map(Number)
-    .sort((a, b) => a - b);
-
-  // Build share text with word count by length
+// Generate word count emoji breakdown for share text
+function generateWordCountEmoji(foundWords: FoundWord[]): string {
   const wordCounts: Record<number, number> = {};
   for (const fw of foundWords) {
     const len = fw.word.length;
@@ -83,13 +49,64 @@ function JumbleResultsModal({
     counts.push(`${numberEmojis[7]}+: ${sevenPlus}`);
   }
 
-  const shareText = [
-    puzzleNumber ? `Jumble #${puzzleNumber}` : 'Jumble',
-    `Score: ${score} pts`,
-    counts.join(' | '),
-    '',
-    'https://nerdcube.games/jumble',
-  ].join('\n');
+  return counts.join(' | ');
+}
+
+// Jumble-specific wrapper for ResultsModal
+interface JumbleResultsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  foundWords: FoundWord[];
+  score: number;
+  maxPossibleScore: number;
+  stars: number;
+  puzzleNumber?: number;
+  isArchiveMode?: boolean;
+}
+
+function JumbleResultsModal({
+  isOpen,
+  onClose,
+  foundWords,
+  score,
+  maxPossibleScore,
+  stars,
+  puzzleNumber,
+  isArchiveMode,
+}: JumbleResultsModalProps) {
+  // Group words by length for display
+  const wordsByLength: Record<number, FoundWord[]> = {};
+  for (const fw of foundWords) {
+    const len = fw.word.length;
+    if (!wordsByLength[len]) {
+      wordsByLength[len] = [];
+    }
+    wordsByLength[len].push(fw);
+  }
+
+  // Sort words within each length group alphabetically
+  for (const len in wordsByLength) {
+    wordsByLength[len].sort((a, b) => a.word.localeCompare(b.word));
+  }
+
+  // Get sorted lengths
+  const lengths = Object.keys(wordsByLength)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  // Build share text using shared utility
+  const shareText = buildShareText({
+    gameId: 'jumble',
+    gameName: 'Jumble',
+    puzzleId: puzzleNumber || 0,
+    score,
+    maxScore: maxPossibleScore,
+    emojiGrid: formatStars(stars),
+    extraLines: [generateWordCountEmoji(foundWords)],
+    shareUrl: isArchiveMode && puzzleNumber
+      ? `https://nerdcube.games/jumble?puzzle=${puzzleNumber}`
+      : 'https://nerdcube.games/jumble',
+  });
 
   return (
     <ResultsModal
@@ -101,6 +118,7 @@ function JumbleResultsModal({
       primaryStat={{ value: score, label: 'points' }}
       secondaryStats={[
         { label: 'words found', value: foundWords.length },
+        { label: 'rating', value: formatStars(stars) },
       ]}
       shareConfig={{ text: shareText }}
     >
@@ -134,9 +152,7 @@ function JumbleResultsModal({
   );
 }
 
-// Base date for puzzle numbering (must match config.ts)
-const PUZZLE_BASE_DATE = '2026-01-01';
-const PUZZLE_BASE_DATE_OBJ = new Date(PUZZLE_BASE_DATE);
+// Use imported PUZZLE_BASE_DATE from config
 
 export default function Game() {
   const searchParams = useSearchParams();
@@ -152,7 +168,7 @@ export default function Game() {
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
     if (archivePuzzleNumber !== null && !isDebug) {
-      if (!isValidPuzzleNumber(PUZZLE_BASE_DATE_OBJ, archivePuzzleNumber)) {
+      if (!isValidPuzzleNumber(PUZZLE_BASE_DATE, archivePuzzleNumber)) {
         router.replace('/');
       }
     }
@@ -168,6 +184,7 @@ export default function Game() {
     totalScore,
     allValidWords,
     maxPossibleScore,
+    stars,
     setCurrentPath,
     submitWord,
     startGame,
@@ -253,7 +270,7 @@ export default function Game() {
   const puzzleInfo = isArchiveMode
     ? {
         number: puzzleNumber,
-        date: formatDisplayDate(getDateForPuzzleNumber(PUZZLE_BASE_DATE_OBJ, puzzleNumber)),
+        date: formatDisplayDate(getDateForPuzzleNumber(PUZZLE_BASE_DATE, puzzleNumber)),
       }
     : jumbleConfig.getPuzzleInfo();
 
@@ -306,7 +323,10 @@ export default function Game() {
           onClose={() => setShowResults(false)}
           foundWords={foundWords}
           score={totalScore}
+          maxPossibleScore={maxPossibleScore}
+          stars={stars}
           puzzleNumber={puzzleInfo.number}
+          isArchiveMode={isArchiveMode}
         />
       </>
     );
@@ -389,7 +409,10 @@ export default function Game() {
         onClose={() => setShowResults(false)}
         foundWords={foundWords}
         score={totalScore}
+        maxPossibleScore={maxPossibleScore}
+        stars={stars}
         puzzleNumber={puzzleInfo.number}
+        isArchiveMode={isArchiveMode}
       />
 
       {/* Debug Panel */}

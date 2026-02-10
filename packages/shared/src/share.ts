@@ -48,9 +48,6 @@ export function buildShareText(input: ShareInput): string {
     lines.push(...input.extraLines);
   }
 
-  // Empty line before emoji grid
-  lines.push('');
-
   // Emoji grid/bar
   lines.push(input.emojiGrid);
 

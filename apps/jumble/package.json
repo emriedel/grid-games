@@ -9,8 +9,8 @@
     "lint": "eslint",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .next .turbo node_modules",
-    "generate-pool": "npx tsx scripts/generatePool.ts",
-    "assign-puzzles": "npx tsx ../../packages/shared/scripts/assignPuzzles.ts . --days 30"
+    "generate-puzzles": "npx tsx scripts/generatePool.ts",
+    "assign-puzzles": "npx tsx scripts/assignPuzzles.ts"
   },
   "dependencies": {
     "@grid-games/config": "*",
