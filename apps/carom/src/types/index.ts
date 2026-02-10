@@ -40,6 +40,7 @@ export interface Puzzle {
   optimalMoves: number;
   date: string;
   puzzleNumber?: number;
+  puzzleId?: string; // Unique puzzle identifier for storage key
   solutionPath?: { pieceId: string; direction: Direction }[];
 }
 

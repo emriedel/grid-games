@@ -96,7 +96,8 @@ export function Game() {
   const todayPuzzleNumber = getTodayPuzzleNumber();
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
 
-  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, replay, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber });
+  const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
+  const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, replay, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber, puzzleId: activePuzzleId });
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [showOptimalInfo, setShowOptimalInfo] = useState(false);
@@ -133,6 +134,7 @@ export function Game() {
         }
 
         setPuzzle(loadedPuzzle);
+        setActivePuzzleId(loadedPuzzle.puzzleId);
 
         // Debug logging - console only
         if (isDebug) {
@@ -149,7 +151,7 @@ export function Game() {
 
         // Check saved state using unified storage (skip in debug mode)
         if (!isDebug) {
-          const puzzleState = getPuzzleState(activePuzzleNumber);
+          const puzzleState = getPuzzleState(activePuzzleNumber, loadedPuzzle.puzzleId);
 
           if (puzzleState?.status === 'completed') {
             // Check if optimal was achieved
@@ -237,7 +239,7 @@ export function Game() {
     const completion = getCompletionState();
     if (completion) {
       // Check if optimal was achieved
-      setAchievedOptimal(didAchieveOptimal(activePuzzleNumber));
+      setAchievedOptimal(didAchieveOptimal(activePuzzleNumber, puzzle.puzzleId));
 
       // Reconstruct final piece positions from move history
       const finalPieces = puzzle.pieces.map(p => ({ ...p }));
@@ -280,14 +282,14 @@ export function Game() {
           moveHistory: state.moveHistory,
           achievedOptimal: isOptimal,
         },
-      });
+      }, activePuzzleId);
       // Small delay before showing results
       const timer = setTimeout(() => {
         setShowResults(true);
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession, activePuzzleNumber]);
+  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession, activePuzzleNumber, activePuzzleId]);
 
   // Handle replay - reset game state and start fresh
   const handleReplay = useCallback(() => {

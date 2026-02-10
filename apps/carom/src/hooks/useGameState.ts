@@ -130,10 +130,13 @@ const initialState: GameState = {
 interface UseGameStateProps {
   /** Puzzle number for storage (defaults to today) */
   puzzleNumber?: number;
+  /** Puzzle ID for storage key (if available) */
+  puzzleId?: string;
 }
 
 export function useGameState(props?: UseGameStateProps) {
   const activePuzzleNumber = props?.puzzleNumber ?? getTodayPuzzleNumber();
+  const activePuzzleId = props?.puzzleId;
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   // Save in-progress state whenever pieces or moves change (only if meaningful progress made)
@@ -147,9 +150,9 @@ export function useGameState(props?: UseGameStateProps) {
           moveCount: state.moveCount,
           moveHistory: state.moveHistory,
         },
-      });
+      }, activePuzzleId);
     }
-  }, [state.phase, state.pieces, state.moveCount, state.moveHistory, activePuzzleNumber]);
+  }, [state.phase, state.pieces, state.moveCount, state.moveHistory, activePuzzleNumber, activePuzzleId]);
 
   const startGame = useCallback((puzzle: Puzzle) => {
     dispatch({ type: 'START_GAME', puzzle });
@@ -222,10 +225,10 @@ export function useGameState(props?: UseGameStateProps) {
 
   const replay = useCallback(() => {
     // Clear saved state for this puzzle
-    clearPuzzleState(activePuzzleNumber);
+    clearPuzzleState(activePuzzleNumber, activePuzzleId);
     // Reset to initial state
     dispatch({ type: 'RESET' });
-  }, [activePuzzleNumber]);
+  }, [activePuzzleNumber, activePuzzleId]);
 
   const setFinished = useCallback(() => {
     dispatch({ type: 'SET_FINISHED' });

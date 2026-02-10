@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Check, Clock } from 'lucide-react';
 import { HamburgerMenu } from '@grid-games/ui';
-import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber, didAchieveOptimal } from '@/lib/storage';
+import { isPuzzleCompletedAny, isPuzzleInProgressAny, getTodayPuzzleNumber, didAchieveOptimalAny } from '@/lib/storage';
 
 // Carom launched Feb 1, 2026
 const PUZZLE_BASE_DATE = '2026-02-01';
@@ -42,13 +42,13 @@ export function ArchivePageContent() {
         year: 'numeric',
       });
 
-      const isCompleted = isPuzzleCompleted(num);
+      const isCompleted = isPuzzleCompletedAny(num);
       entries.push({
         number: num,
         date: dateStr,
         isCompleted,
-        isInProgress: isPuzzleInProgress(num),
-        achievedOptimal: isCompleted && didAchieveOptimal(num),
+        isInProgress: isPuzzleInProgressAny(num),
+        achievedOptimal: isCompleted && didAchieveOptimalAny(num),
       });
     }
 

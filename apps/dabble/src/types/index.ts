@@ -46,6 +46,7 @@ export interface DailyPuzzle {
   seed: number;
   archetype?: string; // Board archetype used for generation (debug info)
   thresholds?: StarThresholds; // Star thresholds (from pre-generated puzzles)
+  puzzleId?: string; // Unique puzzle identifier for storage key
 }
 
 export interface GameState {

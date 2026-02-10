@@ -195,6 +195,7 @@ export function Game() {
   const [scorePopup, setScorePopup] = useState<{ score: number; key: number } | null>(null);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [showThresholdsModal, setShowThresholdsModal] = useState(false);
+  const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -237,11 +238,12 @@ export function Game() {
 
       setPuzzle(dailyPuzzle);
       setRackLetters(dailyPuzzle.letters);
+      setActivePuzzleId(dailyPuzzle.puzzleId);
 
       // Check for saved state (skip in debug mode)
       if (!debugMode) {
         // Check puzzle state using unified storage
-        const puzzleState = getPuzzleState(activePuzzleNumber);
+        const puzzleState = getPuzzleState(activePuzzleNumber, dailyPuzzle.puzzleId);
 
         if (puzzleState?.status === 'completed') {
           // Puzzle is completed
@@ -338,9 +340,9 @@ export function Game() {
           usedRackIndices: Array.from(usedRackIndices),
           turnCount,
         },
-      });
+      }, activePuzzleId);
     }
-  }, [gameState, board, rackLetters, placedTiles, usedRackIndices, lockedRackIndices, submittedWords, turnCount, totalScore, debugMode, activePuzzleNumber]);
+  }, [gameState, board, rackLetters, placedTiles, usedRackIndices, lockedRackIndices, submittedWords, turnCount, totalScore, debugMode, activePuzzleNumber, activePuzzleId]);
 
   // Handle rack letter selection
   const handleRackClick = useCallback((index: number) => {
@@ -449,11 +451,11 @@ export function Game() {
           totalScore: totalScore + turnScore,
           thresholds: puzzle?.thresholds,
         },
-      });
+      }, activePuzzleId);
     }
 
     setError(null);
-  }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber]);
+  }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber, activePuzzleId]);
 
   // Clear current placement
   const handleClear = useCallback(() => {
@@ -484,15 +486,15 @@ export function Game() {
         totalScore,
         thresholds: puzzle?.thresholds,
       },
-    });
-  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber]);
+    }, activePuzzleId);
+  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId]);
 
   // Replay the same puzzle (clear state and start fresh)
   const handleReplay = useCallback(() => {
     if (!puzzle) return;
 
     // Clear saved state for this puzzle
-    clearPuzzleState(activePuzzleNumber);
+    clearPuzzleState(activePuzzleNumber, activePuzzleId);
 
     // Reset to initial puzzle state
     setBoard(puzzle.board);
@@ -508,7 +510,7 @@ export function Game() {
     setError(null);
     setShowShareModal(false);
     setGameState('playing');
-  }, [puzzle, activePuzzleNumber]);
+  }, [puzzle, activePuzzleNumber, activePuzzleId]);
 
   // Handle drag start
   const handleDragStart = useCallback((event: DragStartEvent) => {

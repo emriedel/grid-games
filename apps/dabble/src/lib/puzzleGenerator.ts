@@ -885,6 +885,7 @@ function convertAssignedPuzzle(puzzle: AssignedPuzzle, dateString: string): Dail
     seed: Date.parse(dateString),
     archetype: puzzle.archetype,
     thresholds: puzzle.thresholds,
+    puzzleId: puzzle.id,
   };
 }
 

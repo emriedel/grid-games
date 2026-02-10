@@ -21,7 +21,12 @@ import { hasObstacle, hasPieceAt } from './gameLogic';
 import { CAROM_LAUNCH_DATE, CAROM_LAUNCH_DATE_STRING } from '@/config';
 
 // Cache for monthly puzzle files
-const monthlyFileCache: Map<string, Record<string, PrecomputedPuzzle>> = new Map();
+const monthlyFileCache: Map<string, Record<string, AssignedPuzzle>> = new Map();
+
+// Assigned puzzle with ID (matches monthly file format)
+interface AssignedPuzzle extends PrecomputedPuzzle {
+  id: string;
+}
 
 // Pool puzzle interface (matches script output)
 interface PoolPuzzle extends PrecomputedPuzzle {
@@ -50,7 +55,7 @@ function getMonthForPuzzleNumber(puzzleNumber: number): string {
 /**
  * Load a monthly puzzle file
  */
-async function loadMonthlyFile(month: string): Promise<Record<string, PrecomputedPuzzle> | null> {
+async function loadMonthlyFile(month: string): Promise<Record<string, AssignedPuzzle> | null> {
   // Check cache first
   if (monthlyFileCache.has(month)) {
     return monthlyFileCache.get(month)!;
@@ -64,7 +69,7 @@ async function loadMonthlyFile(month: string): Promise<Record<string, Precompute
       return null;
     }
     const data = await response.json();
-    const puzzles = data.puzzles as Record<string, PrecomputedPuzzle>;
+    const puzzles = data.puzzles as Record<string, AssignedPuzzle>;
 
     // Cache the result
     monthlyFileCache.set(month, puzzles);
@@ -78,7 +83,7 @@ async function loadMonthlyFile(month: string): Promise<Record<string, Precompute
 /**
  * Get a puzzle by its puzzle number from monthly files
  */
-async function getPuzzleByNumber(puzzleNumber: number): Promise<PrecomputedPuzzle | null> {
+async function getPuzzleByNumber(puzzleNumber: number): Promise<AssignedPuzzle | null> {
   const month = getMonthForPuzzleNumber(puzzleNumber);
   const puzzles = await loadMonthlyFile(month);
 
@@ -92,7 +97,7 @@ async function getPuzzleByNumber(puzzleNumber: number): Promise<PrecomputedPuzzl
 /**
  * Convert a precomputed puzzle to a full Puzzle object
  */
-function hydratePuzzle(precomputed: PrecomputedPuzzle, date: string, puzzleNumber: number): Puzzle {
+function hydratePuzzle(precomputed: PrecomputedPuzzle, date: string, puzzleNumber: number, puzzleId?: string): Puzzle {
   const board: Board = {
     size: BOARD_SIZE,
     walls: precomputed.walls,
@@ -112,6 +117,7 @@ function hydratePuzzle(precomputed: PrecomputedPuzzle, date: string, puzzleNumbe
     optimalMoves: precomputed.optimalMoves,
     date,
     puzzleNumber,
+    puzzleId,
     solutionPath: precomputed.solutionPath,
   };
 }
@@ -128,7 +134,7 @@ export async function getDailyPuzzle(dateStr?: string): Promise<Puzzle> {
     // Try to load from monthly assigned files first
     const precomputed = await getPuzzleByNumber(puzzleNumber);
     if (precomputed) {
-      return hydratePuzzle(precomputed, date, puzzleNumber);
+      return hydratePuzzle(precomputed, date, puzzleNumber, precomputed.id);
     }
 
     // Fallback to runtime generation if not found in assigned files
@@ -160,7 +166,7 @@ export async function generateRandomPuzzle(): Promise<Puzzle> {
         const randomNum = puzzleNumbers[Math.floor(Math.random() * puzzleNumbers.length)];
         const precomputed = puzzles[randomNum];
         const randomDate = `random-${Date.now()}`;
-        return hydratePuzzle(precomputed, randomDate, parseInt(randomNum, 10));
+        return hydratePuzzle(precomputed, randomDate, parseInt(randomNum, 10), precomputed.id);
       }
     }
   } catch {
@@ -212,7 +218,7 @@ export async function getPuzzleFromPool(poolId: string): Promise<Puzzle | null> 
 
   // Use a synthetic date for pool puzzles
   const date = `pool-${poolId}`;
-  return hydratePuzzle(poolPuzzle, date, 0);
+  return hydratePuzzle(poolPuzzle, date, 0, poolPuzzle.id);
 }
 
 /**
