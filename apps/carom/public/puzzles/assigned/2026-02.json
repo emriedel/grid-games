@@ -3,7 +3,7 @@
   "baseDate": "2026-02-01",
   "puzzles": {
     "1": {
-      "id": "f7e4d0ce65025b41",
+      "id": "b04fd6fa5ff342eb",
       "walls": [
         [
           0,
@@ -161,7 +161,7 @@
       ]
     },
     "2": {
-      "id": "8d88905b25a69e6d",
+      "id": "59263c2ef218ec2c",
       "walls": [
         [
           0,
@@ -319,7 +319,7 @@
       ]
     },
     "3": {
-      "id": "0766be871327b821",
+      "id": "af081a6e9547e7aa",
       "walls": [
         [
           0,
@@ -485,7 +485,7 @@
       ]
     },
     "4": {
-      "id": "52fd7b1f6335adf5",
+      "id": "10fb8f105ff9d30b",
       "walls": [
         [
           0,
@@ -643,7 +643,7 @@
       ]
     },
     "5": {
-      "id": "13cda1408f8c28e8",
+      "id": "ad5bfaddd729ceba",
       "walls": [
         [
           0,
@@ -805,7 +805,7 @@
       ]
     },
     "6": {
-      "id": "7d50b0374e813362",
+      "id": "b4d6334e58bcd1d6",
       "walls": [
         [
           0,
@@ -963,7 +963,7 @@
       ]
     },
     "7": {
-      "id": "eb2df657ba0e896e",
+      "id": "243273d8733082ae",
       "walls": [
         [
           0,
@@ -1121,7 +1121,7 @@
       ]
     },
     "8": {
-      "id": "b7def4d3d1a49607",
+      "id": "186129de38f34a49",
       "walls": [
         [
           0,
@@ -1279,7 +1279,7 @@
       ]
     },
     "9": {
-      "id": "0e0e6d82ecde5e49",
+      "id": "c3e04db0a4c99ef8",
       "walls": [
         [
           0,
@@ -1437,7 +1437,7 @@
       ]
     },
     "10": {
-      "id": "d6086020013778ed",
+      "id": "33d36d7fcee6c92e",
       "walls": [
         [
           0,
@@ -1599,7 +1599,7 @@
       ]
     },
     "11": {
-      "id": "b1fb36af2034ffd3",
+      "id": "cf277c4b1e4d0854",
       "walls": [
         [
           0,
@@ -1757,7 +1757,7 @@
       ]
     },
     "12": {
-      "id": "8eb29c8aa37d8609",
+      "id": "00b195b5c95bbcaf",
       "walls": [
         [
           0,
@@ -1915,7 +1915,7 @@
       ]
     },
     "13": {
-      "id": "d811fedb4dd1f981",
+      "id": "8e6fce6f7fae7fea",
       "walls": [
         [
           0,
@@ -2081,7 +2081,7 @@
       ]
     },
     "14": {
-      "id": "53ea9ec35671150d",
+      "id": "466d30c75312a229",
       "walls": [
         [
           0,
@@ -2239,7 +2239,7 @@
       ]
     },
     "15": {
-      "id": "a51e5c0652688467",
+      "id": "c0cbd3e4ffee8c14",
       "walls": [
         [
           0,
@@ -2397,7 +2397,7 @@
       ]
     },
     "16": {
-      "id": "c9e680f90814d37a",
+      "id": "302e6f6b9421df44",
       "walls": [
         [
           0,
@@ -2563,7 +2563,7 @@
       ]
     },
     "17": {
-      "id": "40dedb3aebadc830",
+      "id": "73ab73974fb114a9",
       "walls": [
         [
           0,
@@ -2725,7 +2725,7 @@
       ]
     },
     "18": {
-      "id": "bc8523fb15f79d36",
+      "id": "228369db6afa9f7e",
       "walls": [
         [
           0,
@@ -2883,7 +2883,7 @@
       ]
     },
     "19": {
-      "id": "d5903f7b49332901",
+      "id": "8c142cbca3d09d65",
       "walls": [
         [
           0,
@@ -3041,7 +3041,7 @@
       ]
     },
     "20": {
-      "id": "3aa4a2fc497a5cd3",
+      "id": "34c84286f212e6b9",
       "walls": [
         [
           0,
@@ -3203,6 +3203,1290 @@
         {
           "pieceId": "target",
           "direction": "right"
+        }
+      ]
+    },
+    "21": {
+      "id": "56b688477f300b98",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          2,
+          9,
+          2,
+          12,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          6,
+          8,
+          1
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          2,
+          12,
+          0,
+          6,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 1,
+          "col": 7
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 0,
+          "col": 5
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 12,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ]
+    },
+    "22": {
+      "id": "547200ccd6d5e5e8",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          4,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          3,
+          8,
+          3,
+          8,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          2,
+          9,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          1,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 5,
+          "col": 7
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 7,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
+    },
+    "23": {
+      "id": "24ca96191202279a",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          6,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          8,
+          1,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          1,
+          4,
+          0,
+          4,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          2,
+          9,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 5,
+          "col": 1
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 6,
+          "col": 0
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 4,
+          "col": 1
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
+    },
+    "24": {
+      "id": "72818fa870a891c0",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          4,
+          0,
+          0,
+          3,
+          8,
+          4
+        ],
+        [
+          4,
+          0,
+          3,
+          8,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          4,
+          0,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 1,
+        "col": 1
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 6,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 0,
+          "col": 5
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 6
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ]
+    },
+    "25": {
+      "id": "e0af1c5dc882cf6a",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          9,
+          0,
+          0,
+          6,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          1,
+          0,
+          0,
+          4
+        ],
+        [
+          4,
+          2,
+          9,
+          2,
+          12,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 4,
+        "col": 2
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 3,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 1,
+          "col": 0
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
+    },
+    "26": {
+      "id": "55551e174eea867b",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          2,
+          12,
+          0,
+          4
+        ],
+        [
+          4,
+          0,
+          2,
+          12,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          8,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 1,
+        "col": 1
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 5
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 0,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 4,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 12,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ]
+    },
+    "27": {
+      "id": "eb93d09100cbef39",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          4,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          2,
+          9,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          8,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          6,
+          8,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 7,
+          "col": 5
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 5,
+          "col": 3
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 4,
+          "col": 7
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 11,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ]
+    },
+    "28": {
+      "id": "a9f7db0296fe7610",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          6,
+          8,
+          4
+        ],
+        [
+          1,
+          0,
+          0,
+          6,
+          8,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          0,
+          0,
+          3,
+          8,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 3,
+          "col": 3
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 4,
+          "col": 5
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 1,
+          "col": 6
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 3,
+          "col": 7
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
         }
       ]
     }
