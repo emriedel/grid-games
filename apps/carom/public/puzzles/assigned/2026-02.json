@@ -3,7 +3,7 @@
   "baseDate": "2026-02-01",
   "puzzles": {
     "1": {
-      "id": "655c8fe952fd964a",
+      "id": "f7e4d0ce65025b41",
       "walls": [
         [
           0,
@@ -116,10 +116,52 @@
           "col": 3
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ]
     },
     "2": {
-      "id": "0110a010216237ba",
+      "id": "8d88905b25a69e6d",
       "walls": [
         [
           0,
@@ -232,10 +274,52 @@
           "col": 7
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ]
     },
     "3": {
-      "id": "fba51f6234c2fbab",
+      "id": "0766be871327b821",
       "walls": [
         [
           0,
@@ -348,10 +432,60 @@
           "col": 0
         }
       ],
-      "optimalMoves": 12
+      "optimalMoves": 12,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "4": {
-      "id": "5e01981d1791f086",
+      "id": "52fd7b1f6335adf5",
       "walls": [
         [
           0,
@@ -464,10 +598,52 @@
           "col": 3
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "5": {
-      "id": "93259422dbf9e919",
+      "id": "13cda1408f8c28e8",
       "walls": [
         [
           0,
@@ -580,10 +756,56 @@
           "col": 5
         }
       ],
-      "optimalMoves": 11
+      "optimalMoves": 11,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ]
     },
     "6": {
-      "id": "4abeb0ea67afcf77",
+      "id": "7d50b0374e813362",
       "walls": [
         [
           0,
@@ -696,10 +918,52 @@
           "col": 4
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ]
     },
     "7": {
-      "id": "de38f4d2b5317051",
+      "id": "eb2df657ba0e896e",
       "walls": [
         [
           0,
@@ -812,10 +1076,52 @@
           "col": 0
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ]
     },
     "8": {
-      "id": "9110962d06f757ae",
+      "id": "b7def4d3d1a49607",
       "walls": [
         [
           0,
@@ -928,10 +1234,52 @@
           "col": 6
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "9": {
-      "id": "4ef1b128e6e83466",
+      "id": "0e0e6d82ecde5e49",
       "walls": [
         [
           0,
@@ -1044,10 +1392,52 @@
           "col": 3
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ]
     },
     "10": {
-      "id": "520fd127f80b0596",
+      "id": "d6086020013778ed",
       "walls": [
         [
           0,
@@ -1160,10 +1550,56 @@
           "col": 7
         }
       ],
-      "optimalMoves": 11
+      "optimalMoves": 11,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "11": {
-      "id": "a9dc77cd97a7ffa5",
+      "id": "b1fb36af2034ffd3",
       "walls": [
         [
           0,
@@ -1276,10 +1712,52 @@
           "col": 1
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ]
     },
     "12": {
-      "id": "1e9c752d68596b76",
+      "id": "8eb29c8aa37d8609",
       "walls": [
         [
           0,
@@ -1392,10 +1870,52 @@
           "col": 5
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "13": {
-      "id": "d8fd3422b8313c4e",
+      "id": "d811fedb4dd1f981",
       "walls": [
         [
           0,
@@ -1508,10 +2028,60 @@
           "col": 2
         }
       ],
-      "optimalMoves": 12
+      "optimalMoves": 12,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ]
     },
     "14": {
-      "id": "3e93e2ae1d7d1ddd",
+      "id": "53ea9ec35671150d",
       "walls": [
         [
           0,
@@ -1624,10 +2194,52 @@
           "col": 0
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "15": {
-      "id": "9f5a1c5ce9357974",
+      "id": "a51e5c0652688467",
       "walls": [
         [
           0,
@@ -1740,10 +2352,52 @@
           "col": 4
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "16": {
-      "id": "a5308d9f47d03b15",
+      "id": "c9e680f90814d37a",
       "walls": [
         [
           0,
@@ -1856,10 +2510,60 @@
           "col": 7
         }
       ],
-      "optimalMoves": 12
+      "optimalMoves": 12,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ]
     },
     "17": {
-      "id": "2b8baa89f8daf50a",
+      "id": "40dedb3aebadc830",
       "walls": [
         [
           0,
@@ -1972,10 +2676,56 @@
           "col": 2
         }
       ],
-      "optimalMoves": 11
+      "optimalMoves": 11,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ]
     },
     "18": {
-      "id": "76973fc76f135364",
+      "id": "bc8523fb15f79d36",
       "walls": [
         [
           0,
@@ -2088,10 +2838,52 @@
           "col": 3
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ]
     },
     "19": {
-      "id": "6d8fd1471c1dbc92",
+      "id": "d5903f7b49332901",
       "walls": [
         [
           0,
@@ -2204,10 +2996,52 @@
           "col": 4
         }
       ],
-      "optimalMoves": 10
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ]
     },
     "20": {
-      "id": "5c4909ad9a2d0596",
+      "id": "3aa4a2fc497a5cd3",
       "walls": [
         [
           0,
@@ -2320,935 +3154,57 @@
           "col": 3
         }
       ],
-      "optimalMoves": 12
-    },
-    "21": {
-      "id": "7535402e347a4559",
-      "walls": [
-        [
-          0,
-          0,
-          2,
-          8,
-          0,
-          4,
-          0,
-          0
-        ],
-        [
-          0,
-          4,
-          0,
-          0,
-          2,
-          9,
-          0,
-          0
-        ],
-        [
-          2,
-          9,
-          2,
-          12,
-          0,
-          0,
-          0,
-          4
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          6,
-          8,
-          1
-        ],
-        [
-          4,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          2,
-          12,
-          0,
-          6,
-          8,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 5,
-        "col": 5
-      },
-      "pieces": [
+      "optimalMoves": 12,
+      "solutionPath": [
         {
-          "id": "target",
-          "type": "target",
-          "row": 2,
-          "col": 2
+          "pieceId": "target",
+          "direction": "right"
         },
         {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 1,
-          "col": 7
+          "pieceId": "blocker-0",
+          "direction": "down"
         },
         {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 0,
-          "col": 5
+          "pieceId": "blocker-0",
+          "direction": "left"
         },
         {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 2,
-          "col": 5
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
         }
-      ],
-      "optimalMoves": 12
-    },
-    "22": {
-      "id": "a046a464f28066c3",
-      "walls": [
-        [
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0,
-          0
-        ],
-        [
-          4,
-          0,
-          0,
-          4,
-          0,
-          4,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          3,
-          8,
-          3,
-          8,
-          4
-        ],
-        [
-          0,
-          0,
-          0,
-          4,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          2,
-          9,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          6,
-          8
-        ],
-        [
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          1,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 2,
-        "col": 5
-      },
-      "pieces": [
-        {
-          "id": "target",
-          "type": "target",
-          "row": 0,
-          "col": 2
-        },
-        {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 1,
-          "col": 2
-        },
-        {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 5,
-          "col": 7
-        },
-        {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 7,
-          "col": 5
-        }
-      ],
-      "optimalMoves": 10
-    },
-    "23": {
-      "id": "3ffa608eec3ebb9f",
-      "walls": [
-        [
-          0,
-          0,
-          2,
-          8,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          4,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          6,
-          8,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          6,
-          8,
-          1,
-          0,
-          0,
-          4
-        ],
-        [
-          0,
-          0,
-          1,
-          4,
-          0,
-          4,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          2,
-          9,
-          2,
-          9,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          8,
-          0,
-          0,
-          0,
-          0,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 5,
-        "col": 3
-      },
-      "pieces": [
-        {
-          "id": "target",
-          "type": "target",
-          "row": 0,
-          "col": 2
-        },
-        {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 5,
-          "col": 1
-        },
-        {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 6,
-          "col": 0
-        },
-        {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 4,
-          "col": 1
-        }
-      ],
-      "optimalMoves": 10
-    },
-    "24": {
-      "id": "a6617c378a2cec0c",
-      "walls": [
-        [
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          6,
-          8,
-          0,
-          0,
-          4,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          4,
-          0,
-          0,
-          3,
-          8,
-          4
-        ],
-        [
-          4,
-          0,
-          3,
-          8,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          1,
-          0,
-          4,
-          0,
-          2,
-          12,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          3,
-          8,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          8,
-          0,
-          0,
-          0,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 1,
-        "col": 1
-      },
-      "pieces": [
-        {
-          "id": "target",
-          "type": "target",
-          "row": 6,
-          "col": 2
-        },
-        {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 5,
-          "col": 2
-        },
-        {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 0,
-          "col": 5
-        },
-        {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 2,
-          "col": 6
-        }
-      ],
-      "optimalMoves": 10
-    },
-    "25": {
-      "id": "17598aa314996ddf",
-      "walls": [
-        [
-          0,
-          2,
-          8,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          4,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          2,
-          9,
-          0,
-          0,
-          6,
-          8,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          4,
-          0,
-          1,
-          0,
-          0,
-          4
-        ],
-        [
-          4,
-          2,
-          9,
-          2,
-          12,
-          0,
-          0,
-          1
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 4,
-        "col": 2
-      },
-      "pieces": [
-        {
-          "id": "target",
-          "type": "target",
-          "row": 0,
-          "col": 1
-        },
-        {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 2,
-          "col": 0
-        },
-        {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 3,
-          "col": 4
-        },
-        {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 1,
-          "col": 0
-        }
-      ],
-      "optimalMoves": 10
-    },
-    "26": {
-      "id": "7d118e5742fedeae",
-      "walls": [
-        [
-          0,
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0
-        ],
-        [
-          0,
-          6,
-          8,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          2,
-          12,
-          0,
-          4
-        ],
-        [
-          4,
-          0,
-          2,
-          12,
-          0,
-          1,
-          0,
-          1
-        ],
-        [
-          1,
-          0,
-          0,
-          1,
-          0,
-          4,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          3,
-          8,
-          0
-        ],
-        [
-          0,
-          6,
-          8,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 1,
-        "col": 1
-      },
-      "pieces": [
-        {
-          "id": "target",
-          "type": "target",
-          "row": 0,
-          "col": 5
-        },
-        {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 5,
-          "col": 0
-        },
-        {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 0,
-          "col": 4
-        },
-        {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 4,
-          "col": 5
-        }
-      ],
-      "optimalMoves": 12
-    },
-    "27": {
-      "id": "f9d2fd55e25ec872",
-      "walls": [
-        [
-          0,
-          2,
-          8,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          4,
-          0,
-          0,
-          4,
-          0,
-          4,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          2,
-          9,
-          2,
-          9,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          4,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          3,
-          8,
-          0,
-          0,
-          4
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          6,
-          8,
-          1
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 2,
-        "col": 3
-      },
-      "pieces": [
-        {
-          "id": "target",
-          "type": "target",
-          "row": 7,
-          "col": 5
-        },
-        {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 5,
-          "col": 3
-        },
-        {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 4,
-          "col": 7
-        },
-        {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 2,
-          "col": 5
-        }
-      ],
-      "optimalMoves": 11
-    },
-    "28": {
-      "id": "c2de200660044641",
-      "walls": [
-        [
-          0,
-          0,
-          0,
-          2,
-          8,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          4,
-          0,
-          0,
-          0,
-          0,
-          6,
-          8,
-          4
-        ],
-        [
-          1,
-          0,
-          0,
-          6,
-          8,
-          1,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0,
-          4,
-          0,
-          0
-        ],
-        [
-          0,
-          6,
-          8,
-          0,
-          0,
-          3,
-          8,
-          0
-        ],
-        [
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          2,
-          8,
-          0,
-          0,
-          0,
-          0,
-          0
-        ]
-      ],
-      "goal": {
-        "row": 5,
-        "col": 5
-      },
-      "pieces": [
-        {
-          "id": "target",
-          "type": "target",
-          "row": 3,
-          "col": 3
-        },
-        {
-          "id": "blocker-0",
-          "type": "blocker",
-          "row": 4,
-          "col": 5
-        },
-        {
-          "id": "blocker-1",
-          "type": "blocker",
-          "row": 1,
-          "col": 6
-        },
-        {
-          "id": "blocker-2",
-          "type": "blocker",
-          "row": 3,
-          "col": 7
-        }
-      ],
-      "optimalMoves": 10
+      ]
     }
   }
 }
