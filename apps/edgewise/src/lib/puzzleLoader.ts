@@ -61,9 +61,10 @@ export async function loadPuzzleByNumber(puzzleNumber: number): Promise<{
   puzzleId?: string;
 } | null> {
   const month = getMonthForPuzzleNumber(puzzleNumber, PUZZLE_BASE_DATE_STRING);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
   try {
-    const puzzles = await loadMonthlyFile<AssignedPuzzle>(month, 'edgewise');
+    const puzzles = await loadMonthlyFile<AssignedPuzzle>(month, 'edgewise', basePath);
     if (puzzles) {
       const puzzle = puzzles[String(puzzleNumber)];
       if (puzzle) {
@@ -122,7 +123,8 @@ export async function getPuzzleIdsForRange(
   startNum: number,
   endNum: number
 ): Promise<Map<number, string>> {
-  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'edgewise');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'edgewise', basePath);
 }
 
 /**

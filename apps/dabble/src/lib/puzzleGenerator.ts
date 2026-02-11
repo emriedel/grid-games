@@ -836,7 +836,8 @@ function getPuzzleNumberForDate(dateString: string): number {
 
 // Helper to load monthly file using shared utility
 async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedPuzzle> | null> {
-  return loadMonthlyFile<AssignedPuzzle>(month, 'dabble');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return loadMonthlyFile<AssignedPuzzle>(month, 'dabble', basePath);
 }
 
 // Convert assigned puzzle to DailyPuzzle format
@@ -990,7 +991,8 @@ export async function getPoolPuzzles(): Promise<PoolPuzzle[]> {
  * Returns a Map of puzzleNumber -> puzzleId
  */
 export async function getPuzzleIdsForRange(startNum: number, endNum: number): Promise<Map<number, string>> {
-  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'dabble');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'dabble', basePath);
 }
 
 /**

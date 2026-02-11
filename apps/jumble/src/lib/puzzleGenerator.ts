@@ -88,7 +88,8 @@ async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedP
     return monthlyFileCache.get(month) ?? null;
   }
 
-  const result = await loadMonthlyFile<AssignedPuzzle>(month, 'jumble');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const result = await loadMonthlyFile<AssignedPuzzle>(month, 'jumble', basePath);
   monthlyFileCache.set(month, result);
   return result;
 }
@@ -146,7 +147,8 @@ export async function getPuzzleByNumber(puzzleNumber: number): Promise<DailyPuzz
  * Get puzzleIds for a range of puzzle numbers (for archive page)
  */
 export async function getPuzzleIdsForRange(startNum: number, endNum: number): Promise<Map<number, string>> {
-  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'jumble');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'jumble', basePath);
 }
 
 // =====================================================
