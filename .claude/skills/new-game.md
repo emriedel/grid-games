@@ -23,7 +23,52 @@ Edit `apps/new-game/package.json`:
 }
 ```
 
-## Step 3: Define Theme
+## Step 3: Update Layout
+
+The copied layout.tsx already includes Vercel Analytics. Update the metadata:
+
+Edit `apps/new-game/src/app/layout.tsx`:
+```tsx
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from '@vercel/analytics/react';  // Already included
+import "./globals.css";
+
+// ... fonts ...
+
+export const metadata: Metadata = {
+  title: "New Game | Nerdcube Games",
+  description: "Your game description here.",
+  icons: {
+    icon: "https://nerdcube.games/icons/new-game.png",
+    apple: "https://nerdcube.games/icons/new-game.png",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[var(--background)]`}>
+        {children}
+        <Analytics />  {/* Already included - tracks page views on Vercel */}
+      </body>
+    </html>
+  );
+}
+```
+
+## Step 4: Define Theme
 
 Edit `apps/new-game/src/app/globals.css`:
 ```css
@@ -51,7 +96,7 @@ Edit `apps/new-game/src/app/globals.css`:
 }
 ```
 
-## Step 4: Create Storage Module
+## Step 5: Create Storage Module
 
 Create `apps/new-game/src/lib/storage.ts`:
 ```tsx
@@ -119,7 +164,7 @@ export function hasInProgressGame(): boolean {
 }
 ```
 
-## Step 5: Create Game Config
+## Step 6: Create Game Config
 
 Create `apps/new-game/src/config.ts`:
 ```tsx
@@ -147,7 +192,7 @@ export const newGameConfig = defineGameConfig({
 });
 ```
 
-## Step 6: Update Game.tsx Structure
+## Step 7: Update Game.tsx Structure
 
 Use the shared components with proper state persistence:
 ```tsx
@@ -298,7 +343,7 @@ function NewGameResultsModal({
 - Show loading screen while determining initial state
 - LandingScreen receives mode prop and appropriate handlers
 
-## Step 6b: Add Archive Support (Optional)
+## Step 7b: Add Archive Support (Optional)
 
 If your game supports past puzzles (archive), add these files:
 
@@ -406,7 +451,7 @@ In Game.tsx, add `archiveHref` prop to LandingScreen:
 
 In `packages/config/src/games.ts`, set `hasArchive: true` for your game.
 
-## Step 7: Add to Landing Page
+## Step 8: Add to Landing Page
 
 Edit `apps/web/src/app/page.tsx`:
 ```tsx
@@ -423,7 +468,7 @@ const games: GameCard[] = [
 ];
 ```
 
-## Step 8: Add to Config Package (Optional)
+## Step 9: Add to Config Package (Optional)
 
 If the theme should be programmatically accessible, add to `packages/config/src/theme.ts`:
 ```tsx
@@ -434,9 +479,9 @@ export const newGameTheme: GameTheme = {
 };
 ```
 
-## Step 9: Deploy to Vercel
+## Step 10: Deploy to Vercel
 
-### 9a. Deploy the new game app
+### 10a. Deploy the new game app
 
 1. Go to https://vercel.com/new
 2. Import the `grid-games` GitHub repo
@@ -445,7 +490,13 @@ export const newGameTheme: GameTheme = {
 5. Deploy and note the URL (e.g., `grid-games-new-game.vercel.app`)
 6. Verify it works at `https://grid-games-new-game.vercel.app/new-game`
 
-### 9b. Add rewrite to the web app
+### 10b. Enable Analytics in Vercel Dashboard
+
+1. Go to Vercel Dashboard → Your new game project → Analytics tab
+2. Click "Enable" for Web Analytics
+3. Analytics will automatically track page views once deployed (no code changes needed)
+
+### 10c. Add rewrite to the web app
 
 Edit `apps/web/next.config.ts` and add rewrites for the new game:
 ```typescript
@@ -459,7 +510,7 @@ Edit `apps/web/next.config.ts` and add rewrites for the new game:
 },
 ```
 
-### 9c. Push and redeploy
+### 10d. Push and redeploy
 
 ```bash
 git add .
@@ -474,6 +525,8 @@ The web app will automatically redeploy with the new rewrites.
 ## Checklist
 
 - [ ] Package.json updated with unique name and port
+- [ ] Layout.tsx metadata updated (title, description, icons)
+- [ ] Layout.tsx includes `<Analytics />` component (copied from template)
 - [ ] Theme CSS variables defined in globals.css
 - [ ] Storage module created (`src/lib/storage.ts`)
 - [ ] Game config created in src/config.ts
@@ -491,6 +544,8 @@ The web app will automatically redeploy with the new rewrites.
   - [ ] LandingScreen uses `archiveHref` prop
   - [ ] `hasArchive: true` set in GAMES config
 - [ ] Added to landing page in apps/web
-- [ ] Deployed to Vercel
-- [ ] Rewrites added to apps/web/next.config.ts
+- [ ] **Deployed to Vercel:**
+  - [ ] New game app deployed
+  - [ ] **Analytics enabled in Vercel Dashboard** (Analytics tab → Enable)
+  - [ ] Rewrites added to apps/web/next.config.ts
 - [ ] Game-specific CLAUDE.md created in apps/new-game/
