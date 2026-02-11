@@ -389,13 +389,13 @@ export function Game() {
               <button
                 onClick={undo}
                 disabled={!canUndo}
-                className="p-2 rounded-lg bg-[var(--muted)] text-[var(--foreground)] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--border)] transition-colors"
+                className="p-2 rounded-lg bg-[var(--tile-bg)] text-[var(--foreground)] border border-[var(--tile-border)] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--tile-bg-selected)] hover:border-[var(--accent)]/40 transition-colors"
                 aria-label="Undo last move"
                 title="Undo"
               >
                 <Undo2 className="w-5 h-5" />
               </button>
-              <Button variant="secondary" onClick={reset}>
+              <Button variant="secondary" onClick={reset} className="border border-[var(--tile-border)] hover:border-[var(--accent)]/40">
                 Reset
               </Button>
             </div>
