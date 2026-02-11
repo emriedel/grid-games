@@ -37,7 +37,7 @@ function CaromResultsModal({
   isOpen,
   onClose,
   moveCount,
-  optimalMoves,
+  optimalMoves: _optimalMoves,
   achievedOptimal,
   puzzleNumber,
   isArchive,

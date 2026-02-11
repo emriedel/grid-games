@@ -1,4 +1,4 @@
-import { Board, Piece, Position, Direction, Move } from '@/types';
+import { Board, Piece, Direction, Move } from '@/types';
 import { simulateSlide, applyMove, isTargetOnGoal } from './gameLogic';
 
 interface SolverState {

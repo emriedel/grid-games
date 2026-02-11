@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, Button, DebugPanel, DebugButton, ResultsModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
 import { getTodayDateString, formatDisplayDate, getPuzzleNumber, buildShareText } from '@grid-games/shared';
 
 import { GameBoard } from './GameBoard';
@@ -10,7 +10,7 @@ import { AttemptsIndicator } from './AttemptsIndicator';
 import { FeedbackHistory } from './FeedbackDots';
 import { HowToPlayModal } from './HowToPlayModal';
 
-import { getTodayPuzzle, initializeGameState, getRandomPuzzle } from '@/lib/puzzleLoader';
+import { getTodayPuzzle, initializeGameState } from '@/lib/puzzleLoader';
 import {
   rotateSquare,
   groupRotate,
@@ -51,7 +51,6 @@ function EdgewiseResultsModal({
   solved,
   guessesUsed,
   feedbackHistory,
-  puzzleDate,
   puzzleNumber,
 }: EdgewiseResultsModalProps) {
   // Generate emoji grid from feedback history
@@ -315,24 +314,6 @@ export function Game() {
     setShowResults(false);
   }, [puzzle, dateStr]);
 
-  // Handle regenerate puzzle (debug mode)
-  const handleNewPuzzle = useCallback(() => {
-    const result = getRandomPuzzle();
-    if (!result) return;
-
-    const { puzzle: newPuzzle, dateStr: newDateStr } = result;
-    setPuzzle(newPuzzle);
-
-    const initialSquares = initializeGameState(newPuzzle, newDateStr);
-    setSquares(initialSquares);
-    setGuessesUsed(0);
-    setFeedbackHistory([]);
-    setSolved(false);
-    setCategoryResults({ top: null, right: null, bottom: null, left: null });
-    setGameState('playing');
-    setShowResults(false);
-  }, []);
-
   // Render landing screen
   if (gameState === 'landing') {
     return (
@@ -447,14 +428,6 @@ export function Game() {
         puzzleNumber={puzzleNumber}
       />
 
-      {/* Debug Panel */}
-      {isDebug && (
-        <DebugPanel>
-          <div>Puzzle #{puzzleNumber}</div>
-          <div>Guesses: {guessesUsed}/{MAX_ATTEMPTS}</div>
-          <DebugButton onClick={handleNewPuzzle} />
-        </DebugPanel>
-      )}
     </GameContainer>
   );
 }

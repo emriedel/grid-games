@@ -27,12 +27,6 @@ function GoalIcon() {
   );
 }
 
-function WallIcon() {
-  return (
-    <span className="inline-block w-4 h-1 bg-white rounded align-middle mx-0.5" />
-  );
-}
-
 export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="How to Play Carom">

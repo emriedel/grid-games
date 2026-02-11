@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ArrowLeft, Check, Clock } from 'lucide-react';
 import { HamburgerMenu, Skeleton } from '@grid-games/ui';
 import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber, didAchieveOptimal, getSavedPuzzleId } from '@/lib/storage';
@@ -107,13 +108,13 @@ export function ArchivePageContent() {
       {/* Content container with max width */}
       <div className="w-full max-w-md flex-1 flex flex-col px-4">
         {/* Back link */}
-        <a
+        <Link
           href="/"
           className="flex items-center gap-2 py-3 text-[var(--accent)] hover:underline"
         >
           <ArrowLeft size={16} />
           <span>Back to Carom</span>
-        </a>
+        </Link>
 
         {/* Content */}
         <div className="flex-1 pb-8">

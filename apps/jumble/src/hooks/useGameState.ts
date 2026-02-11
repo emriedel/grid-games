@@ -6,7 +6,7 @@ import { Board, FoundWord, GameStatus, Position } from '@/types';
 import { loadDictionary, isValidWord } from '@/lib/dictionary';
 import { getWordFromPath, findAllValidWords, validatePath } from '@/lib/wordValidator';
 import { MIN_WORD_LENGTH } from '@/constants/gameConfig';
-import { calculateWordScore, calculateTotalScore, calculateMaxScore } from '@/lib/scoring';
+import { calculateWordScore, calculateTotalScore } from '@/lib/scoring';
 import {
   findPuzzleState,
   savePuzzleState,

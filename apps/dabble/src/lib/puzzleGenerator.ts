@@ -926,9 +926,7 @@ export function generateRandomPuzzle(): DailyPuzzle {
 // =====================================================
 
 // Pool puzzle format (from scripts/generatePuzzles.ts)
-interface PoolPuzzle extends AssignedPuzzle {
-  // Same structure as AssignedPuzzle
-}
+type PoolPuzzle = AssignedPuzzle;
 
 interface PoolFile {
   generatedAt: string;

@@ -462,7 +462,7 @@ export function Game() {
     }
 
     setError(null);
-  }, [board, placedTiles, submittedWords.length, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber, activePuzzleId]);
+  }, [board, placedTiles, submittedWords, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber, activePuzzleId]);
 
   // Clear current placement
   const handleClear = useCallback(() => {
