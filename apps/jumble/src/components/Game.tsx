@@ -199,7 +199,7 @@ export default function Game() {
 
   const [showResults, setShowResults] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; word: string } | null>(null);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; word: string; message?: string } | null>(null);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [viewingCompletedGame, setViewingCompletedGame] = useState(false);
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
@@ -233,11 +233,11 @@ export default function Game() {
 
   const feedbackTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const showFeedback = useCallback((type: 'success' | 'error', word: string) => {
+  const showFeedback = useCallback((type: 'success' | 'error', word: string, message?: string) => {
     if (feedbackTimeoutRef.current) {
       clearTimeout(feedbackTimeoutRef.current);
     }
-    setFeedback({ type, word });
+    setFeedback({ type, word, message });
     feedbackTimeoutRef.current = setTimeout(() => {
       setFeedback(null);
     }, 1000);
@@ -248,11 +248,16 @@ export default function Game() {
   }, [setCurrentPath]);
 
   const handlePathComplete = useCallback((path: Position[]) => {
-    const success = submitWord(path);
-    if (success && currentWord) {
+    const result = submitWord(path);
+    if (result.success && currentWord) {
       showFeedback('success', currentWord);
-    } else if (currentWord && !success) {
-      showFeedback('error', currentWord);
+    } else if (currentWord && !result.success) {
+      const errorMessages: Record<string, string> = {
+        'already-found': 'Already found',
+        'too-short': 'Too short',
+        'not-in-list': 'Not in word list',
+      };
+      showFeedback('error', currentWord, errorMessages[result.reason]);
     }
     setCurrentPath([]);
   }, [submitWord, currentWord, showFeedback, setCurrentPath]);
@@ -363,7 +368,7 @@ export default function Game() {
                 ${feedback.type === 'success' ? 'text-[var(--success)]' : 'text-[var(--danger)]'}
               `}
             >
-              {feedback.type === 'success' ? `+${foundWords[foundWords.length - 1]?.score || 0}` : 'Invalid'}
+              {feedback.type === 'success' ? `+${foundWords[foundWords.length - 1]?.score || 0}` : feedback.message || 'Invalid'}
             </div>
           )}
         </div>

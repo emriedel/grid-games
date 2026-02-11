@@ -3,8 +3,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Board, FoundWord, GameStatus, Position } from '@/types';
-import { loadDictionary } from '@/lib/dictionary';
+import { loadDictionary, isValidWord } from '@/lib/dictionary';
 import { getWordFromPath, findAllValidWords, validatePath } from '@/lib/wordValidator';
+import { MIN_WORD_LENGTH } from '@/constants/gameConfig';
 import { calculateWordScore, calculateTotalScore, calculateMaxScore } from '@/lib/scoring';
 import {
   findPuzzleState,
@@ -26,6 +27,10 @@ interface UseGameStateProps {
   archivePuzzleNumber?: number | null;
 }
 
+export type SubmitWordResult =
+  | { success: true }
+  | { success: false; reason: 'already-found' | 'too-short' | 'not-in-list' };
+
 interface UseGameStateReturn {
   board: Board;
   foundWords: FoundWord[];
@@ -40,7 +45,7 @@ interface UseGameStateReturn {
   maxPossibleScore: number;
   stars: number;
   setCurrentPath: (path: Position[]) => void;
-  submitWord: (path: Position[]) => boolean;
+  submitWord: (path: Position[]) => SubmitWordResult;
   startGame: () => void;
   resumeGame: () => void;
   endGame: () => void;
@@ -328,19 +333,31 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
 
   // Submit a word
   const submitWord = useCallback(
-    (path: Position[]): boolean => {
-      if (status !== 'playing' || path.length === 0) return false;
+    (path: Position[]): SubmitWordResult => {
+      if (status !== 'playing' || path.length === 0) {
+        return { success: false, reason: 'too-short' };
+      }
 
       const word = getWordFromPath(board, path);
 
       // Check if already found
       if (isWordAlreadyFound(word)) {
-        return false;
+        return { success: false, reason: 'already-found' };
       }
 
-      // Validate the path and word
+      // Check word length
+      if (word.length < MIN_WORD_LENGTH) {
+        return { success: false, reason: 'too-short' };
+      }
+
+      // Check if in dictionary (validatePath also checks this, but we want specific feedback)
+      if (!isValidWord(word)) {
+        return { success: false, reason: 'not-in-list' };
+      }
+
+      // Validate the path geometry (adjacency, no repeated tiles)
       if (!validatePath(board, path)) {
-        return false;
+        return { success: false, reason: 'not-in-list' };
       }
 
       // Add to found words
@@ -352,7 +369,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
         navigator.vibrate(50);
       }
 
-      return true;
+      return { success: true };
     },
     [status, board, isWordAlreadyFound]
   );
