@@ -81,8 +81,9 @@ export function ResultsModal({
     []
   );
 
-  // Get other games (exclude current game)
-  const otherGames = GAMES.filter((g) => g.id !== gameId).slice(0, 3);
+  // Get current game info and other games
+  const currentGame = GAMES.find((g) => g.id === gameId);
+  const otherGames = GAMES.filter((g) => g.id !== gameId).slice(0, 2);
 
   const handleShare = async () => {
     const result = await shareOrCopy(shareConfig.text);
@@ -165,6 +166,24 @@ export function ResultsModal({
         <div className="text-center">
           <p className="text-sm text-[var(--muted)] mb-3">Try another game</p>
           <div className="flex justify-center gap-4">
+            {/* Archive link for current game (if available) */}
+            {currentGame?.hasArchive && (
+              <a
+                href={`${currentGame.href}/archive`}
+                className="flex flex-col items-center gap-1 group"
+              >
+                <div className="w-12 h-12 rounded-lg overflow-hidden bg-[var(--tile-bg)] flex items-center justify-center transition-transform group-hover:scale-105 border border-[var(--accent)]">
+                  <img
+                    src={getIconUrl(currentGame.id)}
+                    alt={`${currentGame.name} Archive`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-xs text-[var(--accent)] group-hover:text-[var(--accent)] transition-colors">
+                  Archive
+                </span>
+              </a>
+            )}
             {otherGames.map((game) => (
               <a
                 key={game.id}

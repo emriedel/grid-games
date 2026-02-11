@@ -44,8 +44,8 @@ export const QU_DISPLAY = 'Qu';
 // Star thresholds - fixed score values for each star level
 export const STAR_THRESHOLDS = {
   star1: 15,
-  star2: 30,
-  star3: 45,
+  star2: 25,
+  star3: 40,
 };
 
 /**
