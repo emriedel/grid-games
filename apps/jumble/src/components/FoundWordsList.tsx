@@ -4,25 +4,12 @@ import { FoundWord } from '@/types';
 
 interface FoundWordsListProps {
   foundWords: FoundWord[];
-  totalScore: number;
 }
 
-export default function FoundWordsList({ foundWords, totalScore }: FoundWordsListProps) {
+export default function FoundWordsList({ foundWords }: FoundWordsListProps) {
   return (
     <div className="w-full">
-      <div
-        className="
-          w-full flex items-center justify-between px-4 py-2
-          bg-[var(--tile-bg)] rounded-t-lg
-        "
-      >
-        <span className="text-sm">
-          {foundWords.length} word{foundWords.length !== 1 ? 's' : ''}
-        </span>
-        <span className="font-bold">{totalScore} pts</span>
-      </div>
-
-      <div className="max-h-32 overflow-y-auto bg-[var(--tile-bg)] rounded-b-lg p-2 border-t border-[var(--tile-border)]">
+      <div className="max-h-48 overflow-y-auto bg-[var(--tile-bg)] rounded-lg p-2">
         {foundWords.length === 0 ? (
           <p className="text-center text-gray-500 text-sm py-2">No words found yet</p>
         ) : (

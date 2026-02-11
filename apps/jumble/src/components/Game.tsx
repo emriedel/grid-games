@@ -3,8 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber, buildShareText } from '@grid-games/shared';
-import { getTodayPuzzleNumber } from '@/lib/storage';
+import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
 import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
 import { jumbleConfig, PUZZLE_BASE_DATE } from '@/config';
@@ -15,50 +14,12 @@ import CurrentWord from './CurrentWord';
 import FoundWordsList from './FoundWordsList';
 import HowToPlayModal from './HowToPlayModal';
 
-// Number to keycap emoji mapping
-const numberEmojis: Record<number, string> = {
-  3: '3️⃣',
-  4: '4️⃣',
-  5: '5️⃣',
-  6: '6️⃣',
-  7: '7️⃣',
-  8: '8️⃣',
-  9: '9️⃣',
-};
-
-// Generate word count emoji breakdown for share text
-function generateWordCountEmoji(foundWords: FoundWord[]): string {
-  const wordCounts: Record<number, number> = {};
-  for (const fw of foundWords) {
-    const len = fw.word.length;
-    wordCounts[len] = (wordCounts[len] || 0) + 1;
-  }
-
-  const counts: string[] = [];
-  for (let len = 3; len <= 6; len++) {
-    if (wordCounts[len]) {
-      counts.push(`${numberEmojis[len]}: ${wordCounts[len]}`);
-    }
-  }
-
-  // 7+ letter words
-  const sevenPlus = Object.entries(wordCounts)
-    .filter(([len]) => parseInt(len) >= 7)
-    .reduce((sum, [, count]) => sum + count, 0);
-  if (sevenPlus > 0) {
-    counts.push(`${numberEmojis[7]}+: ${sevenPlus}`);
-  }
-
-  return counts.join(' | ');
-}
-
 // Jumble-specific wrapper for ResultsModal
 interface JumbleResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
   foundWords: FoundWord[];
   score: number;
-  maxPossibleScore: number;
   stars: number;
   puzzleNumber?: number;
   isArchiveMode?: boolean;
@@ -69,44 +30,20 @@ function JumbleResultsModal({
   onClose,
   foundWords,
   score,
-  maxPossibleScore,
   stars,
   puzzleNumber,
   isArchiveMode,
 }: JumbleResultsModalProps) {
-  // Group words by length for display
-  const wordsByLength: Record<number, FoundWord[]> = {};
-  for (const fw of foundWords) {
-    const len = fw.word.length;
-    if (!wordsByLength[len]) {
-      wordsByLength[len] = [];
-    }
-    wordsByLength[len].push(fw);
-  }
-
-  // Sort words within each length group alphabetically
-  for (const len in wordsByLength) {
-    wordsByLength[len].sort((a, b) => a.word.localeCompare(b.word));
-  }
-
-  // Get sorted lengths
-  const lengths = Object.keys(wordsByLength)
-    .map(Number)
-    .sort((a, b) => a - b);
-
-  // Build share text using shared utility
-  const shareText = buildShareText({
-    gameId: 'jumble',
-    gameName: 'Jumble',
-    puzzleId: puzzleNumber || 0,
-    score,
-    maxScore: maxPossibleScore,
-    emojiGrid: formatStars(stars),
-    extraLines: [generateWordCountEmoji(foundWords)],
-    shareUrl: isArchiveMode && puzzleNumber
+  // Build simplified share text
+  const shareText = [
+    `Jumble #${puzzleNumber || 0}`,
+    `${score} pts ${formatStars(stars)}`,
+    `${foundWords.length} words`,
+    '',
+    isArchiveMode && puzzleNumber
       ? `https://nerdcube.games/jumble?puzzle=${puzzleNumber}`
       : 'https://nerdcube.games/jumble',
-  });
+  ].join('\n');
 
   return (
     <ResultsModal
@@ -116,38 +53,16 @@ function JumbleResultsModal({
       gameName="Jumble"
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: score, label: 'points' }}
-      secondaryStats={[
-        { label: 'words found', value: foundWords.length },
-        { label: 'rating', value: formatStars(stars) },
-      ]}
       shareConfig={{ text: shareText }}
     >
-      {/* Words grouped by length */}
-      {foundWords.length > 0 && (
-        <div className="space-y-4 max-h-48 overflow-y-auto">
-          {lengths.map((len) => {
-            const words = wordsByLength[len];
-            const emoji = len >= 7 ? `${numberEmojis[7]}+` : numberEmojis[len];
-            return (
-              <div key={len}>
-                <h3 className="text-sm font-bold mb-2 text-[var(--muted)]">
-                  {emoji} {len >= 7 ? '7+ letters' : `${len} letters`} ({words.length})
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {words.map((fw) => (
-                    <span
-                      key={fw.word}
-                      className="px-2 py-1 text-xs rounded bg-[var(--tile-bg)] text-[var(--foreground)]"
-                    >
-                      {fw.word}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      {/* Stars display */}
+      <div className="text-center mb-4">
+        <span className="text-3xl text-[var(--foreground)]">{formatStars(stars)}</span>
+      </div>
+      {/* Words count */}
+      <div className="text-center text-[var(--muted)]">
+        {foundWords.length} words found
+      </div>
     </ResultsModal>
   );
 }
@@ -161,7 +76,6 @@ export default function Game() {
 
   // Determine if this is archive mode
   const archivePuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : null;
-  const todayPuzzleNumber = getTodayPuzzleNumber();
 
   const router = useRouter();
 
@@ -201,8 +115,8 @@ export default function Game() {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; word: string; message?: string } | null>(null);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
-  const [viewingCompletedGame, setViewingCompletedGame] = useState(false);
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
+  const [exitedLanding, setExitedLanding] = useState(false);
   const hasAutoShownResultsRef = useRef(false);
 
   // Determine landing mode after mount to avoid hydration mismatch
@@ -265,11 +179,17 @@ export default function Game() {
   // Handle replay - reset game state and start fresh
   const handleReplay = useCallback(() => {
     setShowResults(false);
-    setViewingCompletedGame(false);
+    setExitedLanding(false);
     hasAutoShownResultsRef.current = false;
     setWasPlayingThisSession(true);
     resetGame();
   }, [resetGame]);
+
+  // Handle "See Results" from landing screen for completed puzzles
+  // Goes to game board view without opening modal (user can click "See Results" button there)
+  const handleSeeResults = useCallback(() => {
+    setExitedLanding(true);
+  }, []);
 
   // Get puzzle info for display (use puzzleNumber from hook for archive mode)
   const puzzleInfo = isArchiveMode
@@ -288,8 +208,8 @@ export default function Game() {
     );
   }
 
-  // Ready state - show landing screen
-  if (status === 'ready') {
+  // Ready state - show landing screen (unless user has clicked "See Results" for completed puzzle)
+  if (status === 'ready' && !exitedLanding) {
     return (
       <>
         <LandingScreen
@@ -300,6 +220,7 @@ export default function Game() {
           mode={landingMode}
           onPlay={startGame}
           onResume={resumeGame}
+          onSeeResults={handleSeeResults}
           onRules={() => setShowHowToPlay(true)}
           archiveHref="/archive"
           gameId="jumble"
@@ -309,36 +230,9 @@ export default function Game() {
     );
   }
 
-  // Finished state - show landing screen unless viewing completed game
-  if (status === 'finished' && !viewingCompletedGame) {
-    return (
-      <>
-        <LandingScreen
-          icon={jumbleConfig.icon}
-          name={jumbleConfig.name}
-          description={jumbleConfig.description}
-          puzzleInfo={puzzleInfo}
-          mode="completed"
-          onSeeResults={() => setViewingCompletedGame(true)}
-          archiveHref="/archive"
-          gameId="jumble"
-        />
-        <JumbleResultsModal
-          isOpen={showResults}
-          onClose={() => setShowResults(false)}
-          foundWords={foundWords}
-          score={totalScore}
-          maxPossibleScore={maxPossibleScore}
-          stars={stars}
-          puzzleNumber={puzzleInfo.number}
-          isArchiveMode={isArchiveMode}
-        />
-      </>
-    );
-  }
-
-  // Playing state (or viewing completed game)
-  const isViewingCompleted = status === 'finished' && viewingCompletedGame;
+  // Playing or finished state - show game board
+  // Also treat as finished if we exited landing for a completed puzzle
+  const isFinished = status === 'finished' || (exitedLanding && hasCompleted);
 
   return (
     <GameContainer
@@ -348,12 +242,23 @@ export default function Game() {
           title={`${jumbleConfig.name} #${puzzleInfo.number}`}
           gameId={jumbleConfig.id}
           onRulesClick={() => setShowHowToPlay(true)}
-          rightContent={!isViewingCompleted ? <Timer timeRemaining={timeRemaining} /> : undefined}
+          rightContent={
+            <div className="flex items-center gap-3 pr-1">
+              {isFinished ? (
+                <div className="text-xl">{formatStars(stars)}</div>
+              ) : (
+                <Timer timeRemaining={timeRemaining} />
+              )}
+              <div className="px-2.5 py-1 rounded-lg bg-[var(--tile-bg)]">
+                <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>
+              </div>
+            </div>
+          }
         />
       }
     >
-      {/* Current Word - Above the grid (hide when viewing completed game) */}
-      {!isViewingCompleted && (
+      {/* Current Word - Above the grid (hide when viewing finished game) */}
+      {!isFinished && (
         <div className="relative mb-4 w-full">
           <CurrentWord
             word={currentWord}
@@ -386,11 +291,11 @@ export default function Game() {
 
       {/* Found Words */}
       <div className="mb-4 w-full">
-        <FoundWordsList foundWords={foundWords} totalScore={totalScore} />
+        <FoundWordsList foundWords={foundWords} />
       </div>
 
-      {/* See Results and Play Again buttons - show when viewing completed game */}
-      {isViewingCompleted && (
+      {/* See Results and Play Again buttons - show when game is finished */}
+      {isFinished && (
         <div className="flex gap-2 w-full max-w-xs mx-auto">
           <button
             onClick={() => setShowResults(true)}
@@ -414,7 +319,6 @@ export default function Game() {
         onClose={() => setShowResults(false)}
         foundWords={foundWords}
         score={totalScore}
-        maxPossibleScore={maxPossibleScore}
         stars={stars}
         puzzleNumber={puzzleInfo.number}
         isArchiveMode={isArchiveMode}

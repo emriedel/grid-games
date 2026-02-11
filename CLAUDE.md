@@ -97,6 +97,30 @@ if (loading) return <Loading />;
 
 3. **Loading States** - Show loading screen while async data loads
 
+4. **"See Results" Flow for Completed Puzzles** - When user clicks "See Results" on landing screen for a completed puzzle:
+   - Go to game board view (NOT the landing screen)
+   - Do NOT auto-open the results modal
+   - User can then click "See Results" button on the game board to open the modal
+   - This matches how archive puzzles work (go straight to game board)
+
+```tsx
+// Track if user has exited landing for completed puzzle
+const [exitedLanding, setExitedLanding] = useState(false);
+
+// "See Results" from landing goes to game board without opening modal
+const handleSeeResults = useCallback(() => {
+  setExitedLanding(true);
+}, []);
+
+// Show landing unless user has exited
+if (status === 'ready' && !exitedLanding) {
+  return <LandingScreen ... />;
+}
+
+// Treat as finished if we exited landing for a completed puzzle
+const isFinished = status === 'finished' || (exitedLanding && hasCompleted);
+```
+
 **Storage Pattern:**
 - In-progress state: saves during gameplay, cleared on completion
 - Completion state: includes enough data to reconstruct results view

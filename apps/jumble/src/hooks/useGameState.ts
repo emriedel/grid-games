@@ -162,11 +162,11 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
             setHasInProgress(false);
 
             if (isArchiveMode) {
-              // Archive: go directly to finished
+              // Archive: go directly to finished state (game board view)
               setStatus('finished');
             } else {
-              // Today: show landing with completed mode
-              setStatus('finished');
+              // Today: show landing with completed mode first
+              setStatus('ready');
             }
           } else if (puzzleState?.status === 'in-progress') {
             // Puzzle is in-progress
