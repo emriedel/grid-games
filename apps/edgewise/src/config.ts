@@ -1,6 +1,9 @@
 import { defineGameConfig } from '@grid-games/config';
 import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-games/shared';
-import { PUZZLE_BASE_DATE } from './constants/gameConfig';
+import { PUZZLE_BASE_DATE, PUZZLE_BASE_DATE_STRING } from './constants/gameConfig';
+
+// Re-export for convenience (matches Dabble pattern)
+export { PUZZLE_BASE_DATE, PUZZLE_BASE_DATE_STRING };
 
 // Define the purple theme for Edgewise
 export const edgewiseTheme = {

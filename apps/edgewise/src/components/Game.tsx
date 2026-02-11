@@ -3,13 +3,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
-import { getTodayDateString, formatDisplayDate, getPuzzleNumber, buildShareText } from '@grid-games/shared';
+import { formatDisplayDate, buildShareText } from '@grid-games/shared';
 
 import { GameBoard } from './GameBoard';
 import { AttemptsIndicator } from './AttemptsIndicator';
 import { HowToPlayModal } from './HowToPlayModal';
 
-import { getTodayPuzzle, initializeGameState } from '@/lib/puzzleLoader';
+import {
+  loadPuzzleByNumber,
+  initializeGameState,
+  getDateForPuzzleNumber,
+} from '@/lib/puzzleLoader';
 import {
   rotateSquare,
   groupRotate,
@@ -18,17 +22,16 @@ import {
   isPuzzleSolved,
 } from '@/lib/gameLogic';
 import {
-  getTodayResult,
-  saveDailyResult,
-  saveGameState,
-  getSavedGameState,
-  restoreSquaresFromState,
-  clearGameState,
-  clearDailyResult,
+  getTodayPuzzleNumber,
+  findPuzzleState,
+  saveGameProgress,
+  saveGameCompletion,
+  restoreSquaresFromRotations,
+  clearPuzzleState,
 } from '@/lib/storage';
 
 import { edgewiseConfig } from '@/config';
-import { PUZZLE_BASE_DATE, MAX_ATTEMPTS } from '@/constants/gameConfig';
+import { MAX_ATTEMPTS } from '@/constants/gameConfig';
 import { GameState, SquareState, Puzzle, GuessFeedback, CategoryPosition } from '@/types';
 
 // Edgewise-specific wrapper for ResultsModal
@@ -98,9 +101,17 @@ function EdgewiseResultsModal({
 export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
+  const puzzleParam = searchParams.get('puzzle');
+
+  // Determine if this is an archive puzzle
+  const todayPuzzleNumber = getTodayPuzzleNumber();
+  const requestedPuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : todayPuzzleNumber;
+  const isArchive = puzzleParam !== null && requestedPuzzleNumber !== todayPuzzleNumber;
 
   const [gameState, setGameState] = useState<GameState>('landing');
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
+  const [puzzleId, setPuzzleId] = useState<string | undefined>(undefined);
+  const [puzzleNumber, setPuzzleNumber] = useState(requestedPuzzleNumber);
   const [squares, setSquares] = useState<SquareState[]>([]);
   const [guessesUsed, setGuessesUsed] = useState(0);
   const [feedbackHistory, setFeedbackHistory] = useState<GuessFeedback[]>([]);
@@ -111,64 +122,98 @@ export function Game() {
     bottom: null,
     left: null,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
 
-  const dateStr = getTodayDateString();
-  const puzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE);
+  const dateStr = getDateForPuzzleNumber(puzzleNumber);
 
   // Initialize puzzle on mount
   useEffect(() => {
-    const loadedPuzzle = getTodayPuzzle();
-    if (loadedPuzzle) {
+    async function loadPuzzle() {
+      setIsLoading(true);
+
+      const result = await loadPuzzleByNumber(requestedPuzzleNumber);
+      if (!result) {
+        console.error(`[edgewise] Failed to load puzzle #${requestedPuzzleNumber}`);
+        setIsLoading(false);
+        return;
+      }
+
+      const { puzzle: loadedPuzzle, puzzleId: loadedPuzzleId } = result;
       setPuzzle(loadedPuzzle);
+      setPuzzleId(loadedPuzzleId);
+      setPuzzleNumber(requestedPuzzleNumber);
 
-      // Check if already played today
-      const todayResult = getTodayResult();
-      if (todayResult && !isDebug) {
-        // Set landing mode for completed game
-        setLandingMode('completed');
+      const puzzleDateStr = getDateForPuzzleNumber(requestedPuzzleNumber);
 
-        // Restore finished state
-        setSolved(todayResult.solved);
-        setGuessesUsed(todayResult.guessesUsed);
-        setFeedbackHistory(todayResult.feedbackHistory);
-        setGameState('finished');
+      // Check for existing state for this puzzle
+      const existingState = findPuzzleState(requestedPuzzleNumber);
+      const stateMatchesPuzzleId = !loadedPuzzleId || !existingState?.puzzleId || existingState.puzzleId === loadedPuzzleId;
 
-        // Initialize squares to solved state if won
-        const initialSquares = initializeGameState(loadedPuzzle, dateStr);
-        if (todayResult.solved) {
-          // Show solved configuration
-          setSquares(loadedPuzzle.squares.map(sq => ({
-            words: [sq.top, sq.right, sq.bottom, sq.left],
-            rotation: 0,
-          })));
-          setCategoryResults({ top: true, right: true, bottom: true, left: true });
-        } else {
-          setSquares(initialSquares);
-        }
-      } else {
-        // Check for in-progress game
-        const savedState = getSavedGameState();
-        if (savedState && !isDebug) {
+      if (existingState && stateMatchesPuzzleId && !isDebug) {
+        if (existingState.status === 'completed') {
+          // Set landing mode for completed game
+          setLandingMode('completed');
+
+          // Restore finished state
+          setSolved(existingState.data.solved ?? false);
+          setGuessesUsed(existingState.data.guessesUsed);
+          setFeedbackHistory(existingState.data.feedbackHistory);
+
+          // For archive puzzles, skip landing and go straight to finished state
+          if (isArchive) {
+            setGameState('finished');
+          } else {
+            setGameState('finished');
+          }
+
+          // Initialize squares to solved state if won
+          const initialSquares = initializeGameState(loadedPuzzle, puzzleDateStr);
+          if (existingState.data.solved) {
+            // Show solved configuration
+            setSquares(loadedPuzzle.squares.map(sq => ({
+              words: [sq.top, sq.right, sq.bottom, sq.left],
+              rotation: 0,
+            })));
+            setCategoryResults({ top: true, right: true, bottom: true, left: true });
+          } else {
+            setSquares(initialSquares);
+          }
+        } else if (existingState.status === 'in-progress') {
           // Set landing mode for in-progress game
           setLandingMode('in-progress');
 
-          const initialSquares = initializeGameState(loadedPuzzle, dateStr);
-          const restoredSquares = restoreSquaresFromState(initialSquares, savedState);
+          const initialSquares = initializeGameState(loadedPuzzle, puzzleDateStr);
+          const restoredSquares = restoreSquaresFromRotations(initialSquares, existingState.data.squareRotations);
           setSquares(restoredSquares);
-          setGuessesUsed(savedState.guessesUsed);
-          setFeedbackHistory(savedState.feedbackHistory as GuessFeedback[]);
-        } else {
-          // Start fresh
-          const initialSquares = initializeGameState(loadedPuzzle, dateStr);
-          setSquares(initialSquares);
+          setGuessesUsed(existingState.data.guessesUsed);
+          setFeedbackHistory(existingState.data.feedbackHistory);
+
+          // For archive puzzles, skip landing
+          if (isArchive) {
+            setGameState('playing');
+          }
+        }
+      } else {
+        // Start fresh
+        const initialSquares = initializeGameState(loadedPuzzle, puzzleDateStr);
+        setSquares(initialSquares);
+        setLandingMode('fresh');
+
+        // For archive puzzles, skip landing and go straight to playing
+        if (isArchive) {
+          setGameState('playing');
         }
       }
+
+      setIsLoading(false);
     }
-  }, [dateStr, isDebug]);
+
+    loadPuzzle();
+  }, [requestedPuzzleNumber, isDebug, isArchive]);
 
   // Handle starting the game
   const handlePlay = useCallback(() => {
@@ -184,14 +229,14 @@ export function Game() {
       newSquares[index] = rotateSquare(newSquares[index]);
 
       // Save state
-      saveGameState(newSquares, guessesUsed, feedbackHistory);
+      saveGameProgress(puzzleNumber, newSquares, guessesUsed, feedbackHistory, puzzleId);
 
       return newSquares;
     });
 
     // Reset category results when making changes
     setCategoryResults({ top: null, right: null, bottom: null, left: null });
-  }, [gameState, guessesUsed, feedbackHistory]);
+  }, [gameState, guessesUsed, feedbackHistory, puzzleNumber, puzzleId]);
 
   // Handle group rotation
   const handleGroupRotate = useCallback(() => {
@@ -201,14 +246,14 @@ export function Game() {
       const newSquares = groupRotate(prev);
 
       // Save state
-      saveGameState(newSquares, guessesUsed, feedbackHistory);
+      saveGameProgress(puzzleNumber, newSquares, guessesUsed, feedbackHistory, puzzleId);
 
       return newSquares;
     });
 
     // Reset category results when making changes
     setCategoryResults({ top: null, right: null, bottom: null, left: null });
-  }, [gameState, guessesUsed, feedbackHistory]);
+  }, [gameState, guessesUsed, feedbackHistory, puzzleNumber, puzzleId]);
 
   // Handle submit
   const handleSubmit = useCallback(() => {
@@ -237,40 +282,29 @@ export function Game() {
     if (isSolved) {
       setSolved(true);
       setGameState('finished');
-      clearGameState();
-      saveDailyResult({
-        date: dateStr,
-        puzzleNumber,
-        solved: true,
-        guessesUsed: newGuessesUsed,
-        feedbackHistory: newFeedbackHistory,
-      });
+      // Clear in-progress state first
+      clearPuzzleState(puzzleNumber, puzzleId);
+      saveGameCompletion(puzzleNumber, squares, newGuessesUsed, newFeedbackHistory, true, puzzleId);
       setShowResults(true);
     } else if (newGuessesUsed >= MAX_ATTEMPTS) {
       setSolved(false);
       setGameState('finished');
-      clearGameState();
-      saveDailyResult({
-        date: dateStr,
-        puzzleNumber,
-        solved: false,
-        guessesUsed: newGuessesUsed,
-        feedbackHistory: newFeedbackHistory,
-      });
+      // Clear in-progress state first
+      clearPuzzleState(puzzleNumber, puzzleId);
+      saveGameCompletion(puzzleNumber, squares, newGuessesUsed, newFeedbackHistory, false, puzzleId);
       setShowResults(true);
     } else {
       // Save in-progress state
-      saveGameState(squares, newGuessesUsed, newFeedbackHistory);
+      saveGameProgress(puzzleNumber, squares, newGuessesUsed, newFeedbackHistory, puzzleId);
     }
-  }, [puzzle, squares, guessesUsed, feedbackHistory, gameState, dateStr, puzzleNumber]);
+  }, [puzzle, squares, guessesUsed, feedbackHistory, gameState, puzzleNumber, puzzleId]);
 
   // Handle try again - reset game state and replay
   const handleTryAgain = useCallback(() => {
     if (!puzzle) return;
 
     // Clear all saved progress
-    clearGameState();
-    clearDailyResult();
+    clearPuzzleState(puzzleNumber, puzzleId);
 
     // Reset game state
     const initialSquares = initializeGameState(puzzle, dateStr);
@@ -283,10 +317,19 @@ export function Game() {
     // Back to playing
     setGameState('playing');
     setShowResults(false);
-  }, [puzzle, dateStr]);
+  }, [puzzle, dateStr, puzzleNumber, puzzleId]);
 
-  // Render landing screen
-  if (gameState === 'landing') {
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+        <p className="text-[var(--muted)]">Loading puzzle...</p>
+      </div>
+    );
+  }
+
+  // Render landing screen (only for today's puzzle)
+  if (gameState === 'landing' && !isArchive) {
     return (
       <>
         <LandingScreen
@@ -299,12 +342,12 @@ export function Game() {
           onResume={handlePlay}
           onSeeResults={() => {
             // Restore finished state - don't open modal, just show the completed board
-            const todayResult = getTodayResult();
-            if (todayResult && puzzle) {
-              setSolved(todayResult.solved);
-              setGuessesUsed(todayResult.guessesUsed);
-              setFeedbackHistory(todayResult.feedbackHistory);
-              if (todayResult.solved) {
+            const existingState = findPuzzleState(puzzleNumber);
+            if (existingState?.status === 'completed' && puzzle) {
+              setSolved(existingState.data.solved ?? false);
+              setGuessesUsed(existingState.data.guessesUsed);
+              setFeedbackHistory(existingState.data.feedbackHistory);
+              if (existingState.data.solved) {
                 setSquares(puzzle.squares.map(sq => ({
                   words: [sq.top, sq.right, sq.bottom, sq.left],
                   rotation: 0,
@@ -316,6 +359,7 @@ export function Game() {
           }}
           onRules={() => setShowHowToPlay(true)}
           gameId="edgewise"
+          archiveHref="/archive"
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
       </>
@@ -326,7 +370,7 @@ export function Game() {
   if (!puzzle) {
     return (
       <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
-        <p className="text-[var(--muted)]">Loading puzzle...</p>
+        <p className="text-[var(--muted)]">Puzzle not found</p>
       </div>
     );
   }

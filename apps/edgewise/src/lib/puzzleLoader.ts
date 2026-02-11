@@ -1,39 +1,128 @@
 import seedrandom from 'seedrandom';
 import { Puzzle, SquareState, Rotation, PuzzleSquare } from '@/types';
-import { getTodayDateString } from '@grid-games/shared';
+import {
+  getTodayDateString,
+  getMonthForPuzzleNumber,
+  loadMonthlyFile,
+  getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
+} from '@grid-games/shared';
 import { groupRotate } from './gameLogic';
+import { PUZZLE_BASE_DATE_STRING, PUZZLE_BASE_DATE } from '@/constants/gameConfig';
 
-// Import puzzles from JSON
+// Import puzzles from JSON as fallback
 import puzzlesData from '../../public/puzzles/puzzles.json';
 
-// Type assertion needed because JSON inference doesn't know squares is always a 4-tuple
-const puzzles: Puzzle[] = puzzlesData.puzzles.map(p => ({
+/**
+ * Assigned puzzle format (from monthly files)
+ */
+interface AssignedPuzzle {
+  id: string;
+  date: string;
+  categories: {
+    top: string;
+    right: string;
+    bottom: string;
+    left: string;
+  };
+  squares: [PuzzleSquare, PuzzleSquare, PuzzleSquare, PuzzleSquare];
+  [key: string]: unknown;
+}
+
+// Type assertion for legacy puzzles
+const legacyPuzzles: Puzzle[] = puzzlesData.puzzles.map(p => ({
   ...p,
   squares: p.squares as [PuzzleSquare, PuzzleSquare, PuzzleSquare, PuzzleSquare],
 }));
+
+/**
+ * Get puzzle number for a date
+ */
+export function getPuzzleNumberForDate(dateStr: string): number {
+  const targetDate = new Date(dateStr + 'T00:00:00');
+  const diffTime = targetDate.getTime() - PUZZLE_BASE_DATE.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays + 1;
+}
+
+/**
+ * Get date string for a puzzle number
+ */
+export function getDateForPuzzleNumber(puzzleNumber: number): string {
+  const puzzleDate = new Date(PUZZLE_BASE_DATE.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  return puzzleDate.toISOString().split('T')[0];
+}
+
+/**
+ * Load puzzle by puzzle number from monthly files
+ * Falls back to legacy puzzles.json if not found
+ */
+export async function loadPuzzleByNumber(puzzleNumber: number): Promise<{
+  puzzle: Puzzle;
+  puzzleId?: string;
+} | null> {
+  const month = getMonthForPuzzleNumber(puzzleNumber, PUZZLE_BASE_DATE_STRING);
+
+  try {
+    const puzzles = await loadMonthlyFile<AssignedPuzzle>(month, 'edgewise');
+    if (puzzles) {
+      const puzzle = puzzles[String(puzzleNumber)];
+      if (puzzle) {
+        return {
+          puzzle: {
+            date: puzzle.date,
+            categories: puzzle.categories,
+            squares: puzzle.squares,
+          },
+          puzzleId: puzzle.id,
+        };
+      }
+    }
+  } catch (error) {
+    console.warn(`[edgewise] Failed to load puzzle #${puzzleNumber} from monthly file:`, error);
+  }
+
+  // Fallback to legacy puzzles
+  const dateStr = getDateForPuzzleNumber(puzzleNumber);
+  const legacyPuzzle = legacyPuzzles.find(p => p.date === dateStr);
+  if (legacyPuzzle) {
+    return { puzzle: legacyPuzzle };
+  }
+
+  return null;
+}
 
 /**
  * Get the puzzle for a specific date
  * Falls back to a random puzzle if date not found
  */
 export function getPuzzleForDate(dateStr: string): Puzzle | null {
-  // First try to find exact date match
-  const exactMatch = puzzles.find(p => p.date === dateStr);
+  // First try to find exact date match in legacy puzzles
+  const exactMatch = legacyPuzzles.find(p => p.date === dateStr);
   if (exactMatch) return exactMatch;
 
   // Fallback: use date as seed to pick a puzzle
-  if (puzzles.length === 0) return null;
+  if (legacyPuzzles.length === 0) return null;
 
   const rng = seedrandom(dateStr);
-  const index = Math.floor(rng() * puzzles.length);
-  return puzzles[index];
+  const index = Math.floor(rng() * legacyPuzzles.length);
+  return legacyPuzzles[index];
 }
 
 /**
- * Get today's puzzle
+ * Get today's puzzle (synchronous fallback version)
  */
 export function getTodayPuzzle(): Puzzle | null {
   return getPuzzleForDate(getTodayDateString());
+}
+
+/**
+ * Get puzzle IDs for archive page
+ */
+export async function getPuzzleIdsForRange(
+  startNum: number,
+  endNum: number
+): Promise<Map<number, string>> {
+  return sharedGetPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'edgewise');
 }
 
 /**
@@ -93,12 +182,12 @@ export function getPuzzleNumber(baseDate: Date, currentDate?: Date): number {
  * Get a random puzzle (for debug mode)
  */
 export function getRandomPuzzle(): { puzzle: Puzzle; dateStr: string } | null {
-  if (puzzles.length === 0) return null;
+  if (legacyPuzzles.length === 0) return null;
 
   const randomDate = new Date(Date.now() + Math.random() * 365 * 24 * 60 * 60 * 1000);
   const dateStr = randomDate.toISOString().split('T')[0];
   const rng = seedrandom(dateStr);
-  const index = Math.floor(rng() * puzzles.length);
+  const index = Math.floor(rng() * legacyPuzzles.length);
 
-  return { puzzle: puzzles[index], dateStr };
+  return { puzzle: legacyPuzzles[index], dateStr };
 }

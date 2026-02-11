@@ -1,0 +1,186 @@
+{
+  "gameId": "edgewise",
+  "baseDate": "2026-01-01",
+  "puzzles": {
+    "1": {
+      "date": "2026-01-25",
+      "categories": {
+        "top": "Bodies of Water",
+        "right": "Stone _____",
+        "bottom": "Furniture",
+        "left": "Musical Instruments"
+      },
+      "squares": [
+        {
+          "top": "RIVER",
+          "right": "BENCH",
+          "bottom": "DRUM",
+          "left": "PIANO"
+        },
+        {
+          "top": "OCEAN",
+          "right": "COLD",
+          "bottom": "SOFA",
+          "left": "VIOLIN"
+        },
+        {
+          "top": "GUITAR",
+          "right": "WALL",
+          "bottom": "TABLE",
+          "left": "CREEK"
+        },
+        {
+          "top": "CHAIR",
+          "right": "LAKE",
+          "bottom": "COUCH",
+          "left": "HENGE"
+        }
+      ],
+      "id": "fb6065bf"
+    },
+    "2": {
+      "date": "2026-01-26",
+      "categories": {
+        "top": "Dog Breeds",
+        "right": "_____ Ball",
+        "bottom": "Breakfast Foods",
+        "left": "Shades of Blue"
+      },
+      "squares": [
+        {
+          "top": "BOXER",
+          "right": "WAFFLE",
+          "bottom": "TEAL",
+          "left": "NAVY"
+        },
+        {
+          "top": "BEAGLE",
+          "right": "BASKET",
+          "bottom": "TOAST",
+          "left": "CYAN"
+        },
+        {
+          "top": "COBALT",
+          "right": "VOLLEY",
+          "bottom": "BACON",
+          "left": "POODLE"
+        },
+        {
+          "top": "PANCAKE",
+          "right": "HUSKY",
+          "bottom": "CEREAL",
+          "left": "CRYSTAL"
+        }
+      ],
+      "id": "ee8bb7bd"
+    },
+    "3": {
+      "date": "2026-01-27",
+      "categories": {
+        "top": "Planets",
+        "right": "Types of Dance",
+        "bottom": "Citrus Fruits",
+        "left": "Card Games"
+      },
+      "squares": [
+        {
+          "top": "MARS",
+          "right": "POKER",
+          "bottom": "VENUS",
+          "left": "HEARTS"
+        },
+        {
+          "top": "SATURN",
+          "right": "TANGO",
+          "bottom": "BRIDGE",
+          "left": "EARTH"
+        },
+        {
+          "top": "SAMBA",
+          "right": "SALSA",
+          "bottom": "LEMON",
+          "left": "JUPITER"
+        },
+        {
+          "top": "LIME",
+          "right": "ORANGE",
+          "bottom": "GRAPEFRUIT",
+          "left": "WALTZ"
+        }
+      ],
+      "id": "83d62b7f"
+    },
+    "4": {
+      "date": "2026-01-28",
+      "categories": {
+        "top": "Weather Terms",
+        "right": "Kitchen Tools",
+        "bottom": "Sports",
+        "left": "Tree Types"
+      },
+      "squares": [
+        {
+          "top": "SUNNY",
+          "right": "TENNIS",
+          "bottom": "MAPLE",
+          "left": "OAK"
+        },
+        {
+          "top": "CLOUDY",
+          "right": "SPATULA",
+          "bottom": "PINE",
+          "left": "WINDY"
+        },
+        {
+          "top": "BIRCH",
+          "right": "WHISK",
+          "bottom": "SOCCER",
+          "left": "RAINY"
+        },
+        {
+          "top": "HOCKEY",
+          "right": "STORMY",
+          "bottom": "GOLF",
+          "left": "LADLE"
+        }
+      ],
+      "id": "d84416c7"
+    },
+    "5": {
+      "date": "2026-01-29",
+      "categories": {
+        "top": "Gemstones",
+        "right": "Office Supplies",
+        "bottom": "Pasta Shapes",
+        "left": "Emotions"
+      },
+      "squares": [
+        {
+          "top": "RUBY",
+          "right": "PENNE",
+          "bottom": "FEAR",
+          "left": "JOY"
+        },
+        {
+          "top": "EMERALD",
+          "right": "STAPLER",
+          "bottom": "ANGRY",
+          "left": "PEARL"
+        },
+        {
+          "top": "LOVE",
+          "right": "PENCIL",
+          "bottom": "RIGATONI",
+          "left": "ONYX"
+        },
+        {
+          "top": "SPAGHETTI",
+          "right": "DIAMOND",
+          "bottom": "FUSILLI",
+          "left": "TAPE"
+        }
+      ],
+      "id": "40f9a44e"
+    }
+  }
+}

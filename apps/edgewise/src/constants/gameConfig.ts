@@ -1,7 +1,8 @@
 // Game configuration constants
 export const MAX_ATTEMPTS = 4;
 // IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
-export const PUZZLE_BASE_DATE = new Date('2026-01-25T00:00:00');
+export const PUZZLE_BASE_DATE_STRING = '2026-01-25';
+export const PUZZLE_BASE_DATE = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
 
 // Animation durations (ms)
 export const ROTATION_DURATION = 250;

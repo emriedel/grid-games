@@ -1,139 +1,165 @@
-import { DailyResult, SquareState, Rotation } from '@/types';
-import { getTodayDateString } from '@grid-games/shared';
-
-const DAILY_RESULT_KEY = 'edgewise-daily-result';
-const GAME_STATE_KEY = 'edgewise-game-state';
+import { createArchiveStorage, type BasePuzzleState } from '@grid-games/shared';
+import { SquareState, Rotation, GuessFeedback } from '@/types';
+import { PUZZLE_BASE_DATE } from '@/constants/gameConfig';
 
 /**
- * Get today's result from localStorage
+ * Unified puzzle state for Edgewise - works for both daily and archive puzzles
  */
-export function getTodayResult(): DailyResult | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const stored = localStorage.getItem(DAILY_RESULT_KEY);
-    if (stored) {
-      const result = JSON.parse(stored) as DailyResult;
-      if (result.date === getTodayDateString()) {
-        return result;
-      }
-    }
-  } catch (error) {
-    console.error('Failed to load daily result:', error);
-  }
-  return null;
+export interface EdgewisePuzzleState extends BasePuzzleState {
+  puzzleNumber: number;
+  puzzleId?: string;
+  status: 'in-progress' | 'completed';
+  data: {
+    // Square rotations (indices into puzzle.squares after group rotations applied)
+    squareRotations: Rotation[];
+    // Number of guesses used
+    guessesUsed: number;
+    // History of feedback from each guess
+    feedbackHistory: GuessFeedback[];
+    // Whether puzzle was solved (only set on completion)
+    solved?: boolean;
+    // Square ordering after group rotations (tracks position changes)
+    squareOrder?: number[];
+  };
 }
 
-/**
- * Save daily result to localStorage
- */
-export function saveDailyResult(result: DailyResult): void {
-  if (typeof window === 'undefined') return;
+// Create the storage instance using the shared factory
+const storage = createArchiveStorage<EdgewisePuzzleState>({
+  gameId: 'edgewise',
+  launchDate: PUZZLE_BASE_DATE,
+});
 
-  try {
-    localStorage.setItem(DAILY_RESULT_KEY, JSON.stringify(result));
-  } catch (error) {
-    console.error('Failed to save daily result:', error);
-  }
-}
+// Re-export all shared functions
+export const {
+  getStorageKey,
+  getPuzzleState,
+  findPuzzleState,
+  savePuzzleState,
+  clearPuzzleState,
+  isPuzzleCompleted,
+  isPuzzleCompletedAny,
+  getSavedPuzzleId,
+  isPuzzleInProgress,
+  isPuzzleInProgressAny,
+  getTodayPuzzleNumber,
+} = storage;
 
-/**
- * Check if the player has already completed today's puzzle
- */
-export function hasPlayedToday(): boolean {
-  return getTodayResult() !== null;
-}
-
-/**
- * Game state for persistence during play
- */
-interface SavedGameState {
-  date: string;
-  squareRotations: Rotation[];
-  squarePositions: number[]; // indices of squares in each position
-  guessesUsed: number;
-  feedbackHistory: number[][];
-}
+// ============ Game-Specific Helper Functions ============
 
 /**
- * Get saved game state for today
+ * Save game progress (in-progress state)
  */
-export function getSavedGameState(): SavedGameState | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const stored = localStorage.getItem(GAME_STATE_KEY);
-    if (stored) {
-      const state = JSON.parse(stored) as SavedGameState;
-      if (state.date === getTodayDateString()) {
-        return state;
-      }
-    }
-  } catch (error) {
-    console.error('Failed to load game state:', error);
-  }
-  return null;
-}
-
-/**
- * Save current game state
- */
-export function saveGameState(
+export function saveGameProgress(
+  puzzleNumber: number,
   squares: SquareState[],
   guessesUsed: number,
-  feedbackHistory: number[][]
+  feedbackHistory: GuessFeedback[],
+  puzzleId?: string
 ): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    const state: SavedGameState = {
-      date: getTodayDateString(),
+  const state: EdgewisePuzzleState = {
+    puzzleNumber,
+    puzzleId,
+    status: 'in-progress',
+    data: {
       squareRotations: squares.map(s => s.rotation),
-      squarePositions: squares.map((_, i) => i), // For now, positions are fixed
       guessesUsed,
       feedbackHistory,
+    },
+  };
+  savePuzzleState(puzzleNumber, state, puzzleId);
+}
+
+/**
+ * Save game completion
+ */
+export function saveGameCompletion(
+  puzzleNumber: number,
+  squares: SquareState[],
+  guessesUsed: number,
+  feedbackHistory: GuessFeedback[],
+  solved: boolean,
+  puzzleId?: string
+): void {
+  const state: EdgewisePuzzleState = {
+    puzzleNumber,
+    puzzleId,
+    status: 'completed',
+    data: {
+      squareRotations: squares.map(s => s.rotation),
+      guessesUsed,
+      feedbackHistory,
+      solved,
+    },
+  };
+  savePuzzleState(puzzleNumber, state, puzzleId);
+}
+
+/**
+ * Get result for today's puzzle
+ * Returns null if not completed today
+ */
+export function getTodayResult(): {
+  solved: boolean;
+  guessesUsed: number;
+  feedbackHistory: GuessFeedback[];
+} | null {
+  const puzzleNumber = getTodayPuzzleNumber();
+  const state = findPuzzleState(puzzleNumber);
+
+  if (state?.status === 'completed') {
+    return {
+      solved: state.data.solved ?? false,
+      guessesUsed: state.data.guessesUsed,
+      feedbackHistory: state.data.feedbackHistory,
     };
-    localStorage.setItem(GAME_STATE_KEY, JSON.stringify(state));
-  } catch (error) {
-    console.error('Failed to save game state:', error);
   }
+  return null;
 }
 
 /**
- * Clear saved game state (called when game is finished)
+ * Get in-progress state for today's puzzle
  */
-export function clearGameState(): void {
-  if (typeof window === 'undefined') return;
+export function getTodayInProgress(): {
+  squareRotations: Rotation[];
+  guessesUsed: number;
+  feedbackHistory: GuessFeedback[];
+} | null {
+  const puzzleNumber = getTodayPuzzleNumber();
+  const state = findPuzzleState(puzzleNumber);
 
-  try {
-    localStorage.removeItem(GAME_STATE_KEY);
-  } catch (error) {
-    console.error('Failed to clear game state:', error);
+  if (state?.status === 'in-progress') {
+    return {
+      squareRotations: state.data.squareRotations,
+      guessesUsed: state.data.guessesUsed,
+      feedbackHistory: state.data.feedbackHistory,
+    };
   }
+  return null;
 }
 
 /**
- * Clear daily result (for try again functionality)
+ * Restore squares from saved state rotations
  */
-export function clearDailyResult(): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    localStorage.removeItem(DAILY_RESULT_KEY);
-  } catch (error) {
-    console.error('Failed to clear daily result:', error);
-  }
-}
-
-/**
- * Restore squares from saved state
- */
-export function restoreSquaresFromState(
+export function restoreSquaresFromRotations(
   baseSquares: SquareState[],
-  savedState: SavedGameState
+  rotations: Rotation[]
 ): SquareState[] {
   return baseSquares.map((square, index) => ({
     ...square,
-    rotation: savedState.squareRotations[index] ?? square.rotation,
+    rotation: rotations[index] ?? square.rotation,
   }));
+}
+
+/**
+ * Clear today's puzzle state (for try again functionality)
+ */
+export function clearTodayPuzzle(): void {
+  const puzzleNumber = getTodayPuzzleNumber();
+  // Find and clear any state for this puzzle number
+  const state = findPuzzleState(puzzleNumber);
+  if (state?.puzzleId) {
+    clearPuzzleState(puzzleNumber, state.puzzleId);
+  }
+  // Also try clearing without puzzleId (legacy format)
+  clearPuzzleState(puzzleNumber);
 }

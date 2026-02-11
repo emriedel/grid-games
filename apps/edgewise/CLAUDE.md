@@ -4,6 +4,8 @@
 Edgewise is a daily puzzle game combining elements from NYT Connections and So Clover. Players rotate tiles in a 2×2 grid to match word pairs with categories on the border.
 
 **Accent Color:** Purple (#a855f7)
+**Dev Port:** 3003
+**Package Name:** `@grid-games/edgewise`
 
 ---
 
@@ -23,8 +25,8 @@ Edgewise is a daily puzzle game combining elements from NYT Connections and So C
 - Maximum 4 attempts
 
 ### Feedback
-- After each guess: 4 dots (🟢 correct, ⚪ incorrect)
-- Dots are sorted green-first to hide which categories are correct
+- Category labels turn green when correct after submission
+- Results show emoji line: ❌ for wrong guesses, ✅ for winning guess
 
 ---
 
@@ -37,25 +39,32 @@ apps/edgewise/
 ├── tsconfig.json
 ├── tailwind.config.ts
 ├── CLAUDE.md (this file)
-├── public/puzzles/puzzles.json    # Puzzle data
+├── public/puzzles/
+│   ├── puzzles.json              # Legacy puzzle data (fallback)
+│   ├── pool.json                 # Unassigned puzzles
+│   └── assigned/
+│       └── 2026-01.json          # Monthly assigned puzzles
+├── scripts/
+│   └── assignPuzzles.ts          # Migrate puzzles to monthly files
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
-│   │   └── globals.css            # Purple theme
+│   │   ├── archive/page.tsx      # Archive page
+│   │   └── globals.css           # Purple theme
 │   ├── components/
-│   │   ├── Game.tsx               # Main orchestrator (includes EdgewiseResultsModal wrapper)
-│   │   ├── GameBoard.tsx          # Grid + categories layout
-│   │   ├── Square.tsx             # Rotatable tile
-│   │   ├── CategoryLabel.tsx      # Border category
-│   │   ├── CenterButton.tsx       # Group rotation button
-│   │   ├── FeedbackDots.tsx       # Guess feedback
-│   │   ├── AttemptsIndicator.tsx  # Remaining attempts
+│   │   ├── Game.tsx              # Main orchestrator
+│   │   ├── GameBoard.tsx         # Grid + categories layout
+│   │   ├── Square.tsx            # Rotatable tile
+│   │   ├── CategoryLabel.tsx     # Border category
+│   │   ├── CenterButton.tsx      # Group rotation button
+│   │   ├── AttemptsIndicator.tsx # Remaining attempts
+│   │   ├── ArchivePageContent.tsx# Archive page logic
 │   │   └── HowToPlayModal.tsx
 │   ├── lib/
-│   │   ├── puzzleLoader.ts        # Load/scramble puzzles
-│   │   ├── gameLogic.ts           # Validation logic
-│   │   └── storage.ts             # localStorage
+│   │   ├── puzzleLoader.ts       # Load puzzles from monthly files
+│   │   ├── gameLogic.ts          # Validation logic
+│   │   └── storage.ts            # Archive-enabled storage
 │   ├── types/index.ts
 │   ├── constants/gameConfig.ts
 │   └── config.ts
@@ -82,29 +91,111 @@ type GuessFeedback = [number, number, number, number];  // 2=correct, 0=wrong
 
 ---
 
-## Puzzle JSON Format
+## Pre-Generated Puzzles (Archive Support)
 
-Puzzles are stored in solved configuration. The game scrambles rotations using the date as seed.
+Uses a pool/assigned architecture for stable archives:
 
+### Architecture
+
+```
+public/puzzles/
+├── pool.json                 # Unassigned puzzles (safe to regenerate)
+└── assigned/
+    └── 2026-01.json          # Full puzzle data for Jan 2026 (stable)
+```
+
+**Monthly File Format:**
 ```json
 {
-  "puzzles": [{
-    "date": "2026-01-25",
-    "categories": {
-      "top": "Bodies of Water",
-      "right": "Stone _____",
-      "bottom": "Furniture",
-      "left": "Musical Instruments"
-    },
-    "squares": [
-      { "top": "RIVER", "right": "BENCH", "bottom": "DRUM", "left": "PIANO" },
-      ...
-    ]
-  }]
+  "gameId": "edgewise",
+  "baseDate": "2026-01-01",
+  "puzzles": {
+    "1": { "id": "fb6065bf", "date": "2026-01-25", "categories": {...}, "squares": [...] },
+    "2": { "id": "ee8bb7bd", "date": "2026-01-26", "categories": {...}, "squares": [...] }
+  }
 }
 ```
 
-### Position Mapping
+### Commands
+
+```bash
+# Assign puzzles from puzzles.json to monthly files
+npx tsx scripts/assignPuzzles.ts
+
+# Assign specific number of puzzles
+npx tsx scripts/assignPuzzles.ts 100
+```
+
+---
+
+## State Persistence
+
+Storage module: `src/lib/storage.ts` - uses shared `createArchiveStorage` factory.
+
+**Storage Key Format:** `edgewise-{puzzleNumber}-{puzzleId}`
+
+**Puzzle State Interface:**
+```typescript
+interface EdgewisePuzzleState extends BasePuzzleState {
+  puzzleNumber: number;
+  puzzleId?: string;
+  status: 'in-progress' | 'completed';
+  data: {
+    squareRotations: Rotation[];
+    guessesUsed: number;
+    feedbackHistory: GuessFeedback[];
+    solved?: boolean;  // Only set on completion
+  };
+}
+```
+
+**Helper Functions:**
+- `saveGameProgress(puzzleNumber, squares, guessesUsed, feedbackHistory, puzzleId?)` - Save in-progress state
+- `saveGameCompletion(puzzleNumber, squares, guessesUsed, feedbackHistory, solved, puzzleId?)` - Save completion
+- `getTodayResult()` - Get today's completion result
+- `getTodayInProgress()` - Get today's in-progress state
+- `clearTodayPuzzle()` - Clear all state for today
+- `findPuzzleState(puzzleNumber)` - Find any saved state for a puzzle
+- `getPuzzleIdsForRange(start, end)` - Load puzzleIds from monthly files (for archive)
+
+---
+
+## Archive Page
+
+The archive page at `/archive` shows past puzzles with completion status.
+
+**Key Patterns:**
+- Loads puzzleIds from monthly files using `getPuzzleIdsForRange`
+- Verifies saved puzzleId matches current puzzleId before showing completion
+- Navigates to `/?puzzle=N` for archive puzzles
+- Archive puzzles skip landing screen, go straight to game
+
+---
+
+## Core Logic
+
+### Rotation Formula
+```typescript
+function getWordAtEdge(square: SquareState, visualEdge: Edge): string {
+  const originalIndex = ((visualEdge - square.rotation + 4) % 4);
+  return square.words[originalIndex];
+}
+```
+
+### Group Rotation
+```typescript
+function groupRotate(squares: SquareState[]): SquareState[] {
+  return [squares[3], squares[0], squares[1], squares[2]];
+}
+```
+
+### Initial Scrambling
+- Individual tile rotations: seeded by `{date}-scramble`
+- Group rotations (0-3): seeded by `{date}-group-scramble`
+
+---
+
+## Position Mapping
 
 ```
          [TOP CATEGORY]
@@ -126,25 +217,6 @@ Puzzles are stored in solved configuration. The game scrambles rotations using t
 
 ---
 
-## Core Logic
-
-### Rotation Formula
-```typescript
-function getWordAtEdge(square: SquareState, visualEdge: Edge): string {
-  const originalIndex = ((visualEdge - square.rotation + 4) % 4);
-  return square.words[originalIndex];
-}
-```
-
-### Group Rotation
-```typescript
-function groupRotate(squares: SquareState[]): SquareState[] {
-  return [squares[3], squares[0], squares[1], squares[2]];
-}
-```
-
----
-
 ## Commands
 
 ```bash
@@ -156,18 +228,10 @@ npx turbo build --filter=@grid-games/edgewise
 
 # Debug mode (bypasses localStorage)
 http://localhost:3003?debug=true
+
+# Play specific puzzle
+http://localhost:3003/?puzzle=1
 ```
-
----
-
-## Adding New Puzzles
-
-1. Edit `public/puzzles/puzzles.json`
-2. Add new puzzle object with:
-   - `date`: YYYY-MM-DD format
-   - `categories`: 4 category labels
-   - `squares`: 4 squares with words in solved positions
-3. Ensure the words match the category-edge mapping
 
 ---
 
@@ -182,20 +246,18 @@ http://localhost:3003?debug=true
 --tile-border: #4c1d95;
 ```
 
-## State Persistence
+---
 
-Storage module: `src/lib/storage.ts`
+## Adding New Puzzles
 
-**In-progress state:**
-- `date` - puzzle date
-- `squareRotations` - rotation state of each square (0-3)
-- `squarePositions` - positions of squares after group rotations
-- `guessCount` - number of guesses made
-- `feedbackHistory` - array of previous guess feedback
+1. Add puzzles to `public/puzzles/puzzles.json` with:
+   - `date`: YYYY-MM-DD format
+   - `categories`: 4 category labels
+   - `squares`: 4 squares with words in solved positions
 
-**Completion state:**
-- `date` - puzzle date
-- `solved` - whether puzzle was solved
-- `guessCount` - total guesses used
-- `feedbackHistory` - all feedback from guesses
-- `squareStates` - final state of all squares
+2. Run the assign script to migrate to monthly files:
+   ```bash
+   npx tsx scripts/assignPuzzles.ts
+   ```
+
+3. The script generates unique IDs and creates/updates monthly files in `assigned/`
