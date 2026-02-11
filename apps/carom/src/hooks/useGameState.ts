@@ -11,7 +11,7 @@ type GameAction =
   | { type: 'RESTORE_GAME'; puzzle: Puzzle; pieces: Piece[]; moveCount: number; moveHistory: Move[] }
   | { type: 'SELECT_PIECE'; pieceId: string }
   | { type: 'DESELECT' }
-  | { type: 'MOVE_START' }
+  | { type: 'MOVE_START'; pieces: Piece[] }
   | { type: 'MOVE_END'; pieces: Piece[]; didWin: boolean; move: Move }
   | { type: 'RESET' }
   | { type: 'SET_FINISHED' }
@@ -61,6 +61,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         isAnimating: true,
+        pieces: action.pieces,
       };
 
     case 'MOVE_END':
@@ -186,9 +187,6 @@ export function useGameState(props?: UseGameStateProps) {
       if (!piece) return;
       const startPos: Position = { ...piece.position };
 
-      // Start animation
-      dispatch({ type: 'MOVE_START' });
-
       // Calculate end position
       const endPos = simulateSlide(
         state.puzzle.board,
@@ -199,6 +197,9 @@ export function useGameState(props?: UseGameStateProps) {
 
       // Apply move
       const newPieces = applyMove(state.pieces, state.selectedPieceId, endPos);
+
+      // Start animation with new positions (triggers CSS transition immediately)
+      dispatch({ type: 'MOVE_START', pieces: newPieces });
 
       // Check win condition
       const didWin = isTargetOnGoal(newPieces, state.puzzle.board.goal);
