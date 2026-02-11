@@ -50,6 +50,9 @@ function CaromResultsModal({
   const puzzleUrl = isArchive ? `${baseUrl}?puzzle=${puzzleNumber}` : baseUrl;
   const shareText = `Carom #${puzzleNumber}\n${moveCount} ${movesText}${resultEmoji}\n\n${puzzleUrl}`;
 
+  // Determine message type: success if optimal, neutral otherwise
+  const messageType = achievedOptimal ? 'success' : 'neutral';
+
   return (
     <ResultsModal
       isOpen={isOpen}
@@ -59,6 +62,7 @@ function CaromResultsModal({
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: moveCount, label: movesText }}
       shareConfig={{ text: shareText }}
+      messageType={messageType}
     >
       {/* Trophy display if optimal */}
       {achievedOptimal && (

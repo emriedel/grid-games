@@ -101,6 +101,9 @@ function DabbleResultsModal({
     shareUrl,
   });
 
+  // Determine message type based on star count
+  const messageType = stars === 0 ? 'failure' : 'success';
+
   return (
     <ResultsModal
       isOpen={isOpen}
@@ -110,6 +113,7 @@ function DabbleResultsModal({
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: finalScore, label: 'points' }}
       shareConfig={{ text: shareText }}
+      messageType={messageType}
     >
       {/* Stars display */}
       {thresholds && (

@@ -75,6 +75,9 @@ function EdgewiseResultsModal({
     shareUrl: 'https://nerdcube.games/edgewise',
   });
 
+  // Determine message type: success if solved, failure otherwise
+  const messageType = solved ? 'success' : 'failure';
+
   return (
     <ResultsModal
       isOpen={isOpen}
@@ -87,6 +90,7 @@ function EdgewiseResultsModal({
         label: solved ? (guessesUsed === 1 ? 'guess' : 'guesses') : 'not solved',
       }}
       shareConfig={{ text: shareText }}
+      messageType={messageType}
     >
       {/* Try Again button */}
       <div className="mt-4">

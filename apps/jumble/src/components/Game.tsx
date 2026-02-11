@@ -45,6 +45,9 @@ function JumbleResultsModal({
       : 'https://nerdcube.games/jumble',
   ].join('\n');
 
+  // Determine message type based on star count
+  const messageType = stars === 0 ? 'failure' : 'success';
+
   return (
     <ResultsModal
       isOpen={isOpen}
@@ -54,6 +57,7 @@ function JumbleResultsModal({
       puzzleNumber={puzzleNumber}
       primaryStat={{ value: score, label: 'points' }}
       shareConfig={{ text: shareText }}
+      messageType={messageType}
     >
       {/* Stars display */}
       <div className="text-center mb-4">
