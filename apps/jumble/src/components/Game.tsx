@@ -243,7 +243,7 @@ export default function Game() {
           gameId={jumbleConfig.id}
           onRulesClick={() => setShowHowToPlay(true)}
           rightContent={
-            <div className="flex items-center gap-3 pr-1">
+            <div className="flex items-center gap-4 pr-2">
               {isFinished ? (
                 <div className="text-xl">{formatStars(stars)}</div>
               ) : (

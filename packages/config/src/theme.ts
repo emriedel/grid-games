@@ -52,11 +52,11 @@ export const dabbleTheme: GameTheme = {
 /** Jumble game theme - blue accent */
 export const jumbleTheme: GameTheme = {
   ...baseTheme,
-  accent: '#4a5d7a',        // slate blue
+  accent: '#6b8ab8',        // brighter slate blue
   accentForeground: '#ffffff',
-  accentSecondary: '#1e3a5f', // darker navy
+  accentSecondary: '#3d5a7f', // mid-tone navy
   tileBg: '#1a1a2e',
-  tileBgSelected: '#4a4a6e',
+  tileBgSelected: '#4a5580',
   tileBorder: '#2d2d44',
 };
 

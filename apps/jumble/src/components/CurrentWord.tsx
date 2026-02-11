@@ -18,10 +18,10 @@ export default function CurrentWord({ word, isAlreadyFound }: CurrentWordProps) 
         className={`
           text-xl sm:text-2xl font-bold tracking-wider min-w-[120px] text-center
           transition-colors duration-150
-          ${word.length === 0 ? 'text-gray-500' : ''}
+          ${word.length === 0 ? 'text-[var(--muted)]' : ''}
           ${isAlreadyFound ? 'text-[var(--warning)]' : ''}
           ${isValid && !isAlreadyFound ? 'text-[var(--success)]' : ''}
-          ${isTooShort ? 'text-gray-400' : ''}
+          ${isTooShort ? 'text-[var(--muted)]' : ''}
           ${!isValid && !isTooShort && !isAlreadyFound && word.length > 0 ? 'text-[var(--danger)]' : ''}
         `}
       >

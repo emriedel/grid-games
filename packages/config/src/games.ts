@@ -28,7 +28,7 @@ export const GAMES: GameInfo[] = [
     id: 'jumble',
     name: 'Jumble',
     description: 'Find words in a grid of letters before time runs out',
-    accentColor: '#4a5d7a',
+    accentColor: '#6b8ab8',
     href: '/jumble',
     hasArchive: true,
   },

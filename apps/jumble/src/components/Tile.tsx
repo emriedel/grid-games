@@ -46,7 +46,7 @@ export default function Tile({
     >
       {displayLetter}
       {selectionIndex !== null && (
-        <span className="absolute top-0.5 right-1 text-[10px] opacity-50">
+        <span className="absolute top-0.5 right-1 text-[10px] opacity-70">
           {selectionIndex + 1}
         </span>
       )}
