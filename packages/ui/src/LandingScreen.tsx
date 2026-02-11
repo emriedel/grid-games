@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import { Button } from './Button';
 import { HamburgerMenu } from './HamburgerMenu';
 
@@ -78,11 +79,11 @@ export function LandingScreen({
   const renderArchiveButton = (label: string) => {
     if (archiveHref) {
       return (
-        <a href={archiveHref} className="w-full">
+        <Link href={archiveHref} className="w-full">
           <Button variant="secondary" fullWidth>
             {label}
           </Button>
-        </a>
+        </Link>
       );
     }
     if (onArchive) {
