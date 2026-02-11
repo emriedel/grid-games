@@ -49,22 +49,13 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
           </h3>
           <div className="space-y-3 text-[var(--muted)]">
             <div className="flex items-start gap-3">
-              <span>Pieces <span className="text-[var(--foreground)]">slide until blocked</span> by a wall or another piece</span>
+              <span>Pieces slide until blocked by a wall or another piece</span>
             </div>
             <div className="flex items-start gap-3">
-              <span>Move <span className="text-[var(--foreground)]">any piece</span> — use <BlockerPieceIcon /> blockers to create stopping points</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span><span className="text-[var(--foreground)]">Walls</span> block movement — pieces cannot pass through</span>
+              <span>Use <BlockerPieceIcon /> blockers to create stopping points</span>
             </div>
           </div>
         </section>
-
-        <div className="pt-2">
-          <Button variant="primary" fullWidth onClick={onClose}>
-            Got it!
-          </Button>
-        </div>
       </div>
     </Modal>
   );
