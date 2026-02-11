@@ -79,9 +79,11 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
 
       {/* Overlay and panel */}
       <div
-        className={`fixed inset-0 z-50 transition-opacity duration-300 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className="fixed inset-0 z-50 transition-opacity duration-300"
+        style={{
+          opacity: isOpen ? 1 : 0,
+          pointerEvents: isOpen ? 'auto' : 'none',
+        }}
         onClick={handleClose}
       >
         {/* Backdrop */}
@@ -89,9 +91,10 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
 
         {/* Slide-out panel */}
         <div
-          className={`absolute left-0 top-0 h-full w-72 bg-[var(--background,#0a0a0a)] border-r border-[var(--border,#27272a)] shadow-2xl transition-transform duration-300 ease-out ${
-            isOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className="absolute left-0 top-0 h-full w-72 bg-[var(--background,#0a0a0a)] border-r border-[var(--border,#27272a)] shadow-2xl transition-transform duration-300 ease-out"
+          style={{
+            transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}

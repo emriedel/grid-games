@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { GAMES, getIconUrl } from '@grid-games/config';
 import { HamburgerMenu } from '@grid-games/ui';
 
@@ -40,7 +39,7 @@ export default function Home() {
         {/* Game List */}
         <div className="divide-y divide-[var(--border)]">
           {GAMES.map((game) => (
-            <Link
+            <a
               key={game.id}
               href={game.href}
               className="flex items-center gap-4 py-5 group"
@@ -62,7 +61,7 @@ export default function Home() {
                   {game.description}
                 </p>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

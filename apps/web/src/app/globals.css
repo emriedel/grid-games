@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tell Tailwind to scan the shared UI package for classes */
+@source "../../../../node_modules/@grid-games/ui/src/**/*.tsx";
+
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
@@ -7,6 +10,10 @@
   --border: #27272a;
   --card-bg: #18181b;
   --card-hover: #27272a;
+
+  /* Tile styling (used by HamburgerMenu) */
+  --tile-bg: #27272a;
+  --tile-bg-selected: #3f3f46;
 }
 
 @theme inline {
