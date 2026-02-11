@@ -3,17 +3,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { GAMES, getIconUrl } from '@grid-games/config';
+import { CompletionBadge } from './CompletionBadge';
 
 interface HamburgerMenuProps {
   /** Current game ID to highlight */
   currentGameId?: string;
+  /** Completion status map from useGameCompletion hook */
+  completionStatus?: Map<string, boolean>;
 }
 
 /**
  * Hamburger menu for game navigation
  * Slides out from left with game list
  */
-export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
+export function HamburgerMenu({ currentGameId, completionStatus }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedGame, setExpandedGame] = useState<string | null>(currentGameId ?? null);
 
@@ -148,11 +151,17 @@ export function HamburgerMenu({ currentGameId }: HamburgerMenuProps) {
                       href={game.href}
                       className="flex items-center gap-3 flex-1"
                     >
-                      <img
-                        src={getIconUrl(game.id)}
-                        alt={`${game.name} icon`}
-                        className="w-10 h-10 rounded-lg"
-                      />
+                      <div className="relative w-10 h-10 flex-shrink-0">
+                        <img
+                          src={getIconUrl(game.id)}
+                          alt={`${game.name} icon`}
+                          className="w-10 h-10 rounded-lg"
+                        />
+                        <CompletionBadge
+                          show={completionStatus?.get(game.id) ?? false}
+                          size="sm"
+                        />
+                      </div>
                       <span className="font-medium text-[var(--foreground,#ededed)]">
                         {game.name}
                       </span>

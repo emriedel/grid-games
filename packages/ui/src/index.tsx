@@ -21,3 +21,5 @@ export { ArchiveModal } from './ArchiveModal';
 export type { ArchiveModalProps, ArchiveEntry } from './ArchiveModal';
 export { ArchivePage } from './ArchivePage';
 export type { ArchivePageProps } from './ArchivePage';
+export { CompletionBadge } from './CompletionBadge';
+export { useGameCompletion } from './useGameCompletion';

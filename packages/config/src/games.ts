@@ -5,6 +5,7 @@ export interface GameInfo {
   accentColor: string;
   href: string;
   hasArchive?: boolean;
+  launchDate?: string; // 'YYYY-MM-DD' format for puzzle numbering
 }
 
 export const GAMES: GameInfo[] = [
@@ -15,6 +16,7 @@ export const GAMES: GameInfo[] = [
     accentColor: '#f59e0b',
     href: '/carom',
     hasArchive: true,
+    launchDate: '2026-02-01',
   },
   {
     id: 'dabble',
@@ -23,6 +25,7 @@ export const GAMES: GameInfo[] = [
     accentColor: '#c41e3a',
     href: '/dabble',
     hasArchive: true,
+    launchDate: '2026-02-01',
   },
   {
     id: 'jumble',
@@ -31,6 +34,7 @@ export const GAMES: GameInfo[] = [
     accentColor: '#6b8ab8',
     href: '/jumble',
     hasArchive: true,
+    launchDate: '2026-02-01',
   },
   // Edgewise hidden from navigation (project still exists)
   // {
