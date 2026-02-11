@@ -39,18 +39,24 @@ apps/edgewise/
 ├── tsconfig.json
 ├── tailwind.config.ts
 ├── CLAUDE.md (this file)
+├── data/
+│   └── categories.json           # Category/word database for puzzle generation
 ├── public/puzzles/
 │   ├── puzzles.json              # Legacy puzzle data (fallback)
-│   ├── pool.json                 # Unassigned puzzles
+│   ├── pool.json                 # Unassigned puzzles (pending/approved/rejected)
 │   └── assigned/
 │       └── 2026-01.json          # Monthly assigned puzzles
 ├── scripts/
-│   └── assignPuzzles.ts          # Migrate puzzles to monthly files
+│   ├── types.ts                  # TypeScript types for puzzle generation
+│   ├── generatePuzzles.ts        # Generate puzzles from categories
+│   └── assignPuzzles.ts          # Assign approved puzzles to dates
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
 │   │   ├── archive/page.tsx      # Archive page
+│   │   ├── debug/page.tsx        # Debug puzzle browser (localhost only)
+│   │   ├── api/debug/...         # API routes for puzzle management
 │   │   └── globals.css           # Purple theme
 │   ├── components/
 │   │   ├── Game.tsx              # Main orchestrator
@@ -60,11 +66,13 @@ apps/edgewise/
 │   │   ├── CenterButton.tsx      # Group rotation button
 │   │   ├── AttemptsIndicator.tsx # Remaining attempts
 │   │   ├── ArchivePageContent.tsx# Archive page logic
+│   │   ├── DebugPageContent.tsx  # Debug page UI
 │   │   └── HowToPlayModal.tsx
 │   ├── lib/
 │   │   ├── puzzleLoader.ts       # Load puzzles from monthly files
 │   │   ├── gameLogic.ts          # Validation logic
-│   │   └── storage.ts            # Archive-enabled storage
+│   │   ├── storage.ts            # Archive-enabled storage
+│   │   └── debugHelpers.ts       # Load pool puzzles for debug
 │   ├── types/index.ts
 │   ├── constants/gameConfig.ts
 │   └── config.ts
@@ -119,12 +127,82 @@ public/puzzles/
 ### Commands
 
 ```bash
-# Assign puzzles from puzzles.json to monthly files
-npx tsx scripts/assignPuzzles.ts
+# Generate puzzles from categories into pool.json
+npm run generate-puzzles              # Generate 10 puzzles
+npm run generate-puzzles -- 50        # Generate 50 puzzles
 
-# Assign specific number of puzzles
-npx tsx scripts/assignPuzzles.ts 100
+# Assign approved puzzles from pool to monthly files
+npm run assign-puzzles                # Assign up to today's puzzle
+npm run assign-puzzles -- 100         # Ensure puzzles 1-100 are assigned
 ```
+
+---
+
+## Puzzle Generation System
+
+### Category Database
+
+Categories are stored in `data/categories.json`:
+
+```typescript
+interface CategoryDatabase {
+  categories: Category[];
+  generatedAt: string;
+  metadata: {
+    totalCategories: number;
+    byCategoryType: Record<CategoryType, number>;
+  };
+}
+
+interface Category {
+  name: string;           // e.g., "NBA Teams", "Spring _____"
+  type: CategoryType;
+  words: string[];        // 8-20 single words per category
+}
+
+type CategoryType =
+  | 'compound-word-prefix'   // "Spring _____" → BREAK, BOARD, ROLL
+  | 'compound-word-suffix'   // "_____ Ball" → BASKET, VOLLEY, FOOT
+  | 'proper-noun-group'      // NBA Teams, Pixar Movies, Rock Bands
+  | 'finite-group'           // Planets, Bones, Playing Card Suits
+  | 'general-category'       // Kitchen Utensils, School Supplies
+  | 'things-that'            // Things that are round, Things in pairs
+  | 'adjective-category';    // Shades of Blue, Types of Green
+```
+
+### Generation Workflow
+
+1. **Build Categories** - Generate categories interactively, review in batches by type
+2. **Generate Puzzles** - Run `npm run generate-puzzles` to create puzzles from categories
+3. **Curate Puzzles** - Visit `/debug` to browse, play, approve/reject puzzles
+4. **Assign Puzzles** - Run `npm run assign-puzzles` to move approved puzzles to dates
+
+### Pool.json Format
+
+```typescript
+interface PoolPuzzle {
+  id: string;
+  status: 'pending' | 'approved' | 'rejected';
+  categories: { top: string; right: string; bottom: string; left: string };
+  squares: [PuzzleSquare, PuzzleSquare, PuzzleSquare, PuzzleSquare];
+  metadata: {
+    categoryTypes: CategoryType[];
+    overlapWords: string[];        // Words that fit multiple categories
+    generatedAt: string;
+  };
+}
+```
+
+### Debug Page
+
+Visit `http://localhost:3003/debug` to:
+- Browse pool puzzles and future assigned puzzles
+- Preview puzzle tiles and categories
+- Play any puzzle with "Play This Puzzle" button
+- Approve/Reject pending puzzles
+- Filter by status (all/pending/approved/rejected)
+
+Only available on localhost.
 
 ---
 
@@ -250,6 +328,15 @@ http://localhost:3003/?puzzle=1
 
 ## Adding New Puzzles
 
+### From Categories (Recommended)
+
+1. Ensure categories are populated in `data/categories.json`
+2. Generate puzzles: `npm run generate-puzzles -- 20`
+3. Browse and approve at `http://localhost:3003/debug`
+4. Assign approved puzzles: `npm run assign-puzzles`
+
+### Manual (Legacy)
+
 1. Add puzzles to `public/puzzles/puzzles.json` with:
    - `date`: YYYY-MM-DD format
    - `categories`: 4 category labels
@@ -257,7 +344,7 @@ http://localhost:3003/?puzzle=1
 
 2. Run the assign script to migrate to monthly files:
    ```bash
-   npx tsx scripts/assignPuzzles.ts
+   npm run assign-puzzles
    ```
 
 3. The script generates unique IDs and creates/updates monthly files in `assigned/`
