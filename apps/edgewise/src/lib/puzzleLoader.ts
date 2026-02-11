@@ -1,6 +1,7 @@
 import seedrandom from 'seedrandom';
 import { Puzzle, SquareState, Rotation, PuzzleSquare } from '@/types';
 import { getTodayDateString } from '@grid-games/shared';
+import { groupRotate } from './gameLogic';
 
 // Import puzzles from JSON
 import puzzlesData from '../../public/puzzles/puzzles.json';
@@ -50,26 +51,32 @@ export function getInitialRotations(dateStr: string): [Rotation, Rotation, Rotat
 }
 
 /**
- * Generate initial square positions (can also be scrambled)
- * Returns indices representing which square is in which position
- * For now, we keep positions fixed and only scramble rotations
+ * Generate initial group rotations based on date
+ * Returns number of group rotations (0-3) to apply
  */
-export function getInitialPositions(): [number, number, number, number] {
-  // Squares stay in their original positions
-  // Position 0=top-left, 1=top-right, 2=bottom-right, 3=bottom-left
-  return [0, 1, 2, 3];
+export function getInitialGroupRotations(dateStr: string): number {
+  const rng = seedrandom(dateStr + '-group-scramble');
+  return Math.floor(rng() * 4);
 }
 
 /**
- * Convert puzzle to initial game state with scrambled rotations
+ * Convert puzzle to initial game state with scrambled rotations and positions
  */
 export function initializeGameState(puzzle: Puzzle, dateStr: string): SquareState[] {
   const rotations = getInitialRotations(dateStr);
+  const groupRotationCount = getInitialGroupRotations(dateStr);
 
-  return puzzle.squares.map((square, index) => ({
+  let squares: SquareState[] = puzzle.squares.map((square, index) => ({
     words: [square.top, square.right, square.bottom, square.left],
     rotation: rotations[index],
   }));
+
+  // Apply group rotations for position scrambling
+  for (let i = 0; i < groupRotationCount; i++) {
+    squares = groupRotate(squares);
+  }
+
+  return squares;
 }
 
 /**

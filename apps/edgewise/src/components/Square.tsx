@@ -67,8 +67,11 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
     return (centerFacingVisual as readonly number[]).includes(visualPosition);
   };
 
-  const getWordColor = (visualPosition: Edge) =>
-    isCenterFacing(visualPosition) ? 'var(--muted)' : 'var(--foreground)';
+  const getWordStyle = (visualPosition: Edge): React.CSSProperties => ({
+    color: isCenterFacing(visualPosition) ? 'var(--muted)' : 'var(--foreground)',
+    opacity: isCenterFacing(visualPosition) ? 0.4 : 1,
+    fontSize: isCenterFacing(visualPosition) ? '11px' : '13px',
+  });
 
   // Use displayRotation for word calculation (delays update during animation)
   const topWord = getWordAtVisualPosition(square, 0, displayRotation);
@@ -87,7 +90,9 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
 
   return (
     <button
-      onClick={onRotate}
+      onClick={() => {
+        if (!isAnimating) onRotate();
+      }}
       disabled={disabled}
       className={`
         bg-[var(--tile-bg)] border-2 border-[var(--tile-border)]
@@ -99,7 +104,7 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
     >
       {/* Top word - horizontal */}
       <div className="absolute top-1 left-0 right-0 flex justify-center">
-        <span className="text-[11px] font-bold" style={{ color: getWordColor(0) }}>
+        <span className="font-bold" style={getWordStyle(0)}>
           {topWord}
         </span>
       </div>
@@ -107,9 +112,9 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
       {/* Right word - vertical, reading top-to-bottom */}
       <div className="absolute right-1 top-0 bottom-0 flex items-center justify-center">
         <span
-          className="text-[11px] font-bold"
+          className="font-bold"
           style={{
-            color: getWordColor(1),
+            ...getWordStyle(1),
             writingMode: 'vertical-rl',
             textOrientation: 'mixed',
           }}
@@ -120,7 +125,7 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
 
       {/* Bottom word - horizontal */}
       <div className="absolute bottom-1 left-0 right-0 flex justify-center">
-        <span className="text-[11px] font-bold" style={{ color: getWordColor(2) }}>
+        <span className="font-bold" style={getWordStyle(2)}>
           {bottomWord}
         </span>
       </div>
@@ -128,9 +133,9 @@ export function Square({ square, squareIndex, onRotate, disabled, style }: Squar
       {/* Left word - vertical, reading bottom-to-top */}
       <div className="absolute left-1 top-0 bottom-0 flex items-center justify-center">
         <span
-          className="text-[11px] font-bold"
+          className="font-bold"
           style={{
-            color: getWordColor(3),
+            ...getWordStyle(3),
             writingMode: 'vertical-rl',
             textOrientation: 'mixed',
             transform: 'rotate(180deg)',

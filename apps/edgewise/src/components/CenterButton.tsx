@@ -23,25 +23,20 @@ export function CenterButton({ onRotate, disabled }: CenterButtonProps) {
       `}
       aria-label="Rotate all squares clockwise"
     >
-      {/* Clockwise arrow icon */}
+      {/* Clockwise rotation arrow icon */}
       <svg
         className="w-6 h-6 sm:w-7 sm:h-7"
+        viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        viewBox="0 0 24 24"
+        strokeWidth={2.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M20 4v5h-5M4 20v-5h5"
-        />
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M20 9a9 9 0 0 0-15.36-5.36L4 4M4 15a9 9 0 0 0 15.36 5.36L20 20"
-        />
+        {/* Arrowhead pointing right at top */}
+        <path d="M21 2v6h-6" />
+        {/* Arc curving around clockwise from top-right */}
+        <path d="M21 13a9 9 0 1 1-3-7.7L21 8" />
       </svg>
     </button>
   );

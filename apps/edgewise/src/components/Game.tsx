@@ -7,7 +7,6 @@ import { getTodayDateString, formatDisplayDate, getPuzzleNumber, buildShareText 
 
 import { GameBoard } from './GameBoard';
 import { AttemptsIndicator } from './AttemptsIndicator';
-import { FeedbackHistory } from './FeedbackDots';
 import { HowToPlayModal } from './HowToPlayModal';
 
 import { getTodayPuzzle, initializeGameState } from '@/lib/puzzleLoader';
@@ -53,23 +52,15 @@ function EdgewiseResultsModal({
   feedbackHistory,
   puzzleNumber,
 }: EdgewiseResultsModalProps) {
-  // Generate emoji grid from feedback history
-  const generateEmojiGrid = (): string => {
-    return feedbackHistory
-      .map((feedback) => {
-        const sorted = [...feedback].sort((a, b) => b - a);
-        return sorted
-          .map((v) => {
-            if (v === 2) return '🟢';
-            if (v === 1) return '🟡';
-            return '⚪';
-          })
-          .join('');
-      })
-      .join('\n');
+  // Generate emoji line showing guess history (❌ for wrong, ✅ for win)
+  const generateGuessEmojis = (): string => {
+    return feedbackHistory.map((feedback) => {
+      const isWin = feedback.filter(v => v === 2).length === 4;
+      return isWin ? '✅' : '❌';
+    }).join('');
   };
 
-  const emojiGrid = generateEmojiGrid();
+  const emojiLine = generateGuessEmojis();
 
   const shareText = buildShareText({
     gameId: 'edgewise',
@@ -77,8 +68,7 @@ function EdgewiseResultsModal({
     puzzleId: puzzleNumber,
     score: guessesUsed,
     maxScore: 4,
-    emojiGrid,
-    extraLines: [solved ? '🎉' : ''],
+    emojiGrid: emojiLine,
     shareUrl: 'https://nerdcube.games/edgewise',
   });
 
@@ -95,25 +85,6 @@ function EdgewiseResultsModal({
       }}
       shareConfig={{ text: shareText }}
     >
-      {/* Feedback history visualization */}
-      <div className="flex flex-col items-center gap-2 py-2">
-        {feedbackHistory.map((feedback, index) => {
-          const sorted = [...feedback].sort((a, b) => b - a);
-          return (
-            <div key={index} className="flex gap-1">
-              {sorted.map((v, i) => (
-                <div
-                  key={i}
-                  className={`w-5 h-5 rounded-full ${
-                    v === 2 ? 'bg-[var(--success)]' : v === 1 ? 'bg-[var(--warning)]' : 'bg-[var(--muted)] opacity-50'
-                  }`}
-                />
-              ))}
-            </div>
-          );
-        })}
-      </div>
-
       {/* Try Again button */}
       <div className="mt-4">
         <Button onClick={onTryAgain} variant="secondary" fullWidth>
@@ -371,9 +342,6 @@ export function Game() {
   return (
     <GameContainer navBar={navBar}>
       <div className="flex flex-col items-center gap-4 py-4 px-2">
-        {/* Attempts indicator */}
-        <AttemptsIndicator attemptsUsed={guessesUsed} />
-
         {/* Game board */}
         <GameBoard
           squares={squares}
@@ -384,23 +352,19 @@ export function Game() {
           disabled={gameState === 'finished'}
         />
 
-        {/* Feedback history */}
-        {feedbackHistory.length > 0 && (
-          <div className="mt-2">
-            <FeedbackHistory history={feedbackHistory} />
-          </div>
-        )}
-
-        {/* Submit button */}
+        {/* Attempts indicator and Submit button */}
         {gameState === 'playing' && (
-          <Button
-            onClick={handleSubmit}
-            variant="primary"
-            size="lg"
-            disabled={guessesUsed >= MAX_ATTEMPTS}
-          >
-            Submit
-          </Button>
+          <div className="flex flex-col items-center gap-3">
+            <AttemptsIndicator attemptsUsed={guessesUsed} />
+            <Button
+              onClick={handleSubmit}
+              variant="primary"
+              size="lg"
+              disabled={guessesUsed >= MAX_ATTEMPTS}
+            >
+              Submit
+            </Button>
+          </div>
         )}
 
         {/* Show results button when finished */}

@@ -21,7 +21,7 @@ export function CategoryLabel({ position, label, isCorrect }: CategoryLabelProps
         className={`
           h-full w-10
           ${bgColor}
-          text-[var(--foreground)] text-[11px] font-medium
+          text-[var(--foreground)] text-xs font-medium
           rounded-md
           transition-colors duration-300
           flex items-center justify-center

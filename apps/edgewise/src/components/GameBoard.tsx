@@ -37,11 +37,13 @@ export function GameBoard({
   // This maps: which visual position is each of the 4 slots currently at?
   const [visualPositions, setVisualPositions] = useState<[number, number, number, number]>([0, 1, 2, 3]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [transitionsEnabled, setTransitionsEnabled] = useState(true);
 
   const handleGroupRotate = useCallback(() => {
     if (isAnimating || disabled) return;
 
     setIsAnimating(true);
+    setTransitionsEnabled(true);
 
     // Animate: each slot slides to the next position clockwise
     // Position 0 -> 1, 1 -> 2, 2 -> 3, 3 -> 0
@@ -54,12 +56,20 @@ export function GameBoard({
 
     // After animation completes, swap the data and reset positions instantly
     setTimeout(() => {
+      // Disable transitions for instant reset (prevents word flashing)
+      setTransitionsEnabled(false);
+
       // First, call the data swap
       onGroupRotate();
       // Reset positions to [0,1,2,3] - this happens after data swap
       // so the new data appears at the "home" positions
       setVisualPositions([0, 1, 2, 3]);
-      setIsAnimating(false);
+
+      // Re-enable transitions after a frame
+      requestAnimationFrame(() => {
+        setTransitionsEnabled(true);
+        setIsAnimating(false);
+      });
     }, 300);
   }, [isAnimating, disabled, onGroupRotate]);
 
@@ -73,8 +83,8 @@ export function GameBoard({
       height: 'calc(50% - 4px)',
       left: `calc(${x}% + ${x > 0 ? 4 : 0}px)`,
       top: `calc(${y}% + ${y > 0 ? 4 : 0}px)`,
-      // Only animate during the sliding phase, not during reset
-      transition: isAnimating ? 'left 300ms ease-out, top 300ms ease-out' : 'none',
+      // Only animate during the sliding phase when transitions are enabled
+      transition: transitionsEnabled && isAnimating ? 'left 300ms ease-out, top 300ms ease-out' : 'none',
     };
   };
 
