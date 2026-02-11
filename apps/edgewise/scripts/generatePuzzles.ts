@@ -5,7 +5,7 @@
  * This script generates puzzles algorithmically from the category database:
  * 1. Reads categories from data/categories.json
  * 2. Builds a word index to find overlapping words
- * 3. Selects 4 compatible categories for each puzzle
+ * 3. Selects 4 compatible categories for each puzzle (with variety enforcement)
  * 4. Assigns words to tiles ensuring unique solution
  * 5. Validates puzzles have exactly one solution
  * 6. Outputs to pool.json with pending status
@@ -29,36 +29,20 @@ import type {
 } from './types';
 
 // -----------------------------------------------------------------------------
+// Configuration
+// -----------------------------------------------------------------------------
+
+// Maximum times a category can be used across all generated puzzles
+const MAX_CATEGORY_USES = 2;
+
+// Minimum words required per category
+const MIN_WORDS_PER_CATEGORY = 4;
+
+// -----------------------------------------------------------------------------
 // Constants
 // -----------------------------------------------------------------------------
 
-const CATEGORY_POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
-
-// Which edges of each square face outward (toward categories) vs inward (red herrings)
-// In solved position:
-// - Square 0 (top-left): top & left face categories, right & bottom face center
-// - Square 1 (top-right): top & right face categories, left & bottom face center
-// - Square 2 (bottom-right): bottom & right face categories, top & left face center
-// - Square 3 (bottom-left): bottom & left face categories, top & right face center
-const OUTWARD_EDGES: Record<number, [string, string]> = {
-  0: ['top', 'left'],
-  1: ['top', 'right'],
-  2: ['bottom', 'right'],
-  3: ['bottom', 'left'],
-};
-
-const INWARD_EDGES: Record<number, [string, string]> = {
-  0: ['right', 'bottom'],
-  1: ['left', 'bottom'],
-  2: ['top', 'left'],
-  3: ['top', 'right'],
-};
-
 // Category to edge mapping (which squares contribute to each category)
-// TOP: Square 0 top + Square 1 top
-// RIGHT: Square 1 right + Square 2 right
-// BOTTOM: Square 2 bottom + Square 3 bottom
-// LEFT: Square 3 left + Square 0 left
 const CATEGORY_EDGE_MAP: Record<string, Array<{ square: number; edge: string }>> = {
   top: [
     { square: 0, edge: 'top' },
@@ -111,7 +95,7 @@ function getMultiCategoryWords(index: WordIndex): string[] {
 }
 
 // -----------------------------------------------------------------------------
-// Category Selection
+// Category Selection with Usage Tracking
 // -----------------------------------------------------------------------------
 
 interface CategoryQuad {
@@ -119,65 +103,84 @@ interface CategoryQuad {
   categoryObjects: [Category, Category, Category, Category];
 }
 
-function findCategoryQuads(
+function selectNextCategoryQuad(
   categories: Category[],
   index: WordIndex,
-  maxQuads: number
-): CategoryQuad[] {
-  const quads: CategoryQuad[] = [];
-  const usedCombinations = new Set<string>();
+  categoryUsage: Map<string, number>,
+  usedCombinations: Set<string>
+): CategoryQuad | null {
+  // Filter to categories that haven't exceeded max usage
+  const availableCategories = categories.filter(cat => {
+    const usage = categoryUsage.get(cat.name) || 0;
+    const words = index.categoryToWords.get(cat.name) || [];
+    return usage < MAX_CATEGORY_USES && words.length >= MIN_WORDS_PER_CATEGORY;
+  });
 
-  // Shuffle categories for variety
-  const shuffled = [...categories].sort(() => Math.random() - 0.5);
-
-  // Try to find valid category combinations
-  for (let i = 0; i < shuffled.length && quads.length < maxQuads * 10; i++) {
-    for (let j = i + 1; j < shuffled.length; j++) {
-      for (let k = j + 1; k < shuffled.length; k++) {
-        for (let l = k + 1; l < shuffled.length; l++) {
-          const fourCats = [shuffled[i], shuffled[j], shuffled[k], shuffled[l]];
-
-          // Check if this combination has enough unique words
-          const allWords = new Set<string>();
-          let valid = true;
-
-          for (const cat of fourCats) {
-            const words = index.categoryToWords.get(cat.name) || [];
-            if (words.length < 4) {
-              valid = false;
-              break;
-            }
-            words.forEach(w => allWords.add(w));
-          }
-
-          if (!valid || allWords.size < 16) continue;
-
-          // Try different position assignments
-          const permutations = getPermutations([0, 1, 2, 3]);
-          for (const perm of permutations) {
-            const catNames = perm.map(idx => fourCats[idx].name);
-            const key = catNames.join('|');
-
-            if (usedCombinations.has(key)) continue;
-            usedCombinations.add(key);
-
-            quads.push({
-              categories: catNames as [string, string, string, string],
-              categoryObjects: perm.map(idx => fourCats[idx]) as [Category, Category, Category, Category],
-            });
-
-            if (quads.length >= maxQuads * 10) break;
-          }
-          if (quads.length >= maxQuads * 10) break;
-        }
-        if (quads.length >= maxQuads * 10) break;
-      }
-      if (quads.length >= maxQuads * 10) break;
-    }
+  if (availableCategories.length < 4) {
+    return null;
   }
 
-  // Shuffle and return
-  return quads.sort(() => Math.random() - 0.5).slice(0, maxQuads);
+  // Sort by usage (prefer less-used categories) with some randomness
+  const sortedCategories = [...availableCategories].sort((a, b) => {
+    const usageA = categoryUsage.get(a.name) || 0;
+    const usageB = categoryUsage.get(b.name) || 0;
+    if (usageA !== usageB) return usageA - usageB;
+    return Math.random() - 0.5;
+  });
+
+  // Try to find a valid combination, prioritizing less-used categories
+  const maxAttempts = 500;
+  let attempts = 0;
+
+  while (attempts < maxAttempts) {
+    attempts++;
+
+    // Pick 4 categories, weighted toward less-used ones
+    const selected: Category[] = [];
+    const candidates = [...sortedCategories];
+
+    for (let i = 0; i < 4 && candidates.length > 0; i++) {
+      // Bias toward front of list (less-used categories)
+      // Use exponential distribution to favor lower indices
+      const idx = Math.min(
+        Math.floor(Math.pow(Math.random(), 1.5) * candidates.length),
+        candidates.length - 1
+      );
+      selected.push(candidates[idx]);
+      candidates.splice(idx, 1);
+    }
+
+    if (selected.length < 4) continue;
+
+    // Check if this combination has enough unique words
+    const allWords = new Set<string>();
+    let valid = true;
+
+    for (const cat of selected) {
+      const words = index.categoryToWords.get(cat.name) || [];
+      words.forEach(w => allWords.add(w));
+    }
+
+    if (allWords.size < 16) continue;
+
+    // Create a sorted key to check for duplicate combinations
+    const sortedNames = selected.map(c => c.name).sort();
+    const comboKey = sortedNames.join('|');
+    if (usedCombinations.has(comboKey)) continue;
+
+    // Shuffle position assignment
+    const shuffled = [...selected].sort(() => Math.random() - 0.5);
+    const catNames = shuffled.map(c => c.name) as [string, string, string, string];
+
+    usedCombinations.add(comboKey);
+
+    return {
+      categories: catNames,
+      categoryObjects: shuffled as [Category, Category, Category, Category],
+    };
+  }
+
+  return null;
 }
 
 function getPermutations<T>(arr: T[]): T[][] {
@@ -256,20 +259,32 @@ function generateWordAssignment(
   if (!leftPicked) return null;
 
   // Now we need 8 red herring words (center-facing edges)
-  // Prefer words that overlap with categories (for misdirection) but aren't the picked words
-  const allCategoryWords = new Set<string>();
+  // Try to use words from the same categories first (for misdirection)
+  // But also accept any unused words from any category
+  const redHerringCandidates: string[] = [];
+
+  // First, collect unused words from the 4 categories (good for misdirection)
   for (const cat of quad.categoryObjects) {
     for (const word of index.categoryToWords.get(cat.name) || []) {
-      if (!usedWords.has(word)) {
-        allCategoryWords.add(word);
+      if (!usedWords.has(word) && !redHerringCandidates.includes(word)) {
+        redHerringCandidates.push(word);
       }
     }
   }
 
-  // Get remaining words from all categories for red herrings
-  const redHerringCandidates = [...allCategoryWords].sort(() => Math.random() - 0.5);
+  // If not enough, add words from other categories
+  if (redHerringCandidates.length < 8) {
+    for (const [word] of index.wordToCategories) {
+      if (!usedWords.has(word) && !redHerringCandidates.includes(word)) {
+        redHerringCandidates.push(word);
+        if (redHerringCandidates.length >= 16) break;
+      }
+    }
+  }
 
-  // If not enough red herring candidates, this combination won't work
+  // Shuffle and take 8
+  redHerringCandidates.sort(() => Math.random() - 0.5);
+
   if (redHerringCandidates.length < 8) return null;
 
   const redHerrings = redHerringCandidates.slice(0, 8);
@@ -322,7 +337,6 @@ function getWordAtEdge(
   visualEdge: number,
   rotation: Rotation
 ): string {
-  // Convert rotation-adjusted edge back to original
   const edges = ['top', 'right', 'bottom', 'left'] as const;
   const originalIndex = ((visualEdge - rotation + 4) % 4) as 0 | 1 | 2 | 3;
   return square[edges[originalIndex]];
@@ -331,17 +345,15 @@ function getWordAtEdge(
 function checkSolution(
   squares: [PoolPuzzleSquare, PoolPuzzleSquare, PoolPuzzleSquare, PoolPuzzleSquare],
   categories: { top: string; right: string; bottom: string; left: string },
-  positions: number[], // Which square is in which position
+  positions: number[],
   rotations: Rotation[],
   index: WordIndex
 ): boolean {
-  // Check each category
   for (const [catPosition, catName] of Object.entries(categories)) {
     const edges = CATEGORY_EDGE_MAP[catPosition];
     const words: string[] = [];
 
     for (const { square: squarePos, edge } of edges) {
-      // Find which original square is at this position
       const originalSquareIdx = positions.indexOf(squarePos);
       if (originalSquareIdx === -1) return false;
 
@@ -351,7 +363,6 @@ function checkSolution(
       words.push(getWordAtEdge(square, edgeIndex, rotation));
     }
 
-    // Check if both words belong to this category
     const categoryWords = index.categoryToWords.get(catName) || [];
     for (const word of words) {
       if (!categoryWords.includes(word)) {
@@ -370,10 +381,7 @@ function hasUniqueSolution(
 ): boolean {
   let solutionCount = 0;
 
-  // Generate all position permutations (4! = 24)
   const positionPerms = getPermutations([0, 1, 2, 3]);
-
-  // Generate all rotation combinations (4^4 = 256)
   const rotationCombos: Rotation[][] = [];
   for (let r0 = 0; r0 < 4; r0++) {
     for (let r1 = 0; r1 < 4; r1++) {
@@ -385,7 +393,6 @@ function hasUniqueSolution(
     }
   }
 
-  // Check all 24 * 256 = 6144 configurations
   for (const positions of positionPerms) {
     for (const rotations of rotationCombos) {
       if (checkSolution(squares, categories, positions, rotations, index)) {
@@ -458,18 +465,33 @@ async function main() {
 
   // Get count from command line
   const targetCount = process.argv[2] ? parseInt(process.argv[2], 10) : 10;
-  console.log(`\nTarget: generate ${targetCount} new puzzles\n`);
+  console.log(`\nTarget: generate ${targetCount} new puzzles`);
+  console.log(`Max category usage: ${MAX_CATEGORY_USES} per category\n`);
 
-  // Find category combinations
-  const quads = findCategoryQuads(database.categories, index, targetCount * 5);
-  console.log(`Found ${quads.length} potential category combinations`);
-
-  // Generate puzzles
-  let generated = 0;
+  // Track category usage across this generation run
+  const categoryUsage = new Map<string, number>();
+  const usedCombinations = new Set<string>();
   const existingIds = new Set(pool.puzzles.map(p => p.id));
 
-  for (const quad of quads) {
-    if (generated >= targetCount) break;
+  let generated = 0;
+  let attempts = 0;
+  const maxAttempts = targetCount * 50;
+
+  while (generated < targetCount && attempts < maxAttempts) {
+    attempts++;
+
+    // Select next category quad based on usage
+    const quad = selectNextCategoryQuad(
+      database.categories,
+      index,
+      categoryUsage,
+      usedCombinations
+    );
+
+    if (!quad) {
+      console.log('No more valid category combinations available');
+      break;
+    }
 
     const assignment = generateWordAssignment(quad, index);
     if (!assignment) {
@@ -518,9 +540,17 @@ async function main() {
     existingIds.add(id);
     generated++;
 
+    // Update category usage
+    for (const catName of quad.categories) {
+      const current = categoryUsage.get(catName) || 0;
+      categoryUsage.set(catName, current + 1);
+    }
+
     console.log(`Generated puzzle ${id}:`);
     console.log(`  Categories: ${quad.categories.join(' | ')}`);
-    console.log(`  Overlap words: ${assignment.overlapWords.length > 0 ? assignment.overlapWords.join(', ') : 'none'}`);
+    if (assignment.overlapWords.length > 0) {
+      console.log(`  Overlap words: ${assignment.overlapWords.join(', ')}`);
+    }
   }
 
   // Save pool
@@ -528,9 +558,17 @@ async function main() {
   console.log(`\nSaved pool.json with ${pool.puzzles.length} total puzzles`);
   console.log(`Generated ${generated} new puzzles`);
 
+  // Show category usage stats
+  const usageEntries = [...categoryUsage.entries()].sort((a, b) => b[1] - a[1]);
+  console.log(`\nCategory usage (top 10):`);
+  for (const [cat, count] of usageEntries.slice(0, 10)) {
+    console.log(`  ${cat}: ${count}`);
+  }
+
   if (generated < targetCount) {
-    console.log(`\nWarning: Only generated ${generated}/${targetCount} puzzles.`);
-    console.log('Try adding more categories to the database.');
+    console.log(`\nNote: Only generated ${generated}/${targetCount} puzzles.`);
+    console.log(`This may be due to max category usage limits or solution validation failures.`);
+    console.log(`Try increasing MAX_CATEGORY_USES or adding more categories.`);
   }
 }
 

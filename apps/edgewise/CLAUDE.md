@@ -142,7 +142,7 @@ npm run assign-puzzles -- 100         # Ensure puzzles 1-100 are assigned
 
 ### Category Database
 
-Categories are stored in `data/categories.json`:
+Categories are stored in `data/categories.json` (~200 categories):
 
 ```typescript
 interface CategoryDatabase {
@@ -170,12 +170,62 @@ type CategoryType =
   | 'adjective-category';    // Shades of Blue, Types of Green
 ```
 
+### Generation Algorithm
+
+The script `scripts/generatePuzzles.ts` uses the following approach:
+
+**1. Build Word Index**
+- Maps each word to the categories it belongs to
+- Identifies "overlap words" that appear in multiple categories (used for misdirection)
+
+**2. Category Usage Tracking**
+```typescript
+const MAX_CATEGORY_USES = 2;        // Each category used at most 2x per batch
+const MIN_WORDS_PER_CATEGORY = 4;   // Need enough words to fill edges
+```
+- Tracks how many times each category has been used
+- Prefers less-used categories when selecting (exponential distribution)
+- Ensures variety across generated puzzles
+
+**3. Select 4 Categories (CategoryQuad)**
+- Finds combinations where words can be assigned to create misdirection
+- At least some "overlap words" that fit multiple categories
+- Each category must have enough unique words for outward-facing edges
+
+**4. Assign Words to Tile Edges**
+For each puzzle:
+- 8 outward-facing edges get words that match their category
+- 8 center-facing edges (red herrings) get overlap words or category words
+- Overlap words are placed on center-facing edges to create misdirection
+
+**5. Validate Unique Solution**
+Brute-force checks all 6,144 possible configurations:
+- 4! = 24 tile position permutations
+- 4^4 = 256 rotation combinations
+- Puzzle is only valid if exactly ONE configuration solves all 4 categories
+
 ### Generation Workflow
 
 1. **Build Categories** - Generate categories interactively, review in batches by type
 2. **Generate Puzzles** - Run `npm run generate-puzzles` to create puzzles from categories
 3. **Curate Puzzles** - Visit `/debug` to browse, play, approve/reject puzzles
 4. **Assign Puzzles** - Run `npm run assign-puzzles` to move approved puzzles to dates
+
+### Lessons Learned
+
+**Category Variety is Critical**
+- Early versions reused the same 3-4 categories (Fire _____, Light _____, _____ Box) in almost every puzzle
+- Solution: Track category usage and limit each to MAX_CATEGORY_USES (2) per generation batch
+- Prefer less-used categories with exponential weighting
+
+**Why Some Categories Dominate**
+- Categories with many common "overlap words" (like compound-word prefixes) are easier to combine
+- The algorithm naturally gravitates toward these without usage limits
+- ~200 categories ensures enough variety for 50+ unique puzzles per batch
+
+**Red Herring Quality**
+- Overlap words make better red herrings (they genuinely fit multiple categories)
+- Center-facing edges should have words that could plausibly match adjacent categories
 
 ### Pool.json Format
 
@@ -334,6 +384,20 @@ http://localhost:3003/?puzzle=1
 2. Generate puzzles: `npm run generate-puzzles -- 20`
 3. Browse and approve at `http://localhost:3003/debug`
 4. Assign approved puzzles: `npm run assign-puzzles`
+
+**Tips for Generation:**
+- Generate in batches of 20-50 puzzles at a time
+- Each category is limited to 2 uses per batch (MAX_CATEGORY_USES)
+- Clear pool.json before regenerating to reset category usage counts
+- After generation, the script prints category usage stats to verify variety
+- If certain categories dominate, consider adding more categories to the database
+
+**Expanding the Category Database:**
+- Current database has ~200 categories across 7 types
+- To add more variety, expand categories interactively in conversation
+- Review categories by type (compound-word-prefix, proper-noun-group, etc.)
+- Each category should have 8-20 single words
+- Avoid multi-word entries (e.g., "ICE CREAM" should just be "ICE")
 
 ### Manual (Legacy)
 

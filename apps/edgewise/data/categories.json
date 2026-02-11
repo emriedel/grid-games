@@ -1,16 +1,1002 @@
 {
-  "categories": [],
+  "categories": [
+    {
+      "name": "Fire _____",
+      "type": "compound-word-prefix",
+      "words": ["TRUCK", "FIGHTER", "FLY", "PLACE", "WORKS", "WOOD", "ARM", "CRACKER", "BALL", "STORM"]
+    },
+    {
+      "name": "Black _____",
+      "type": "compound-word-prefix",
+      "words": ["BIRD", "BOARD", "BERRY", "SMITH", "MAIL", "LIST", "OUT", "TOP", "JACK", "HOLE"]
+    },
+    {
+      "name": "Sun _____",
+      "type": "compound-word-prefix",
+      "words": ["FLOWER", "LIGHT", "SHINE", "BURN", "SET", "RISE", "ROOF", "GLASSES", "SCREEN", "DIAL"]
+    },
+    {
+      "name": "Water _____",
+      "type": "compound-word-prefix",
+      "words": ["FALL", "MELON", "PROOF", "SHED", "COLOR", "FRONT", "BED", "MARK", "FOWL", "SLIDE"]
+    },
+    {
+      "name": "Snow _____",
+      "type": "compound-word-prefix",
+      "words": ["BALL", "FLAKE", "MAN", "STORM", "BOARD", "SHOE", "PLOW", "FALL", "DRIFT", "WHITE"]
+    },
+    {
+      "name": "Air _____",
+      "type": "compound-word-prefix",
+      "words": ["PORT", "PLANE", "LINE", "CRAFT", "WAVE", "TIGHT", "LIFT", "FARE", "DROP", "BORNE"]
+    },
+    {
+      "name": "Book _____",
+      "type": "compound-word-prefix",
+      "words": ["MARK", "WORM", "CASE", "SHELF", "STORE", "KEEPER", "END", "LET", "MAKER", "CLUB"]
+    },
+    {
+      "name": "Hand _____",
+      "type": "compound-word-prefix",
+      "words": ["SHAKE", "WRITING", "BAG", "MADE", "STAND", "CUFF", "OUT", "BALL", "RAIL", "PRINT"]
+    },
+    {
+      "name": "Head _____",
+      "type": "compound-word-prefix",
+      "words": ["LINE", "ACHE", "PHONES", "LIGHT", "BAND", "QUARTERS", "HUNTER", "STRONG", "FIRST", "COUNT"]
+    },
+    {
+      "name": "Day _____",
+      "type": "compound-word-prefix",
+      "words": ["LIGHT", "DREAM", "BREAK", "TIME", "CARE", "PACK", "BED", "LILY", "TRIPPER", "LONG"]
+    },
+    {
+      "name": "Rain _____",
+      "type": "compound-word-prefix",
+      "words": ["BOW", "DROP", "COAT", "FALL", "STORM", "FOREST", "WATER", "CHECK", "MAKER", "BIRD"]
+    },
+    {
+      "name": "Star _____",
+      "type": "compound-word-prefix",
+      "words": ["FISH", "LIGHT", "DUST", "SHIP", "BOARD", "BURST", "DOM", "STRUCK", "GAZE", "FRUIT"]
+    },
+    {
+      "name": "Night _____",
+      "type": "compound-word-prefix",
+      "words": ["MARE", "CLUB", "FALL", "GOWN", "STAND", "TIME", "LIFE", "SHADE", "HAWK", "OWL"]
+    },
+    {
+      "name": "Home _____",
+      "type": "compound-word-prefix",
+      "words": ["WORK", "SICK", "TOWN", "MADE", "LAND", "COMING", "RUN", "OWNER", "STEAD", "BASE"]
+    },
+    {
+      "name": "Back _____",
+      "type": "compound-word-prefix",
+      "words": ["BONE", "YARD", "PACK", "GROUND", "FIRE", "DROP", "STAGE", "LASH", "BOARD", "LOG"]
+    },
+    {
+      "name": "Light _____",
+      "type": "compound-word-prefix",
+      "words": ["HOUSE", "WEIGHT", "BULB", "NING", "YEAR", "HEADED", "SHIP", "SABER", "SWITCH", "ROOM"]
+    },
+    {
+      "name": "Sea _____",
+      "type": "compound-word-prefix",
+      "words": ["FOOD", "SHELL", "HORSE", "WEED", "SHORE", "SIDE", "GULL", "BED", "MAN", "PORT"]
+    },
+    {
+      "name": "Blue _____",
+      "type": "compound-word-prefix",
+      "words": ["BIRD", "BERRY", "PRINT", "BELL", "GRASS", "JAY", "GILL", "FISH", "BLOOD", "BONNET"]
+    },
+    {
+      "name": "Green _____",
+      "type": "compound-word-prefix",
+      "words": ["HOUSE", "BACK", "HORN", "WICH", "ROOM", "GROCER", "ERY", "LAND", "PEACE", "BELT"]
+    },
+    {
+      "name": "Gold _____",
+      "type": "compound-word-prefix",
+      "words": ["FISH", "MINE", "SMITH", "FINCH", "FIELD", "DIGGER", "RUSH", "BRICK", "LEAF", "MEDAL"]
+    },
+    {
+      "name": "Time _____",
+      "type": "compound-word-prefix",
+      "words": ["LINE", "TABLE", "PIECE", "KEEPER", "STAMP", "FRAME", "ZONE", "SHARE", "LESS", "OUT"]
+    },
+    {
+      "name": "Key _____",
+      "type": "compound-word-prefix",
+      "words": ["BOARD", "HOLE", "STONE", "NOTE", "WORD", "CHAIN", "RING", "PAD", "STROKE", "WAY"]
+    },
+    {
+      "name": "Over _____",
+      "type": "compound-word-prefix",
+      "words": ["HEAD", "TIME", "LOAD", "NIGHT", "COAT", "LOOK", "BOARD", "DOSE", "FLOW", "CAST"]
+    },
+    {
+      "name": "Under _____",
+      "type": "compound-word-prefix",
+      "words": ["GROUND", "WEAR", "LINE", "DOG", "COVER", "WORLD", "WATER", "PASS", "GROWTH", "BELLY"]
+    },
+    {
+      "name": "Work _____",
+      "type": "compound-word-prefix",
+      "words": ["SHOP", "PLACE", "OUT", "LOAD", "FORCE", "BENCH", "BOOK", "FLOW", "STATION", "HORSE"]
+    },
+    {
+      "name": "Moon _____",
+      "type": "compound-word-prefix",
+      "words": ["LIGHT", "SHINE", "WALK", "BEAM", "STONE", "RISE", "LIT", "ROOF", "SCAPE", "STRUCK"]
+    },
+    {
+      "name": "Earth _____",
+      "type": "compound-word-prefix",
+      "words": ["QUAKE", "WORM", "BOUND", "LING", "WARE", "WORK", "MOVER", "SHINE", "SHAKING", "WARD"]
+    },
+    {
+      "name": "Wind _____",
+      "type": "compound-word-prefix",
+      "words": ["MILL", "SHIELD", "STORM", "FALL", "PIPE", "BREAKER", "SWEPT", "BURN", "SOCK", "SCREEN"]
+    },
+    {
+      "name": "Sand _____",
+      "type": "compound-word-prefix",
+      "words": ["PAPER", "CASTLE", "STORM", "BOX", "STONE", "BAR", "BAG", "BANK", "PIPER", "WITCH"]
+    },
+    {
+      "name": "Ice _____",
+      "type": "compound-word-prefix",
+      "words": ["BERG", "CREAM", "BREAKER", "BOX", "CAP", "COLD", "MAN", "PICK", "SKATE", "HOUSE"]
+    },
+    {
+      "name": "Bed _____",
+      "type": "compound-word-prefix",
+      "words": ["ROOM", "SIDE", "TIME", "SPREAD", "BUG", "POST", "ROCK", "RIDDEN", "FELLOW", "DING"]
+    },
+    {
+      "name": "Foot _____",
+      "type": "compound-word-prefix",
+      "words": ["BALL", "PRINT", "NOTE", "STEP", "HOLD", "WEAR", "HILL", "PATH", "REST", "WORK"]
+    },
+    {
+      "name": "Eye _____",
+      "type": "compound-word-prefix",
+      "words": ["BALL", "BROW", "LASH", "LID", "SIGHT", "SORE", "WITNESS", "GLASSES", "LINER", "OPENER"]
+    },
+    {
+      "name": "Door _____",
+      "type": "compound-word-prefix",
+      "words": ["BELL", "KNOB", "MAT", "STEP", "STOP", "WAY", "FRAME", "MAN", "PRIZE", "KEEPER"]
+    },
+    {
+      "name": "Wall _____",
+      "type": "compound-word-prefix",
+      "words": ["PAPER", "FLOWER", "STREET", "BOARD", "NUT", "EYED", "MOUNT", "CRAWL", "PLUG", "EYE"]
+    },
+    {
+      "name": "Hair _____",
+      "type": "compound-word-prefix",
+      "words": ["CUT", "BRUSH", "PIN", "STYLE", "LINE", "SPRAY", "DRESSER", "BALL", "NET", "BAND"]
+    },
+    {
+      "name": "Side _____",
+      "type": "compound-word-prefix",
+      "words": ["WALK", "LINE", "SHOW", "KICK", "STEP", "TRACK", "BOARD", "BURNS", "ARM", "SWIPE"]
+    },
+    {
+      "name": "Road _____",
+      "type": "compound-word-prefix",
+      "words": ["BLOCK", "SIDE", "RUNNER", "TRIP", "MAP", "KILL", "WORK", "HOUSE", "RAGE", "SHOW"]
+    },
+    {
+      "name": "House _____",
+      "type": "compound-word-prefix",
+      "words": ["HOLD", "WIFE", "WORK", "KEEPER", "BOAT", "PLANT", "GUEST", "WARMING", "COAT", "BOUND"]
+    },
+    {
+      "name": "School _____",
+      "type": "compound-word-prefix",
+      "words": ["HOUSE", "TEACHER", "WORK", "YARD", "MATE", "BOOK", "GIRL", "BOY", "MASTER", "BUS"]
+    },
+    {
+      "name": "Heart _____",
+      "type": "compound-word-prefix",
+      "words": ["BEAT", "BREAK", "BURN", "FELT", "LAND", "SICK", "THROB", "ACHE", "BROKEN", "WARM"]
+    },
+    {
+      "name": "Blood _____",
+      "type": "compound-word-prefix",
+      "words": ["HOUND", "LINE", "SHED", "SHOT", "STAIN", "STREAM", "BATH", "BANK", "TYPE", "THIRSTY"]
+    },
+    {
+      "name": "Brain _____",
+      "type": "compound-word-prefix",
+      "words": ["STORM", "WASH", "WAVE", "CHILD", "POWER", "DEAD", "FREEZE", "PAN", "TEASER", "TRUST"]
+    },
+    {
+      "name": "Life _____",
+      "type": "compound-word-prefix",
+      "words": ["TIME", "BOAT", "GUARD", "LINE", "STYLE", "LONG", "SAVER", "SPAN", "BLOOD", "JACKET"]
+    },
+    {
+      "name": "Paper _____",
+      "type": "compound-word-prefix",
+      "words": ["BACK", "BOY", "CLIP", "CUT", "WEIGHT", "WORK", "TRAIL", "BOARD", "MILL", "TIGER"]
+    },
+    {
+      "name": "Stone _____",
+      "type": "compound-word-prefix",
+      "words": ["WALL", "WORK", "COLD", "MASON", "WARE", "CUTTER", "FISH", "FRUIT", "GROUND", "WASHED"]
+    },
+    {
+      "name": "Wood _____",
+      "type": "compound-word-prefix",
+      "words": ["LAND", "WORK", "PECKER", "CHUCK", "SHED", "WIND", "CUTTER", "CARVER", "GRAIN", "PILE"]
+    },
+    {
+      "name": "Cross _____",
+      "type": "compound-word-prefix",
+      "words": ["WORD", "WALK", "ROAD", "BOW", "BAR", "FIRE", "CHECK", "BREED", "BONES", "HAIR"]
+    },
+    {
+      "name": "Horse _____",
+      "type": "compound-word-prefix",
+      "words": ["BACK", "PLAY", "POWER", "SHOE", "RADISH", "HAIR", "FLY", "MAN", "WHIP", "TAIL"]
+    },
+    {
+      "name": "Honey _____",
+      "type": "compound-word-prefix",
+      "words": ["BEE", "COMB", "DEW", "MOON", "POT", "SUCKLE", "BUNCH", "TRAP", "GUIDE", "CRISP"]
+    },
+    {
+      "name": "_____ Ball",
+      "type": "compound-word-suffix",
+      "words": ["BASKET", "FOOT", "BASE", "VOLLEY", "SOFT", "SNOW", "BEACH", "FIRE", "HAND", "EYE"]
+    },
+    {
+      "name": "_____ Board",
+      "type": "compound-word-suffix",
+      "words": ["CARD", "CLIP", "CUP", "DART", "FLOOR", "KEY", "SKATE", "SNOW", "SURF", "WHITE"]
+    },
+    {
+      "name": "_____ House",
+      "type": "compound-word-suffix",
+      "words": ["BIRD", "BOAT", "COURT", "DOG", "DOLL", "FARM", "FIRE", "GREEN", "LIGHT", "TREE"]
+    },
+    {
+      "name": "_____ Man",
+      "type": "compound-word-suffix",
+      "words": ["BAT", "FIRE", "MAIL", "MILK", "POLICE", "SNOW", "SPIDER", "SUPER", "SAND", "SALES"]
+    },
+    {
+      "name": "_____ Room",
+      "type": "compound-word-suffix",
+      "words": ["BALL", "BED", "BATH", "CLASS", "COURT", "DARK", "LIVING", "SHOW", "STOCK", "GREEN"]
+    },
+    {
+      "name": "_____ Box",
+      "type": "compound-word-suffix",
+      "words": ["CARD", "GEAR", "ICE", "JUICE", "LUNCH", "MAIL", "SAND", "TOOL", "TOY", "VOICE"]
+    },
+    {
+      "name": "_____ Light",
+      "type": "compound-word-suffix",
+      "words": ["CANDLE", "DAY", "FLASH", "FLOOD", "GAS", "HEAD", "MOON", "SPOT", "STAR", "SUN"]
+    },
+    {
+      "name": "_____ Line",
+      "type": "compound-word-suffix",
+      "words": ["AIR", "BASE", "BLOOD", "COAST", "DATE", "DEAD", "HAIR", "HEAD", "LIFE", "PIPE"]
+    },
+    {
+      "name": "_____ Stone",
+      "type": "compound-word-suffix",
+      "words": ["BIRTH", "CORNER", "GRAVE", "HAIL", "KEY", "LIME", "MILE", "MOON", "SAND", "TOMB"]
+    },
+    {
+      "name": "_____ Book",
+      "type": "compound-word-suffix",
+      "words": ["CHECK", "COOK", "FACE", "GUIDE", "HAND", "NOTE", "PASS", "PHONE", "PLAY", "TEXT"]
+    },
+    {
+      "name": "_____ Fish",
+      "type": "compound-word-suffix",
+      "words": ["CAT", "GOLD", "JELLY", "STAR", "SWORD", "CRAY", "BLOW", "CRAW", "FLAT", "SHELL"]
+    },
+    {
+      "name": "_____ Work",
+      "type": "compound-word-suffix",
+      "words": ["ART", "FIRE", "FOOT", "FRAME", "GROUND", "HOME", "HOUSE", "NET", "PAPER", "TEAM"]
+    },
+    {
+      "name": "_____ Bird",
+      "type": "compound-word-suffix",
+      "words": ["BLACK", "BLUE", "FIRE", "HUMMING", "JAIL", "LOVE", "MOCKING", "SNOW", "SONG", "THUNDER"]
+    },
+    {
+      "name": "_____ Dog",
+      "type": "compound-word-suffix",
+      "words": ["BULL", "CORN", "HOT", "SHEEP", "WATCH", "BIRD", "GUARD", "UNDER", "PRAIRIE", "TOP"]
+    },
+    {
+      "name": "_____ Day",
+      "type": "compound-word-suffix",
+      "words": ["BIRTH", "GAME", "HOLI", "PAY", "SUN", "WEEK", "WORK", "DOOMS", "YESTER", "EVERY"]
+    },
+    {
+      "name": "_____ Way",
+      "type": "compound-word-suffix",
+      "words": ["AIR", "DOOR", "DRIVE", "FREE", "GANG", "GATE", "HIGH", "PATH", "RAIL", "RUN"]
+    },
+    {
+      "name": "_____ Time",
+      "type": "compound-word-suffix",
+      "words": ["AIR", "BED", "DAY", "DOWN", "DRIVE", "HALF", "LIFE", "LUNCH", "PRIME", "SHOW"]
+    },
+    {
+      "name": "_____ Side",
+      "type": "compound-word-suffix",
+      "words": ["BED", "DOWN", "FIRE", "HILL", "LAKE", "OUT", "RING", "ROAD", "SEA", "UP"]
+    },
+    {
+      "name": "_____ Shop",
+      "type": "compound-word-suffix",
+      "words": ["BARBER", "BODY", "BOOK", "COFFEE", "GIFT", "PET", "PRINT", "SWEAT", "TOY", "WORK"]
+    },
+    {
+      "name": "_____ Cake",
+      "type": "compound-word-suffix",
+      "words": ["CUP", "CHEESE", "PAN", "POUND", "FRUIT", "SHORT", "BEEF", "OAT", "HOT", "FISH"]
+    },
+    {
+      "name": "_____ Flower",
+      "type": "compound-word-suffix",
+      "words": ["BELL", "CORN", "MAY", "PASS", "SUN", "WALL", "WILD", "CAULI", "SAFE", "FLOUR"]
+    },
+    {
+      "name": "_____ Water",
+      "type": "compound-word-suffix",
+      "words": ["BATH", "DISH", "FLOOD", "FRESH", "GROUND", "RAIN", "SALT", "SEA", "TAP", "WASTE"]
+    },
+    {
+      "name": "_____ Boat",
+      "type": "compound-word-suffix",
+      "words": ["HOUSE", "LIFE", "MOTOR", "ROW", "SAIL", "SPEED", "STEAM", "TUG", "GUN", "SHOW"]
+    },
+    {
+      "name": "_____ Fly",
+      "type": "compound-word-suffix",
+      "words": ["BUTTER", "DRAGON", "FIRE", "HORSE", "HOUSE", "MAY", "SUPER", "SHOO", "FRUIT", "DEER"]
+    },
+    {
+      "name": "_____ Yard",
+      "type": "compound-word-suffix",
+      "words": ["BACK", "BARN", "BONE", "CHURCH", "COURT", "GRAVE", "JUNK", "SHIP", "STOCK", "VINE"]
+    },
+    {
+      "name": "_____ Tree",
+      "type": "compound-word-suffix",
+      "words": ["APPLE", "CHERRY", "FAMILY", "PALM", "PINE", "PLUM", "OAK", "PEACH", "PEAR", "SHOE"]
+    },
+    {
+      "name": "_____ Stick",
+      "type": "compound-word-suffix",
+      "words": ["BREAD", "CHOP", "DRUM", "FIRE", "HOCKEY", "JOY", "LIP", "MATCH", "SELFIE", "YARD"]
+    },
+    {
+      "name": "_____ Ring",
+      "type": "compound-word-suffix",
+      "words": ["BOX", "EAR", "FINGER", "KEY", "NOSE", "SPRING", "WEDDING", "MOOD", "TOE", "NAPKIN"]
+    },
+    {
+      "name": "_____ Nut",
+      "type": "compound-word-suffix",
+      "words": ["BRAZIL", "CHEST", "COCO", "DOUGH", "HAZEL", "PEA", "PINE", "WING", "BUTTER", "GROUND"]
+    },
+    {
+      "name": "_____ Nail",
+      "type": "compound-word-suffix",
+      "words": ["FINGER", "HANG", "TOE", "THUMB", "DOOR", "SNAIL", "HAIL", "COFFIN", "HOB", "HAMMER"]
+    },
+    {
+      "name": "_____ Glass",
+      "type": "compound-word-suffix",
+      "words": ["EYE", "HOUR", "LOOKING", "SHOT", "SPY", "STAINED", "SUN", "WINE", "WATER", "SAND"]
+    },
+    {
+      "name": "_____ Bone",
+      "type": "compound-word-suffix",
+      "words": ["BACK", "FUNNY", "JAW", "COLLAR", "HIP", "WISH", "HERRING", "CHEEK", "WHALE", "TROM"]
+    },
+    {
+      "name": "_____ Walk",
+      "type": "compound-word-suffix",
+      "words": ["BOARD", "CAKE", "CAT", "CROSS", "MOON", "SIDE", "SLEEP", "SPACE", "TIGHT", "JAY"]
+    },
+    {
+      "name": "_____ Guard",
+      "type": "compound-word-suffix",
+      "words": ["BODY", "COAST", "LIFE", "MOUTH", "NIGHT", "SAFE", "SECURITY", "VAN", "REAR", "MUD"]
+    },
+    {
+      "name": "_____ Maker",
+      "type": "compound-word-suffix",
+      "words": ["BOOK", "COFFEE", "DEAL", "DRESS", "FILM", "KING", "MATCH", "MONEY", "PEACE", "TROUBLE"]
+    },
+    {
+      "name": "_____ Print",
+      "type": "compound-word-suffix",
+      "words": ["BLUE", "FINGER", "FINE", "FOOT", "MIS", "NEWS", "OFF", "OVER", "THUMB", "WOOD"]
+    },
+    {
+      "name": "_____ Cut",
+      "type": "compound-word-suffix",
+      "words": ["BUZZ", "CREW", "HAIR", "PAPER", "PRICE", "SHORT", "TAX", "UPPER", "CROSS", "WOOD"]
+    },
+    {
+      "name": "_____ Top",
+      "type": "compound-word-suffix",
+      "words": ["CAR", "DESK", "FLAT", "HILL", "LAP", "ROOF", "TABLE", "TIP", "TREE", "TANK"]
+    },
+    {
+      "name": "_____ Head",
+      "type": "compound-word-suffix",
+      "words": ["AIR", "BED", "BLOCK", "BONE", "BULL", "HOT", "EGG", "RED", "WAR", "FAT"]
+    },
+    {
+      "name": "_____ Watch",
+      "type": "compound-word-suffix",
+      "words": ["BIRD", "FIRE", "NIGHT", "STOP", "WRIST", "WHALE", "DEATH", "WEIGHT", "NEIGHBOR", "CRIME"]
+    },
+    {
+      "name": "_____ Run",
+      "type": "compound-word-suffix",
+      "words": ["DRY", "FUN", "HOME", "LONG", "OUT", "OVER", "TRIAL", "BASE", "SKI", "GUN"]
+    },
+    {
+      "name": "_____ Stand",
+      "type": "compound-word-suffix",
+      "words": ["BAND", "BOOK", "GRAND", "HAND", "HEAD", "KICK", "NIGHT", "NEWS", "TAXI", "LAMP"]
+    },
+    {
+      "name": "_____ Berry",
+      "type": "compound-word-suffix",
+      "words": ["BLACK", "BLUE", "CRAN", "GOOSE", "RASP", "STRAW", "ELDER", "HUCKLE", "DEW", "MUL"]
+    },
+    {
+      "name": "_____ Fall",
+      "type": "compound-word-suffix",
+      "words": ["DOWN", "FREE", "LAND", "NIGHT", "RAIN", "SHORT", "SNOW", "WATER", "WIND", "PITCH"]
+    },
+    {
+      "name": "_____ Port",
+      "type": "compound-word-suffix",
+      "words": ["AIR", "CAR", "PASS", "SEA", "TRANS", "EXPORT", "IMPORT", "REPORT", "HELI", "FREE"]
+    },
+    {
+      "name": "_____ Land",
+      "type": "compound-word-suffix",
+      "words": ["FARM", "GRASS", "HOME", "MAIN", "MOTHER", "SWAMP", "FATHER", "DREAM", "WONDER", "WOOD"]
+    },
+    {
+      "name": "_____ Mark",
+      "type": "compound-word-suffix",
+      "words": ["BENCH", "BIRTH", "BOOK", "LAND", "POST", "QUESTION", "TRADE", "CHECK", "WATER", "EAR"]
+    },
+    {
+      "name": "_____ Point",
+      "type": "compound-word-suffix",
+      "words": ["CHECK", "DEW", "END", "FLASH", "GUN", "MID", "PIN", "STAND", "VIEW", "BALL"]
+    },
+    {
+      "name": "_____ Back",
+      "type": "compound-word-suffix",
+      "words": ["CUT", "DRAW", "FEED", "FLASH", "HOLD", "KICK", "PLAY", "SET", "HORSE", "QUARTER"]
+    },
+    {
+      "name": "NBA Teams",
+      "type": "proper-noun-group",
+      "words": ["LAKERS", "CELTICS", "BULLS", "HEAT", "WARRIORS", "NETS", "KNICKS", "SPURS", "SUNS", "JAZZ", "NUGGETS", "BUCKS", "CLIPPERS", "ROCKETS", "MAVERICKS", "HAWKS", "PISTONS", "CAVALIERS", "RAPTORS", "MAGIC", "PACERS", "PELICANS", "GRIZZLIES", "TIMBERWOLVES", "BLAZERS", "KINGS", "HORNETS", "THUNDER", "WIZARDS", "SIXERS"]
+    },
+    {
+      "name": "NFL Teams",
+      "type": "proper-noun-group",
+      "words": ["EAGLES", "COWBOYS", "PACKERS", "CHIEFS", "BILLS", "BRONCOS", "RAIDERS", "DOLPHINS", "GIANTS", "BEARS", "LIONS", "VIKINGS", "SAINTS", "FALCONS", "PANTHERS", "BUCCANEERS", "RAVENS", "STEELERS", "BENGALS", "BROWNS", "COLTS", "TITANS", "TEXANS", "JAGUARS", "CHARGERS", "SEAHAWKS", "NINERS", "CARDINALS", "RAMS", "JETS", "PATRIOTS", "COMMANDERS"]
+    },
+    {
+      "name": "MLB Teams",
+      "type": "proper-noun-group",
+      "words": ["YANKEES", "DODGERS", "CUBS", "GIANTS", "ASTROS", "BRAVES", "PHILLIES", "METS", "CARDINALS", "RANGERS", "ORIOLES", "RAYS", "TWINS", "TIGERS", "ROYALS", "GUARDIANS", "ANGELS", "ATHLETICS", "MARINERS", "PADRES", "ROCKIES", "REDS", "BREWERS", "PIRATES", "MARLINS", "NATIONALS", "DIAMONDBACKS", "WHITESOX", "REDSOX", "BLUEJAYS"]
+    },
+    {
+      "name": "Disney Princesses",
+      "type": "proper-noun-group",
+      "words": ["ARIEL", "BELLE", "CINDERELLA", "JASMINE", "MOANA", "MULAN", "RAPUNZEL", "TIANA", "ELSA", "AURORA", "POCAHONTAS", "MERIDA", "SNOW", "GISELLE", "ANNA", "RAYA"]
+    },
+    {
+      "name": "Greek Gods",
+      "type": "proper-noun-group",
+      "words": ["ZEUS", "HERA", "APOLLO", "ATHENA", "POSEIDON", "HERMES", "ARES", "ARTEMIS", "HADES", "APHRODITE", "DEMETER", "DIONYSUS", "HEPHAESTUS", "PERSEPHONE", "EROS", "HELIOS"]
+    },
+    {
+      "name": "Roman Gods",
+      "type": "proper-noun-group",
+      "words": ["JUPITER", "MARS", "VENUS", "NEPTUNE", "MERCURY", "PLUTO", "DIANA", "MINERVA", "JUNO", "APOLLO", "CERES", "BACCHUS", "VULCAN", "CUPID", "SATURN", "PROSERPINA"]
+    },
+    {
+      "name": "Beatles Members",
+      "type": "proper-noun-group",
+      "words": ["JOHN", "PAUL", "GEORGE", "RINGO", "LENNON", "STARR", "HARRISON", "MCCARTNEY"]
+    },
+    {
+      "name": "US Presidents",
+      "type": "proper-noun-group",
+      "words": ["LINCOLN", "WASHINGTON", "JEFFERSON", "KENNEDY", "REAGAN", "OBAMA", "NIXON", "CLINTON", "BUSH", "ADAMS", "MADISON", "MONROE", "JACKSON", "GRANT", "WILSON", "TRUMAN", "EISENHOWER", "CARTER", "FORD", "TAFT", "HOOVER", "COOLIDGE", "HARDING", "MCKINLEY", "ROOSEVELT", "PIERCE", "TYLER", "POLK", "TAYLOR", "HARRISON", "CLEVELAND", "GARFIELD", "FILLMORE", "BUCHANAN"]
+    },
+    {
+      "name": "Shakespeare Plays",
+      "type": "proper-noun-group",
+      "words": ["HAMLET", "MACBETH", "OTHELLO", "TEMPEST", "LEAR", "ROMEO", "SHREW", "CAESAR", "MIDSUMMER", "TWELFTH"]
+    },
+    {
+      "name": "Bond Films",
+      "type": "proper-noun-group",
+      "words": ["GOLDFINGER", "SKYFALL", "THUNDERBALL", "GOLDENEYE", "SPECTRE", "OCTOPUSSY", "MOONRAKER", "CASINO"]
+    },
+    {
+      "name": "Harry Potter Houses",
+      "type": "proper-noun-group",
+      "words": ["GRYFFINDOR", "SLYTHERIN", "HUFFLEPUFF", "RAVENCLAW"]
+    },
+    {
+      "name": "Star Wars Characters",
+      "type": "proper-noun-group",
+      "words": ["LUKE", "LEIA", "VADER", "YODA", "SOLO", "CHEWBACCA", "OBI", "ANAKIN", "KYLO", "PALPATINE", "REY", "FINN", "MAZ", "JABBA", "BOBA", "GROGU"]
+    },
+    {
+      "name": "Marvel Heroes",
+      "type": "proper-noun-group",
+      "words": ["SPIDERMAN", "HULK", "THOR", "IRONMAN", "WOLVERINE", "CYCLOPS", "STORM", "DEADPOOL", "ANTMAN", "GROOT", "GAMORA", "ROCKET", "DRAX", "NEBULA", "VISION", "SCARLET", "FALCON", "PANTHER"]
+    },
+    {
+      "name": "DC Heroes",
+      "type": "proper-noun-group",
+      "words": ["BATMAN", "SUPERMAN", "AQUAMAN", "FLASH", "CYBORG", "ARROW", "SHAZAM", "ROBIN", "NIGHTWING", "BATGIRL", "SUPERGIRL", "HAWKGIRL", "ZATANNA", "CONSTANTINE", "RAVEN", "STARFIRE"]
+    },
+    {
+      "name": "Famous Artists",
+      "type": "proper-noun-group",
+      "words": ["PICASSO", "MONET", "WARHOL", "REMBRANDT", "MICHELANGELO", "MATISSE", "POLLOCK", "KAHLO", "VERMEER", "BANKSY", "DALI", "RENOIR", "GOYA", "CEZANNE", "DEGAS", "KLIMT"]
+    },
+    {
+      "name": "Classical Composers",
+      "type": "proper-noun-group",
+      "words": ["BACH", "MOZART", "BEETHOVEN", "CHOPIN", "VIVALDI", "BRAHMS", "HANDEL", "HAYDN", "LISZT", "WAGNER", "SCHUBERT", "TCHAIKOVSKY", "DEBUSSY", "RACHMANINOFF", "STRAUSS", "MAHLER"]
+    },
+    {
+      "name": "World Capitals",
+      "type": "proper-noun-group",
+      "words": ["PARIS", "LONDON", "TOKYO", "BERLIN", "ROME", "MADRID", "CAIRO", "LIMA", "OSLO", "DUBLIN", "ATHENS", "VIENNA", "PRAGUE", "LISBON", "WARSAW", "STOCKHOLM", "COPENHAGEN", "BRUSSELS", "AMSTERDAM", "OTTAWA"]
+    },
+    {
+      "name": "US States",
+      "type": "proper-noun-group",
+      "words": ["TEXAS", "FLORIDA", "ALASKA", "HAWAII", "MONTANA", "MAINE", "OHIO", "UTAH", "KANSAS", "IOWA", "IDAHO", "OREGON", "WYOMING", "INDIANA", "ARIZONA", "VERMONT", "COLORADO", "DELAWARE", "GEORGIA", "ALABAMA", "KENTUCKY", "LOUISIANA", "MARYLAND", "MICHIGAN", "MINNESOTA", "MISSISSIPPI", "MISSOURI", "NEBRASKA", "NEVADA", "OKLAHOMA", "PENNSYLVANIA", "TENNESSEE", "VIRGINIA", "WISCONSIN", "CONNECTICUT", "CALIFORNIA", "ILLINOIS", "ARKANSAS", "WASHINGTON"]
+    },
+    {
+      "name": "Countries",
+      "type": "proper-noun-group",
+      "words": ["FRANCE", "BRAZIL", "JAPAN", "EGYPT", "INDIA", "KENYA", "SPAIN", "PERU", "CHILE", "CUBA", "ITALY", "GREECE", "CHINA", "MEXICO", "CANADA", "AUSTRALIA", "GERMANY", "RUSSIA", "SWEDEN", "NORWAY", "POLAND", "TURKEY", "PORTUGAL", "ARGENTINA", "COLOMBIA"]
+    },
+    {
+      "name": "Planets",
+      "type": "finite-group",
+      "words": ["MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE", "PLUTO"]
+    },
+    {
+      "name": "Months",
+      "type": "finite-group",
+      "words": ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
+    },
+    {
+      "name": "Days of the Week",
+      "type": "finite-group",
+      "words": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+    },
+    {
+      "name": "Playing Card Suits",
+      "type": "finite-group",
+      "words": ["HEARTS", "DIAMONDS", "CLUBS", "SPADES"]
+    },
+    {
+      "name": "Chess Pieces",
+      "type": "finite-group",
+      "words": ["KING", "QUEEN", "ROOK", "BISHOP", "KNIGHT", "PAWN"]
+    },
+    {
+      "name": "Zodiac Signs",
+      "type": "finite-group",
+      "words": ["ARIES", "TAURUS", "GEMINI", "CANCER", "LEO", "VIRGO", "LIBRA", "SCORPIO", "SAGITTARIUS", "CAPRICORN", "AQUARIUS", "PISCES"]
+    },
+    {
+      "name": "Continents",
+      "type": "finite-group",
+      "words": ["AFRICA", "ANTARCTICA", "ASIA", "AUSTRALIA", "EUROPE"]
+    },
+    {
+      "name": "Oceans",
+      "type": "finite-group",
+      "words": ["ATLANTIC", "PACIFIC", "INDIAN", "ARCTIC", "SOUTHERN"]
+    },
+    {
+      "name": "Primary Colors",
+      "type": "finite-group",
+      "words": ["RED", "BLUE", "YELLOW"]
+    },
+    {
+      "name": "Rainbow Colors",
+      "type": "finite-group",
+      "words": ["RED", "ORANGE", "YELLOW", "GREEN", "BLUE", "INDIGO", "VIOLET"]
+    },
+    {
+      "name": "Cardinal Directions",
+      "type": "finite-group",
+      "words": ["NORTH", "SOUTH", "EAST", "WEST"]
+    },
+    {
+      "name": "Seasons",
+      "type": "finite-group",
+      "words": ["SPRING", "SUMMER", "FALL", "WINTER", "AUTUMN"]
+    },
+    {
+      "name": "Five Senses",
+      "type": "finite-group",
+      "words": ["SIGHT", "SOUND", "SMELL", "TASTE", "TOUCH"]
+    },
+    {
+      "name": "Olympic Rings Colors",
+      "type": "finite-group",
+      "words": ["BLUE", "YELLOW", "BLACK", "GREEN", "RED"]
+    },
+    {
+      "name": "Reindeer",
+      "type": "finite-group",
+      "words": ["DASHER", "DANCER", "PRANCER", "VIXEN", "COMET", "CUPID", "DONNER", "BLITZEN", "RUDOLPH"]
+    },
+    {
+      "name": "Seven Dwarfs",
+      "type": "finite-group",
+      "words": ["DOC", "GRUMPY", "HAPPY", "SLEEPY", "BASHFUL", "SNEEZY", "DOPEY"]
+    },
+    {
+      "name": "Deadly Sins",
+      "type": "finite-group",
+      "words": ["PRIDE", "GREED", "LUST", "ENVY", "GLUTTONY", "WRATH", "SLOTH"]
+    },
+    {
+      "name": "Elements (Classical)",
+      "type": "finite-group",
+      "words": ["EARTH", "WATER", "FIRE", "AIR"]
+    },
+    {
+      "name": "Teenage Mutant Ninja Turtles",
+      "type": "finite-group",
+      "words": ["LEONARDO", "DONATELLO", "RAPHAEL", "MICHELANGELO", "SPLINTER", "SHREDDER"]
+    },
+    {
+      "name": "Kitchen Utensils",
+      "type": "general-category",
+      "words": ["SPATULA", "WHISK", "LADLE", "TONGS", "PEELER", "GRATER", "COLANDER", "STRAINER", "MASHER", "ROLLER", "KNIFE", "FORK", "SPOON", "ZESTER", "CORKSCREW", "OPENER"]
+    },
+    {
+      "name": "School Supplies",
+      "type": "general-category",
+      "words": ["PENCIL", "ERASER", "RULER", "NOTEBOOK", "CRAYON", "MARKER", "SCISSORS", "GLUE", "STAPLER", "BINDER", "BACKPACK", "PAPER", "FOLDER", "HIGHLIGHTER", "COMPASS", "CALCULATOR"]
+    },
+    {
+      "name": "Musical Instruments",
+      "type": "general-category",
+      "words": ["GUITAR", "PIANO", "DRUMS", "VIOLIN", "TRUMPET", "FLUTE", "SAXOPHONE", "CELLO", "HARP", "TROMBONE", "BANJO", "CLARINET", "OBOE", "TUBA", "HARMONICA", "UKULELE", "ACCORDION", "ORGAN"]
+    },
+    {
+      "name": "Tools",
+      "type": "general-category",
+      "words": ["HAMMER", "SCREWDRIVER", "WRENCH", "PLIERS", "SAW", "DRILL", "LEVEL", "TAPE", "CHISEL", "CLAMP", "AXE", "SHOVEL", "RAKE", "MALLET", "FILE", "CROWBAR"]
+    },
+    {
+      "name": "Vegetables",
+      "type": "general-category",
+      "words": ["CARROT", "BROCCOLI", "SPINACH", "CELERY", "PEPPER", "ONION", "TOMATO", "CUCUMBER", "LETTUCE", "CABBAGE", "POTATO", "CORN", "SQUASH", "ZUCCHINI", "ASPARAGUS", "BEET", "RADISH", "KALE", "GARLIC"]
+    },
+    {
+      "name": "Fruits",
+      "type": "general-category",
+      "words": ["APPLE", "BANANA", "ORANGE", "GRAPE", "MANGO", "PEACH", "PEAR", "PLUM", "CHERRY", "MELON", "KIWI", "LIME", "LEMON", "PAPAYA", "FIG", "DATE", "APRICOT", "RASPBERRY", "BLUEBERRY", "STRAWBERRY", "COCONUT", "PINEAPPLE"]
+    },
+    {
+      "name": "Trees",
+      "type": "general-category",
+      "words": ["OAK", "MAPLE", "PINE", "BIRCH", "WILLOW", "ELM", "CEDAR", "SPRUCE", "ASH", "WALNUT", "REDWOOD", "HICKORY", "BEECH", "POPLAR", "ASPEN", "CYPRESS", "FIR", "MAGNOLIA", "DOGWOOD", "CHESTNUT"]
+    },
+    {
+      "name": "Flowers",
+      "type": "general-category",
+      "words": ["ROSE", "TULIP", "DAISY", "LILY", "ORCHID", "SUNFLOWER", "VIOLET", "IRIS", "PEONY", "CARNATION", "DAFFODIL", "JASMINE", "MARIGOLD", "ZINNIA", "LAVENDER", "POPPY", "HIBISCUS", "AZALEA", "GARDENIA", "BEGONIA"]
+    },
+    {
+      "name": "Birds",
+      "type": "general-category",
+      "words": ["EAGLE", "HAWK", "OWL", "ROBIN", "SPARROW", "CROW", "CARDINAL", "DOVE", "SWAN", "PELICAN", "FALCON", "PARROT", "FLAMINGO", "HERON", "SEAGULL", "PENGUIN", "OSTRICH", "RAVEN", "JAY", "FINCH", "WREN", "CRANE"]
+    },
+    {
+      "name": "Fish",
+      "type": "general-category",
+      "words": ["SALMON", "TUNA", "TROUT", "BASS", "COD", "HALIBUT", "PERCH", "PIKE", "MACKEREL", "SARDINE", "CARP", "FLOUNDER", "SWORDFISH", "TILAPIA", "CATFISH", "SNAPPER", "GROUPER", "ANCHOVY", "HERRING", "EEL"]
+    },
+    {
+      "name": "Mammals",
+      "type": "general-category",
+      "words": ["ELEPHANT", "TIGER", "LION", "BEAR", "WOLF", "DEER", "RABBIT", "SQUIRREL", "WHALE", "DOLPHIN", "GIRAFFE", "ZEBRA", "HIPPO", "RHINO", "MONKEY", "GORILLA", "CHEETAH", "LEOPARD", "MOOSE", "FOX", "OTTER", "SEAL", "BEAVER", "PANDA", "KOALA", "KANGAROO"]
+    },
+    {
+      "name": "Reptiles",
+      "type": "general-category",
+      "words": ["SNAKE", "LIZARD", "TURTLE", "CROCODILE", "ALLIGATOR", "GECKO", "IGUANA", "CHAMELEON", "COBRA", "PYTHON", "TORTOISE", "VIPER", "BOA", "ANACONDA", "KOMODO"]
+    },
+    {
+      "name": "Insects",
+      "type": "general-category",
+      "words": ["ANT", "BEE", "BUTTERFLY", "BEETLE", "MOSQUITO", "FLY", "WASP", "MOTH", "CRICKET", "GRASSHOPPER", "DRAGONFLY", "LADYBUG", "FIREFLY", "COCKROACH", "TERMITE", "FLEA", "LOCUST", "MANTIS", "HORNET"]
+    },
+    {
+      "name": "Furniture",
+      "type": "general-category",
+      "words": ["CHAIR", "TABLE", "COUCH", "DESK", "DRESSER", "CABINET", "SHELF", "BENCH", "STOOL", "OTTOMAN", "BED", "SOFA", "LOVESEAT", "RECLINER", "WARDROBE", "BOOKCASE", "NIGHTSTAND", "FUTON"]
+    },
+    {
+      "name": "Clothing",
+      "type": "general-category",
+      "words": ["SHIRT", "PANTS", "JACKET", "DRESS", "SKIRT", "SWEATER", "COAT", "SHORTS", "VEST", "BLOUSE", "JEANS", "HOODIE", "CARDIGAN", "BLAZER", "SUIT", "TIE", "SCARF", "SOCKS"]
+    },
+    {
+      "name": "Footwear",
+      "type": "general-category",
+      "words": ["BOOTS", "SNEAKERS", "SANDALS", "HEELS", "LOAFERS", "SLIPPERS", "FLATS", "CLOGS", "MOCCASINS", "OXFORDS", "PUMPS", "WEDGES", "STILETTOS"]
+    },
+    {
+      "name": "Jewelry",
+      "type": "general-category",
+      "words": ["RING", "NECKLACE", "BRACELET", "EARRING", "BROOCH", "PENDANT", "ANKLET", "CUFFLINK", "TIARA", "LOCKET", "WATCH", "CHAIN", "CHARM", "BANGLE", "CHOKER", "CROWN"]
+    },
+    {
+      "name": "Sports",
+      "type": "general-category",
+      "words": ["BASEBALL", "BASKETBALL", "FOOTBALL", "SOCCER", "TENNIS", "GOLF", "HOCKEY", "SWIMMING", "BOXING", "WRESTLING", "VOLLEYBALL", "RUGBY", "CRICKET", "LACROSSE", "BADMINTON", "SKIING", "SKATING", "SURFING", "CYCLING", "ARCHERY", "FENCING", "GYMNASTICS"]
+    },
+    {
+      "name": "Dances",
+      "type": "general-category",
+      "words": ["WALTZ", "TANGO", "SALSA", "BALLET", "TAP", "JAZZ", "SWING", "FOXTROT", "POLKA", "RUMBA", "MAMBO", "SAMBA", "FLAMENCO", "DISCO", "JIVE", "MERENGUE", "BACHATA"]
+    },
+    {
+      "name": "Currencies",
+      "type": "general-category",
+      "words": ["DOLLAR", "EURO", "POUND", "YEN", "PESO", "FRANC", "RUPEE", "YUAN", "KRONA", "RAND", "RUBLE", "LIRA", "DINAR", "DIRHAM", "BAHT", "WON", "SHEKEL"]
+    },
+    {
+      "name": "Gemstones",
+      "type": "general-category",
+      "words": ["DIAMOND", "RUBY", "EMERALD", "SAPPHIRE", "OPAL", "TOPAZ", "PEARL", "AMETHYST", "JADE", "GARNET", "TURQUOISE", "ONYX", "AQUAMARINE", "CITRINE", "PERIDOT", "MOONSTONE", "TANZANITE", "TOURMALINE"]
+    },
+    {
+      "name": "Metals",
+      "type": "general-category",
+      "words": ["GOLD", "SILVER", "COPPER", "IRON", "STEEL", "BRONZE", "PLATINUM", "ALUMINUM", "ZINC", "NICKEL", "TITANIUM", "LEAD", "TIN", "BRASS", "CHROME", "TUNGSTEN", "COBALT"]
+    },
+    {
+      "name": "Fabrics",
+      "type": "general-category",
+      "words": ["COTTON", "SILK", "WOOL", "LINEN", "DENIM", "VELVET", "SATIN", "LEATHER", "POLYESTER", "CASHMERE", "CHIFFON", "TWEED", "FLANNEL", "FLEECE", "NYLON", "SUEDE", "CORDUROY", "CANVAS", "LACE"]
+    },
+    {
+      "name": "Beverages",
+      "type": "general-category",
+      "words": ["COFFEE", "TEA", "JUICE", "SODA", "MILK", "WATER", "WINE", "BEER", "LEMONADE", "SMOOTHIE", "CIDER", "COCOA", "ESPRESSO", "LATTE", "CAPPUCCINO", "PUNCH"]
+    },
+    {
+      "name": "Desserts",
+      "type": "general-category",
+      "words": ["CAKE", "PIE", "COOKIE", "BROWNIE", "PUDDING", "MOUSSE", "SUNDAE", "TART", "FUDGE", "TRUFFLE", "CHEESECAKE", "TIRAMISU", "ECLAIR", "MACARON", "DONUT", "GELATO", "SORBET", "COBBLER", "CANNOLI", "BAKLAVA"]
+    },
+    {
+      "name": "Things That Are Round",
+      "type": "things-that",
+      "words": ["BALL", "WHEEL", "COIN", "GLOBE", "PLATE", "CLOCK", "PIZZA", "DONUT", "RING", "MOON", "BUTTON", "FRISBEE", "TIRE", "BUBBLE", "PEARL"]
+    },
+    {
+      "name": "Things That Are Sharp",
+      "type": "things-that",
+      "words": ["KNIFE", "NEEDLE", "THORN", "BLADE", "RAZOR", "CLAW", "FANG", "ARROW", "TACK", "NAIL", "SCISSORS", "AXE", "SWORD", "DAGGER"]
+    },
+    {
+      "name": "Things That Are Hot",
+      "type": "things-that",
+      "words": ["FIRE", "SUN", "LAVA", "CHILI", "PEPPER", "SAUNA", "DESERT", "OVEN", "STOVE", "FURNACE", "GRILL", "EMBER", "FLAME"]
+    },
+    {
+      "name": "Things That Are Cold",
+      "type": "things-that",
+      "words": ["ICE", "SNOW", "GLACIER", "FREEZER", "ARCTIC", "IGLOO", "SLEET", "FROST", "HAIL", "BLIZZARD", "TUNDRA", "WINTER"]
+    },
+    {
+      "name": "Things That Float",
+      "type": "things-that",
+      "words": ["BOAT", "RAFT", "CORK", "BALLOON", "BUOY", "DUCK", "LILY", "LOG", "FEATHER", "BUBBLE", "ICEBERG", "JELLYFISH"]
+    },
+    {
+      "name": "Things That Fly",
+      "type": "things-that",
+      "words": ["BIRD", "PLANE", "KITE", "BALLOON", "HELICOPTER", "ROCKET", "DRONE", "BEE", "BUTTERFLY", "BAT", "EAGLE", "JET"]
+    },
+    {
+      "name": "Things That Spin",
+      "type": "things-that",
+      "words": ["TOP", "WHEEL", "FAN", "TORNADO", "DRILL", "PLANET", "RECORD", "BALLERINA", "TURBINE", "PINWHEEL", "ROTOR", "GYRO"]
+    },
+    {
+      "name": "Things That Bounce",
+      "type": "things-that",
+      "words": ["BALL", "SPRING", "TRAMPOLINE", "KANGAROO", "RUBBER", "CHECK", "FROG", "BASKETBALL", "TENNIS", "POGO"]
+    },
+    {
+      "name": "Things That Glow",
+      "type": "things-that",
+      "words": ["STAR", "MOON", "CANDLE", "FIREFLY", "NEON", "EMBER", "LAVA", "LANTERN", "BULB", "JELLYFISH", "AURORA"]
+    },
+    {
+      "name": "Things That Ring",
+      "type": "things-that",
+      "words": ["BELL", "PHONE", "ALARM", "DOORBELL", "TIMER", "GONG", "CHIME", "TRIANGLE"]
+    },
+    {
+      "name": "Things in Pairs",
+      "type": "things-that",
+      "words": ["SHOES", "SOCKS", "GLOVES", "EYES", "EARS", "HANDS", "TWINS", "SCISSORS", "PANTS", "GLASSES", "WINGS", "LUNGS", "DICE"]
+    },
+    {
+      "name": "Things With Stripes",
+      "type": "things-that",
+      "words": ["ZEBRA", "TIGER", "FLAG", "CANDY", "BARBER", "REFEREE", "SKUNK", "PRISONER", "BEE", "BACON"]
+    },
+    {
+      "name": "Things With Spots",
+      "type": "things-that",
+      "words": ["LEOPARD", "DALMATIAN", "LADYBUG", "DICE", "DOMINO", "CHEETAH", "GIRAFFE", "FAWN"]
+    },
+    {
+      "name": "Things That Tick",
+      "type": "things-that",
+      "words": ["CLOCK", "WATCH", "BOMB", "METER", "TIMER", "HEART", "METRONOME", "GEIGER"]
+    },
+    {
+      "name": "Things That Melt",
+      "type": "things-that",
+      "words": ["ICE", "SNOW", "BUTTER", "CHOCOLATE", "CHEESE", "CANDLE", "GLACIER", "PLASTIC", "METAL", "CREAM"]
+    },
+    {
+      "name": "Things With Wheels",
+      "type": "things-that",
+      "words": ["CAR", "BIKE", "BUS", "TRAIN", "SKATEBOARD", "WAGON", "WHEELCHAIR", "STROLLER", "SCOOTER", "TRUCK", "TRACTOR"]
+    },
+    {
+      "name": "Things That Grow",
+      "type": "things-that",
+      "words": ["PLANT", "TREE", "CHILD", "HAIR", "NAIL", "CRYSTAL", "MOSS", "MOLD", "TUMOR", "ECONOMY", "POPULATION"]
+    },
+    {
+      "name": "Things That Sting",
+      "type": "things-that",
+      "words": ["BEE", "WASP", "JELLYFISH", "SCORPION", "NETTLE", "HORNET", "ANT", "RAY"]
+    },
+    {
+      "name": "Things That Bite",
+      "type": "things-that",
+      "words": ["DOG", "SHARK", "MOSQUITO", "SNAKE", "SPIDER", "ANT", "FLEA", "TICK", "FROST", "WOLF", "PIRANHA"]
+    },
+    {
+      "name": "Things That Drip",
+      "type": "things-that",
+      "words": ["FAUCET", "CANDLE", "ICICLE", "NOSE", "TAP", "SWEAT", "HONEY", "PAINT", "BLOOD", "RAIN"]
+    },
+    {
+      "name": "Shades of Blue",
+      "type": "adjective-category",
+      "words": ["NAVY", "SKY", "ROYAL", "BABY", "TEAL", "COBALT", "AZURE", "MIDNIGHT", "CERULEAN", "TURQUOISE", "INDIGO", "SAPPHIRE", "POWDER", "STEEL", "OCEAN"]
+    },
+    {
+      "name": "Shades of Green",
+      "type": "adjective-category",
+      "words": ["LIME", "OLIVE", "MINT", "FOREST", "SAGE", "EMERALD", "JADE", "HUNTER", "KELLY", "CHARTREUSE", "MOSS", "PINE", "SEAFOAM", "TEAL", "FERN"]
+    },
+    {
+      "name": "Shades of Red",
+      "type": "adjective-category",
+      "words": ["CRIMSON", "SCARLET", "RUBY", "CHERRY", "MAROON", "BURGUNDY", "CARDINAL", "ROSE", "CORAL", "BRICK", "RUST", "WINE", "BLOOD", "FIRE", "APPLE"]
+    },
+    {
+      "name": "Shades of Yellow",
+      "type": "adjective-category",
+      "words": ["GOLD", "LEMON", "MUSTARD", "CANARY", "HONEY", "BUTTER", "BLONDE", "AMBER", "SAFFRON", "MAIZE", "CREAM", "FLAX", "BANANA", "CORN"]
+    },
+    {
+      "name": "Shades of Orange",
+      "type": "adjective-category",
+      "words": ["TANGERINE", "PEACH", "CORAL", "APRICOT", "RUST", "AMBER", "CARROT", "PUMPKIN", "COPPER", "GINGER", "MANGO", "SALMON", "BURNT", "TERRA"]
+    },
+    {
+      "name": "Shades of Purple",
+      "type": "adjective-category",
+      "words": ["VIOLET", "LAVENDER", "PLUM", "GRAPE", "MAUVE", "LILAC", "AMETHYST", "ORCHID", "WINE", "EGGPLANT", "MULBERRY", "MAGENTA", "IRIS", "ROYAL"]
+    },
+    {
+      "name": "Shades of Pink",
+      "type": "adjective-category",
+      "words": ["ROSE", "BLUSH", "CORAL", "SALMON", "FUCHSIA", "MAGENTA", "BUBBLEGUM", "HOT", "DUSTY", "SHELL", "PEACH", "FLAMINGO", "CARNATION", "CHERRY"]
+    },
+    {
+      "name": "Shades of Brown",
+      "type": "adjective-category",
+      "words": ["TAN", "CHOCOLATE", "COFFEE", "MOCHA", "CHESTNUT", "WALNUT", "CARAMEL", "BRONZE", "COPPER", "MAHOGANY", "UMBER", "SIENNA", "COCOA", "TAWNY"]
+    },
+    {
+      "name": "Shades of Gray",
+      "type": "adjective-category",
+      "words": ["SILVER", "CHARCOAL", "SLATE", "ASH", "SMOKE", "PEWTER", "STEEL", "STONE", "DOVE", "GRAPHITE", "IRON", "GUNMETAL", "FOG", "CLOUD"]
+    },
+    {
+      "name": "Shades of White",
+      "type": "adjective-category",
+      "words": ["IVORY", "CREAM", "PEARL", "SNOW", "BONE", "EGGSHELL", "VANILLA", "ALABASTER", "CHALK", "MILK", "LINEN", "FROST", "GHOST", "CLOUD"]
+    },
+    {
+      "name": "Types of Smiles",
+      "type": "adjective-category",
+      "words": ["GRIN", "SMIRK", "BEAM", "SNEER", "SIMPER", "LEER", "GRIMACE"]
+    },
+    {
+      "name": "Types of Walks",
+      "type": "adjective-category",
+      "words": ["STROLL", "MARCH", "STRUT", "SAUNTER", "TRUDGE", "WADDLE", "SHUFFLE", "STOMP", "LIMP", "TIPTOE", "STRIDE", "SWAGGER", "PROWL", "LUMBER"]
+    },
+    {
+      "name": "Types of Rain",
+      "type": "adjective-category",
+      "words": ["DRIZZLE", "DOWNPOUR", "SHOWER", "SPRINKLE", "STORM", "MIST", "DELUGE", "SQUALL", "TORRENT", "MONSOON"]
+    },
+    {
+      "name": "Types of Winds",
+      "type": "adjective-category",
+      "words": ["BREEZE", "GUST", "GALE", "SQUALL", "TORNADO", "HURRICANE", "CYCLONE", "TYPHOON", "DRAFT", "ZEPHYR", "BLAST", "WHIRLWIND"]
+    },
+    {
+      "name": "Types of Laughs",
+      "type": "adjective-category",
+      "words": ["GIGGLE", "CHUCKLE", "CACKLE", "SNICKER", "GUFFAW", "CHORTLE", "SNORT", "ROAR", "HOWL", "TITTER"]
+    }
+  ],
   "generatedAt": "2026-02-11T00:00:00Z",
   "metadata": {
-    "totalCategories": 0,
+    "totalCategories": 197,
     "byCategoryType": {
-      "compound-word-prefix": 0,
-      "compound-word-suffix": 0,
-      "proper-noun-group": 0,
-      "finite-group": 0,
-      "general-category": 0,
-      "things-that": 0,
-      "adjective-category": 0
+      "compound-word-prefix": 50,
+      "compound-word-suffix": 49,
+      "proper-noun-group": 19,
+      "finite-group": 19,
+      "general-category": 25,
+      "things-that": 20,
+      "adjective-category": 15
     }
   }
 }
