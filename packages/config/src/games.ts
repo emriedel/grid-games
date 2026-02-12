@@ -36,15 +36,15 @@ export const GAMES: GameInfo[] = [
     hasArchive: true,
     launchDate: '2026-02-01',
   },
-  {
-    id: 'edgewise',
-    name: 'Edgewise',
-    description: 'Rotate tiles to match words with their categories',
-    accentColor: '#a855f7',
-    href: '/edgewise',
-    hasArchive: true,
-    launchDate: '2026-01-25',
-  },
+  // {
+  //   id: 'edgewise',
+  //   name: 'Edgewise',
+  //   description: 'Rotate tiles to match words with their categories',
+  //   accentColor: '#a855f7',
+  //   href: '/edgewise',
+  //   hasArchive: true,
+  //   launchDate: '2026-01-25',
+  // },
 ];
 
 export function getIconUrl(gameId: string): string {
