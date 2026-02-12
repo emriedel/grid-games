@@ -46,6 +46,11 @@ npm run assign-puzzles -w @grid-games/carom -- 100  # Ensure puzzles 1-100 assig
 | `src/components/HeaderMoveCounter.tsx` | Move counter with trophy display |
 | `src/components/OptimalInfoModal.tsx` | Modal showing optimal move count |
 | `src/components/ArchivePageContent.tsx` | Archive page with 🏆/✓ status |
+| `src/components/ReplayControls.tsx` | Playback controls (play/pause, step forward/back) |
+| `src/components/ReplayPageContent.tsx` | Shared replay page content |
+| `src/app/replay/page.tsx` | `/replay` route for shared replays |
+| `src/hooks/useReplay.ts` | Replay state management hook |
+| `src/lib/replay.ts` | Move encoding/decoding for URLs |
 | `src/lib/gameLogic.ts` | Move simulation, collision detection |
 | `src/lib/solver.ts` | BFS solver for optimal solution |
 | `src/lib/puzzleGenerator.ts` | Loads puzzles from monthly assigned files |
@@ -247,3 +252,211 @@ states match the current puzzleId. This ensures regenerated puzzles don't show s
 completion status. See `ArchivePageContent.tsx` for implementation.
 
 **Auto-persistence:** Uses `useEffect` to watch state changes and auto-save.
+
+---
+
+## Replay Feature
+
+Carom includes a replay feature that allows users to watch animated replays of completed puzzles and share replay links with others.
+
+### Feature Overview
+
+1. **Inline replay controls** appear automatically below the board when a game is finished
+2. **Board shows solved state** initially (at end of move history)
+3. **Share Replay button** in results modal copies a shareable URL
+4. **Dedicated `/replay` page** for viewing shared replays (auto-plays on load)
+5. **Version mismatch detection** warns if puzzle has been regenerated since replay was recorded
+
+### URL Format
+
+```
+https://nerdcube.games/carom/replay?p=5&id=a1b2c3d4&m=trudtl0d1r2u
+```
+
+| Param | Description |
+|-------|-------------|
+| `p` | Puzzle number (to load board layout) |
+| `id` | First 8 chars of puzzleId (for version verification) |
+| `m` | Encoded moves (2 chars per move: pieceId + direction) |
+
+### Move Encoding
+
+Compact 2-character-per-move format to keep URLs short:
+
+**Piece IDs:**
+- `t` = target
+- `0` = blocker-0
+- `1` = blocker-1
+- `2` = blocker-2
+
+**Directions:**
+- `u` = up, `r` = right, `d` = down, `l` = left
+
+**Example:** `trudtl0d1r2u` = 6 moves (target up, target right, target down, target left, blocker-0 down, blocker-1 right, blocker-2 up)
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `src/lib/replay.ts` | Encoding/decoding utilities and URL building |
+| `src/hooks/useReplay.ts` | Two hooks: `useReplay` (full Move objects) and `useReplayFromMoves` (decoded moves) |
+| `src/components/ReplayControls.tsx` | UI controls (step back/forward, play/pause/replay) |
+| `src/components/ReplayPageContent.tsx` | Content for `/replay` page |
+| `src/app/replay/page.tsx` | Page wrapper with Suspense |
+
+### Implementation Details
+
+#### `useReplay` Hook
+
+Used in `Game.tsx` for replaying the player's own completed game:
+
+```typescript
+const replayState = useReplay(state.puzzle, state.moveHistory);
+
+// Returns:
+interface UseReplayReturn {
+  currentStep: number;      // 0 = initial, N = after move N
+  totalSteps: number;       // = moveHistory.length
+  isPlaying: boolean;
+  isAtEnd: boolean;
+  isAtStart: boolean;
+  pieces: Piece[];          // Piece positions at current step
+  isAnimating: boolean;
+
+  play(): void;             // Start/resume (restarts if at end)
+  pause(): void;
+  stepForward(): void;
+  stepBackward(): void;
+  goToStart(): void;
+  goToEnd(): void;
+}
+```
+
+**Key behaviors:**
+- Initializes at end position (solved state) via `useEffect` that syncs with `moveHistory.length`
+- Must be called before any conditional returns (React Rules of Hooks)
+- When at end, `play()` restarts from beginning
+
+#### `useReplayFromMoves` Hook
+
+Used in `ReplayPageContent.tsx` for shared replays where we only have decoded moves (pieceId + direction, not full Move objects with positions):
+
+```typescript
+const replayState = useReplayFromMoves(puzzle, moves);
+```
+
+- Initializes at step 0 (beginning)
+- Simulates each move using `simulateSlide()` to calculate positions
+- Auto-play triggered by parent component after load
+
+#### Integrating Replay Controls in Game.tsx
+
+```tsx
+// Call hook unconditionally BEFORE any early returns
+const replayState = useReplay(state.puzzle, state.moveHistory);
+
+// ... later, after early returns ...
+
+// Use replay pieces when finished
+const displayPieces = isFinished ? replayState.pieces : state.pieces;
+
+// Render board with display pieces
+<Board pieces={displayPieces} ... />
+
+// Show replay controls when finished
+{isFinished && (
+  <ReplayControls
+    currentStep={replayState.currentStep}
+    totalSteps={replayState.totalSteps}
+    isPlaying={replayState.isPlaying}
+    isAtEnd={replayState.isAtEnd}
+    isAtStart={replayState.isAtStart}
+    onPlay={replayState.play}
+    onPause={replayState.pause}
+    onStepForward={replayState.stepForward}
+    onStepBackward={replayState.stepBackward}
+  />
+)}
+```
+
+#### Adding Share Replay Button
+
+Use `ResultsModal`'s `additionalActions` prop to add buttons after "Share Results":
+
+```tsx
+<ResultsModal
+  ...
+  additionalActions={
+    <Button variant="secondary" fullWidth onClick={handleShareReplay}>
+      {copied ? 'Link Copied!' : 'Share Replay'}
+    </Button>
+  }
+>
+```
+
+#### Auto-Play on Shared Replay Page
+
+```tsx
+// In ReplayPageContent.tsx
+useEffect(() => {
+  if (puzzle && moves.length > 0 && !isLoading) {
+    const timer = setTimeout(() => {
+      replayState.play();
+    }, 500);
+    return () => clearTimeout(timer);
+  }
+}, [puzzle, moves.length, isLoading]);
+```
+
+### Animation Timing
+
+```typescript
+const SLIDE_ANIMATION_DURATION = 200; // Match existing piece animation
+const PAUSE_BETWEEN_MOVES = 150;      // Brief pause after each move
+const TOTAL_STEP_TIME = 350;          // Total time per step during auto-play
+```
+
+### Adapting for Other Games
+
+To add replay to another game:
+
+1. **Create `lib/replay.ts`** with game-specific encoding:
+   - Define piece ID mappings (e.g., letters for tiles, indices for pieces)
+   - Define move encoding (direction, position, or action type)
+   - Implement `encodeReplayMoves()`, `decodeReplayMoves()`, `buildReplayUrl()`, `parseReplayParams()`
+
+2. **Create `hooks/useReplay.ts`**:
+   - Copy the hook structure
+   - Implement `getPiecesAtStep()` for your game's state reconstruction
+   - For decoded moves, implement position calculation in `useReplayFromMoves`
+
+3. **Create `components/ReplayControls.tsx`**:
+   - Can likely reuse as-is or with minor styling changes
+
+4. **Create `/replay` page**:
+   - `app/replay/page.tsx` - Suspense wrapper
+   - `components/ReplayPageContent.tsx` - Load puzzle, parse params, render board + controls
+
+5. **Modify `Game.tsx`**:
+   - Add `useReplay` hook (before any early returns!)
+   - Use replay pieces for board when finished
+   - Add `ReplayControls` component when finished
+   - Add Share Replay button to results modal via `additionalActions`
+
+6. **Update `ResultsModal`** usage:
+   - Use `additionalActions` prop for Share Replay button
+
+### Version Mismatch Handling
+
+When puzzles are regenerated, their `puzzleId` changes. The replay URL stores the first 8 chars of the original puzzleId. On load:
+
+```typescript
+if (loadedPuzzle.puzzleId) {
+  const loadedIdPrefix = loadedPuzzle.puzzleId.slice(0, 8);
+  if (loadedIdPrefix !== params.puzzleId) {
+    setVersionMismatch(true);
+  }
+}
+```
+
+If mismatched, show a warning banner but still allow viewing (the replay may still work if board layout is similar).

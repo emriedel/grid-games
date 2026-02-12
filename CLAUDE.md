@@ -332,6 +332,34 @@ import { shareOrCopy } from '@grid-games/shared';
 import { loadDictionary, isValidWord } from '@grid-games/dictionary';
 ```
 
+### Replay Feature Pattern
+
+Games can include a replay feature that lets users watch animated replays of completed puzzles and share replay links. See **Carom** (`apps/carom/CLAUDE.md`) for the reference implementation.
+
+**Key components:**
+- `lib/replay.ts` - Move encoding/decoding for compact URLs
+- `hooks/useReplay.ts` - Replay state management (current step, play/pause, pieces at step)
+- `components/ReplayControls.tsx` - UI controls (step back/forward, play/pause/replay)
+- `app/replay/page.tsx` - Dedicated page for shared replays
+
+**URL format:** `/replay?p={puzzleNumber}&id={puzzleIdPrefix}&m={encodedMoves}`
+
+**Integration:**
+1. Call `useReplay()` hook before any early returns in Game.tsx
+2. Use replay pieces for board when game is finished
+3. Show `ReplayControls` when finished
+4. Add "Share Replay" button to results modal via `additionalActions` prop
+
+**ResultsModal additionalActions prop:**
+```tsx
+<ResultsModal
+  ...
+  additionalActions={
+    <Button onClick={handleShareReplay}>Share Replay</Button>
+  }
+>
+```
+
 ---
 
 ## Debug Mode
