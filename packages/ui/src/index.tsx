@@ -8,6 +8,7 @@ export { GameContainer } from './GameContainer';
 export { LandingScreen } from './LandingScreen';
 export type { LandingScreenMode } from './LandingScreen';
 export { ToastProvider, useToast } from './Toast';
+export { BugReporterProvider, useBugReporter } from './BugReporter';
 export { Skeleton, SkeletonGrid, SkeletonText } from './Skeleton';
 export { useKeyboardShortcuts } from './useKeyboardShortcuts';
 export { ResultsModal } from './ResultsModal';

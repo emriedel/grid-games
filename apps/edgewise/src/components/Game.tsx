@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter } from '@grid-games/ui';
 import { formatDisplayDate, buildShareText } from '@grid-games/shared';
 
 import { GameBoard } from './GameBoard';
@@ -106,6 +106,7 @@ export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
   const puzzleParam = searchParams.get('puzzle');
+  const bugReporter = useBugReporter();
 
   // Determine if this is an archive puzzle
   const todayPuzzleNumber = getTodayPuzzleNumber();
@@ -364,6 +365,7 @@ export function Game() {
           onRules={() => setShowHowToPlay(true)}
           gameId="edgewise"
           archiveHref="/archive"
+          onReportBug={bugReporter.open}
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
       </>
@@ -384,6 +386,7 @@ export function Game() {
       title={`${edgewiseConfig.name} #${puzzleNumber}`}
       gameId={edgewiseConfig.id}
       onRulesClick={() => setShowHowToPlay(true)}
+      onReportBug={bugReporter.open}
     />
   );
 

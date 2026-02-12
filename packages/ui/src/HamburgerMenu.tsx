@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Mail, Bug, LayoutGrid } from 'lucide-react';
 import { GAMES, getIconUrl } from '@grid-games/config';
 import { CompletionBadge } from './CompletionBadge';
 
@@ -10,13 +10,15 @@ interface HamburgerMenuProps {
   currentGameId?: string;
   /** Completion status map from useGameCompletion hook */
   completionStatus?: Map<string, boolean>;
+  /** Callback to open bug reporter modal */
+  onReportBug?: () => void;
 }
 
 /**
  * Hamburger menu for game navigation
  * Slides out from left with game list
  */
-export function HamburgerMenu({ currentGameId, completionStatus }: HamburgerMenuProps) {
+export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedGame, setExpandedGame] = useState<string | null>(currentGameId ?? null);
 
@@ -187,23 +189,48 @@ export function HamburgerMenu({ currentGameId, completionStatus }: HamburgerMenu
                 </div>
               );
             })}
-          </div>
 
-          {/* Footer link */}
-          <div className="absolute bottom-0 left-0 right-0 border-t border-[var(--border,#27272a)]">
+            {/* All Games link */}
             <a
               href="/"
-              className="flex items-center gap-3 px-4 py-4 hover:bg-[var(--tile-bg,#27272a)] transition-colors"
+              className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--tile-bg,#27272a)] transition-colors"
             >
-              <img
-                src="https://nerdcube.games/icon.png"
-                alt="All Games"
-                className="w-10 h-10 rounded-lg"
-              />
+              <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-lg bg-[var(--tile-bg,#27272a)]">
+                <LayoutGrid size={20} className="text-[var(--muted,#a1a1aa)]" />
+              </div>
               <span className="font-medium text-[var(--muted,#a1a1aa)]">
                 All Games
               </span>
             </a>
+          </div>
+
+          {/* Footer section */}
+          <div className="absolute bottom-0 left-0 right-0 border-t border-[var(--border,#27272a)] pb-2">
+            <div className="flex">
+              {onReportBug && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClose();
+                      onReportBug();
+                    }}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
+                  >
+                    <Bug size={16} />
+                    Report Bug
+                  </button>
+                  <div className="w-px bg-[var(--border,#27272a)]" />
+                </>
+              )}
+              <a
+                href="/contact"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
+              >
+                <Mail size={16} />
+                Contact
+              </a>
+            </div>
           </div>
         </div>
       </div>

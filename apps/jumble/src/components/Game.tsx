@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, ResultsModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, ResultsModal, useBugReporter } from '@grid-games/ui';
 import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
 import { Position, FoundWord } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
@@ -82,6 +82,7 @@ export default function Game() {
   const archivePuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : null;
 
   const router = useRouter();
+  const bugReporter = useBugReporter();
 
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
@@ -228,6 +229,7 @@ export default function Game() {
           onRules={() => setShowHowToPlay(true)}
           archiveHref="/archive"
           gameId="jumble"
+          onReportBug={bugReporter.open}
         />
         <HowToPlayModal isOpen={showHowToPlay} onClose={() => setShowHowToPlay(false)} />
       </>
@@ -246,6 +248,7 @@ export default function Game() {
           title={`${jumbleConfig.name} #${puzzleInfo.number}`}
           gameId={jumbleConfig.id}
           onRulesClick={() => setShowHowToPlay(true)}
+          onReportBug={bugReporter.open}
           rightContent={
             <div className="flex items-center gap-4 pr-2">
               {isFinished ? (

@@ -23,5 +23,9 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@grid-games/config": "^0.1.0",
+    "lucide-react": "^0.563.0"
   }
 }

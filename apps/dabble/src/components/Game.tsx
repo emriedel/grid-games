@@ -11,7 +11,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
-import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal, useBugReporter } from '@grid-games/ui';
 import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
@@ -174,6 +174,7 @@ export function Game() {
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
 
   const router = useRouter();
+  const bugReporter = useBugReporter();
 
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
@@ -642,6 +643,7 @@ export function Game() {
           onRules={() => setShowRulesModal(true)}
           archiveHref="/archive"
           gameId="dabble"
+          onReportBug={bugReporter.open}
         />
         <HowToPlayModal
           isOpen={showRulesModal}
@@ -677,6 +679,7 @@ export function Game() {
             title={`${dabbleConfig.name} #${puzzleInfo.number}`}
             gameId={dabbleConfig.id}
             onRulesClick={() => setShowRulesModal(true)}
+            onReportBug={bugReporter.open}
             rightContent={
               <div className="flex items-center gap-4 pr-1">
                 {gameState === 'finished' ? (

@@ -39,6 +39,8 @@ interface LandingScreenProps {
   gameId?: string;
   /** Landing screen mode: 'fresh' (default), 'in-progress', or 'completed' */
   mode?: LandingScreenMode;
+  /** Callback to open bug reporter modal */
+  onReportBug?: () => void;
 }
 
 /**
@@ -64,6 +66,7 @@ export function LandingScreen({
   children,
   gameId,
   mode = 'fresh',
+  onReportBug,
 }: LandingScreenProps) {
   // Determine description text based on mode
   const displayDescription = mode === 'fresh'
@@ -148,7 +151,7 @@ export function LandingScreen({
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center px-6 py-8 pt-[18vh] relative">
       {/* Menu button */}
       <div className="absolute top-4 left-4">
-        <HamburgerMenu currentGameId={gameId} />
+        <HamburgerMenu currentGameId={gameId} onReportBug={onReportBug} />
       </div>
 
       {/* Game icon */}

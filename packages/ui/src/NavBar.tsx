@@ -13,6 +13,8 @@ interface NavBarProps {
   onRulesClick?: () => void;
   /** Custom content for right side (score, timer, etc.) */
   rightContent?: ReactNode;
+  /** Callback to open bug reporter modal */
+  onReportBug?: () => void;
 }
 
 /**
@@ -24,6 +26,7 @@ export function NavBar({
   gameId,
   onRulesClick,
   rightContent,
+  onReportBug,
 }: NavBarProps) {
   const completionStatus = useGameCompletion();
 
@@ -32,7 +35,7 @@ export function NavBar({
       <div className="flex items-center justify-between px-4 py-3 max-w-md mx-auto">
         {/* Left: Menu button + Title */}
         <div className="flex items-center gap-3">
-          <HamburgerMenu currentGameId={gameId} completionStatus={completionStatus} />
+          <HamburgerMenu currentGameId={gameId} completionStatus={completionStatus} onReportBug={onReportBug} />
           <span className="text-[var(--accent)] font-bold text-lg">
             {title}
           </span>

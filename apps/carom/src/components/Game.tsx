@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
-import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter } from '@grid-games/ui';
 import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber, shareOrCopy } from '@grid-games/shared';
 import { caromConfig, CAROM_LAUNCH_DATE } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
@@ -124,6 +124,7 @@ export function Game() {
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
 
   const router = useRouter();
+  const bugReporter = useBugReporter();
 
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
@@ -376,6 +377,7 @@ export function Game() {
           onRules={() => setShowRules(true)}
           archiveHref="/archive"
           gameId="carom"
+          onReportBug={bugReporter.open}
         />
         <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
       </>
@@ -401,6 +403,7 @@ export function Game() {
             }
             gameId={caromConfig.id}
             onRulesClick={() => setShowRules(true)}
+            onReportBug={bugReporter.open}
             rightContent={
               <HeaderMoveCounter
                 moves={state.moveCount}

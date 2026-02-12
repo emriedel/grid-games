@@ -2,16 +2,17 @@
 
 import Image from 'next/image';
 import { GAMES, getIconUrl } from '@grid-games/config';
-import { HamburgerMenu, CompletionBadge, useGameCompletion } from '@grid-games/ui';
+import { HamburgerMenu, CompletionBadge, useGameCompletion, useBugReporter } from '@grid-games/ui';
 
 export default function Home() {
   const completionStatus = useGameCompletion();
+  const bugReporter = useBugReporter();
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] relative">
       {/* Menu button */}
       <div className="absolute top-4 left-4 z-10">
-        <HamburgerMenu completionStatus={completionStatus} />
+        <HamburgerMenu completionStatus={completionStatus} onReportBug={bugReporter.open} />
       </div>
 
       <div className="max-w-xl mx-auto px-4 py-12">
