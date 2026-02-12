@@ -13,6 +13,7 @@ interface GameBoardProps {
   onGroupRotate: () => void;
   categoryResults?: Record<CategoryPosition, boolean | null>;
   disabled?: boolean;
+  shake?: boolean;
 }
 
 // Position coordinates as percentages [x, y]
@@ -30,6 +31,7 @@ export function GameBoard({
   onGroupRotate,
   categoryResults,
   disabled,
+  shake,
 }: GameBoardProps) {
   const gridSize = 'min(70vw, 320px)';
 
@@ -112,7 +114,7 @@ export function GameBoard({
 
         {/* Grid container with explicit size */}
         <div
-          className="relative"
+          className={`relative ${shake ? 'shake' : ''}`}
           style={{ width: gridSize, height: gridSize }}
         >
           {/* Squares with absolute positioning for sliding animation */}

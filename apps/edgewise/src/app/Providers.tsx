@@ -1,6 +1,6 @@
 'use client';
 
-import { BugReporterProvider } from '@grid-games/ui';
+import { BugReporterProvider, ToastProvider } from '@grid-games/ui';
 import { type ReactNode } from 'react';
 
 interface ProvidersProps {
@@ -15,8 +15,10 @@ const API_ENDPOINT = process.env.NODE_ENV === 'development'
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <BugReporterProvider apiEndpoint={API_ENDPOINT}>
-      {children}
-    </BugReporterProvider>
+    <ToastProvider position="top">
+      <BugReporterProvider apiEndpoint={API_ENDPOINT}>
+        {children}
+      </BugReporterProvider>
+    </ToastProvider>
   );
 }

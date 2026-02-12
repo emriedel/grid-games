@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter, useToast } from '@grid-games/ui';
 import { formatDisplayDate, buildShareText } from '@grid-games/shared';
 
 import { GameBoard } from './GameBoard';
@@ -34,11 +34,16 @@ import { edgewiseConfig } from '@/config';
 import { MAX_ATTEMPTS } from '@/constants/gameConfig';
 import { GameState, SquareState, Puzzle, GuessFeedback, CategoryPosition } from '@/types';
 
+// Create a unique key for the current board configuration
+function getBoardConfigKey(squares: SquareState[]): string {
+  // Use the first word of each square (identifies which square) + rotation
+  return squares.map(s => `${s.words[0]}:${s.rotation}`).join('|');
+}
+
 // Edgewise-specific wrapper for ResultsModal
 interface EdgewiseResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onTryAgain: () => void;
   solved: boolean;
   guessesUsed: number;
   feedbackHistory: GuessFeedback[];
@@ -49,7 +54,6 @@ interface EdgewiseResultsModalProps {
 function EdgewiseResultsModal({
   isOpen,
   onClose,
-  onTryAgain,
   solved,
   guessesUsed,
   feedbackHistory,
@@ -91,14 +95,7 @@ function EdgewiseResultsModal({
       }}
       shareConfig={{ text: shareText }}
       messageType={messageType}
-    >
-      {/* Try Again button */}
-      <div className="mt-4">
-        <Button onClick={onTryAgain} variant="secondary" fullWidth>
-          Try Again
-        </Button>
-      </div>
-    </ResultsModal>
+    />
   );
 }
 
@@ -107,6 +104,7 @@ export function Game() {
   const isDebug = searchParams.get('debug') === 'true';
   const puzzleParam = searchParams.get('puzzle');
   const bugReporter = useBugReporter();
+  const toast = useToast();
 
   // Determine if this is an archive puzzle
   const todayPuzzleNumber = getTodayPuzzleNumber();
@@ -132,6 +130,8 @@ export function Game() {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [guessedConfigs, setGuessedConfigs] = useState<Set<string>>(new Set());
+  const [shake, setShake] = useState(false);
 
   const dateStr = getDateForPuzzleNumber(puzzleNumber);
 
@@ -264,18 +264,19 @@ export function Game() {
   const handleSubmit = useCallback(() => {
     if (!puzzle || gameState !== 'playing') return;
 
+    // Check if this configuration was already guessed
+    const configKey = getBoardConfigKey(squares);
+    if (guessedConfigs.has(configKey)) {
+      toast.show('Already guessed this arrangement', 'info');
+      return;
+    }
+
+    // Track this configuration
+    setGuessedConfigs(prev => new Set(prev).add(configKey));
+
     const results = checkAllCategories(squares, puzzle);
     const feedback = generateFeedback(results);
     const newGuessesUsed = guessesUsed + 1;
-
-    // Update category results for visual feedback
-    const newCategoryResults: Record<CategoryPosition, boolean | null> = {
-      top: results.find(r => r.category === 'top')?.correct ?? null,
-      right: results.find(r => r.category === 'right')?.correct ?? null,
-      bottom: results.find(r => r.category === 'bottom')?.correct ?? null,
-      left: results.find(r => r.category === 'left')?.correct ?? null,
-    };
-    setCategoryResults(newCategoryResults);
 
     const newFeedbackHistory = [...feedbackHistory, feedback];
     setFeedbackHistory(newFeedbackHistory);
@@ -285,6 +286,8 @@ export function Game() {
     const isSolved = isPuzzleSolved(squares, puzzle);
 
     if (isSolved) {
+      // Only show category completion styling on full solve
+      setCategoryResults({ top: true, right: true, bottom: true, left: true });
       setSolved(true);
       setGameState('finished');
       // Clear in-progress state first
@@ -292,6 +295,9 @@ export function Game() {
       saveGameCompletion(puzzleNumber, squares, newGuessesUsed, newFeedbackHistory, true, puzzleId);
       setShowResults(true);
     } else if (newGuessesUsed >= MAX_ATTEMPTS) {
+      // Trigger shake on final wrong guess
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
       setSolved(false);
       setGameState('finished');
       // Clear in-progress state first
@@ -299,30 +305,13 @@ export function Game() {
       saveGameCompletion(puzzleNumber, squares, newGuessesUsed, newFeedbackHistory, false, puzzleId);
       setShowResults(true);
     } else {
+      // Trigger shake on wrong guess
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
       // Save in-progress state
       saveGameProgress(puzzleNumber, squares, newGuessesUsed, newFeedbackHistory, puzzleId);
     }
-  }, [puzzle, squares, guessesUsed, feedbackHistory, gameState, puzzleNumber, puzzleId]);
-
-  // Handle try again - reset game state and replay
-  const handleTryAgain = useCallback(() => {
-    if (!puzzle) return;
-
-    // Clear all saved progress
-    clearPuzzleState(puzzleNumber, puzzleId);
-
-    // Reset game state
-    const initialSquares = initializeGameState(puzzle, dateStr);
-    setSquares(initialSquares);
-    setGuessesUsed(0);
-    setFeedbackHistory([]);
-    setSolved(false);
-    setCategoryResults({ top: null, right: null, bottom: null, left: null });
-
-    // Back to playing
-    setGameState('playing');
-    setShowResults(false);
-  }, [puzzle, dateStr, puzzleNumber, puzzleId]);
+  }, [puzzle, squares, guessesUsed, feedbackHistory, gameState, puzzleNumber, puzzleId, guessedConfigs, toast]);
 
   // Loading state
   if (isLoading) {
@@ -401,6 +390,7 @@ export function Game() {
           onGroupRotate={handleGroupRotate}
           categoryResults={categoryResults}
           disabled={gameState === 'finished'}
+          shake={shake}
         />
 
         {/* Attempts indicator and Submit button */}
@@ -435,7 +425,6 @@ export function Game() {
       <EdgewiseResultsModal
         isOpen={showResults}
         onClose={() => setShowResults(false)}
-        onTryAgain={handleTryAgain}
         solved={solved}
         guessesUsed={guessesUsed}
         feedbackHistory={feedbackHistory}

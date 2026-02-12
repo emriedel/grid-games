@@ -88,7 +88,8 @@ function ToastContainer({
   duration,
   onDismiss,
 }: ToastContainerProps) {
-  const positionClasses = position === 'top' ? 'top-4' : 'bottom-4';
+  // top-16 (64px) clears typical nav headers
+  const positionClasses = position === 'top' ? 'top-16' : 'bottom-20';
 
   return (
     <div

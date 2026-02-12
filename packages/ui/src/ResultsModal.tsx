@@ -194,14 +194,14 @@ export function ResultsModal({
                 href={`${currentGame.href}/archive`}
                 className="flex flex-col items-center gap-1 group"
               >
-                <div className="w-12 h-12 rounded-lg overflow-hidden bg-[var(--tile-bg)] flex items-center justify-center transition-transform group-hover:scale-105 border border-[var(--accent)]">
+                <div className="w-12 h-12 rounded-lg overflow-hidden bg-[var(--tile-bg)] flex items-center justify-center transition-transform group-hover:scale-105">
                   <img
                     src={getIconUrl(currentGame.id)}
                     alt={`${currentGame.name} Archive`}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="text-xs text-[var(--accent)] group-hover:text-[var(--accent)] transition-colors">
+                <span className="text-xs text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors">
                   Archive
                 </span>
               </a>

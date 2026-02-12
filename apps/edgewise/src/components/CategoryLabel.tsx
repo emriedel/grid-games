@@ -11,8 +11,9 @@ interface CategoryLabelProps {
 export function CategoryLabel({ position, label, isCorrect }: CategoryLabelProps) {
   const isVertical = position === 'left' || position === 'right';
 
+  // Use subtle accent styling on completion - semi-transparent purple
   const bgColor = isCorrect === true
-    ? 'bg-[var(--success)]'
+    ? 'bg-[var(--accent)]/20'
     : 'bg-[var(--border)]';
 
   if (isVertical) {
