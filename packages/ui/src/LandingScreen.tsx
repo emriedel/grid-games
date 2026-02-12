@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { Button } from './Button';
 import { HamburgerMenu } from './HamburgerMenu';
+import { useGameCompletion } from './useGameCompletion';
 
 /** Landing screen mode determines the UI state */
 export type LandingScreenMode = 'fresh' | 'in-progress' | 'completed';
@@ -68,6 +69,8 @@ export function LandingScreen({
   mode = 'fresh',
   onReportBug,
 }: LandingScreenProps) {
+  const completionStatus = useGameCompletion();
+
   // Determine description text based on mode
   const displayDescription = mode === 'fresh'
     ? description
@@ -151,7 +154,7 @@ export function LandingScreen({
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center px-6 py-8 pt-[18vh] relative">
       {/* Menu button */}
       <div className="absolute top-4 left-4">
-        <HamburgerMenu currentGameId={gameId} onReportBug={onReportBug} />
+        <HamburgerMenu currentGameId={gameId} completionStatus={completionStatus} onReportBug={onReportBug} />
       </div>
 
       {/* Game icon */}
