@@ -62,6 +62,8 @@ export interface ResultsModalProps {
   onShare?: () => void;
   /** Message type: 'success' for positive, 'failure' for encouraging, 'neutral' for completed */
   messageType?: 'success' | 'failure' | 'neutral';
+  /** Additional actions to render after the share button */
+  additionalActions?: ReactNode;
 }
 
 /**
@@ -85,6 +87,7 @@ export function ResultsModal({
   shareConfig,
   onShare,
   messageType = 'success',
+  additionalActions,
 }: ResultsModalProps) {
   const [copied, setCopied] = useState(false);
 
@@ -170,11 +173,12 @@ export function ResultsModal({
         {/* Game-specific breakdown slot */}
         {children && <div className="mb-6">{children}</div>}
 
-        {/* Share button */}
-        <div className="mb-6">
+        {/* Share button and additional actions */}
+        <div className="flex flex-col gap-2 mb-6">
           <Button variant="primary" fullWidth onClick={handleShare}>
             {copied ? 'Copied!' : 'Share Results'}
           </Button>
+          {additionalActions}
         </div>
 
         {/* Separator */}

@@ -4,10 +4,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal } from '@grid-games/ui';
-import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
+import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber, shareOrCopy } from '@grid-games/shared';
 import { caromConfig, CAROM_LAUNCH_DATE } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
+import { useReplay } from '@/hooks/useReplay';
 import { getDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleGenerator';
+import { buildReplayUrl } from '@/lib/replay';
 import {
   getCompletionState,
   getInProgressState,
@@ -20,7 +22,8 @@ import { Board } from './Board';
 import { HeaderMoveCounter } from './HeaderMoveCounter';
 import { HowToPlayModal } from './HowToPlayModal';
 import { OptimalInfoModal } from './OptimalInfoModal';
-import { Direction, Puzzle } from '@/types';
+import { ReplayControls } from './ReplayControls';
+import { Direction, Puzzle, Move } from '@/types';
 
 // Carom-specific wrapper for ResultsModal
 interface CaromResultsModalProps {
@@ -30,6 +33,8 @@ interface CaromResultsModalProps {
   optimalMoves: number;
   achievedOptimal: boolean;
   puzzleNumber: number;
+  puzzleId: string | undefined;
+  moveHistory: Move[];
   isArchive: boolean;
 }
 
@@ -40,8 +45,11 @@ function CaromResultsModal({
   optimalMoves: _optimalMoves,
   achievedOptimal,
   puzzleNumber,
+  puzzleId,
+  moveHistory,
   isArchive,
 }: CaromResultsModalProps) {
+  const [replayCopied, setReplayCopied] = useState(false);
   const movesText = moveCount === 1 ? 'move' : 'moves';
 
   // Build share text - no arrow emojis, include trophy if optimal, checkmark otherwise
@@ -53,6 +61,30 @@ function CaromResultsModal({
   // Determine message type: success if optimal, neutral otherwise
   const messageType = achievedOptimal ? 'success' : 'neutral';
 
+  // Handle share replay
+  const handleShareReplay = useCallback(async () => {
+    if (!puzzleId || moveHistory.length === 0) return;
+
+    const replayUrl = buildReplayUrl(puzzleNumber, puzzleId, moveHistory);
+    const result = await shareOrCopy(replayUrl);
+
+    if (result.success && result.method === 'clipboard') {
+      setReplayCopied(true);
+      setTimeout(() => setReplayCopied(false), 2000);
+    }
+  }, [puzzleNumber, puzzleId, moveHistory]);
+
+  // Share Replay button as additional action
+  const shareReplayButton = puzzleId && moveHistory.length > 0 ? (
+    <Button
+      variant="secondary"
+      fullWidth
+      onClick={handleShareReplay}
+    >
+      {replayCopied ? 'Link Copied!' : 'Share Replay'}
+    </Button>
+  ) : undefined;
+
   return (
     <ResultsModal
       isOpen={isOpen}
@@ -63,6 +95,7 @@ function CaromResultsModal({
       primaryStat={{ value: moveCount, label: movesText }}
       shareConfig={{ text: shareText }}
       messageType={messageType}
+      additionalActions={shareReplayButton}
     >
       {/* Trophy display if optimal */}
       {achievedOptimal && (
@@ -103,6 +136,10 @@ export function Game() {
 
   const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
   const { state, startGame, restoreGame, selectPiece, deselectPiece, movePiece, reset, replay, setFinished, undo, canUndo } = useGameState({ puzzleNumber: activePuzzleNumber, puzzleId: activePuzzleId });
+
+  // Replay hook - must be called before any conditional returns
+  const replayState = useReplay(state.puzzle, state.moveHistory);
+
   const [showRules, setShowRules] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [showOptimalInfo, setShowOptimalInfo] = useState(false);
@@ -348,6 +385,9 @@ export function Game() {
   // Playing / Finished states
   const isFinished = state.phase === 'finished';
 
+  // Determine which pieces to show: replay pieces when finished, game pieces otherwise
+  const displayPieces = isFinished ? replayState.pieces : state.pieces;
+
   return (
     <>
       <GameContainer
@@ -378,7 +418,7 @@ export function Game() {
           {state.puzzle && (
             <Board
               board={state.puzzle.board}
-              pieces={state.pieces}
+              pieces={displayPieces}
               selectedPieceId={state.selectedPieceId}
               onPieceSelect={selectPiece}
               onDeselect={deselectPiece}
@@ -405,23 +445,39 @@ export function Game() {
             </div>
           )}
 
-          {/* See Results and Play Again buttons - show when finished */}
+          {/* Replay controls and action buttons - show when finished */}
           {isFinished && (
-            <div className="flex gap-2">
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() => setShowResults(true)}
-              >
-                See Results
-              </Button>
-              <Button
-                variant="secondary"
-                size="lg"
-                onClick={handleReplay}
-              >
-                Play Again
-              </Button>
+            <div className="flex flex-col items-center gap-4">
+              {/* Replay controls */}
+              <ReplayControls
+                currentStep={replayState.currentStep}
+                totalSteps={replayState.totalSteps}
+                isPlaying={replayState.isPlaying}
+                isAtEnd={replayState.isAtEnd}
+                isAtStart={replayState.isAtStart}
+                onPlay={replayState.play}
+                onPause={replayState.pause}
+                onStepForward={replayState.stepForward}
+                onStepBackward={replayState.stepBackward}
+              />
+
+              {/* Action buttons */}
+              <div className="flex gap-2">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  onClick={() => setShowResults(true)}
+                >
+                  See Results
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  onClick={handleReplay}
+                >
+                  Play Again
+                </Button>
+              </div>
             </div>
           )}
 
@@ -439,6 +495,8 @@ export function Game() {
             optimalMoves={state.puzzle.optimalMoves}
             achievedOptimal={achievedOptimal}
             puzzleNumber={state.puzzle.puzzleNumber ?? activePuzzleNumber}
+            puzzleId={activePuzzleId}
+            moveHistory={state.moveHistory}
             isArchive={isArchiveMode}
           />
           <OptimalInfoModal
