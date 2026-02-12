@@ -126,20 +126,12 @@ export default function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps)
 
         <section>
           <h3 className="font-bold text-[var(--accent)] mb-1">Stars</h3>
-          <div className="grid grid-cols-3 gap-2 mt-2">
-            <div className="flex justify-between px-2 py-1 bg-[var(--tile-bg)] rounded text-[var(--muted)]">
-              <span>15 pts</span>
-              <span>★☆☆</span>
-            </div>
-            <div className="flex justify-between px-2 py-1 bg-[var(--tile-bg)] rounded text-[var(--muted)]">
-              <span>30 pts</span>
-              <span>★★☆</span>
-            </div>
-            <div className="flex justify-between px-2 py-1 bg-[var(--tile-bg)] rounded text-[var(--muted)]">
-              <span>45 pts</span>
-              <span>★★★</span>
-            </div>
-          </div>
+          <p className="text-[var(--muted)]">
+            Earn up to 3 stars based on your score. Thresholds vary slightly by puzzle.
+          </p>
+          <p className="text-[var(--muted)] mt-2 text-xs italic">
+            Tap the score during gameplay to see this puzzle&apos;s thresholds.
+          </p>
         </section>
       </div>
     </Modal>

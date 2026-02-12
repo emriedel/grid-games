@@ -36,3 +36,9 @@ export interface DailyResult {
   score: number;
   maxPossibleScore: number;
 }
+
+export interface StarThresholds {
+  star1: number;
+  star2: number;
+  star3: number;
+}

@@ -2,9 +2,9 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { LandingScreen, NavBar, GameContainer, ResultsModal, useBugReporter } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, ResultsModal, useBugReporter, Modal } from '@grid-games/ui';
 import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
-import { Position, FoundWord } from '@/types';
+import { Position, FoundWord, StarThresholds } from '@/types';
 import { useGameState } from '@/hooks/useGameState';
 import { jumbleConfig, PUZZLE_BASE_DATE } from '@/config';
 import { formatStars } from '@/constants/gameConfig';
@@ -71,6 +71,34 @@ function JumbleResultsModal({
   );
 }
 
+// Score Thresholds Modal - shows star requirements for this puzzle
+interface ScoreThresholdsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  thresholds: StarThresholds;
+}
+
+function ScoreThresholdsModal({ isOpen, onClose, thresholds }: ScoreThresholdsModalProps) {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Star Thresholds">
+      <div className="flex justify-center gap-8">
+        <div className="text-center">
+          <div className="text-2xl">★</div>
+          <div className="text-lg text-[var(--accent)]">{thresholds.star1}+</div>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl">★★</div>
+          <div className="text-lg text-[var(--accent)]">{thresholds.star2}+</div>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl">★★★</div>
+          <div className="text-lg text-[var(--accent)]">{thresholds.star3}+</div>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
 // Use imported PUZZLE_BASE_DATE from config
 
 export default function Game() {
@@ -104,6 +132,7 @@ export default function Game() {
     allValidWords,
     maxPossibleScore,
     stars,
+    thresholds,
     setCurrentPath,
     submitWord,
     startGame,
@@ -118,6 +147,7 @@ export default function Game() {
 
   const [showResults, setShowResults] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [showThresholds, setShowThresholds] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; word: string; message?: string } | null>(null);
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
@@ -256,9 +286,28 @@ export default function Game() {
               ) : (
                 <Timer timeRemaining={timeRemaining} />
               )}
-              <div className="px-2.5 py-1 rounded-lg bg-[var(--tile-bg)]">
+              <button
+                onClick={() => setShowThresholds(true)}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)] transition-colors cursor-pointer"
+              >
                 <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>
-              </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[var(--muted)]"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 16v-4" />
+                  <path d="M12 8h.01" />
+                </svg>
+              </button>
             </div>
           }
         />
@@ -329,6 +378,11 @@ export default function Game() {
         stars={stars}
         puzzleNumber={puzzleInfo.number}
         isArchiveMode={isArchiveMode}
+      />
+      <ScoreThresholdsModal
+        isOpen={showThresholds}
+        onClose={() => setShowThresholds(false)}
+        thresholds={thresholds}
       />
 
       {/* Debug Panel */}

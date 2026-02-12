@@ -303,6 +303,31 @@ const SCORING_TABLE: Record<number, number> = {
   8: 11,
 };
 
+// ============ STAR THRESHOLDS ============
+
+interface StarThresholds {
+  star1: number;
+  star2: number;
+  star3: number;
+}
+
+const THRESHOLD_CONFIG = {
+  star1: { percent: 0.08, floor: 12, ceiling: 18 },
+  star2: { percent: 0.15, floor: 22, ceiling: 32 },
+  star3: { percent: 0.25, floor: 35, ceiling: 45 },
+};
+
+function calculateThresholds(maxPossibleScore: number): StarThresholds {
+  const clamp = (val: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, Math.round(val)));
+  const { star1, star2, star3 } = THRESHOLD_CONFIG;
+  return {
+    star1: clamp(maxPossibleScore * star1.percent, star1.floor, star1.ceiling),
+    star2: clamp(maxPossibleScore * star2.percent, star2.floor, star2.ceiling),
+    star3: clamp(maxPossibleScore * star3.percent, star3.floor, star3.ceiling),
+  };
+}
+
 function calculateWordScore(word: string): number {
   // Get effective length (QU counts as 2 letters)
   let length = 0;
@@ -342,6 +367,7 @@ export interface JumblePoolPuzzle {
   id: string;
   board: Board;
   maxPossibleScore: number;
+  thresholds: StarThresholds;
   debug: {
     totalValidWords: number;
     wordsByLength: Record<number, number>;
@@ -412,10 +438,12 @@ function generatePuzzle(seed: number, dictionary: Trie): JumblePoolPuzzle | null
 
       longestWords.sort((a, b) => b.length - a.length);
 
+      const maxScore = calculateMaxPossibleScore(allWords);
       return {
         id: generatePuzzleId(),
         board,
-        maxPossibleScore: calculateMaxPossibleScore(allWords),
+        maxPossibleScore: maxScore,
+        thresholds: calculateThresholds(maxScore),
         debug: {
           totalValidWords: allWords.size,
           wordsByLength,

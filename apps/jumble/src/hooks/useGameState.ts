@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Board, FoundWord, GameStatus, Position } from '@/types';
+import { Board, FoundWord, GameStatus, Position, StarThresholds } from '@/types';
 import { loadDictionary, isValidWord } from '@/lib/dictionary';
 import { getWordFromPath, findAllValidWords, validatePath } from '@/lib/wordValidator';
 import { MIN_WORD_LENGTH } from '@/constants/gameConfig';
@@ -19,7 +19,7 @@ import {
   getPuzzleFromPool,
   type DailyPuzzle,
 } from '@/lib/puzzleGenerator';
-import { TIMER_DURATION, calculateStars, STAR_THRESHOLDS } from '@/constants/gameConfig';
+import { TIMER_DURATION, calculateStars, STAR_THRESHOLDS, calculateThresholds } from '@/constants/gameConfig';
 import { useTimer } from './useTimer';
 
 interface UseGameStateProps {
@@ -44,6 +44,7 @@ interface UseGameStateReturn {
   allValidWords: Map<string, Position[]>;
   maxPossibleScore: number;
   stars: number;
+  thresholds: StarThresholds;
   setCurrentPath: (path: Position[]) => void;
   submitWord: (path: Position[]) => SubmitWordResult;
   startGame: () => void;
@@ -75,6 +76,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
   const [puzzleId, setPuzzleId] = useState<string | undefined>(undefined);
   const [allValidWords, setAllValidWords] = useState<Map<string, Position[]>>(new Map());
   const [maxPossibleScore, setMaxPossibleScore] = useState(0);
+  const [thresholds, setThresholds] = useState<StarThresholds>(STAR_THRESHOLDS);
   const [hasInProgress, setHasInProgress] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
 
@@ -96,10 +98,10 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
   // Calculate total score
   const totalScore = useMemo(() => calculateTotalScore(foundWords), [foundWords]);
 
-  // Calculate stars based on score
+  // Calculate stars based on score and thresholds
   const stars = useMemo(() => {
-    return calculateStars(totalScore);
-  }, [totalScore]);
+    return calculateStars(totalScore, thresholds);
+  }, [totalScore, thresholds]);
 
   // Check if word already found
   const isWordAlreadyFound = useCallback(
@@ -135,6 +137,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
         setPuzzleNumber(puzzle.puzzleNumber || activePuzzleNumber);
         setPuzzleId(puzzle.puzzleId);
         setMaxPossibleScore(puzzle.maxPossibleScore);
+        setThresholds(puzzle.thresholds);
 
         // Find all valid words
         const validWords = findAllValidWords(puzzle.board);
@@ -146,7 +149,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
           console.log('[Jumble Debug] Puzzle ID:', puzzle.puzzleId);
           console.log('[Jumble Debug] Max possible score:', puzzle.maxPossibleScore);
           console.log('[Jumble Debug] Total words:', validWords.size);
-          console.log('[Jumble Debug] Star thresholds:', STAR_THRESHOLDS);
+          console.log('[Jumble Debug] Star thresholds:', puzzle.thresholds);
           console.log('[Jumble Debug] Pre-generated:', puzzle.isPreGenerated);
         }
 
@@ -234,7 +237,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
   // Save completion state when game finishes
   useEffect(() => {
     if (status === 'finished' && foundWords.length > 0 && puzzleId) {
-      const finalStars = calculateStars(totalScore);
+      const finalStars = calculateStars(totalScore, thresholds);
       savePuzzleState(
         puzzleNumber || activePuzzleNumber,
         {
@@ -321,6 +324,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
     setPuzzleNumber(puzzle.puzzleNumber);
     setPuzzleId(puzzle.puzzleId);
     setMaxPossibleScore(puzzle.maxPossibleScore);
+    setThresholds(puzzle.thresholds);
     setStatus('ready');
     setFoundWords([]);
     setCurrentPath([]);
@@ -387,6 +391,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
     allValidWords,
     maxPossibleScore,
     stars,
+    thresholds,
     setCurrentPath,
     submitWord,
     startGame,

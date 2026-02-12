@@ -12,7 +12,8 @@ import {
   type PuzzleWithId,
 } from '@grid-games/shared';
 import { PUZZLE_BASE_DATE, PUZZLE_BASE_DATE_STRING } from '@/config';
-import type { Board } from '@/types';
+import type { Board, StarThresholds } from '@/types';
+import { calculateThresholds } from '@/constants/gameConfig';
 import { generateBoard as generateBoardClientSide } from './boardGenerator';
 import { findAllValidWords } from './wordValidator';
 import { calculateMaxScore } from './scoring';
@@ -24,6 +25,7 @@ export interface AssignedPuzzle extends PuzzleWithId {
   id: string;
   board: Board;
   maxPossibleScore: number;
+  thresholds: StarThresholds;
   debug: {
     totalValidWords: number;
     wordsByLength: Record<number, number>;
@@ -41,6 +43,7 @@ export interface DailyPuzzle {
   puzzleNumber: number;
   board: Board;
   maxPossibleScore: number;
+  thresholds: StarThresholds;
   isPreGenerated: boolean;
 }
 
@@ -114,6 +117,7 @@ export async function getDailyPuzzle(dateString?: string): Promise<DailyPuzzle> 
         puzzleNumber,
         board: puzzle.board,
         maxPossibleScore: puzzle.maxPossibleScore,
+        thresholds: puzzle.thresholds || calculateThresholds(puzzle.maxPossibleScore),
         isPreGenerated: true,
       };
     }
@@ -131,6 +135,7 @@ export async function getDailyPuzzle(dateString?: string): Promise<DailyPuzzle> 
     puzzleNumber,
     board,
     maxPossibleScore,
+    thresholds: calculateThresholds(maxPossibleScore),
     isPreGenerated: false,
   };
 }
@@ -205,6 +210,7 @@ export async function getPuzzleFromPool(poolId: string): Promise<DailyPuzzle | n
     puzzleNumber: 0, // Pool puzzles don't have a number yet
     board: poolPuzzle.board,
     maxPossibleScore: poolPuzzle.maxPossibleScore,
+    thresholds: poolPuzzle.thresholds || calculateThresholds(poolPuzzle.maxPossibleScore),
     isPreGenerated: true,
   };
 }
