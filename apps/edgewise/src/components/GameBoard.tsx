@@ -14,6 +14,8 @@ interface GameBoardProps {
   categoryResults?: Record<CategoryPosition, boolean | null>;
   disabled?: boolean;
   shake?: boolean;
+  hideCategories?: boolean; // Hide all categories except top (for harder mode)
+  hiddenCategoryNames?: string[]; // Names of hidden categories to show floating above board
 }
 
 // Position coordinates as percentages [x, y]
@@ -32,7 +34,26 @@ export function GameBoard({
   categoryResults,
   disabled,
   shake,
+  hideCategories = false,
+  hiddenCategoryNames = [],
 }: GameBoardProps) {
+  // When hideCategories is true, only show top category (others show "?" until solved)
+  const shouldShowCategory = (position: CategoryPosition): boolean => {
+    if (!hideCategories) return true;
+    if (position === 'top') return true; // Always show top
+    // Show other categories only when solved (all correct)
+    return categoryResults?.[position] === true;
+  };
+
+  // Check if all categories are solved (for reveal)
+  const allSolved = categoryResults?.top === true &&
+    categoryResults?.right === true &&
+    categoryResults?.bottom === true &&
+    categoryResults?.left === true;
+
+  // Show floating categories only when hiding categories and not yet solved
+  const showFloatingCategories = hideCategories && hiddenCategoryNames.length > 0 && !allSolved;
+
   const gridSize = 'min(70vw, 320px)';
 
   // Track visual positions for animation
@@ -92,6 +113,25 @@ export function GameBoard({
 
   return (
     <div className="flex flex-col items-center w-full">
+      {/* Floating hidden categories (shown above board when in hidden mode) */}
+      {showFloatingCategories && (
+        <div className="mb-4 text-center">
+          <span className="text-[var(--muted)] text-xs uppercase tracking-wider mb-2 block">
+            Also find:
+          </span>
+          <div className="flex flex-wrap justify-center gap-2">
+            {hiddenCategoryNames.map((name, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 text-sm bg-[var(--border)]/50 text-[var(--foreground)] rounded-full border border-[var(--border)]"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Top category */}
       <div className="mb-3" style={{ width: gridSize }}>
         <CategoryLabel
@@ -107,8 +147,9 @@ export function GameBoard({
         <div style={{ height: gridSize }}>
           <CategoryLabel
             position="left"
-            label={puzzle.categories.left}
+            label={shouldShowCategory('left') ? puzzle.categories.left : '?'}
             isCorrect={categoryResults?.left}
+            isHidden={!shouldShowCategory('left')}
           />
         </div>
 
@@ -155,8 +196,9 @@ export function GameBoard({
         <div style={{ height: gridSize }}>
           <CategoryLabel
             position="right"
-            label={puzzle.categories.right}
+            label={shouldShowCategory('right') ? puzzle.categories.right : '?'}
             isCorrect={categoryResults?.right}
+            isHidden={!shouldShowCategory('right')}
           />
         </div>
       </div>
@@ -165,8 +207,9 @@ export function GameBoard({
       <div className="mt-3" style={{ width: gridSize }}>
         <CategoryLabel
           position="bottom"
-          label={puzzle.categories.bottom}
+          label={shouldShowCategory('bottom') ? puzzle.categories.bottom : '?'}
           isCorrect={categoryResults?.bottom}
+          isHidden={!shouldShowCategory('bottom')}
         />
       </div>
     </div>

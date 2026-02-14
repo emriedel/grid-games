@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter, useToast } from '@grid-games/ui';
 import { formatDisplayDate, buildShareText } from '@grid-games/shared';
@@ -11,6 +11,7 @@ import { HowToPlayModal } from './HowToPlayModal';
 
 import {
   loadPuzzleByNumber,
+  loadPuzzleFromPoolById,
   initializeGameState,
   getDateForPuzzleNumber,
 } from '@/lib/puzzleLoader';
@@ -103,13 +104,15 @@ export function Game() {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get('debug') === 'true';
   const puzzleParam = searchParams.get('puzzle');
+  const poolIdParam = searchParams.get('poolId');
   const bugReporter = useBugReporter();
   const toast = useToast();
 
-  // Determine if this is an archive puzzle
+  // Determine if this is an archive puzzle or a pool puzzle (debug)
   const todayPuzzleNumber = getTodayPuzzleNumber();
   const requestedPuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : todayPuzzleNumber;
   const isArchive = puzzleParam !== null && requestedPuzzleNumber !== todayPuzzleNumber;
+  const isPoolPuzzle = isDebug && poolIdParam !== null;
 
   const [gameState, setGameState] = useState<GameState>('landing');
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -135,24 +138,68 @@ export function Game() {
 
   const dateStr = getDateForPuzzleNumber(puzzleNumber);
 
+  // Shuffle helper (Fisher-Yates)
+  const shuffleArray = <T,>(arr: T[]): T[] => {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // Compute shuffled hidden category names when in hideCategories mode
+  // Memoize based on puzzle to shuffle only once per puzzle load
+  const hiddenCategoryNames = useMemo(() => {
+    if (!puzzle || !isPoolPuzzle) return [];
+    const categories = [
+      puzzle.categories.right,
+      puzzle.categories.bottom,
+      puzzle.categories.left,
+    ];
+    return shuffleArray(categories);
+  }, [puzzle, isPoolPuzzle]);
+
   // Initialize puzzle on mount
   useEffect(() => {
     async function loadPuzzle() {
       setIsLoading(true);
 
-      const result = await loadPuzzleByNumber(requestedPuzzleNumber);
-      if (!result) {
-        console.error(`[edgewise] Failed to load puzzle #${requestedPuzzleNumber}`);
-        setIsLoading(false);
-        return;
+      let result: { puzzle: Puzzle; puzzleId?: string } | null = null;
+
+      // If loading a pool puzzle (debug mode), load from pool.json
+      if (isPoolPuzzle && poolIdParam) {
+        result = await loadPuzzleFromPoolById(poolIdParam);
+        if (!result) {
+          console.error(`[edgewise] Failed to load pool puzzle: ${poolIdParam}`);
+          setIsLoading(false);
+          return;
+        }
+      } else {
+        result = await loadPuzzleByNumber(requestedPuzzleNumber);
+        if (!result) {
+          console.error(`[edgewise] Failed to load puzzle #${requestedPuzzleNumber}`);
+          setIsLoading(false);
+          return;
+        }
       }
 
       const { puzzle: loadedPuzzle, puzzleId: loadedPuzzleId } = result;
       setPuzzle(loadedPuzzle);
       setPuzzleId(loadedPuzzleId);
-      setPuzzleNumber(requestedPuzzleNumber);
+      setPuzzleNumber(isPoolPuzzle ? 0 : requestedPuzzleNumber); // Use 0 for pool puzzles
 
-      const puzzleDateStr = getDateForPuzzleNumber(requestedPuzzleNumber);
+      const puzzleDateStr = isPoolPuzzle ? loadedPuzzle.date : getDateForPuzzleNumber(requestedPuzzleNumber);
+
+      // For pool puzzles in debug mode, skip saved state and start fresh
+      if (isPoolPuzzle) {
+        const initialSquares = initializeGameState(loadedPuzzle, puzzleDateStr);
+        setSquares(initialSquares);
+        setLandingMode('fresh');
+        setGameState('playing'); // Skip landing for pool puzzles
+        setIsLoading(false);
+        return;
+      }
 
       // Check for existing state for this puzzle
       const existingState = findPuzzleState(requestedPuzzleNumber);
@@ -218,7 +265,7 @@ export function Game() {
     }
 
     loadPuzzle();
-  }, [requestedPuzzleNumber, isDebug, isArchive]);
+  }, [requestedPuzzleNumber, isDebug, isArchive, isPoolPuzzle, poolIdParam]);
 
   // Handle starting the game
   const handlePlay = useCallback(() => {
@@ -322,8 +369,8 @@ export function Game() {
     );
   }
 
-  // Render landing screen (only for today's puzzle)
-  if (gameState === 'landing' && !isArchive) {
+  // Render landing screen (only for today's puzzle, not archive or pool puzzles)
+  if (gameState === 'landing' && !isArchive && !isPoolPuzzle) {
     return (
       <>
         <LandingScreen
@@ -370,9 +417,13 @@ export function Game() {
     );
   }
 
+  const navBarTitle = isPoolPuzzle && poolIdParam
+    ? `${edgewiseConfig.name} (Test: ${poolIdParam})`
+    : `${edgewiseConfig.name} #${puzzleNumber}`;
+
   const navBar = (
     <NavBar
-      title={`${edgewiseConfig.name} #${puzzleNumber}`}
+      title={navBarTitle}
       gameId={edgewiseConfig.id}
       onRulesClick={() => setShowHowToPlay(true)}
       onReportBug={bugReporter.open}
@@ -391,6 +442,8 @@ export function Game() {
           categoryResults={categoryResults}
           disabled={gameState === 'finished'}
           shake={shake}
+          hideCategories={isPoolPuzzle} // Test hidden categories mode with pool puzzles
+          hiddenCategoryNames={hiddenCategoryNames}
         />
 
         {/* Attempts indicator and Submit button */}

@@ -6,15 +6,21 @@ interface CategoryLabelProps {
   position: CategoryPosition;
   label: string;
   isCorrect?: boolean | null;
+  isHidden?: boolean; // True when category is hidden (shows "?")
 }
 
-export function CategoryLabel({ position, label, isCorrect }: CategoryLabelProps) {
+export function CategoryLabel({ position, label, isCorrect, isHidden }: CategoryLabelProps) {
   const isVertical = position === 'left' || position === 'right';
 
   // Use subtle accent styling on completion - semi-transparent purple
+  // Use muted/dashed styling when hidden
   const bgColor = isCorrect === true
     ? 'bg-[var(--accent)]/20'
-    : 'bg-[var(--border)]';
+    : isHidden
+      ? 'bg-[var(--border)]/50 border border-dashed border-[var(--muted)]'
+      : 'bg-[var(--border)]';
+
+  const textColor = isHidden ? 'text-[var(--muted)]' : 'text-[var(--foreground)]';
 
   if (isVertical) {
     return (
@@ -22,7 +28,7 @@ export function CategoryLabel({ position, label, isCorrect }: CategoryLabelProps
         className={`
           h-full w-10
           ${bgColor}
-          text-[var(--foreground)] text-xs font-medium
+          ${textColor} text-xs font-medium
           rounded-md
           transition-colors duration-300
           flex items-center justify-center
@@ -46,7 +52,7 @@ export function CategoryLabel({ position, label, isCorrect }: CategoryLabelProps
       className={`
         w-full
         ${bgColor}
-        text-[var(--foreground)] text-sm font-medium
+        ${textColor} text-sm font-medium
         px-3 py-2
         rounded-md
         transition-colors duration-300

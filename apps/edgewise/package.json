@@ -8,7 +8,8 @@
     "start": "next start --port 3003",
     "lint": "eslint",
     "generate-puzzles": "npx tsx scripts/generatePuzzles.ts",
-    "assign-puzzles": "npx tsx scripts/assignPuzzles.ts"
+    "assign-puzzles": "npx tsx scripts/assignPuzzles.ts",
+    "validate-puzzles": "npx tsx scripts/validatePuzzles.ts"
   },
   "dependencies": {
     "@grid-games/config": "*",

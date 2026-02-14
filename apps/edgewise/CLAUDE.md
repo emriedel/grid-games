@@ -131,6 +131,10 @@ public/puzzles/
 npm run generate-puzzles              # Generate 10 puzzles
 npm run generate-puzzles -- 50        # Generate 50 puzzles
 
+# Validate puzzles have unique solutions
+npm run validate-puzzles              # Console table output
+npm run validate-puzzles --json       # JSON output
+
 # Assign approved puzzles from pool to monthly files
 npm run assign-puzzles                # Assign up to today's puzzle
 npm run assign-puzzles -- 100         # Ensure puzzles 1-100 are assigned
@@ -226,6 +230,53 @@ Brute-force checks all 6,144 possible configurations:
 **Red Herring Quality**
 - Overlap words make better red herrings (they genuinely fit multiple categories)
 - Center-facing edges should have words that could plausibly match adjacent categories
+
+### Puzzle Design Rules for Unique Solutions
+
+**The Symmetry Problem**
+Puzzles with symmetric tile structures have multiple valid solutions:
+- BAD: Every tile has 1 word per category in same edge positions → 24 solutions (4! permutations)
+- BAD: Two tiles can swap positions because their outer edges satisfy the same categories
+
+**Why Multiple Solutions Occur**
+1. **Position ambiguity**: Tile outer edges satisfy requirements for multiple grid positions
+2. **Rotation ambiguity**: Multiple rotations place category-valid words on outer edges
+3. **Category overlap**: Words belong to multiple puzzle categories (e.g., QUEEN is card+chess+band)
+
+**Designing for Unique Solutions**
+Each tile must have exactly ONE valid (position, rotation) configuration:
+
+1. **Outer edges must use single-category words**
+   - For tile at pos 0: TOP edge needs category-specific word (not in LEFT category)
+   - Example: Use DOVE (bird-only) not CARDINAL (bird+NFL)
+
+2. **Opposite edges must NOT satisfy swapped requirements**
+   - If pos 1 needs top=bird, right=NFL...
+   - The bottom edge must NOT be a bird (prevents 180° rotation working)
+   - The left edge must NOT be NFL (prevents swapped placement)
+
+3. **Center edges can have multi-category overlap words**
+   - These create misdirection without affecting solution count
+   - Example: PYTHON (snake+language) on center edge
+
+**Position Requirements Summary**
+```
+Position 0 (top-left):    TOP edge = TOP category,    LEFT edge = LEFT category
+Position 1 (top-right):   TOP edge = TOP category,    RIGHT edge = RIGHT category
+Position 2 (bottom-right): BOTTOM edge = BOTTOM cat,  RIGHT edge = RIGHT category
+Position 3 (bottom-left):  BOTTOM edge = BOTTOM cat,  LEFT edge = LEFT category
+```
+
+**Validation**
+```bash
+npm run validate-puzzles           # Must report exactly 1 solution per puzzle
+npm run validate-puzzles --json    # JSON output for scripting
+```
+
+Use the analysis script to debug placement issues:
+```bash
+npx tsx scripts/analyzePuzzle.ts <puzzle-id>
+```
 
 ### Pool.json Format
 

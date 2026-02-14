@@ -193,3 +193,46 @@ export function getRandomPuzzle(): { puzzle: Puzzle; dateStr: string } | null {
 
   return { puzzle: legacyPuzzles[index], dateStr };
 }
+
+/**
+ * Load a puzzle from pool.json by ID (for debug page testing)
+ */
+export async function loadPuzzleFromPoolById(poolId: string): Promise<{
+  puzzle: Puzzle;
+  puzzleId: string;
+} | null> {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+  try {
+    const response = await fetch(`${basePath}/puzzles/pool.json`);
+    if (!response.ok) {
+      console.warn('[edgewise] Failed to load pool.json');
+      return null;
+    }
+
+    const data = await response.json();
+    const poolPuzzles = data.puzzles || [];
+
+    const found = poolPuzzles.find((p: { id: string }) => p.id === poolId);
+    if (!found) {
+      console.warn(`[edgewise] Pool puzzle not found: ${poolId}`);
+      return null;
+    }
+
+    // Convert pool puzzle format to game Puzzle format
+    // Pool puzzles don't have a date, so we generate one for scrambling
+    const debugDate = new Date().toISOString().split('T')[0] + '-' + poolId;
+
+    return {
+      puzzle: {
+        date: debugDate,
+        categories: found.categories,
+        squares: found.squares,
+      },
+      puzzleId: found.id,
+    };
+  } catch (error) {
+    console.error('[edgewise] Error loading pool puzzle:', error);
+    return null;
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "description": "Categories derived from polysemous word meanings. Each category contains words that share a meaning domain but may have other meanings that create misdirection.",
+  "generatedAt": "2026-02-12T00:00:00Z",
+  "categories": [
+    {
+      "name": "Planets",
+      "words": ["MERCURY", "VENUS", "MARS", "JUPITER", "SATURN", "NEPTUNE", "PLUTO"],
+      "overlapWith": ["Roman Gods", "Car Brands"]
+    },
+    {
+      "name": "Roman Gods",
+      "words": ["MERCURY", "VENUS", "MARS", "JUPITER", "SATURN", "NEPTUNE", "PLUTO", "DIANA", "MINERVA", "JUNO", "APOLLO"],
+      "overlapWith": ["Planets", "Months"]
+    },
+    {
+      "name": "Car Brands",
+      "words": ["FORD", "LINCOLN", "TESLA", "MERCURY", "SATURN", "JAGUAR", "RAM"],
+      "overlapWith": ["Planets", "US Presidents", "Big Cats"]
+    },
+    {
+      "name": "Ford Models",
+      "words": ["MUSTANG", "BRONCO", "COBRA", "FALCON", "EXPLORER", "RANGER", "ESCAPE"],
+      "overlapWith": ["Horse Types", "Snakes", "Birds"]
+    },
+    {
+      "name": "Dodge Models",
+      "words": ["VIPER", "CHARGER", "CHALLENGER", "RAM", "DART", "DURANGO"],
+      "overlapWith": ["Snakes", "NFL Teams"]
+    },
+    {
+      "name": "Honda Models",
+      "words": ["PILOT", "ODYSSEY", "ACCORD", "CIVIC", "PASSPORT", "INSIGHT", "ELEMENT"],
+      "overlapWith": ["Occupations", "Types of Journeys"]
+    },
+    {
+      "name": "Tech Companies",
+      "words": ["APPLE", "AMAZON", "ORACLE", "ADOBE", "META", "UBER", "LYFT"],
+      "overlapWith": ["Fruits", "Rivers", "Mythology"]
+    },
+    {
+      "name": "Programming Languages",
+      "words": ["JAVA", "PYTHON", "RUBY", "SWIFT", "RUST", "PEARL", "GO"],
+      "overlapWith": ["Snakes", "Gemstones", "Coffee Terms"]
+    },
+    {
+      "name": "Snakes",
+      "words": ["PYTHON", "VIPER", "COBRA", "BOA", "MAMBA", "ANACONDA", "ADDER"],
+      "overlapWith": ["Programming Languages", "Dodge Models", "Ford Models"]
+    },
+    {
+      "name": "Big Cats",
+      "words": ["JAGUAR", "PUMA", "COUGAR", "PANTHER", "LEOPARD", "LYNX", "TIGER"],
+      "overlapWith": ["Car Brands", "NFL Teams", "Shoe Brands"]
+    },
+    {
+      "name": "Horse Types",
+      "words": ["MUSTANG", "BRONCO", "COLT", "MARE", "STALLION", "PONY", "STEED"],
+      "overlapWith": ["Ford Models", "NFL Teams"]
+    },
+    {
+      "name": "Birds",
+      "words": ["CRANE", "CARDINAL", "ROBIN", "JAY", "RAVEN", "HAWK", "EAGLE", "FALCON", "DOVE", "DUCK", "SWIFT", "FINCH"],
+      "overlapWith": ["NFL Teams", "Construction Equipment", "Names"]
+    },
+    {
+      "name": "Flowers",
+      "words": ["ROSE", "IRIS", "LILY", "VIOLET", "DAISY", "JASMINE", "POPPY", "DAHLIA", "PETUNIA"],
+      "overlapWith": ["Female Names", "Colors"]
+    },
+    {
+      "name": "Gemstones",
+      "words": ["RUBY", "JADE", "PEARL", "AMBER", "CRYSTAL", "DIAMOND", "EMERALD", "OPAL", "ONYX"],
+      "overlapWith": ["Female Names", "Programming Languages", "Card Suits"]
+    },
+    {
+      "name": "Female Names",
+      "words": ["ROSE", "IRIS", "LILY", "VIOLET", "DAISY", "JASMINE", "JADE", "PEARL", "AMBER", "CRYSTAL", "RUBY", "OLIVE", "HAZEL", "IVY", "GINGER", "GRACE", "FAITH", "HOPE", "JOY", "DAWN", "SUMMER", "MAY", "GEORGIA", "RAVEN"],
+      "overlapWith": ["Flowers", "Gemstones", "Seasons", "US States"]
+    },
+    {
+      "name": "Male Names",
+      "words": ["JACK", "BILL", "MARK", "FRANK", "GRANT", "WILL", "HUNTER", "MASON", "ARCHER", "TROY", "MILES", "BASIL", "JAY", "RAY", "ROBIN", "JORDAN"],
+      "overlapWith": ["Playing Cards", "US Presidents", "Occupations"]
+    },
+    {
+      "name": "Playing Cards",
+      "words": ["JACK", "QUEEN", "KING", "ACE", "JOKER"],
+      "overlapWith": ["Chess Pieces", "Male Names", "Rock Bands"]
+    },
+    {
+      "name": "Card Suits",
+      "words": ["DIAMOND", "CLUB", "HEART", "SPADE"],
+      "overlapWith": ["Gemstones", "Rock Bands", "Tools"]
+    },
+    {
+      "name": "Chess Pieces",
+      "words": ["KING", "QUEEN", "ROOK", "BISHOP", "KNIGHT", "PAWN"],
+      "overlapWith": ["Playing Cards", "Royalty"]
+    },
+    {
+      "name": "Royalty",
+      "words": ["KING", "QUEEN", "PRINCE", "PRINCESS", "DUKE", "DUCHESS", "BARON", "EARL", "COUNT", "KNIGHT"],
+      "overlapWith": ["Chess Pieces", "Playing Cards"]
+    },
+    {
+      "name": "Rock Bands",
+      "words": ["QUEEN", "KISS", "RUSH", "CREAM", "HEART", "BOSTON", "CHICAGO", "KANSAS", "JOURNEY", "POISON"],
+      "overlapWith": ["Playing Cards", "Card Suits", "US Cities"]
+    },
+    {
+      "name": "US Presidents",
+      "words": ["FORD", "LINCOLN", "WASHINGTON", "GRANT", "MADISON", "JACKSON", "CARTER", "BUSH", "ADAMS", "WILSON"],
+      "overlapWith": ["Car Brands", "Male Names", "US Cities"]
+    },
+    {
+      "name": "US States",
+      "words": ["WASHINGTON", "GEORGIA", "VIRGINIA", "CAROLINA", "DAKOTA", "MONTANA", "INDIANA"],
+      "overlapWith": ["Female Names", "US Presidents"]
+    },
+    {
+      "name": "US Cities",
+      "words": ["PHOENIX", "BUFFALO", "PORTLAND", "LINCOLN", "JACKSON", "MADISON", "BOSTON", "CHICAGO"],
+      "overlapWith": ["Mythical Creatures", "Animals", "Rock Bands"]
+    },
+    {
+      "name": "NFL Teams",
+      "words": ["JAGUAR", "BRONCO", "CARDINAL", "RAVEN", "EAGLE", "FALCON", "BEAR", "RAM", "CHARGER", "DOLPHIN", "PANTHER"],
+      "overlapWith": ["Big Cats", "Birds", "Dodge Models"]
+    },
+    {
+      "name": "Golf Terms",
+      "words": ["EAGLE", "BIRDIE", "BOGEY", "IRON", "DRIVER", "WEDGE", "CHIP", "HOLE", "GREEN", "FAIRWAY"],
+      "overlapWith": ["Birds", "Tools", "Colors"]
+    },
+    {
+      "name": "Golf Equipment",
+      "words": ["IRON", "DRIVER", "WEDGE", "PUTTER", "WOOD", "HYBRID"],
+      "overlapWith": ["Metals", "Occupations", "Shoe Types"]
+    },
+    {
+      "name": "Computer Parts",
+      "words": ["MOUSE", "MONITOR", "CHIP", "KEY", "CELL", "TABLET", "SERVER"],
+      "overlapWith": ["Animals", "Body Parts", "Occupations"]
+    },
+    {
+      "name": "Body Parts",
+      "words": ["PALM", "IRIS", "CROWN", "TEMPLE", "CHEST", "TRUNK", "BARK"],
+      "overlapWith": ["Trees", "Flowers", "Buildings"]
+    },
+    {
+      "name": "Tree Parts",
+      "words": ["BARK", "TRUNK", "ROOT", "BRANCH", "LIMB", "LEAF", "SAP"],
+      "overlapWith": ["Body Parts", "Dog Sounds", "Car Parts"]
+    },
+    {
+      "name": "Trees",
+      "words": ["PALM", "HAZEL", "OLIVE", "WILLOW", "MAPLE", "OAK", "ASH", "CEDAR"],
+      "overlapWith": ["Body Parts", "Female Names", "Cities"]
+    },
+    {
+      "name": "Seasons",
+      "words": ["SPRING", "SUMMER", "FALL", "WINTER"],
+      "overlapWith": ["Female Names", "Verbs", "Hardware"]
+    },
+    {
+      "name": "Musicians",
+      "words": ["PRINCE", "STING", "DRAKE", "MADONNA", "SEAL", "JEWEL", "PINK", "BRANDY"],
+      "overlapWith": ["Royalty", "Verbs", "Animals"]
+    },
+    {
+      "name": "Occupations",
+      "words": ["PILOT", "HUNTER", "MASON", "ARCHER", "PORTER", "DRIVER", "ANCHOR", "SERVER", "COACH"],
+      "overlapWith": ["Male Names", "Honda Models", "TV Roles"]
+    },
+    {
+      "name": "Metals",
+      "words": ["IRON", "GOLD", "SILVER", "COPPER", "STEEL", "BRONZE", "LEAD", "TIN"],
+      "overlapWith": ["Golf Equipment", "Colors", "Verbs"]
+    },
+    {
+      "name": "Colors",
+      "words": ["VIOLET", "JADE", "AMBER", "OLIVE", "RUST", "SAGE", "HUNTER", "IVORY", "PEARL", "CREAM"],
+      "overlapWith": ["Flowers", "Gemstones", "Female Names"]
+    },
+    {
+      "name": "Beverages",
+      "words": ["JAVA", "PUNCH", "CIDER", "BRANDY", "PORTER", "CREAM"],
+      "overlapWith": ["Programming Languages", "Rock Bands", "Verbs"]
+    }
+  ],
+  "goldenOverlapWords": [
+    {
+      "word": "MERCURY",
+      "categories": ["Planets", "Roman Gods", "Car Brands", "Chemical Elements"]
+    },
+    {
+      "word": "QUEEN",
+      "categories": ["Rock Bands", "Chess Pieces", "Royalty", "Playing Cards"]
+    },
+    {
+      "word": "JACK",
+      "categories": ["Playing Cards", "Male Names", "Tools", "Audio Equipment"]
+    },
+    {
+      "word": "DIAMOND",
+      "categories": ["Gemstones", "Card Suits", "Baseball Terms", "Shapes"]
+    },
+    {
+      "word": "HEART",
+      "categories": ["Rock Bands", "Organs", "Card Suits"]
+    },
+    {
+      "word": "EAGLE",
+      "categories": ["Birds", "Golf Terms", "NFL Teams", "Scout Ranks"]
+    },
+    {
+      "word": "CARDINAL",
+      "categories": ["Birds", "Religious Titles", "MLB Teams", "NFL Teams"]
+    },
+    {
+      "word": "PHOENIX",
+      "categories": ["US Cities", "Mythical Creatures", "NBA Teams"]
+    },
+    {
+      "word": "IRIS",
+      "categories": ["Flowers", "Body Parts (eye)", "Female Names", "Greek Gods"]
+    },
+    {
+      "word": "RUBY",
+      "categories": ["Gemstones", "Programming Languages", "Female Names"]
+    },
+    {
+      "word": "ROSE",
+      "categories": ["Flowers", "Female Names", "Verbs", "Wine Types"]
+    },
+    {
+      "word": "SPRING",
+      "categories": ["Seasons", "Hardware", "Water Sources", "Verbs"]
+    },
+    {
+      "word": "JAGUAR",
+      "categories": ["Car Brands", "Big Cats", "NFL Teams"]
+    },
+    {
+      "word": "PYTHON",
+      "categories": ["Programming Languages", "Snakes"]
+    },
+    {
+      "word": "VIPER",
+      "categories": ["Car Models", "Snakes"]
+    },
+    {
+      "word": "MUSTANG",
+      "categories": ["Ford Models", "Horse Types"]
+    },
+    {
+      "word": "BRONCO",
+      "categories": ["Ford Models", "Horse Types", "NFL Teams"]
+    },
+    {
+      "word": "FORD",
+      "categories": ["Car Brands", "US Presidents", "Geography Terms"]
+    },
+    {
+      "word": "LINCOLN",
+      "categories": ["Car Brands", "US Presidents", "US Cities"]
+    },
+    {
+      "word": "IRON",
+      "categories": ["Golf Equipment", "Metals", "Appliances"]
+    }
+  ]
+}

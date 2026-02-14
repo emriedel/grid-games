@@ -2,1020 +2,213 @@
   "gameId": "edgewise",
   "puzzles": [
     {
-      "id": "9bdc994e",
+      "id": "poly001a",
       "status": "pending",
       "categories": {
-        "top": "Side _____",
-        "right": "_____ Watch",
-        "bottom": "_____ Stone",
-        "left": "Kitchen Utensils"
+        "top": "Snakes",
+        "right": "Car Brands",
+        "bottom": "Programming Languages",
+        "left": "Big Cats"
       },
       "squares": [
         {
-          "top": "SWIPE",
-          "right": "WALK",
-          "bottom": "TOMB",
-          "left": "PEELER"
-        },
-        {
-          "top": "KICK",
-          "right": "WRIST",
-          "bottom": "DEATH",
-          "left": "FIRE"
-        },
-        {
-          "top": "ZESTER",
-          "right": "STOP",
-          "bottom": "MOON",
-          "left": "STRAINER"
-        },
-        {
-          "top": "WHALE",
-          "right": "ARM",
-          "bottom": "BIRTH",
-          "left": "FORK"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-prefix",
-          "compound-word-suffix",
-          "compound-word-suffix",
-          "general-category"
-        ],
-        "overlapWords": [
-          "KICK",
-          "STOP",
-          "MOON",
-          "BIRTH"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.441Z"
-      }
-    },
-    {
-      "id": "28ec800e",
-      "status": "pending",
-      "categories": {
-        "top": "Playing Card Suits",
-        "right": "Disney Princesses",
-        "bottom": "Paper _____",
-        "left": "_____ Mark"
-      },
-      "squares": [
-        {
-          "top": "HEARTS",
-          "right": "MOANA",
-          "bottom": "BOY",
-          "left": "POST"
-        },
-        {
-          "top": "DIAMONDS",
-          "right": "RAPUNZEL",
-          "bottom": "BOARD",
-          "left": "WEIGHT"
-        },
-        {
-          "top": "POCAHONTAS",
-          "right": "AURORA",
-          "bottom": "CUT",
-          "left": "SNOW"
-        },
-        {
-          "top": "BENCH",
-          "right": "GISELLE",
-          "bottom": "BACK",
-          "left": "QUESTION"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "finite-group",
-          "proper-noun-group",
-          "compound-word-prefix",
-          "compound-word-suffix"
-        ],
-        "overlapWords": [
-          "AURORA",
-          "CUT",
-          "BACK",
-          "POST"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.444Z"
-      }
-    },
-    {
-      "id": "cfa15cb4",
-      "status": "pending",
-      "categories": {
-        "top": "Beatles Members",
-        "right": "Light _____",
-        "bottom": "Sports",
-        "left": "Types of Winds"
-      },
-      "squares": [
-        {
-          "top": "RINGO",
-          "right": "JOHN",
-          "bottom": "PAUL",
-          "left": "BLAST"
-        },
-        {
-          "top": "HARRISON",
-          "right": "SHIP",
-          "bottom": "RUGBY",
-          "left": "GALE"
-        },
-        {
-          "top": "BULB",
-          "right": "WEIGHT",
-          "bottom": "SOCCER",
-          "left": "SKATING"
-        },
-        {
-          "top": "CRICKET",
-          "right": "CYCLING",
-          "bottom": "GOLF",
-          "left": "TYPHOON"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "proper-noun-group",
-          "compound-word-prefix",
-          "general-category",
-          "adjective-category"
-        ],
-        "overlapWords": [
-          "HARRISON",
-          "SHIP",
-          "WEIGHT"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.447Z"
-      }
-    },
-    {
-      "id": "d837d673",
-      "status": "pending",
-      "categories": {
-        "top": "Shakespeare Plays",
-        "right": "Months",
-        "bottom": "Shades of Blue",
-        "left": "_____ Cut"
-      },
-      "squares": [
-        {
-          "top": "TEMPEST",
-          "right": "APRIL",
-          "bottom": "HAMLET",
-          "left": "BUZZ"
-        },
-        {
-          "top": "OTHELLO",
-          "right": "SEPTEMBER",
-          "bottom": "CAESAR",
-          "left": "SHREW"
-        },
-        {
-          "top": "MACBETH",
-          "right": "AUGUST",
-          "bottom": "TEAL",
-          "left": "MAY"
-        },
-        {
-          "top": "SHORT",
-          "right": "JUNE",
-          "bottom": "BABY",
-          "left": "UPPER"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "proper-noun-group",
-          "finite-group",
-          "adjective-category",
-          "compound-word-suffix"
-        ],
-        "overlapWords": [
-          "TEAL"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.449Z"
-      }
-    },
-    {
-      "id": "c88e0b78",
-      "status": "pending",
-      "categories": {
-        "top": "Night _____",
-        "right": "Flowers",
-        "bottom": "Gemstones",
-        "left": "Home _____"
-      },
-      "squares": [
-        {
-          "top": "TIME",
-          "right": "PEARL",
-          "bottom": "POPPY",
-          "left": "BASE"
-        },
-        {
-          "top": "MARE",
-          "right": "GARDENIA",
-          "bottom": "VIOLET",
-          "left": "WORK"
-        },
-        {
-          "top": "SUNFLOWER",
-          "right": "LILY",
-          "bottom": "RUBY",
-          "left": "ORCHID"
-        },
-        {
-          "top": "GOWN",
-          "right": "MARIGOLD",
-          "bottom": "SAPPHIRE",
-          "left": "COMING"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-prefix",
-          "general-category",
-          "general-category",
-          "compound-word-prefix"
-        ],
-        "overlapWords": [
-          "TIME",
-          "LILY",
-          "RUBY",
-          "SAPPHIRE",
-          "BASE"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.451Z"
-      }
-    },
-    {
-      "id": "cd25d587",
-      "status": "pending",
-      "categories": {
-        "top": "Shades of White",
-        "right": "_____ Line",
-        "bottom": "Types of Laughs",
-        "left": "Flowers"
-      },
-      "squares": [
-        {
-          "top": "BONE",
-          "right": "CHUCKLE",
-          "bottom": "IVORY",
-          "left": "ROSE"
-        },
-        {
-          "top": "CHALK",
-          "right": "PIPE",
-          "bottom": "ZINNIA",
-          "left": "DAISY"
-        },
-        {
-          "top": "ROAR",
-          "right": "COAST",
-          "bottom": "SNORT",
-          "left": "GARDENIA"
-        },
-        {
-          "top": "LIFE",
-          "right": "LAVENDER",
-          "bottom": "GIGGLE",
-          "left": "PEONY"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "adjective-category",
-          "compound-word-suffix",
-          "adjective-category",
-          "general-category"
-        ],
-        "overlapWords": [
-          "BONE",
-          "PIPE",
-          "COAST",
-          "ROSE"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.452Z"
-      }
-    },
-    {
-      "id": "0724abf2",
-      "status": "pending",
-      "categories": {
-        "top": "_____ Head",
-        "right": "Furniture",
-        "bottom": "Vegetables",
-        "left": "Door _____"
-      },
-      "squares": [
-        {
-          "top": "BED",
-          "right": "KEEPER",
-          "bottom": "KNOB",
-          "left": "STOP"
-        },
-        {
-          "top": "BONE",
-          "right": "BOOKCASE",
-          "bottom": "PRIZE",
-          "left": "MAN"
-        },
-        {
-          "top": "CABINET",
-          "right": "STOOL",
-          "bottom": "POTATO",
-          "left": "SPINACH"
-        },
-        {
-          "top": "SHELF",
-          "right": "FRAME",
-          "bottom": "CELERY",
-          "left": "MAT"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-suffix",
-          "general-category",
-          "general-category",
-          "compound-word-prefix"
-        ],
-        "overlapWords": [
-          "BED",
-          "BONE",
-          "STOP"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.454Z"
-      }
-    },
-    {
-      "id": "c0e3399d",
-      "status": "pending",
-      "categories": {
-        "top": "_____ Ring",
-        "right": "_____ Bird",
-        "bottom": "Green _____",
-        "left": "Shades of Orange"
-      },
-      "squares": [
-        {
-          "top": "KEY",
-          "right": "BOX",
-          "bottom": "SNOW",
-          "left": "TANGERINE"
-        },
-        {
-          "top": "FINGER",
-          "right": "FIRE",
-          "bottom": "CORAL",
-          "left": "ROOM"
-        },
-        {
-          "top": "TOE",
-          "right": "THUNDER",
-          "bottom": "BACK",
-          "left": "GROCER"
-        },
-        {
-          "top": "PEACH",
-          "right": "HOUSE",
-          "bottom": "WICH",
-          "left": "BURNT"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-suffix",
-          "compound-word-suffix",
-          "compound-word-prefix",
-          "adjective-category"
-        ],
-        "overlapWords": [
-          "KEY",
-          "FINGER",
-          "FIRE",
-          "THUNDER",
-          "BACK"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.456Z"
-      }
-    },
-    {
-      "id": "4c4582b2",
-      "status": "pending",
-      "categories": {
-        "top": "Shades of Purple",
-        "right": "Earth _____",
-        "bottom": "_____ Nut",
-        "left": "MLB Teams"
-      },
-      "squares": [
-        {
-          "top": "GRAPE",
-          "right": "ROCKIES",
-          "bottom": "ORIOLES",
-          "left": "BRAVES"
-        },
-        {
-          "top": "MULBERRY",
-          "right": "WORM",
-          "bottom": "WHITESOX",
-          "left": "MARINERS"
-        },
-        {
-          "top": "COCO",
-          "right": "QUAKE",
-          "bottom": "BRAZIL",
-          "left": "BUTTER"
-        },
-        {
-          "top": "BLUEJAYS",
-          "right": "REDS",
-          "bottom": "CHEST",
-          "left": "YANKEES"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "adjective-category",
-          "compound-word-prefix",
-          "compound-word-suffix",
-          "proper-noun-group"
-        ],
-        "overlapWords": [
-          "GRAPE",
-          "WORM",
-          "BRAZIL"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.457Z"
-      }
-    },
-    {
-      "id": "e34e2173",
-      "status": "pending",
-      "categories": {
-        "top": "Things That Melt",
-        "right": "Chess Pieces",
-        "bottom": "Things With Wheels",
-        "left": "_____ House"
-      },
-      "squares": [
-        {
-          "top": "ICE",
-          "right": "CHOCOLATE",
-          "bottom": "FIRE",
-          "left": "FARM"
-        },
-        {
-          "top": "SNOW",
-          "right": "KING",
-          "bottom": "TREE",
-          "left": "PLASTIC"
-        },
-        {
-          "top": "BOAT",
-          "right": "BISHOP",
-          "bottom": "WHEELCHAIR",
-          "left": "PAWN"
-        },
-        {
-          "top": "BIKE",
-          "right": "TRACTOR",
-          "bottom": "WAGON",
-          "left": "DOLL"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "things-that",
-          "finite-group",
-          "things-that",
-          "compound-word-suffix"
-        ],
-        "overlapWords": [
-          "ICE",
-          "SNOW",
-          "KING",
-          "FARM"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.460Z"
-      }
-    },
-    {
-      "id": "f8cbfce5",
-      "status": "pending",
-      "categories": {
-        "top": "Harry Potter Houses",
-        "right": "Days of the Week",
-        "bottom": "Things That Sting",
-        "left": "Day _____"
-      },
-      "squares": [
-        {
-          "top": "RAVENCLAW",
-          "right": "HORNET",
-          "bottom": "WASP",
-          "left": "BED"
-        },
-        {
-          "top": "HUFFLEPUFF",
-          "right": "SATURDAY",
-          "bottom": "WEDNESDAY",
-          "left": "TRIPPER"
-        },
-        {
-          "top": "LILY",
-          "right": "MONDAY",
-          "bottom": "JELLYFISH",
-          "left": "PACK"
-        },
-        {
-          "top": "BREAK",
-          "right": "SCORPION",
-          "bottom": "BEE",
-          "left": "TIME"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "proper-noun-group",
-          "finite-group",
-          "things-that",
-          "compound-word-prefix"
-        ],
-        "overlapWords": [
-          "JELLYFISH",
-          "BEE",
-          "TIME",
-          "BED"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.463Z"
-      }
-    },
-    {
-      "id": "4892033b",
-      "status": "pending",
-      "categories": {
-        "top": "Elements (Classical)",
-        "right": "Shades of Yellow",
-        "bottom": "Chess Pieces",
-        "left": "Wall _____"
-      },
-      "squares": [
-        {
-          "top": "AIR",
-          "right": "FLAX",
-          "bottom": "MOUNT",
-          "left": "PAPER"
-        },
-        {
-          "top": "WATER",
-          "right": "LEMON",
-          "bottom": "SAFFRON",
-          "left": "CANARY"
-        },
-        {
-          "top": "HONEY",
-          "right": "GOLD",
-          "bottom": "PAWN",
-          "left": "BISHOP"
-        },
-        {
-          "top": "BANANA",
-          "right": "KING",
-          "bottom": "KNIGHT",
-          "left": "NUT"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "finite-group",
-          "adjective-category",
-          "finite-group",
-          "compound-word-prefix"
-        ],
-        "overlapWords": [
-          "AIR",
-          "WATER",
-          "LEMON",
-          "GOLD",
-          "PAPER"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.464Z"
-      }
-    },
-    {
-      "id": "62ed4493",
-      "status": "pending",
-      "categories": {
-        "top": "_____ Watch",
-        "right": "Things With Wheels",
-        "bottom": "_____ Guard",
-        "left": "_____ Ball"
-      },
-      "squares": [
-        {
-          "top": "FIRE",
-          "right": "WHEELCHAIR",
-          "bottom": "WHALE",
-          "left": "FOOT"
-        },
-        {
-          "top": "WRIST",
-          "right": "CAR",
-          "bottom": "LIFE",
-          "left": "BODY"
-        },
-        {
-          "top": "SOFT",
-          "right": "TRUCK",
-          "bottom": "MOUTH",
-          "left": "WAGON"
-        },
-        {
-          "top": "REAR",
-          "right": "STROLLER",
-          "bottom": "VAN",
-          "left": "BASE"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-suffix",
-          "things-that",
-          "compound-word-suffix",
-          "compound-word-suffix"
-        ],
-        "overlapWords": [
-          "FIRE",
-          "CAR",
-          "TRUCK",
-          "BASE",
-          "FOOT"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.466Z"
-      }
-    },
-    {
-      "id": "8f3c0fab",
-      "status": "pending",
-      "categories": {
-        "top": "_____ Line",
-        "right": "_____ Yard",
-        "bottom": "Home _____",
-        "left": "Currencies"
-      },
-      "squares": [
-        {
-          "top": "PIPE",
-          "right": "AIR",
-          "bottom": "CHURCH",
-          "left": "YEN"
-        },
-        {
-          "top": "COAST",
-          "right": "BONE",
-          "bottom": "BASE",
-          "left": "LIFE"
-        },
-        {
-          "top": "STOCK",
-          "right": "JUNK",
-          "bottom": "COMING",
-          "left": "MADE"
-        },
-        {
-          "top": "YUAN",
-          "right": "BARN",
-          "bottom": "RUN",
-          "left": "DOLLAR"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-suffix",
-          "compound-word-suffix",
-          "compound-word-prefix",
-          "general-category"
-        ],
-        "overlapWords": [
-          "PIPE",
-          "COAST",
-          "BONE",
-          "RUN"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.468Z"
-      }
-    },
-    {
-      "id": "32458ac3",
-      "status": "pending",
-      "categories": {
-        "top": "Marvel Heroes",
-        "right": "Time _____",
-        "bottom": "_____ Nail",
-        "left": "Things That Are Sharp"
-      },
-      "squares": [
-        {
-          "top": "STORM",
-          "right": "COFFIN",
-          "bottom": "ANTMAN",
-          "left": "CLAW"
-        },
-        {
-          "top": "GAMORA",
-          "right": "SHARE",
-          "bottom": "THOR",
-          "left": "NEBULA"
-        },
-        {
-          "top": "FRAME",
-          "right": "LESS",
-          "bottom": "FINGER",
-          "left": "FALCON"
-        },
-        {
-          "top": "KEEPER",
-          "right": "LINE",
-          "bottom": "SNAIL",
-          "left": "BLADE"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "proper-noun-group",
-          "compound-word-prefix",
-          "compound-word-suffix",
-          "things-that"
-        ],
-        "overlapWords": [
-          "STORM",
-          "FINGER"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.470Z"
-      }
-    },
-    {
-      "id": "725606da",
-      "status": "pending",
-      "categories": {
-        "top": "Things That Fly",
-        "right": "_____ Fall",
-        "bottom": "Shades of Blue",
-        "left": "Things That Melt"
-      },
-      "squares": [
-        {
-          "top": "DRONE",
-          "right": "BABY",
-          "bottom": "POWDER",
-          "left": "SNOW"
-        },
-        {
-          "top": "ROCKET",
-          "right": "DOWN",
-          "bottom": "BUTTER",
-          "left": "SKY"
-        },
-        {
-          "top": "TURQUOISE",
-          "right": "FREE",
-          "bottom": "MIDNIGHT",
-          "left": "OCEAN"
-        },
-        {
-          "top": "WIND",
-          "right": "PLANE",
-          "bottom": "AZURE",
-          "left": "ICE"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "things-that",
-          "compound-word-suffix",
-          "adjective-category",
-          "things-that"
-        ],
-        "overlapWords": [
-          "ROCKET",
-          "DOWN",
-          "FREE",
-          "ICE",
-          "SNOW"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.472Z"
-      }
-    },
-    {
-      "id": "e7e13375",
-      "status": "pending",
-      "categories": {
-        "top": "_____ Ring",
-        "right": "Elements (Classical)",
-        "bottom": "School _____",
-        "left": "_____ Cut"
-      },
-      "squares": [
-        {
-          "top": "MOOD",
-          "right": "KEY",
-          "bottom": "BUS",
-          "left": "HAIR"
-        },
-        {
-          "top": "EAR",
-          "right": "WATER",
-          "bottom": "WEDDING",
-          "left": "CREW"
-        },
-        {
-          "top": "BOX",
-          "right": "AIR",
-          "bottom": "GIRL",
-          "left": "FIRE"
-        },
-        {
-          "top": "BUZZ",
-          "right": "WORK",
-          "bottom": "BOY",
-          "left": "PAPER"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-suffix",
-          "finite-group",
-          "compound-word-prefix",
-          "compound-word-suffix"
-        ],
-        "overlapWords": [
-          "EAR",
-          "WATER",
-          "AIR",
-          "BOY",
-          "PAPER",
-          "HAIR"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.473Z"
-      }
-    },
-    {
-      "id": "2811d45e",
-      "status": "pending",
-      "categories": {
-        "top": "_____ House",
-        "right": "Water _____",
-        "bottom": "Classical Composers",
-        "left": "_____ Bone"
-      },
-      "squares": [
-        {
-          "top": "FARM",
-          "right": "BOAT",
-          "bottom": "HANDEL",
-          "left": "FUNNY"
-        },
-        {
-          "top": "BIRD",
-          "right": "BED",
-          "bottom": "SCHUBERT",
-          "left": "HAYDN"
-        },
-        {
-          "top": "TROM",
-          "right": "MARK",
-          "bottom": "VIVALDI",
-          "left": "FALL"
-        },
-        {
-          "top": "FOWL",
-          "right": "LIGHT",
-          "bottom": "BACH",
-          "left": "HIP"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-suffix",
-          "compound-word-prefix",
-          "proper-noun-group",
-          "compound-word-suffix"
-        ],
-        "overlapWords": [
-          "FARM",
-          "BIRD",
-          "BED",
-          "MARK"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.475Z"
-      }
-    },
-    {
-      "id": "ac663648",
-      "status": "pending",
-      "categories": {
-        "top": "_____ Back",
-        "right": "Things That Are Hot",
-        "bottom": "Book _____",
-        "left": "_____ Way"
-      },
-      "squares": [
-        {
-          "top": "CUT",
-          "right": "RUN",
-          "bottom": "GRILL",
-          "left": "HIGH"
-        },
-        {
-          "top": "DRAW",
-          "right": "SAUNA",
-          "bottom": "SET",
-          "left": "RAIL"
-        },
-        {
-          "top": "CLUB",
-          "right": "EMBER",
-          "bottom": "LET",
-          "left": "STORE"
-        },
-        {
-          "top": "GANG",
-          "right": "AIR",
-          "bottom": "END",
-          "left": "DOOR"
-        }
-      ],
-      "metadata": {
-        "categoryTypes": [
-          "compound-word-suffix",
-          "things-that",
-          "compound-word-prefix",
-          "compound-word-suffix"
-        ],
-        "overlapWords": [
-          "CUT",
-          "EMBER",
-          "END",
-          "DOOR"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.477Z"
-      }
-    },
-    {
-      "id": "91aec995",
-      "status": "pending",
-      "categories": {
-        "top": "Hand _____",
-        "right": "Reptiles",
-        "bottom": "Work _____",
-        "left": "NFL Teams"
-      },
-      "squares": [
-        {
-          "top": "WRITING",
-          "right": "RAVENS",
-          "bottom": "LOAD",
-          "left": "EAGLES"
-        },
-        {
-          "top": "STAND",
+          "top": "VIPER",
           "right": "PYTHON",
-          "bottom": "DOLPHINS",
-          "left": "RAIL"
+          "bottom": "COBRA",
+          "left": "JAGUAR"
         },
         {
-          "top": "GIANTS",
-          "right": "TURTLE",
-          "bottom": "BOOK",
-          "left": "STATION"
+          "top": "MAMBA",
+          "right": "FORD",
+          "bottom": "ANACONDA",
+          "left": "BOA"
         },
         {
-          "top": "BUCCANEERS",
-          "right": "BEARS",
-          "bottom": "SHOP",
-          "left": "RAIDERS"
+          "top": "ADDER",
+          "right": "LINCOLN",
+          "bottom": "RUST",
+          "left": "GO"
+        },
+        {
+          "top": "JAVA",
+          "right": "RUBY",
+          "bottom": "SWIFT",
+          "left": "PANTHER"
         }
       ],
       "metadata": {
-        "categoryTypes": [
-          "compound-word-prefix",
-          "general-category",
-          "compound-word-prefix",
-          "proper-noun-group"
-        ],
-        "overlapWords": [
-          "STAND",
-          "BOOK"
-        ],
-        "generatedAt": "2026-02-11T21:25:26.479Z"
+        "categoryTypes": ["polysemous-group", "polysemous-group", "polysemous-group", "polysemous-group"],
+        "approach": "polysemous-words",
+        "designNotes": "Tile0@pos0: VIPER(snake), JAGUAR(cat+car overlap). Tile1@pos1: MAMBA(snake), FORD(car-only). Tile2@pos2: RUST(lang), LINCOLN(car). Tile3@pos3: SWIFT(lang), PANTHER(cat-only). Center: PYTHON/COBRA(snake), ANACONDA/BOA(snake), ADDER(snake)/GO(lang), JAVA/RUBY(lang).",
+        "generatedAt": "2026-02-13T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "poly002b",
+      "status": "pending",
+      "categories": {
+        "top": "Flowers",
+        "right": "Metals",
+        "bottom": "Female Names",
+        "left": "Colors"
+      },
+      "squares": [
+        {
+          "top": "DAISY",
+          "right": "ROSE",
+          "bottom": "POPPY",
+          "left": "SAGE"
+        },
+        {
+          "top": "JASMINE",
+          "right": "IRON",
+          "bottom": "LILY",
+          "left": "DAHLIA"
+        },
+        {
+          "top": "TIN",
+          "right": "COPPER",
+          "bottom": "GRACE",
+          "left": "SILVER"
+        },
+        {
+          "top": "GOLD",
+          "right": "BRONZE",
+          "bottom": "HOPE",
+          "left": "IVORY"
+        }
+      ],
+      "metadata": {
+        "categoryTypes": ["polysemous-group", "polysemous-group", "polysemous-group", "polysemous-group"],
+        "approach": "polysemous-words",
+        "designNotes": "Tile0@pos0: DAISY(flower-only), SAGE(color-only). Tile1@pos1: JASMINE(flower-only), IRON(metal). Tile2@pos2: GRACE(name-only), COPPER(metal-only). Tile3@pos3: HOPE(name-only), IVORY(color-only). Multi words on center for misdirection.",
+        "generatedAt": "2026-02-13T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "poly003c",
+      "status": "pending",
+      "categories": {
+        "top": "Playing Cards",
+        "right": "Rock Bands",
+        "bottom": "US Cities",
+        "left": "Card Suits"
+      },
+      "squares": [
+        {
+          "top": "JACK",
+          "right": "ACE",
+          "bottom": "JOKER",
+          "left": "CLUB"
+        },
+        {
+          "top": "KING",
+          "right": "KISS",
+          "bottom": "RUSH",
+          "left": "JOURNEY"
+        },
+        {
+          "top": "QUEEN",
+          "right": "CREAM",
+          "bottom": "BOSTON",
+          "left": "POISON"
+        },
+        {
+          "top": "KANSAS",
+          "right": "BUFFALO",
+          "bottom": "PHOENIX",
+          "left": "SPADE"
+        }
+      ],
+      "metadata": {
+        "categoryTypes": ["polysemous-group", "polysemous-group", "polysemous-group", "polysemous-group"],
+        "approach": "polysemous-words",
+        "designNotes": "Tile0@pos0: JACK(card), CLUB(suit). Tile1@pos1: KING(card), KISS(band). Bottom=RUSH(band-only), prevents rotation. Tile2@pos2: BOSTON(city+band), CREAM(band). Tile3@pos3: PHOENIX(city), SPADE(suit). Right=BUFFALO(city-only, NOT band) prevents pos2.",
+        "generatedAt": "2026-02-13T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "poly004d",
+      "status": "pending",
+      "categories": {
+        "top": "Birds",
+        "right": "NFL Teams",
+        "bottom": "Golf Terms",
+        "left": "Male Names"
+      },
+      "squares": [
+        {
+          "top": "DOVE",
+          "right": "CRANE",
+          "bottom": "FINCH",
+          "left": "JACK"
+        },
+        {
+          "top": "ROBIN",
+          "right": "BEAR",
+          "bottom": "CARDINAL",
+          "left": "SWIFT"
+        },
+        {
+          "top": "RAVEN",
+          "right": "RAM",
+          "bottom": "BIRDIE",
+          "left": "BOGEY"
+        },
+        {
+          "top": "WEDGE",
+          "right": "CHIP",
+          "bottom": "IRON",
+          "left": "BILL"
+        }
+      ],
+      "metadata": {
+        "categoryTypes": ["polysemous-group", "polysemous-group", "polysemous-group", "polysemous-group"],
+        "approach": "polysemous-words",
+        "designNotes": "Tile0@pos0: DOVE(bird), JACK(name). Tile1@pos1: ROBIN(bird), BEAR(NFL). Left=SWIFT(bird-only, NOT NFL) prevents rot2. Tile2@pos2: BIRDIE(golf), RAM(NFL). Top=RAVEN(bird+NFL) as misdirection, but BOGEY(golf-only) on left prevents pos1 since pos1 needs left=name. Tile3@pos3: IRON(golf), BILL(name). Right=CHIP(golf-only) prevents pos2.",
+        "generatedAt": "2026-02-13T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "poly005e",
+      "status": "pending",
+      "categories": {
+        "top": "Programming Languages",
+        "right": "Big Cats",
+        "bottom": "Beverages",
+        "left": "Musicians"
+      },
+      "squares": [
+        {
+          "top": "RUST",
+          "right": "PYTHON",
+          "bottom": "RUBY",
+          "left": "SEAL"
+        },
+        {
+          "top": "GO",
+          "right": "JAGUAR",
+          "bottom": "SWIFT",
+          "left": "JAVA"
+        },
+        {
+          "top": "COUGAR",
+          "right": "PANTHER",
+          "bottom": "PORTER",
+          "left": "CIDER"
+        },
+        {
+          "top": "PRINCE",
+          "right": "JEWEL",
+          "bottom": "PUNCH",
+          "left": "DRAKE"
+        }
+      ],
+      "metadata": {
+        "categoryTypes": ["polysemous-group", "polysemous-group", "polysemous-group", "polysemous-group"],
+        "approach": "polysemous-words",
+        "designNotes": "Tile0@pos0: RUST(lang-only), SEAL(musician-only). Tile1@pos1: GO(lang-only), JAGUAR(cat+car). Tile2@pos2: PORTER(bev-only), PANTHER(cat-only). Tile3@pos3: PUNCH(bev-only), DRAKE(musician-only). Key: Tile2 left=CIDER(bev-only, not musician) prevents pos3. Tile3 right=JEWEL(musician, not cat) prevents pos2.",
+        "generatedAt": "2026-02-13T00:00:00.000Z"
       }
     }
   ]

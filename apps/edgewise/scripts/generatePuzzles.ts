@@ -27,6 +27,10 @@ import type {
   PoolPuzzleSquare,
   WordIndex,
 } from './types';
+import {
+  getPermutations,
+  hasUniqueSolution,
+} from './validation';
 
 // -----------------------------------------------------------------------------
 // Configuration
@@ -37,30 +41,6 @@ const MAX_CATEGORY_USES = 2;
 
 // Minimum words required per category
 const MIN_WORDS_PER_CATEGORY = 4;
-
-// -----------------------------------------------------------------------------
-// Constants
-// -----------------------------------------------------------------------------
-
-// Category to edge mapping (which squares contribute to each category)
-const CATEGORY_EDGE_MAP: Record<string, Array<{ square: number; edge: string }>> = {
-  top: [
-    { square: 0, edge: 'top' },
-    { square: 1, edge: 'top' },
-  ],
-  right: [
-    { square: 1, edge: 'right' },
-    { square: 2, edge: 'right' },
-  ],
-  bottom: [
-    { square: 2, edge: 'bottom' },
-    { square: 3, edge: 'bottom' },
-  ],
-  left: [
-    { square: 3, edge: 'left' },
-    { square: 0, edge: 'left' },
-  ],
-};
 
 // -----------------------------------------------------------------------------
 // Word Index Building
@@ -181,19 +161,6 @@ function selectNextCategoryQuad(
   }
 
   return null;
-}
-
-function getPermutations<T>(arr: T[]): T[][] {
-  if (arr.length <= 1) return [arr];
-  const result: T[][] = [];
-  for (let i = 0; i < arr.length; i++) {
-    const rest = [...arr.slice(0, i), ...arr.slice(i + 1)];
-    const perms = getPermutations(rest);
-    for (const perm of perms) {
-      result.push([arr[i], ...perm]);
-    }
-  }
-  return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -324,87 +291,6 @@ function generateWordAssignment(
   ];
 
   return { squares, overlapWords };
-}
-
-// -----------------------------------------------------------------------------
-// Solution Validation
-// -----------------------------------------------------------------------------
-
-type Rotation = 0 | 1 | 2 | 3;
-
-function getWordAtEdge(
-  square: PoolPuzzleSquare,
-  visualEdge: number,
-  rotation: Rotation
-): string {
-  const edges = ['top', 'right', 'bottom', 'left'] as const;
-  const originalIndex = ((visualEdge - rotation + 4) % 4) as 0 | 1 | 2 | 3;
-  return square[edges[originalIndex]];
-}
-
-function checkSolution(
-  squares: [PoolPuzzleSquare, PoolPuzzleSquare, PoolPuzzleSquare, PoolPuzzleSquare],
-  categories: { top: string; right: string; bottom: string; left: string },
-  positions: number[],
-  rotations: Rotation[],
-  index: WordIndex
-): boolean {
-  for (const [catPosition, catName] of Object.entries(categories)) {
-    const edges = CATEGORY_EDGE_MAP[catPosition];
-    const words: string[] = [];
-
-    for (const { square: squarePos, edge } of edges) {
-      const originalSquareIdx = positions.indexOf(squarePos);
-      if (originalSquareIdx === -1) return false;
-
-      const square = squares[originalSquareIdx];
-      const rotation = rotations[originalSquareIdx];
-      const edgeIndex = ['top', 'right', 'bottom', 'left'].indexOf(edge);
-      words.push(getWordAtEdge(square, edgeIndex, rotation));
-    }
-
-    const categoryWords = index.categoryToWords.get(catName) || [];
-    for (const word of words) {
-      if (!categoryWords.includes(word)) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
-function hasUniqueSolution(
-  squares: [PoolPuzzleSquare, PoolPuzzleSquare, PoolPuzzleSquare, PoolPuzzleSquare],
-  categories: { top: string; right: string; bottom: string; left: string },
-  index: WordIndex
-): boolean {
-  let solutionCount = 0;
-
-  const positionPerms = getPermutations([0, 1, 2, 3]);
-  const rotationCombos: Rotation[][] = [];
-  for (let r0 = 0; r0 < 4; r0++) {
-    for (let r1 = 0; r1 < 4; r1++) {
-      for (let r2 = 0; r2 < 4; r2++) {
-        for (let r3 = 0; r3 < 4; r3++) {
-          rotationCombos.push([r0, r1, r2, r3] as Rotation[]);
-        }
-      }
-    }
-  }
-
-  for (const positions of positionPerms) {
-    for (const rotations of rotationCombos) {
-      if (checkSolution(squares, categories, positions, rotations, index)) {
-        solutionCount++;
-        if (solutionCount > 1) {
-          return false;
-        }
-      }
-    }
-  }
-
-  return solutionCount === 1;
 }
 
 // -----------------------------------------------------------------------------

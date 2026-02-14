@@ -1,0 +1,1352 @@
+{
+  "description": "Words with multiple meanings across different semantic domains. Used for creating puzzles where misdirection comes from natural word polysemy rather than arbitrary category overlap.",
+  "generatedAt": "2026-02-12T00:00:00Z",
+  "words": [
+    {
+      "word": "MERCURY",
+      "meanings": [
+        { "meaning": "Planet in solar system", "suggestedCategory": "Planets" },
+        { "meaning": "Roman messenger god", "suggestedCategory": "Roman Gods" },
+        { "meaning": "Car brand (discontinued)", "suggestedCategory": "Car Brands" },
+        { "meaning": "Chemical element (Hg)", "suggestedCategory": "Chemical Elements" }
+      ]
+    },
+    {
+      "word": "MARS",
+      "meanings": [
+        { "meaning": "Planet in solar system", "suggestedCategory": "Planets" },
+        { "meaning": "Roman god of war", "suggestedCategory": "Roman Gods" },
+        { "meaning": "Candy company", "suggestedCategory": "Candy Brands" }
+      ]
+    },
+    {
+      "word": "VENUS",
+      "meanings": [
+        { "meaning": "Planet in solar system", "suggestedCategory": "Planets" },
+        { "meaning": "Roman goddess of love", "suggestedCategory": "Roman Gods" },
+        { "meaning": "Razor brand", "suggestedCategory": "Brands" },
+        { "meaning": "Tennis player (Williams)", "suggestedCategory": "Tennis Players" }
+      ]
+    },
+    {
+      "word": "SATURN",
+      "meanings": [
+        { "meaning": "Planet in solar system", "suggestedCategory": "Planets" },
+        { "meaning": "Roman god of agriculture", "suggestedCategory": "Roman Gods" },
+        { "meaning": "Car brand (discontinued)", "suggestedCategory": "Car Brands" }
+      ]
+    },
+    {
+      "word": "PLUTO",
+      "meanings": [
+        { "meaning": "Dwarf planet", "suggestedCategory": "Planets" },
+        { "meaning": "Roman god of underworld", "suggestedCategory": "Roman Gods" },
+        { "meaning": "Disney character (dog)", "suggestedCategory": "Disney Characters" }
+      ]
+    },
+    {
+      "word": "NEPTUNE",
+      "meanings": [
+        { "meaning": "Planet in solar system", "suggestedCategory": "Planets" },
+        { "meaning": "Roman god of the sea", "suggestedCategory": "Roman Gods" }
+      ]
+    },
+    {
+      "word": "JUPITER",
+      "meanings": [
+        { "meaning": "Planet in solar system", "suggestedCategory": "Planets" },
+        { "meaning": "King of Roman gods", "suggestedCategory": "Roman Gods" },
+        { "meaning": "Florida city", "suggestedCategory": "Florida Cities" }
+      ]
+    },
+    {
+      "word": "AMAZON",
+      "meanings": [
+        { "meaning": "E-commerce company", "suggestedCategory": "Tech Companies" },
+        { "meaning": "South American river", "suggestedCategory": "Rivers" },
+        { "meaning": "Mythical female warriors", "suggestedCategory": "Mythology" }
+      ]
+    },
+    {
+      "word": "APPLE",
+      "meanings": [
+        { "meaning": "Tech company", "suggestedCategory": "Tech Companies" },
+        { "meaning": "Fruit", "suggestedCategory": "Fruits" },
+        { "meaning": "Record label (Beatles)", "suggestedCategory": "Record Labels" }
+      ]
+    },
+    {
+      "word": "ORACLE",
+      "meanings": [
+        { "meaning": "Tech company", "suggestedCategory": "Tech Companies" },
+        { "meaning": "Ancient Greek prophet", "suggestedCategory": "Mythology" },
+        { "meaning": "Wise advisor", "suggestedCategory": "Roles" }
+      ]
+    },
+    {
+      "word": "JAGUAR",
+      "meanings": [
+        { "meaning": "Car brand", "suggestedCategory": "Car Brands" },
+        { "meaning": "Large cat", "suggestedCategory": "Big Cats" },
+        { "meaning": "NFL team (Jacksonville)", "suggestedCategory": "NFL Teams" }
+      ]
+    },
+    {
+      "word": "MUSTANG",
+      "meanings": [
+        { "meaning": "Ford car model", "suggestedCategory": "Ford Models" },
+        { "meaning": "Wild horse", "suggestedCategory": "Horse Types" }
+      ]
+    },
+    {
+      "word": "BRONCO",
+      "meanings": [
+        { "meaning": "Ford SUV model", "suggestedCategory": "Ford Models" },
+        { "meaning": "Wild horse", "suggestedCategory": "Horse Types" },
+        { "meaning": "NFL team (Denver)", "suggestedCategory": "NFL Teams" }
+      ]
+    },
+    {
+      "word": "VIPER",
+      "meanings": [
+        { "meaning": "Dodge sports car", "suggestedCategory": "Car Models" },
+        { "meaning": "Venomous snake", "suggestedCategory": "Snakes" }
+      ]
+    },
+    {
+      "word": "COBRA",
+      "meanings": [
+        { "meaning": "Ford Shelby model", "suggestedCategory": "Ford Models" },
+        { "meaning": "Venomous snake", "suggestedCategory": "Snakes" }
+      ]
+    },
+    {
+      "word": "IMPALA",
+      "meanings": [
+        { "meaning": "Chevy car model", "suggestedCategory": "Chevy Models" },
+        { "meaning": "African antelope", "suggestedCategory": "Antelopes" }
+      ]
+    },
+    {
+      "word": "RAM",
+      "meanings": [
+        { "meaning": "Dodge truck brand", "suggestedCategory": "Car Brands" },
+        { "meaning": "Male sheep", "suggestedCategory": "Farm Animals" },
+        { "meaning": "Computer memory", "suggestedCategory": "Computer Parts" },
+        { "meaning": "NFL team (LA)", "suggestedCategory": "NFL Teams" }
+      ]
+    },
+    {
+      "word": "CHARGER",
+      "meanings": [
+        { "meaning": "Dodge car model", "suggestedCategory": "Dodge Models" },
+        { "meaning": "Phone charger", "suggestedCategory": "Electronics" },
+        { "meaning": "NFL team (LA)", "suggestedCategory": "NFL Teams" }
+      ]
+    },
+    {
+      "word": "CHALLENGER",
+      "meanings": [
+        { "meaning": "Dodge car model", "suggestedCategory": "Dodge Models" },
+        { "meaning": "Space shuttle", "suggestedCategory": "Space Shuttles" }
+      ]
+    },
+    {
+      "word": "PILOT",
+      "meanings": [
+        { "meaning": "Honda SUV model", "suggestedCategory": "Honda Models" },
+        { "meaning": "Aircraft operator", "suggestedCategory": "Occupations" },
+        { "meaning": "TV show first episode", "suggestedCategory": "TV Terms" }
+      ]
+    },
+    {
+      "word": "ODYSSEY",
+      "meanings": [
+        { "meaning": "Honda minivan", "suggestedCategory": "Honda Models" },
+        { "meaning": "Epic journey", "suggestedCategory": "Types of Journeys" },
+        { "meaning": "Homer's Greek poem", "suggestedCategory": "Classic Literature" }
+      ]
+    },
+    {
+      "word": "ECLIPSE",
+      "meanings": [
+        { "meaning": "Mitsubishi car model", "suggestedCategory": "Car Models" },
+        { "meaning": "Astronomical event", "suggestedCategory": "Astronomical Events" },
+        { "meaning": "To surpass/overshadow", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "AVALON",
+      "meanings": [
+        { "meaning": "Toyota sedan", "suggestedCategory": "Toyota Models" },
+        { "meaning": "Mythical island", "suggestedCategory": "Mythology" }
+      ]
+    },
+    {
+      "word": "PHOENIX",
+      "meanings": [
+        { "meaning": "City in Arizona", "suggestedCategory": "US Cities" },
+        { "meaning": "Mythical bird", "suggestedCategory": "Mythical Creatures" },
+        { "meaning": "NBA team", "suggestedCategory": "NBA Teams" }
+      ]
+    },
+    {
+      "word": "JAVA",
+      "meanings": [
+        { "meaning": "Programming language", "suggestedCategory": "Programming Languages" },
+        { "meaning": "Coffee (slang)", "suggestedCategory": "Coffee Terms" },
+        { "meaning": "Indonesian island", "suggestedCategory": "Islands" }
+      ]
+    },
+    {
+      "word": "PYTHON",
+      "meanings": [
+        { "meaning": "Programming language", "suggestedCategory": "Programming Languages" },
+        { "meaning": "Large snake", "suggestedCategory": "Snakes" },
+        { "meaning": "Monty Python comedy group", "suggestedCategory": "Comedy Groups" }
+      ]
+    },
+    {
+      "word": "RUBY",
+      "meanings": [
+        { "meaning": "Programming language", "suggestedCategory": "Programming Languages" },
+        { "meaning": "Red gemstone", "suggestedCategory": "Gemstones" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" }
+      ]
+    },
+    {
+      "word": "SWIFT",
+      "meanings": [
+        { "meaning": "Programming language", "suggestedCategory": "Programming Languages" },
+        { "meaning": "Fast", "suggestedCategory": "Adjectives" },
+        { "meaning": "Taylor Swift", "suggestedCategory": "Pop Stars" },
+        { "meaning": "Small bird", "suggestedCategory": "Birds" }
+      ]
+    },
+    {
+      "word": "RUST",
+      "meanings": [
+        { "meaning": "Programming language", "suggestedCategory": "Programming Languages" },
+        { "meaning": "Iron oxidation", "suggestedCategory": "Chemical Processes" },
+        { "meaning": "Reddish-brown color", "suggestedCategory": "Colors" }
+      ]
+    },
+    {
+      "word": "ROSE",
+      "meanings": [
+        { "meaning": "Flower", "suggestedCategory": "Flowers" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Past tense of rise", "suggestedCategory": "Verbs" },
+        { "meaning": "Pink wine", "suggestedCategory": "Wine Types" }
+      ]
+    },
+    {
+      "word": "IRIS",
+      "meanings": [
+        { "meaning": "Flower", "suggestedCategory": "Flowers" },
+        { "meaning": "Part of the eye", "suggestedCategory": "Eye Parts" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Greek goddess of rainbow", "suggestedCategory": "Greek Gods" }
+      ]
+    },
+    {
+      "word": "LILY",
+      "meanings": [
+        { "meaning": "Flower", "suggestedCategory": "Flowers" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" }
+      ]
+    },
+    {
+      "word": "VIOLET",
+      "meanings": [
+        { "meaning": "Flower", "suggestedCategory": "Flowers" },
+        { "meaning": "Purple color", "suggestedCategory": "Colors" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" }
+      ]
+    },
+    {
+      "word": "DAISY",
+      "meanings": [
+        { "meaning": "Flower", "suggestedCategory": "Flowers" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" }
+      ]
+    },
+    {
+      "word": "JASMINE",
+      "meanings": [
+        { "meaning": "Flower", "suggestedCategory": "Flowers" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Disney princess", "suggestedCategory": "Disney Princesses" }
+      ]
+    },
+    {
+      "word": "JADE",
+      "meanings": [
+        { "meaning": "Green gemstone", "suggestedCategory": "Gemstones" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Green color", "suggestedCategory": "Colors" }
+      ]
+    },
+    {
+      "word": "PEARL",
+      "meanings": [
+        { "meaning": "Gemstone from oyster", "suggestedCategory": "Gemstones" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "White color shade", "suggestedCategory": "Shades of White" }
+      ]
+    },
+    {
+      "word": "AMBER",
+      "meanings": [
+        { "meaning": "Fossilized resin", "suggestedCategory": "Gemstones" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Orange-yellow color", "suggestedCategory": "Colors" },
+        { "meaning": "Traffic light color", "suggestedCategory": "Traffic Signals" }
+      ]
+    },
+    {
+      "word": "CRYSTAL",
+      "meanings": [
+        { "meaning": "Clear mineral", "suggestedCategory": "Minerals" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Fine glassware", "suggestedCategory": "Glassware" }
+      ]
+    },
+    {
+      "word": "OLIVE",
+      "meanings": [
+        { "meaning": "Fruit/tree", "suggestedCategory": "Fruits" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Green-brown color", "suggestedCategory": "Colors" }
+      ]
+    },
+    {
+      "word": "HAZEL",
+      "meanings": [
+        { "meaning": "Tree/shrub", "suggestedCategory": "Trees" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Eye color", "suggestedCategory": "Eye Colors" }
+      ]
+    },
+    {
+      "word": "IVY",
+      "meanings": [
+        { "meaning": "Climbing plant", "suggestedCategory": "Plants" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Ivy League universities", "suggestedCategory": "University Terms" }
+      ]
+    },
+    {
+      "word": "GINGER",
+      "meanings": [
+        { "meaning": "Spice/root", "suggestedCategory": "Spices" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Red hair color", "suggestedCategory": "Hair Colors" }
+      ]
+    },
+    {
+      "word": "SAGE",
+      "meanings": [
+        { "meaning": "Herb", "suggestedCategory": "Herbs" },
+        { "meaning": "Wise person", "suggestedCategory": "Roles" },
+        { "meaning": "Green-gray color", "suggestedCategory": "Colors" },
+        { "meaning": "Unisex name", "suggestedCategory": "Names" }
+      ]
+    },
+    {
+      "word": "BASIL",
+      "meanings": [
+        { "meaning": "Herb", "suggestedCategory": "Herbs" },
+        { "meaning": "Male name", "suggestedCategory": "Male Names" }
+      ]
+    },
+    {
+      "word": "QUEEN",
+      "meanings": [
+        { "meaning": "Rock band", "suggestedCategory": "Rock Bands" },
+        { "meaning": "Chess piece", "suggestedCategory": "Chess Pieces" },
+        { "meaning": "Royalty", "suggestedCategory": "Royalty" },
+        { "meaning": "Playing card", "suggestedCategory": "Playing Cards" }
+      ]
+    },
+    {
+      "word": "KING",
+      "meanings": [
+        { "meaning": "Chess piece", "suggestedCategory": "Chess Pieces" },
+        { "meaning": "Royalty", "suggestedCategory": "Royalty" },
+        { "meaning": "Playing card", "suggestedCategory": "Playing Cards" },
+        { "meaning": "Male name (Martin Luther King)", "suggestedCategory": "Famous Names" }
+      ]
+    },
+    {
+      "word": "JACK",
+      "meanings": [
+        { "meaning": "Playing card", "suggestedCategory": "Playing Cards" },
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Device to lift car", "suggestedCategory": "Tools" },
+        { "meaning": "Audio connector", "suggestedCategory": "Audio Equipment" }
+      ]
+    },
+    {
+      "word": "ACE",
+      "meanings": [
+        { "meaning": "Playing card", "suggestedCategory": "Playing Cards" },
+        { "meaning": "Tennis serve winner", "suggestedCategory": "Tennis Terms" },
+        { "meaning": "Expert pilot", "suggestedCategory": "Military Terms" },
+        { "meaning": "To excel", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "DIAMOND",
+      "meanings": [
+        { "meaning": "Gemstone", "suggestedCategory": "Gemstones" },
+        { "meaning": "Playing card suit", "suggestedCategory": "Card Suits" },
+        { "meaning": "Baseball field", "suggestedCategory": "Baseball Terms" },
+        { "meaning": "Shape", "suggestedCategory": "Shapes" }
+      ]
+    },
+    {
+      "word": "CLUB",
+      "meanings": [
+        { "meaning": "Playing card suit", "suggestedCategory": "Card Suits" },
+        { "meaning": "Golf club", "suggestedCategory": "Golf Equipment" },
+        { "meaning": "Social organization", "suggestedCategory": "Organizations" },
+        { "meaning": "Weapon", "suggestedCategory": "Weapons" }
+      ]
+    },
+    {
+      "word": "HEART",
+      "meanings": [
+        { "meaning": "Rock band", "suggestedCategory": "Rock Bands" },
+        { "meaning": "Organ", "suggestedCategory": "Organs" },
+        { "meaning": "Playing card suit", "suggestedCategory": "Card Suits" },
+        { "meaning": "Center/core", "suggestedCategory": "Abstract Concepts" }
+      ]
+    },
+    {
+      "word": "CRANE",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "Construction machine", "suggestedCategory": "Construction Equipment" },
+        { "meaning": "To stretch neck", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "CARDINAL",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "Catholic leader", "suggestedCategory": "Religious Titles" },
+        { "meaning": "MLB team (St. Louis)", "suggestedCategory": "MLB Teams" },
+        { "meaning": "NFL team (Arizona)", "suggestedCategory": "NFL Teams" }
+      ]
+    },
+    {
+      "word": "ROBIN",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "Unisex name", "suggestedCategory": "Names" },
+        { "meaning": "Batman's sidekick", "suggestedCategory": "DC Characters" }
+      ]
+    },
+    {
+      "word": "JAY",
+      "meanings": [
+        { "meaning": "Bird (Blue Jay)", "suggestedCategory": "Birds" },
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Letter J", "suggestedCategory": "Letters" }
+      ]
+    },
+    {
+      "word": "RAVEN",
+      "meanings": [
+        { "meaning": "Black bird", "suggestedCategory": "Birds" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "NFL team (Baltimore)", "suggestedCategory": "NFL Teams" },
+        { "meaning": "Black hair color", "suggestedCategory": "Hair Colors" }
+      ]
+    },
+    {
+      "word": "HAWK",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "Aggressive person", "suggestedCategory": "Personality Types" },
+        { "meaning": "NBA team (Atlanta)", "suggestedCategory": "NBA Teams" },
+        { "meaning": "To sell aggressively", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "EAGLE",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "Golf term (2 under par)", "suggestedCategory": "Golf Terms" },
+        { "meaning": "Scout rank", "suggestedCategory": "Scout Ranks" },
+        { "meaning": "NFL team (Philadelphia)", "suggestedCategory": "NFL Teams" }
+      ]
+    },
+    {
+      "word": "FALCON",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "SpaceX rocket", "suggestedCategory": "Space Vehicles" },
+        { "meaning": "NFL team (Atlanta)", "suggestedCategory": "NFL Teams" },
+        { "meaning": "Ford car model", "suggestedCategory": "Ford Models" }
+      ]
+    },
+    {
+      "word": "DOVE",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "Soap brand", "suggestedCategory": "Soap Brands" },
+        { "meaning": "Symbol of peace", "suggestedCategory": "Symbols" },
+        { "meaning": "Past tense of dive", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "DUCK",
+      "meanings": [
+        { "meaning": "Bird", "suggestedCategory": "Birds" },
+        { "meaning": "To lower head", "suggestedCategory": "Verbs" },
+        { "meaning": "NHL team (Anaheim)", "suggestedCategory": "NHL Teams" }
+      ]
+    },
+    {
+      "word": "SEAL",
+      "meanings": [
+        { "meaning": "Marine mammal", "suggestedCategory": "Marine Animals" },
+        { "meaning": "To close/secure", "suggestedCategory": "Verbs" },
+        { "meaning": "Official stamp", "suggestedCategory": "Official Documents" },
+        { "meaning": "Navy special forces", "suggestedCategory": "Military Units" }
+      ]
+    },
+    {
+      "word": "BASS",
+      "meanings": [
+        { "meaning": "Fish", "suggestedCategory": "Fish" },
+        { "meaning": "Low musical tone", "suggestedCategory": "Musical Terms" },
+        { "meaning": "Bass guitar", "suggestedCategory": "Musical Instruments" }
+      ]
+    },
+    {
+      "word": "PERCH",
+      "meanings": [
+        { "meaning": "Fish", "suggestedCategory": "Fish" },
+        { "meaning": "To sit on something", "suggestedCategory": "Verbs" },
+        { "meaning": "Bird's resting place", "suggestedCategory": "Bird Terms" }
+      ]
+    },
+    {
+      "word": "RAY",
+      "meanings": [
+        { "meaning": "Fish (manta ray)", "suggestedCategory": "Fish" },
+        { "meaning": "Beam of light", "suggestedCategory": "Light Terms" },
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "MLB team (Tampa Bay)", "suggestedCategory": "MLB Teams" }
+      ]
+    },
+    {
+      "word": "MOLE",
+      "meanings": [
+        { "meaning": "Burrowing animal", "suggestedCategory": "Animals" },
+        { "meaning": "Spy/informant", "suggestedCategory": "Spy Terms" },
+        { "meaning": "Skin mark", "suggestedCategory": "Skin Features" },
+        { "meaning": "Chemistry unit", "suggestedCategory": "Chemistry Terms" }
+      ]
+    },
+    {
+      "word": "BAT",
+      "meanings": [
+        { "meaning": "Flying mammal", "suggestedCategory": "Animals" },
+        { "meaning": "Baseball equipment", "suggestedCategory": "Sports Equipment" },
+        { "meaning": "To hit", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "PALM",
+      "meanings": [
+        { "meaning": "Tree", "suggestedCategory": "Trees" },
+        { "meaning": "Part of hand", "suggestedCategory": "Body Parts" },
+        { "meaning": "To conceal in hand", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "BARK",
+      "meanings": [
+        { "meaning": "Tree covering", "suggestedCategory": "Tree Parts" },
+        { "meaning": "Dog sound", "suggestedCategory": "Animal Sounds" },
+        { "meaning": "Sailing ship", "suggestedCategory": "Ship Types" }
+      ]
+    },
+    {
+      "word": "TRUNK",
+      "meanings": [
+        { "meaning": "Tree stem", "suggestedCategory": "Tree Parts" },
+        { "meaning": "Car storage", "suggestedCategory": "Car Parts" },
+        { "meaning": "Elephant nose", "suggestedCategory": "Animal Parts" },
+        { "meaning": "Large suitcase", "suggestedCategory": "Luggage" }
+      ]
+    },
+    {
+      "word": "ROOT",
+      "meanings": [
+        { "meaning": "Plant part", "suggestedCategory": "Plant Parts" },
+        { "meaning": "Origin/source", "suggestedCategory": "Abstract Concepts" },
+        { "meaning": "To cheer for", "suggestedCategory": "Verbs" },
+        { "meaning": "Math operation", "suggestedCategory": "Math Terms" }
+      ]
+    },
+    {
+      "word": "BOLT",
+      "meanings": [
+        { "meaning": "Fastener", "suggestedCategory": "Hardware" },
+        { "meaning": "Lightning", "suggestedCategory": "Weather" },
+        { "meaning": "To run away", "suggestedCategory": "Verbs" },
+        { "meaning": "Usain Bolt", "suggestedCategory": "Athletes" }
+      ]
+    },
+    {
+      "word": "SPRING",
+      "meanings": [
+        { "meaning": "Season", "suggestedCategory": "Seasons" },
+        { "meaning": "Coiled metal", "suggestedCategory": "Hardware" },
+        { "meaning": "Water source", "suggestedCategory": "Water Sources" },
+        { "meaning": "To jump", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "FALL",
+      "meanings": [
+        { "meaning": "Season (autumn)", "suggestedCategory": "Seasons" },
+        { "meaning": "To drop down", "suggestedCategory": "Verbs" },
+        { "meaning": "Waterfall", "suggestedCategory": "Water Features" }
+      ]
+    },
+    {
+      "word": "CURRENT",
+      "meanings": [
+        { "meaning": "Present time", "suggestedCategory": "Time Terms" },
+        { "meaning": "Water flow", "suggestedCategory": "Water Terms" },
+        { "meaning": "Electrical flow", "suggestedCategory": "Electrical Terms" }
+      ]
+    },
+    {
+      "word": "DRAFT",
+      "meanings": [
+        { "meaning": "Air current", "suggestedCategory": "Air Terms" },
+        { "meaning": "Sports player selection", "suggestedCategory": "Sports Terms" },
+        { "meaning": "Preliminary version", "suggestedCategory": "Writing Terms" },
+        { "meaning": "Beer from tap", "suggestedCategory": "Beer Terms" }
+      ]
+    },
+    {
+      "word": "CHARGE",
+      "meanings": [
+        { "meaning": "Electrical charge", "suggestedCategory": "Electrical Terms" },
+        { "meaning": "To attack", "suggestedCategory": "Verbs" },
+        { "meaning": "Credit card payment", "suggestedCategory": "Payment Terms" },
+        { "meaning": "Responsibility", "suggestedCategory": "Abstract Concepts" }
+      ]
+    },
+    {
+      "word": "PITCH",
+      "meanings": [
+        { "meaning": "Baseball throw", "suggestedCategory": "Baseball Terms" },
+        { "meaning": "Sound frequency", "suggestedCategory": "Music Terms" },
+        { "meaning": "Sales presentation", "suggestedCategory": "Business Terms" },
+        { "meaning": "Black tar", "suggestedCategory": "Materials" }
+      ]
+    },
+    {
+      "word": "STRIKE",
+      "meanings": [
+        { "meaning": "Bowling term", "suggestedCategory": "Bowling Terms" },
+        { "meaning": "Baseball term", "suggestedCategory": "Baseball Terms" },
+        { "meaning": "Work stoppage", "suggestedCategory": "Labor Terms" },
+        { "meaning": "To hit", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "MATCH",
+      "meanings": [
+        { "meaning": "Fire starter", "suggestedCategory": "Fire Starting" },
+        { "meaning": "Sports game", "suggestedCategory": "Sports Terms" },
+        { "meaning": "To pair/equal", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "COURT",
+      "meanings": [
+        { "meaning": "Tennis/basketball surface", "suggestedCategory": "Sports Venues" },
+        { "meaning": "Legal building", "suggestedCategory": "Legal Terms" },
+        { "meaning": "Royal court", "suggestedCategory": "Royalty Terms" },
+        { "meaning": "To woo", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "BANK",
+      "meanings": [
+        { "meaning": "Financial institution", "suggestedCategory": "Financial Institutions" },
+        { "meaning": "River edge", "suggestedCategory": "Geography Terms" },
+        { "meaning": "To rely on", "suggestedCategory": "Verbs" },
+        { "meaning": "Pool shot", "suggestedCategory": "Billiards Terms" }
+      ]
+    },
+    {
+      "word": "SCALE",
+      "meanings": [
+        { "meaning": "Weighing device", "suggestedCategory": "Measuring Tools" },
+        { "meaning": "Fish covering", "suggestedCategory": "Fish Anatomy" },
+        { "meaning": "Music notes", "suggestedCategory": "Music Terms" },
+        { "meaning": "To climb", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "KEY",
+      "meanings": [
+        { "meaning": "Door opener", "suggestedCategory": "Tools" },
+        { "meaning": "Musical key", "suggestedCategory": "Music Terms" },
+        { "meaning": "Keyboard key", "suggestedCategory": "Computer Parts" },
+        { "meaning": "Small island", "suggestedCategory": "Geography Terms" }
+      ]
+    },
+    {
+      "word": "RING",
+      "meanings": [
+        { "meaning": "Jewelry", "suggestedCategory": "Jewelry" },
+        { "meaning": "Sound of bell", "suggestedCategory": "Sounds" },
+        { "meaning": "Boxing arena", "suggestedCategory": "Sports Venues" },
+        { "meaning": "Circular shape", "suggestedCategory": "Shapes" }
+      ]
+    },
+    {
+      "word": "BRIDGE",
+      "meanings": [
+        { "meaning": "Structure over water", "suggestedCategory": "Structures" },
+        { "meaning": "Card game", "suggestedCategory": "Card Games" },
+        { "meaning": "Ship control room", "suggestedCategory": "Ship Parts" },
+        { "meaning": "Dental work", "suggestedCategory": "Dental Terms" }
+      ]
+    },
+    {
+      "word": "CHANNEL",
+      "meanings": [
+        { "meaning": "TV station", "suggestedCategory": "TV Terms" },
+        { "meaning": "Water passage", "suggestedCategory": "Water Features" },
+        { "meaning": "To direct", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "RECORD",
+      "meanings": [
+        { "meaning": "Vinyl disc", "suggestedCategory": "Music Formats" },
+        { "meaning": "Achievement", "suggestedCategory": "Sports Terms" },
+        { "meaning": "To capture audio/video", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "COACH",
+      "meanings": [
+        { "meaning": "Sports trainer", "suggestedCategory": "Sports Roles" },
+        { "meaning": "Bus type", "suggestedCategory": "Vehicles" },
+        { "meaning": "Luxury brand", "suggestedCategory": "Fashion Brands" },
+        { "meaning": "To train", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "TARGET",
+      "meanings": [
+        { "meaning": "Retail store", "suggestedCategory": "Retail Stores" },
+        { "meaning": "Goal/aim", "suggestedCategory": "Abstract Concepts" },
+        { "meaning": "Shooting bullseye", "suggestedCategory": "Archery Terms" }
+      ]
+    },
+    {
+      "word": "GAP",
+      "meanings": [
+        { "meaning": "Clothing store", "suggestedCategory": "Retail Stores" },
+        { "meaning": "Opening/space", "suggestedCategory": "Abstract Concepts" }
+      ]
+    },
+    {
+      "word": "SHELL",
+      "meanings": [
+        { "meaning": "Oil company", "suggestedCategory": "Oil Companies" },
+        { "meaning": "Sea creature covering", "suggestedCategory": "Animal Parts" },
+        { "meaning": "Ammunition casing", "suggestedCategory": "Military Terms" }
+      ]
+    },
+    {
+      "word": "CROWN",
+      "meanings": [
+        { "meaning": "Royal headwear", "suggestedCategory": "Royalty Items" },
+        { "meaning": "Top of head", "suggestedCategory": "Body Parts" },
+        { "meaning": "Dental cap", "suggestedCategory": "Dental Terms" },
+        { "meaning": "Currency (krona)", "suggestedCategory": "Currencies" }
+      ]
+    },
+    {
+      "word": "FORD",
+      "meanings": [
+        { "meaning": "Car company", "suggestedCategory": "Car Brands" },
+        { "meaning": "Shallow river crossing", "suggestedCategory": "Geography Terms" },
+        { "meaning": "US President", "suggestedCategory": "US Presidents" }
+      ]
+    },
+    {
+      "word": "CHASE",
+      "meanings": [
+        { "meaning": "Bank", "suggestedCategory": "Banks" },
+        { "meaning": "To pursue", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "LINCOLN",
+      "meanings": [
+        { "meaning": "Car brand", "suggestedCategory": "Car Brands" },
+        { "meaning": "US President", "suggestedCategory": "US Presidents" },
+        { "meaning": "City in Nebraska", "suggestedCategory": "US Cities" }
+      ]
+    },
+    {
+      "word": "WASHINGTON",
+      "meanings": [
+        { "meaning": "US State", "suggestedCategory": "US States" },
+        { "meaning": "US President", "suggestedCategory": "US Presidents" },
+        { "meaning": "DC capital", "suggestedCategory": "US Cities" },
+        { "meaning": "NFL team (Commanders)", "suggestedCategory": "NFL Teams" }
+      ]
+    },
+    {
+      "word": "GEORGIA",
+      "meanings": [
+        { "meaning": "US State", "suggestedCategory": "US States" },
+        { "meaning": "Country", "suggestedCategory": "Countries" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" }
+      ]
+    },
+    {
+      "word": "JORDAN",
+      "meanings": [
+        { "meaning": "Country", "suggestedCategory": "Countries" },
+        { "meaning": "Michael Jordan (athlete)", "suggestedCategory": "Athletes" },
+        { "meaning": "Sneaker brand", "suggestedCategory": "Shoe Brands" },
+        { "meaning": "Unisex name", "suggestedCategory": "Names" }
+      ]
+    },
+    {
+      "word": "DELTA",
+      "meanings": [
+        { "meaning": "Airline", "suggestedCategory": "Airlines" },
+        { "meaning": "River formation", "suggestedCategory": "Geography Terms" },
+        { "meaning": "Greek letter", "suggestedCategory": "Greek Letters" },
+        { "meaning": "Change (math)", "suggestedCategory": "Math Terms" }
+      ]
+    },
+    {
+      "word": "TESLA",
+      "meanings": [
+        { "meaning": "Car company", "suggestedCategory": "Car Brands" },
+        { "meaning": "Scientist (Nikola)", "suggestedCategory": "Scientists" },
+        { "meaning": "Unit of magnetism", "suggestedCategory": "Physics Units" }
+      ]
+    },
+    {
+      "word": "PARK",
+      "meanings": [
+        { "meaning": "Green space", "suggestedCategory": "Public Spaces" },
+        { "meaning": "To stop a car", "suggestedCategory": "Verbs" },
+        { "meaning": "Korean surname", "suggestedCategory": "Korean Surnames" }
+      ]
+    },
+    {
+      "word": "FAIR",
+      "meanings": [
+        { "meaning": "Carnival event", "suggestedCategory": "Events" },
+        { "meaning": "Just/equitable", "suggestedCategory": "Adjectives" },
+        { "meaning": "Light complexion", "suggestedCategory": "Skin Tones" }
+      ]
+    },
+    {
+      "word": "LIGHT",
+      "meanings": [
+        { "meaning": "Illumination", "suggestedCategory": "Light Terms" },
+        { "meaning": "Not heavy", "suggestedCategory": "Adjectives" },
+        { "meaning": "Beer type", "suggestedCategory": "Beer Types" }
+      ]
+    },
+    {
+      "word": "WILL",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Legal document", "suggestedCategory": "Legal Documents" },
+        { "meaning": "Determination", "suggestedCategory": "Abstract Concepts" },
+        { "meaning": "Future tense helper", "suggestedCategory": "Grammar Terms" }
+      ]
+    },
+    {
+      "word": "MAY",
+      "meanings": [
+        { "meaning": "Month", "suggestedCategory": "Months" },
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Possibility", "suggestedCategory": "Modal Verbs" }
+      ]
+    },
+    {
+      "word": "GRACE",
+      "meanings": [
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Elegance", "suggestedCategory": "Qualities" },
+        { "meaning": "Prayer before meals", "suggestedCategory": "Religious Terms" }
+      ]
+    },
+    {
+      "word": "FAITH",
+      "meanings": [
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Religious belief", "suggestedCategory": "Religious Terms" },
+        { "meaning": "Trust", "suggestedCategory": "Qualities" }
+      ]
+    },
+    {
+      "word": "HOPE",
+      "meanings": [
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Optimistic feeling", "suggestedCategory": "Emotions" }
+      ]
+    },
+    {
+      "word": "JOY",
+      "meanings": [
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Happiness", "suggestedCategory": "Emotions" }
+      ]
+    },
+    {
+      "word": "DAWN",
+      "meanings": [
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Early morning", "suggestedCategory": "Times of Day" }
+      ]
+    },
+    {
+      "word": "SUMMER",
+      "meanings": [
+        { "meaning": "Female name", "suggestedCategory": "Female Names" },
+        { "meaning": "Season", "suggestedCategory": "Seasons" }
+      ]
+    },
+    {
+      "word": "HUNTER",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "One who hunts", "suggestedCategory": "Occupations" },
+        { "meaning": "Green color", "suggestedCategory": "Shades of Green" }
+      ]
+    },
+    {
+      "word": "MASON",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Stone worker", "suggestedCategory": "Occupations" },
+        { "meaning": "Glass jar brand", "suggestedCategory": "Jar Types" }
+      ]
+    },
+    {
+      "word": "ARCHER",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "One who shoots arrows", "suggestedCategory": "Occupations" }
+      ]
+    },
+    {
+      "word": "PORTER",
+      "meanings": [
+        { "meaning": "Surname", "suggestedCategory": "Surnames" },
+        { "meaning": "Luggage carrier", "suggestedCategory": "Occupations" },
+        { "meaning": "Dark beer", "suggestedCategory": "Beer Types" }
+      ]
+    },
+    {
+      "word": "TROY",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Ancient city", "suggestedCategory": "Ancient Cities" },
+        { "meaning": "Weight unit", "suggestedCategory": "Weight Units" }
+      ]
+    },
+    {
+      "word": "MILES",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Distance unit", "suggestedCategory": "Distance Units" }
+      ]
+    },
+    {
+      "word": "MARK",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "To write on", "suggestedCategory": "Verbs" },
+        { "meaning": "German currency (former)", "suggestedCategory": "Currencies" },
+        { "meaning": "Target", "suggestedCategory": "Abstract Concepts" }
+      ]
+    },
+    {
+      "word": "FRANK",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Honest/direct", "suggestedCategory": "Adjectives" },
+        { "meaning": "Hot dog (slang)", "suggestedCategory": "Food" }
+      ]
+    },
+    {
+      "word": "BILL",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "Invoice", "suggestedCategory": "Financial Terms" },
+        { "meaning": "Bird's beak", "suggestedCategory": "Animal Parts" },
+        { "meaning": "Proposed law", "suggestedCategory": "Political Terms" }
+      ]
+    },
+    {
+      "word": "GRANT",
+      "meanings": [
+        { "meaning": "Male name", "suggestedCategory": "Male Names" },
+        { "meaning": "US President", "suggestedCategory": "US Presidents" },
+        { "meaning": "To give/bestow", "suggestedCategory": "Verbs" },
+        { "meaning": "Funding", "suggestedCategory": "Financial Terms" }
+      ]
+    },
+    {
+      "word": "KISS",
+      "meanings": [
+        { "meaning": "Rock band", "suggestedCategory": "Rock Bands" },
+        { "meaning": "Romantic gesture", "suggestedCategory": "Gestures" },
+        { "meaning": "Chocolate candy", "suggestedCategory": "Candy" }
+      ]
+    },
+    {
+      "word": "RUSH",
+      "meanings": [
+        { "meaning": "Rock band", "suggestedCategory": "Rock Bands" },
+        { "meaning": "To hurry", "suggestedCategory": "Verbs" },
+        { "meaning": "Sudden demand", "suggestedCategory": "Abstract Concepts" }
+      ]
+    },
+    {
+      "word": "CREAM",
+      "meanings": [
+        { "meaning": "Rock band", "suggestedCategory": "Rock Bands" },
+        { "meaning": "Dairy product", "suggestedCategory": "Dairy Products" },
+        { "meaning": "Best part", "suggestedCategory": "Abstract Concepts" },
+        { "meaning": "White color shade", "suggestedCategory": "Shades of White" }
+      ]
+    },
+    {
+      "word": "PRINCE",
+      "meanings": [
+        { "meaning": "Musician", "suggestedCategory": "Musicians" },
+        { "meaning": "Royalty", "suggestedCategory": "Royalty" }
+      ]
+    },
+    {
+      "word": "STING",
+      "meanings": [
+        { "meaning": "Musician", "suggestedCategory": "Musicians" },
+        { "meaning": "Insect attack", "suggestedCategory": "Actions" },
+        { "meaning": "Undercover operation", "suggestedCategory": "Police Terms" }
+      ]
+    },
+    {
+      "word": "DRAKE",
+      "meanings": [
+        { "meaning": "Musician (rapper)", "suggestedCategory": "Rappers" },
+        { "meaning": "Male duck", "suggestedCategory": "Animal Terms" }
+      ]
+    },
+    {
+      "word": "BIRDIE",
+      "meanings": [
+        { "meaning": "Golf term (1 under par)", "suggestedCategory": "Golf Terms" },
+        { "meaning": "Small bird (affectionate)", "suggestedCategory": "Terms of Endearment" },
+        { "meaning": "Badminton shuttlecock", "suggestedCategory": "Sports Equipment" }
+      ]
+    },
+    {
+      "word": "BOGEY",
+      "meanings": [
+        { "meaning": "Golf term (1 over par)", "suggestedCategory": "Golf Terms" },
+        { "meaning": "Enemy aircraft", "suggestedCategory": "Military Terms" }
+      ]
+    },
+    {
+      "word": "IRON",
+      "meanings": [
+        { "meaning": "Golf club", "suggestedCategory": "Golf Equipment" },
+        { "meaning": "Metal element", "suggestedCategory": "Metals" },
+        { "meaning": "Clothes pressing appliance", "suggestedCategory": "Appliances" }
+      ]
+    },
+    {
+      "word": "DRIVER",
+      "meanings": [
+        { "meaning": "Golf club", "suggestedCategory": "Golf Equipment" },
+        { "meaning": "One who drives", "suggestedCategory": "Occupations" },
+        { "meaning": "Computer software", "suggestedCategory": "Computer Terms" }
+      ]
+    },
+    {
+      "word": "WEDGE",
+      "meanings": [
+        { "meaning": "Golf club", "suggestedCategory": "Golf Equipment" },
+        { "meaning": "Triangular shape", "suggestedCategory": "Shapes" },
+        { "meaning": "Shoe type", "suggestedCategory": "Shoe Types" },
+        { "meaning": "To force into", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "CHIP",
+      "meanings": [
+        { "meaning": "Golf shot", "suggestedCategory": "Golf Terms" },
+        { "meaning": "Computer part", "suggestedCategory": "Computer Parts" },
+        { "meaning": "Snack food", "suggestedCategory": "Snacks" },
+        { "meaning": "Small piece", "suggestedCategory": "Abstract Concepts" }
+      ]
+    },
+    {
+      "word": "CELL",
+      "meanings": [
+        { "meaning": "Phone", "suggestedCategory": "Electronics" },
+        { "meaning": "Prison room", "suggestedCategory": "Prison Terms" },
+        { "meaning": "Biological unit", "suggestedCategory": "Biology Terms" }
+      ]
+    },
+    {
+      "word": "MOUSE",
+      "meanings": [
+        { "meaning": "Computer device", "suggestedCategory": "Computer Parts" },
+        { "meaning": "Small rodent", "suggestedCategory": "Animals" }
+      ]
+    },
+    {
+      "word": "MONITOR",
+      "meanings": [
+        { "meaning": "Computer screen", "suggestedCategory": "Computer Parts" },
+        { "meaning": "To watch/observe", "suggestedCategory": "Verbs" },
+        { "meaning": "Large lizard", "suggestedCategory": "Reptiles" }
+      ]
+    },
+    {
+      "word": "TABLET",
+      "meanings": [
+        { "meaning": "Computer device", "suggestedCategory": "Electronics" },
+        { "meaning": "Medicine form", "suggestedCategory": "Medicine Terms" },
+        { "meaning": "Stone slab", "suggestedCategory": "Ancient Artifacts" }
+      ]
+    },
+    {
+      "word": "SERVER",
+      "meanings": [
+        { "meaning": "Computer system", "suggestedCategory": "Computer Terms" },
+        { "meaning": "Restaurant worker", "suggestedCategory": "Occupations" }
+      ]
+    },
+    {
+      "word": "CLOUD",
+      "meanings": [
+        { "meaning": "Weather formation", "suggestedCategory": "Weather" },
+        { "meaning": "Computing storage", "suggestedCategory": "Computer Terms" },
+        { "meaning": "To obscure", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "BUG",
+      "meanings": [
+        { "meaning": "Insect", "suggestedCategory": "Insects" },
+        { "meaning": "Software error", "suggestedCategory": "Computer Terms" },
+        { "meaning": "Surveillance device", "suggestedCategory": "Spy Equipment" },
+        { "meaning": "To annoy", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "TOAST",
+      "meanings": [
+        { "meaning": "Browned bread", "suggestedCategory": "Bread Products" },
+        { "meaning": "To honor with drink", "suggestedCategory": "Celebrations" },
+        { "meaning": "Finished/done for (slang)", "suggestedCategory": "Slang" }
+      ]
+    },
+    {
+      "word": "JAM",
+      "meanings": [
+        { "meaning": "Fruit spread", "suggestedCategory": "Condiments" },
+        { "meaning": "Traffic situation", "suggestedCategory": "Traffic Terms" },
+        { "meaning": "Music session", "suggestedCategory": "Music Terms" },
+        { "meaning": "To force/wedge", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "PUNCH",
+      "meanings": [
+        { "meaning": "Fruit drink", "suggestedCategory": "Beverages" },
+        { "meaning": "To hit with fist", "suggestedCategory": "Verbs" },
+        { "meaning": "Hole-making tool", "suggestedCategory": "Tools" }
+      ]
+    },
+    {
+      "word": "MUG",
+      "meanings": [
+        { "meaning": "Drinking vessel", "suggestedCategory": "Drinkware" },
+        { "meaning": "Face (slang)", "suggestedCategory": "Body Parts" },
+        { "meaning": "To rob", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "PITCHER",
+      "meanings": [
+        { "meaning": "Drink container", "suggestedCategory": "Drinkware" },
+        { "meaning": "Baseball player", "suggestedCategory": "Baseball Positions" }
+      ]
+    },
+    {
+      "word": "TRIP",
+      "meanings": [
+        { "meaning": "Journey", "suggestedCategory": "Travel Terms" },
+        { "meaning": "To stumble", "suggestedCategory": "Verbs" },
+        { "meaning": "Hallucinogenic experience", "suggestedCategory": "Drug Terms" }
+      ]
+    },
+    {
+      "word": "WAVE",
+      "meanings": [
+        { "meaning": "Water movement", "suggestedCategory": "Water Terms" },
+        { "meaning": "Hand gesture", "suggestedCategory": "Gestures" },
+        { "meaning": "Hair style", "suggestedCategory": "Hair Styles" }
+      ]
+    },
+    {
+      "word": "TIE",
+      "meanings": [
+        { "meaning": "Necktie", "suggestedCategory": "Clothing" },
+        { "meaning": "Equal score", "suggestedCategory": "Sports Terms" },
+        { "meaning": "To fasten", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "CHECK",
+      "meanings": [
+        { "meaning": "Payment form", "suggestedCategory": "Payment Methods" },
+        { "meaning": "Restaurant bill", "suggestedCategory": "Restaurant Terms" },
+        { "meaning": "Chess move", "suggestedCategory": "Chess Terms" },
+        { "meaning": "Pattern", "suggestedCategory": "Patterns" },
+        { "meaning": "To verify", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "SCORE",
+      "meanings": [
+        { "meaning": "Points in game", "suggestedCategory": "Sports Terms" },
+        { "meaning": "Music notation", "suggestedCategory": "Music Terms" },
+        { "meaning": "Twenty", "suggestedCategory": "Numbers" },
+        { "meaning": "To achieve", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "VOLUME",
+      "meanings": [
+        { "meaning": "Sound level", "suggestedCategory": "Audio Terms" },
+        { "meaning": "Book", "suggestedCategory": "Book Terms" },
+        { "meaning": "3D space measurement", "suggestedCategory": "Math Terms" }
+      ]
+    },
+    {
+      "word": "ANCHOR",
+      "meanings": [
+        { "meaning": "Ship weight", "suggestedCategory": "Ship Equipment" },
+        { "meaning": "News presenter", "suggestedCategory": "TV Roles" },
+        { "meaning": "To secure", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "TANK",
+      "meanings": [
+        { "meaning": "Military vehicle", "suggestedCategory": "Military Vehicles" },
+        { "meaning": "Water container", "suggestedCategory": "Containers" },
+        { "meaning": "To fail deliberately", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "BEAR",
+      "meanings": [
+        { "meaning": "Animal", "suggestedCategory": "Animals" },
+        { "meaning": "To carry/endure", "suggestedCategory": "Verbs" },
+        { "meaning": "NFL team (Chicago)", "suggestedCategory": "NFL Teams" },
+        { "meaning": "Stock market pessimist", "suggestedCategory": "Stock Market Terms" }
+      ]
+    },
+    {
+      "word": "BULL",
+      "meanings": [
+        { "meaning": "Male cattle", "suggestedCategory": "Farm Animals" },
+        { "meaning": "NBA team (Chicago)", "suggestedCategory": "NBA Teams" },
+        { "meaning": "Stock market optimist", "suggestedCategory": "Stock Market Terms" },
+        { "meaning": "Nonsense (slang)", "suggestedCategory": "Slang" }
+      ]
+    },
+    {
+      "word": "ROCK",
+      "meanings": [
+        { "meaning": "Stone", "suggestedCategory": "Geology" },
+        { "meaning": "Music genre", "suggestedCategory": "Music Genres" },
+        { "meaning": "To sway", "suggestedCategory": "Verbs" },
+        { "meaning": "Dwayne Johnson nickname", "suggestedCategory": "Nicknames" }
+      ]
+    },
+    {
+      "word": "SONIC",
+      "meanings": [
+        { "meaning": "Fast food chain", "suggestedCategory": "Fast Food Chains" },
+        { "meaning": "Video game character", "suggestedCategory": "Video Game Characters" },
+        { "meaning": "Relating to sound", "suggestedCategory": "Adjectives" }
+      ]
+    },
+    {
+      "word": "BUFFALO",
+      "meanings": [
+        { "meaning": "City in New York", "suggestedCategory": "US Cities" },
+        { "meaning": "Animal (bison)", "suggestedCategory": "Animals" },
+        { "meaning": "NFL team (Bills)", "suggestedCategory": "NFL Teams" },
+        { "meaning": "To intimidate", "suggestedCategory": "Verbs" }
+      ]
+    },
+    {
+      "word": "PHOENIX",
+      "meanings": [
+        { "meaning": "City in Arizona", "suggestedCategory": "US Cities" },
+        { "meaning": "Mythical bird", "suggestedCategory": "Mythical Creatures" },
+        { "meaning": "NBA team (Suns)", "suggestedCategory": "NBA Teams" }
+      ]
+    },
+    {
+      "word": "PORTLAND",
+      "meanings": [
+        { "meaning": "City in Oregon", "suggestedCategory": "US Cities" },
+        { "meaning": "City in Maine", "suggestedCategory": "US Cities" },
+        { "meaning": "Cement type", "suggestedCategory": "Building Materials" }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalWords": 148,
+    "topPolysemousWords": [
+      "MERCURY",
+      "QUEEN",
+      "JACK",
+      "DIAMOND",
+      "HEART",
+      "CARDINAL",
+      "PHOENIX",
+      "SPRING",
+      "KEY",
+      "BANK"
+    ]
+  }
+}
