@@ -22,6 +22,8 @@ export interface ArchivePageProps {
   getPuzzleStars?: (puzzleNumber: number) => number;
   /** Function to get score for a completed puzzle (optional) */
   getPuzzleScore?: (puzzleNumber: number) => number | null;
+  /** Custom formatter for score display (optional, defaults to showing raw number) */
+  formatScore?: (score: number) => string;
   /** Callback when user selects a puzzle */
   onSelectPuzzle: (puzzleNumber: number) => void;
   /** URL to navigate back to the game */
@@ -50,6 +52,7 @@ export function ArchivePage({
   isPuzzleInProgress,
   getPuzzleStars,
   getPuzzleScore,
+  formatScore,
   onSelectPuzzle,
   backHref,
 }: ArchivePageProps) {
@@ -141,7 +144,9 @@ export function ArchivePage({
                       <div className="flex items-center gap-2">
                         {entry.score !== null && (
                           <>
-                            <span className="text-[var(--muted,#a1a1aa)]">{entry.score}</span>
+                            <span className="text-[var(--muted,#a1a1aa)]">
+                              {formatScore ? formatScore(entry.score) : entry.score}
+                            </span>
                             <span className="text-lg text-[var(--muted,#a1a1aa)] opacity-50">·</span>
                           </>
                         )}

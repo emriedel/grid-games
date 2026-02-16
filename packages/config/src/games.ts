@@ -36,6 +36,15 @@ export const GAMES: GameInfo[] = [
     hasArchive: true,
     launchDate: '2026-02-01',
   },
+  {
+    id: 'trio',
+    name: 'Trio',
+    description: 'Find all five sets of three matching cards',
+    accentColor: '#14b8a6',
+    href: '/trio',
+    hasArchive: true,
+    launchDate: '2026-02-01',
+  },
   // {
   //   id: 'edgewise',
   //   name: 'Edgewise',

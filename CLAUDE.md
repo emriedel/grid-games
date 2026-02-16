@@ -4,7 +4,7 @@
 
 **Nerdcube Games** is a collection of daily word puzzle games (similar to NYT Games). Turborepo monorepo with shared packages for UI, config, and utilities.
 
-**Games:** Dabble (amber), Jumble (red/pink) | **Domain:** nerdcube.games
+**Games:** Dabble (red), Jumble (blue), Trio (teal) | **Domain:** nerdcube.games
 
 > **Game-specific work?** Each app has its own `CLAUDE.md` with detailed docs. Consider working from `apps/[game]/` directly.
 >

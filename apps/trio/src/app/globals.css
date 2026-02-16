@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/* Tell Tailwind to scan the shared UI package for classes */
+@source "../../../../node_modules/@grid-games/ui/src/**/*.tsx";
+
+:root {
+  /* Base tokens */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #a1a1aa;
+  --border: #27272a;
+
+  /* Trio theme - Teal accent */
+  --accent: #14b8a6;
+  --accent-foreground: #ffffff;
+  --accent-secondary: #0d9488;
+
+  /* Card backgrounds - warm cream tones */
+  --card-bg: #f5f0e6;
+  --card-bg-hover: #ebe5d8;
+  --card-bg-selected: #e0d9c8;
+  --card-bg-hinted: #fff8e6;
+
+  /* Hint system */
+  --hint-color: #f59e0b;
+
+  /* Tile/card styling (legacy) */
+  --tile-bg: #1c1c1c;
+  --tile-bg-selected: #2a4a47;
+  --tile-border: #3f3f46;
+
+  /* Card colors (for shapes) - rich, saturated colors */
+  --trio-red: #dc2626;
+  --trio-green: #059669;
+  --trio-purple: #7c3aed;
+  --trio-blue: #2563eb;
+  --trio-orange: #ea580c;
+  --trio-teal: #0d9488;
+
+  /* Status colors */
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Card animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes cardAdd {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.3);
+  }
+}
+
+@keyframes foundSetAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.animate-card-add {
+  animation: cardAdd 0.3s ease-out forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 1.5s ease-in-out infinite;
+}
+
+.animate-found-set-appear {
+  animation: foundSetAppear 0.3s ease-out forwards;
+}

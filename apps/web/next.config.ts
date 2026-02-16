@@ -44,6 +44,14 @@ const nextConfig: NextConfig = {
         source: '/carom/:path*',
         destination: 'https://grid-games-carom.vercel.app/carom/:path*',
       },
+      {
+        source: '/trio',
+        destination: 'https://grid-games-trio.vercel.app/trio',
+      },
+      {
+        source: '/trio/:path*',
+        destination: 'https://grid-games-trio.vercel.app/trio/:path*',
+      },
     ];
   },
 };

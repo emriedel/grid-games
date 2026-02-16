@@ -1,0 +1,38 @@
+{
+  "name": "@grid-games/trio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3005",
+    "build": "next build",
+    "start": "next start --port 3005",
+    "lint": "eslint",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next .turbo node_modules",
+    "find-base-configs": "npx tsx scripts/findBaseConfigs.ts",
+    "generate-pool": "npx tsx scripts/generateSequential.ts",
+    "generate-pool-legacy": "npx tsx scripts/generatePool.ts",
+    "assign-puzzles": "npx tsx scripts/assignPuzzles.ts"
+  },
+  "dependencies": {
+    "@grid-games/config": "*",
+    "@grid-games/ui": "*",
+    "@grid-games/shared": "*",
+    "@vercel/analytics": "^1.6.1",
+    "next": "16.1.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "seedrandom": "^3.0.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/seedrandom": "^3.0.8",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

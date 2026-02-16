@@ -71,14 +71,26 @@ export const edgewiseTheme: GameTheme = {
   tileBorder: '#4c1d95',    // purple-800
 };
 
+/** Trio game theme - teal accent */
+export const trioTheme: GameTheme = {
+  ...baseTheme,
+  accent: '#14b8a6',        // teal-500
+  accentForeground: '#ffffff',
+  accentSecondary: '#0d9488', // teal-600
+  tileBg: '#1c1c1c',
+  tileBgSelected: '#2a4a47',
+  tileBorder: '#3f3f46',
+};
+
 /** Game identifiers */
-export type GameId = 'dabble' | 'jumble' | 'edgewise';
+export type GameId = 'dabble' | 'jumble' | 'edgewise' | 'trio';
 
 /** Map of all game themes */
 export const gameThemes: Record<GameId, GameTheme> = {
   dabble: dabbleTheme,
   jumble: jumbleTheme,
   edgewise: edgewiseTheme,
+  trio: trioTheme,
 };
 
 /**
