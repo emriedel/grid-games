@@ -52,6 +52,14 @@ const nextConfig: NextConfig = {
         source: '/trio/:path*',
         destination: 'https://grid-games-trio.vercel.app/trio/:path*',
       },
+      {
+        source: '/tessera',
+        destination: 'https://grid-games-tessera.vercel.app/tessera',
+      },
+      {
+        source: '/tessera/:path*',
+        destination: 'https://grid-games-tessera.vercel.app/tessera/:path*',
+      },
     ];
   },
 };

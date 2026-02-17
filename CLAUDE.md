@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-**Nerdcube Games** is a collection of daily word puzzle games (similar to NYT Games). Turborepo monorepo with shared packages for UI, config, and utilities.
+**Nerdcube Games** is a collection of daily puzzle games (similar to NYT Games). Turborepo monorepo with shared packages for UI, config, and utilities.
 
-**Games:** Dabble (red), Jumble (blue), Trio (teal) | **Domain:** nerdcube.games
+**Games:** Dabble (red), Jumble (blue), Trio (teal), Tessera (green) | **Domain:** nerdcube.games
 
 > **Game-specific work?** Each app has its own `CLAUDE.md` with detailed docs. Consider working from `apps/[game]/` directly.
 >
@@ -162,7 +162,7 @@ const rng = seedrandom(new Date().toISOString().split('T')[0]);
 
 ### Pre-Generated Puzzles (Archive-Enabled Games)
 
-Games with archive support (Dabble, Carom) use a pool/assigned architecture:
+Games with archive support (Dabble, Carom, Tessera) use a pool/assigned architecture:
 
 ```
 public/puzzles/
@@ -381,6 +381,7 @@ Each game has a `/debug` page for browsing unpublished puzzles (localhost only):
 ```
 http://localhost:3001/debug    # Dabble puzzle browser
 http://localhost:3004/debug    # Carom puzzle browser
+http://localhost:3006/debug    # Tessera puzzle browser
 ```
 
 Features:

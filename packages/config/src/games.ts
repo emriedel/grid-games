@@ -54,6 +54,15 @@ export const GAMES: GameInfo[] = [
   //   hasArchive: true,
   //   launchDate: '2026-01-25',
   // },
+  // {
+  //   id: 'tessera',
+  //   name: 'Tessera',
+  //   description: 'Fill the target shape using pentomino pieces',
+  //   accentColor: '#059669',
+  //   href: '/tessera',
+  //   hasArchive: true,
+  //   launchDate: '2026-03-01',
+  // },
 ];
 
 export function getIconUrl(gameId: string): string {
