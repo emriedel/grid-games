@@ -38,54 +38,46 @@ Then open http://localhost:3005
 3. Exactly ONE valid trio exists each round
 4. Tap 3 cards to select them, then press **Submit**
 5. Valid trios are removed; 3 new cards replace them
-6. Find the trio in all 5 rounds to win
-7. **4 wrong guesses = game over**
+6. Complete all 5 rounds
 
-### Attempts & Hints
-- **4 Attempts:** You have 4 chances to make wrong guesses before game over
-- **3 Hints:** Use hints (💡) to reveal cards from the valid trio
+### Hints & Scoring
+- **1 Hint per round:** Use hints (💡) to reveal a card from the valid trio
+- Wrong guess: The correct trio is revealed and round advances (marked as "missed")
 - No timer - take your time to find the correct trio
+- **Perfect game:** Find all 5 trios without hints (earns 🏆)
 
 ### Card Attributes
 
-Each attribute has 3 values in each puzzle (selected from a larger pool):
+Each attribute has exactly 3 values per puzzle:
 
-- **Shape Pool:** circle, triangle, square, diamond, pentagon, hexagon, star, cross, heart
-- **Color Pool:** red, green, purple, blue, orange, teal (rich, saturated colors)
-- **Pattern Pool:** solid, outline, striped
+- **Shape:** 3 shapes per puzzle (from pool: circle, triangle, square, diamond, pentagon, hexagon, star, cross, heart)
+- **Color:** Red (#dc2626), Blue (#2563eb), Gold (#f59e0b) - vibrant, saturated palette
+- **Pattern:** solid, outline, striped
 - **Count:** 1, 2, or 3 shapes (displayed in triangle pattern for count=3)
 
-**Conflict Rules:** Similar shapes/colors never appear together in the same puzzle:
-
-*Shape conflicts:*
+**Shape Conflict Rules:** Similar shapes never appear together in the same puzzle:
 - Pentagon and hexagon (too similar multi-sided polygons)
 - Square and diamond (diamond is just a rotated square)
-
-*Color conflicts:*
-- Green and teal (both greenish)
-- Red and orange (both warm/reddish)
-- Blue and purple (both cool, can look similar)
 
 ### Valid Set Examples
 
 1. **All Different:** 3 different shapes, 3 different colors, 3 different patterns, 3 different counts
 2. **Mixed:** Same shape, same count; different colors, different patterns
 
-### Share Format (Strands-style)
+### Share Format
 
 ```
-Trio #42
-🎯🎯🎯🎯🎯
-❌❌
-💡
+Trio 🏆 #42        (trophy if all found without hints)
+5/5 Trios
+🟩🟨🟩🟥🟩
 
 nerdcube.games/trio
 ```
 
-- 🎯 = rounds completed
-- ❌ = wrong guesses
-- 💡 = hints used
-- Loss shows "(3/5)" after rounds
+- 🟩 = found (no hint)
+- 🟨 = found with hint
+- 🟥 = missed
+- 🏆 = appears next to game name if ALL rounds found without hints (perfect game)
 
 ## File Structure
 
@@ -101,9 +93,10 @@ src/
 │   ├── Tableau.tsx      # 3x3 card grid
 │   ├── Card.tsx         # Interactive card (square, cream bg, hint glow)
 │   ├── CardShape.tsx    # SVG shape rendering (triangle layout for count=3)
-│   ├── AttemptsIndicator.tsx   # 4 dots showing remaining attempts
-│   ├── HintsIndicator.tsx      # Hint button with count
-│   ├── FoundSetDisplay.tsx     # Shows last found trio at bottom
+│   ├── HintsIndicator.tsx      # Hint button
+│   ├── FoundSetDisplay.tsx     # Shows last found trio below buttons
+│   ├── RoundProgress.tsx       # 5-dot progress indicator in nav
+│   ├── AllFoundTrios.tsx       # Displays all trios on finished screen
 │   ├── HowToPlayModal.tsx
 │   └── ArchivePageContent.tsx
 ├── lib/
@@ -142,19 +135,16 @@ interface GameState {
   currentRound: number;          // 1-5
   cards: Card[];                 // Current 9 cards
   selectedCardIds: string[];     // Max 3
-  foundSets: FoundSet[];         // Sets found by player (1 per round)
-  // Attempts system
-  incorrectGuesses: number;      // 0-4, game over at 4
-  guessHistory: GuessAttempt[];  // For duplicate detection
-  // Hint system
-  hintsUsed: number;             // 0-3
+  roundOutcomes: RoundOutcome[]; // 'pending' | 'found' | 'found-with-hint' | 'missed'
+  hintUsedInRound: boolean[];    // Track hint usage per round
+  allTrios: Card[][];            // All trios (found + missed) for results display
   hintedCardIds: string[];       // Cards revealed by hints
-  // Display
-  lastFoundSet?: Card[];         // For bottom display
-  won: boolean;                  // True if completed all rounds
+  lastFoundSet?: Card[];         // For display below buttons
   // Animation
   removingCardIds: string[];
   addingCardIds: string[];
+  revealingCorrectTrio: boolean;
+  correctTrioCardIds: string[];
 }
 ```
 
@@ -162,18 +152,18 @@ interface GameState {
 
 1. Tap cards to select (max 3)
 2. Press **Submit** to check your trio
-3. Valid: Cards animate out, new cards appear, round advances
-4. Invalid: Shake animation, selection clears, lose 1 attempt
-5. Duplicate guess: Toast "Already guessed", no attempt lost
-6. Game ends after round 5 (win) OR 4 wrong guesses (loss)
+3. Valid: Cards animate out, new cards appear, round advances (outcome: 'found' or 'found-with-hint')
+4. Invalid: Shake animation, correct trio revealed briefly, then round advances (outcome: 'missed')
+5. Game ends after round 5
 
 ### Key Actions
 
 - `SELECT_CARD` / `DESELECT_CARD` - Toggle card selection
 - `SUBMIT_SELECTION` - Check if selected cards form valid trio
 - `FOUND_SET` - Valid trio found, advance round
-- `INVALID_GUESS` - Wrong guess, increment incorrectGuesses
-- `USE_HINT` - Reveal next card in valid set
+- `MISSED_ROUND` - Wrong guess, reveal correct trio
+- `ADVANCE_AFTER_MISS` - Move to next round after reveal
+- `USE_HINT` - Reveal first card in valid set
 
 ## Storage Pattern
 
@@ -189,14 +179,12 @@ interface TrioPuzzleState {
   status: 'in-progress' | 'completed';
   data: {
     currentRound: number;
-    foundSets: FoundSet[];
     currentCardTuples: Tuple[];
-    incorrectGuesses: number;
-    guessHistory: GuessAttempt[];
-    hintsUsed: number;
-    hintedCardIds: string[];
+    roundOutcomes: RoundOutcome[];
+    hintUsedInRound: boolean[];
+    allTrioTuples: Tuple[][];
     selectedCardIds?: string[];
-    won?: boolean;
+    lastFoundSetTuples?: Tuple[];
   };
 }
 ```
