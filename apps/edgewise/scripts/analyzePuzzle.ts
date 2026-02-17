@@ -5,7 +5,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import type { PoolFile, PoolPuzzle } from './types';
+import type { PoolFile, PoolPuzzle, PoolPuzzleSquare } from './types';
 
 interface DerivedCategory {
   name: string;
@@ -85,12 +85,12 @@ console.log('=== VALID PLACEMENTS PER TILE ===');
 
 const edges = ['top', 'right', 'bottom', 'left'] as const;
 
-function getWordAtEdge(sq: typeof puzzle.squares[0], visualEdge: number, rotation: number): string {
+function getWordAtEdge(sq: PoolPuzzleSquare, visualEdge: number, rotation: number): string {
   const originalIndex = ((visualEdge - rotation + 4) % 4);
   return sq[edges[originalIndex]];
 }
 
-function checkTileAtPosition(sq: typeof puzzle.squares[0], pos: number, rot: number): boolean {
+function checkTileAtPosition(sq: PoolPuzzleSquare, pos: number, rot: number): boolean {
   // Position requirements (which edges need to match which categories)
   const requirements: Record<number, Array<{edge: number, cat: string}>> = {
     0: [{edge: 0, cat: cats.top}, {edge: 3, cat: cats.left}],      // top-left
