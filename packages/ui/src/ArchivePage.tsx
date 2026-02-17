@@ -28,6 +28,10 @@ export interface ArchivePageProps {
   onSelectPuzzle: (puzzleNumber: number) => void;
   /** URL to navigate back to the game */
   backHref: string;
+  /** Display mode for completion status: 'stars' (default) or 'checkmark' */
+  statusDisplay?: 'stars' | 'checkmark';
+  /** For 'checkmark' mode: is this a "perfect" completion? Shows trophy instead of checkmark */
+  isPerfectCompletion?: (puzzleNumber: number) => boolean;
 }
 
 interface ArchiveEntry {
@@ -37,6 +41,7 @@ interface ArchiveEntry {
   isInProgress: boolean;
   stars: number;
   score: number | null;
+  isPerfect: boolean;
 }
 
 /**
@@ -55,6 +60,8 @@ export function ArchivePage({
   formatScore,
   onSelectPuzzle,
   backHref,
+  statusDisplay = 'stars',
+  isPerfectCompletion,
 }: ArchivePageProps) {
   // Calculate archive entries (puzzle #1 to yesterday's puzzle)
   const archiveEntries = useMemo(() => {
@@ -81,11 +88,12 @@ export function ArchivePage({
         isInProgress: isPuzzleInProgress?.(num) ?? false,
         stars: isCompleted && getPuzzleStars ? getPuzzleStars(num) : 0,
         score: isCompleted && getPuzzleScore ? getPuzzleScore(num) : null,
+        isPerfect: isCompleted && isPerfectCompletion ? isPerfectCompletion(num) : false,
       });
     }
 
     return entries;
-  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getPuzzleScore]);
+  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getPuzzleScore, isPerfectCompletion]);
 
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
@@ -150,9 +158,19 @@ export function ArchivePage({
                             <span className="text-lg text-[var(--muted,#a1a1aa)] opacity-50">·</span>
                           </>
                         )}
-                        <span className="text-[var(--accent)]">
-                          {'★'.repeat(entry.stars)}{'☆'.repeat(3 - entry.stars)}
-                        </span>
+                        {statusDisplay === 'checkmark' ? (
+                          // Checkmark/Trophy mode
+                          entry.isPerfect ? (
+                            <span className="text-xl" title="Perfect!">🏆</span>
+                          ) : (
+                            <Check size={18} className="text-[var(--success,#22c55e)]" />
+                          )
+                        ) : (
+                          // Stars mode (default)
+                          <span className="text-[var(--accent)]">
+                            {'★'.repeat(entry.stars)}{'☆'.repeat(3 - entry.stars)}
+                          </span>
+                        )}
                       </div>
                     ) : entry.isInProgress ? (
                       <Clock size={18} className="text-[var(--warning,#f59e0b)]" />

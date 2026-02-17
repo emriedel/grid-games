@@ -17,16 +17,11 @@ export const GAME_CONFIG = {
   // Cards replaced after finding a set
   REPLACEMENT_COUNT: 3,
 
-  // Attempts-based game over (replaces timer)
-  MAX_INCORRECT_GUESSES: 4,  // 4 wrong guesses = game over
-
-  // Hint system
-  MAX_HINTS: 3,  // 3 hints available per puzzle
-
   // Animation durations (ms)
   ANIMATION: {
     CARD_REMOVE: 300,
     CARD_ADD: 300,
     BETWEEN_ROUNDS: 400,
+    REVEAL_CORRECT: 1500, // Time to show correct answer after miss
   },
 } as const;

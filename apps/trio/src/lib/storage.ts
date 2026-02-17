@@ -4,12 +4,12 @@
  * Uses the createArchiveStorage factory from @grid-games/shared.
  *
  * Sequential Draw Mode storage:
- * - Saves current round, found sets, and current board state
- * - Tracks incorrect guesses, hints used, and guess history
+ * - Saves current round, round outcomes, and current board state
+ * - Tracks hint usage per round and all trios (found + missed)
  */
 
 import { createArchiveStorage, type BasePuzzleState } from '@grid-games/shared';
-import type { FoundSet, Tuple, GuessAttempt } from '@/types';
+import type { Tuple, RoundOutcome } from '@/types';
 
 // Define Trio-specific puzzle state
 export interface TrioPuzzleState extends BasePuzzleState {
@@ -17,17 +17,13 @@ export interface TrioPuzzleState extends BasePuzzleState {
   puzzleId?: string;
   status: 'in-progress' | 'completed';
   data: {
-    // In-progress state
     currentRound: number;
-    foundSets: FoundSet[];
-    currentCardTuples: Tuple[];   // Current 12 cards as tuples
-    incorrectGuesses: number;
-    guessHistory: GuessAttempt[];
-    hintsUsed: number;
-    hintedCardIds: string[];
+    currentCardTuples: Tuple[];      // Current 9 cards as tuples (in position order 0-8)
+    roundOutcomes: RoundOutcome[];   // 5 outcomes (one per round)
+    hintUsedInRound: boolean[];      // 5 booleans (one per round)
+    allTrioTuples: Tuple[][];        // All trios' tuples (found + missed)
     selectedCardIds?: string[];
-    // Completion state
-    won?: boolean;
+    lastFoundSetTuples?: Tuple[];    // Last found trio's tuples (for resume display)
   };
 }
 
@@ -58,14 +54,13 @@ export const {
 export function saveInProgressState(
   puzzleNumber: number,
   currentRound: number,
-  foundSets: FoundSet[],
   currentCardTuples: Tuple[],
-  incorrectGuesses: number,
-  guessHistory: GuessAttempt[],
-  hintsUsed: number,
-  hintedCardIds: string[],
+  roundOutcomes: RoundOutcome[],
+  hintUsedInRound: boolean[],
+  allTrioTuples: Tuple[][],
   selectedCardIds: string[],
-  puzzleId?: string
+  puzzleId?: string,
+  lastFoundSetTuples?: Tuple[]
 ): void {
   const state: TrioPuzzleState = {
     puzzleNumber,
@@ -73,13 +68,12 @@ export function saveInProgressState(
     status: 'in-progress',
     data: {
       currentRound,
-      foundSets,
       currentCardTuples,
-      incorrectGuesses,
-      guessHistory,
-      hintsUsed,
-      hintedCardIds,
+      roundOutcomes,
+      hintUsedInRound,
+      allTrioTuples,
       selectedCardIds,
+      lastFoundSetTuples,
     },
   };
   savePuzzleState(puzzleNumber, state, puzzleId);
@@ -90,12 +84,9 @@ export function saveInProgressState(
  */
 export function saveCompletedState(
   puzzleNumber: number,
-  currentRound: number,
-  foundSets: FoundSet[],
-  incorrectGuesses: number,
-  guessHistory: GuessAttempt[],
-  hintsUsed: number,
-  won: boolean,
+  roundOutcomes: RoundOutcome[],
+  hintUsedInRound: boolean[],
+  allTrioTuples: Tuple[][],
   puzzleId?: string
 ): void {
   const state: TrioPuzzleState = {
@@ -103,14 +94,11 @@ export function saveCompletedState(
     puzzleId,
     status: 'completed',
     data: {
-      currentRound,
-      foundSets,
+      currentRound: 5,
       currentCardTuples: [], // Not needed for completed state
-      incorrectGuesses,
-      guessHistory,
-      hintsUsed,
-      hintedCardIds: [],
-      won,
+      roundOutcomes,
+      hintUsedInRound,
+      allTrioTuples,
     },
   };
   savePuzzleState(puzzleNumber, state, puzzleId);

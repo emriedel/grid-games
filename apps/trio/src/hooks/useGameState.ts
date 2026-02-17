@@ -1,7 +1,7 @@
 'use client';
 
 import { useReducer, useCallback } from 'react';
-import type { GameState, GameAction, SequentialPuzzle, Card, FoundSet, GuessAttempt } from '@/types';
+import type { GameState, GameAction, SequentialPuzzle, Card, RoundOutcome } from '@/types';
 import { isValidSet } from '@/lib/setLogic';
 import { GAME_CONFIG } from '@/constants';
 import { getReplacementCards } from '@/lib/puzzleLoader';
@@ -12,32 +12,16 @@ const initialState: GameState = {
   currentRound: 1,
   cards: [],
   selectedCardIds: [],
-  foundSets: [],
-  incorrectGuesses: 0,
-  guessHistory: [],
-  hintsUsed: 0,
+  roundOutcomes: ['pending', 'pending', 'pending', 'pending', 'pending'],
+  hintUsedInRound: [false, false, false, false, false],
+  allTrios: [],
+  revealingCorrectTrio: false,
+  correctTrioCardIds: [],
   hintedCardIds: [],
   lastFoundSet: undefined,
-  won: false,
   removingCardIds: [],
   addingCardIds: [],
 };
-
-/**
- * Check if a guess is a duplicate within the current round.
- */
-function isDuplicateGuess(
-  cardIds: [string, string, string],
-  round: number,
-  guessHistory: GuessAttempt[]
-): boolean {
-  const sortedIds = [...cardIds].sort();
-  return guessHistory.some(attempt => {
-    if (attempt.round !== round) return false;
-    const sortedAttempt = [...attempt.cardIds].sort();
-    return sortedIds.every((id, i) => id === sortedAttempt[i]);
-  });
-}
 
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
@@ -48,13 +32,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         cards: action.cards,
         currentRound: 1,
         selectedCardIds: [],
-        foundSets: [],
-        incorrectGuesses: 0,
-        guessHistory: [],
-        hintsUsed: 0,
+        roundOutcomes: ['pending', 'pending', 'pending', 'pending', 'pending'],
+        hintUsedInRound: [false, false, false, false, false],
+        allTrios: [],
+        revealingCorrectTrio: false,
+        correctTrioCardIds: [],
         hintedCardIds: [],
         lastFoundSet: undefined,
-        won: false,
         removingCardIds: [],
         addingCardIds: [],
       };
@@ -78,6 +62,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       if (state.removingCardIds.includes(action.cardId)) {
         return state;
       }
+      // Can't select during reveal
+      if (state.revealingCorrectTrio) {
+        return state;
+      }
       return {
         ...state,
         selectedCardIds: [...state.selectedCardIds, action.cardId],
@@ -85,6 +73,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'DESELECT_CARD':
+      // Can't deselect during reveal
+      if (state.revealingCorrectTrio) {
+        return state;
+      }
       return {
         ...state,
         selectedCardIds: state.selectedCardIds.filter(id => id !== action.cardId),
@@ -101,31 +93,68 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return state;
 
     case 'FOUND_SET': {
-      const newFoundSets = [...state.foundSets, action.set];
+      const roundIndex = state.currentRound - 1;
       const newRound = state.currentRound + 1;
       const isComplete = newRound > GAME_CONFIG.ROUND_COUNT;
 
-      // Mark found cards as removing
-      const removingCardIds = action.set.cardIds;
+      // Update round outcome based on whether hint was used
+      const newRoundOutcomes = [...state.roundOutcomes] as RoundOutcome[];
+      newRoundOutcomes[roundIndex] = action.usedHint ? 'found-with-hint' : 'found';
 
-      // Record the guess as correct
-      const newGuessHistory: GuessAttempt[] = [...state.guessHistory, {
-        cardIds: action.set.cardIds,
-        round: state.currentRound,
-        wasCorrect: true,
-      }];
+      // Add to all trios
+      const newAllTrios = [...state.allTrios, action.lastFoundCards];
+
+      // Mark found cards as removing
+      const removingCardIds = action.lastFoundCards.map(c => c.id);
 
       return {
         ...state,
-        foundSets: newFoundSets,
         selectedCardIds: [],
         removingCardIds,
-        guessHistory: newGuessHistory,
+        roundOutcomes: newRoundOutcomes,
+        allTrios: newAllTrios,
         lastFoundSet: action.lastFoundCards,
         // Clear hints for new round (hinted cards were just found)
         hintedCardIds: [],
         phase: isComplete ? 'finished' : state.phase,
-        won: isComplete ? true : state.won,
+      };
+    }
+
+    case 'MISSED_ROUND': {
+      const roundIndex = state.currentRound - 1;
+
+      // Update round outcome to missed
+      const newRoundOutcomes = [...state.roundOutcomes] as RoundOutcome[];
+      newRoundOutcomes[roundIndex] = 'missed';
+
+      // Add correct trio to allTrios
+      const newAllTrios = [...state.allTrios, action.correctTrio];
+
+      return {
+        ...state,
+        selectedCardIds: [],
+        roundOutcomes: newRoundOutcomes,
+        allTrios: newAllTrios,
+        revealingCorrectTrio: true,
+        correctTrioCardIds: action.correctTrioCardIds,
+        lastFoundSet: action.correctTrio,
+      };
+    }
+
+    case 'ADVANCE_AFTER_MISS': {
+      const newRound = state.currentRound + 1;
+      const isComplete = newRound > GAME_CONFIG.ROUND_COUNT;
+
+      // Set removingCardIds to the correct trio that was revealed
+      const removingCardIds = [...state.correctTrioCardIds];
+
+      return {
+        ...state,
+        revealingCorrectTrio: false,
+        correctTrioCardIds: [],
+        removingCardIds,
+        hintedCardIds: [],
+        phase: isComplete ? 'finished' : state.phase,
       };
     }
 
@@ -176,50 +205,35 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         addingCardIds: [],
       };
 
-    case 'INVALID_GUESS': {
-      const newIncorrectGuesses = state.incorrectGuesses + 1;
-      const isGameOver = newIncorrectGuesses >= GAME_CONFIG.MAX_INCORRECT_GUESSES;
-
-      return {
-        ...state,
-        incorrectGuesses: newIncorrectGuesses,
-        guessHistory: [...state.guessHistory, action.attempt],
-        selectedCardIds: [],
-        phase: isGameOver ? 'finished' : state.phase,
-        won: isGameOver ? false : state.won,
-      };
-    }
-
     case 'USE_HINT': {
-      if (state.hintsUsed >= GAME_CONFIG.MAX_HINTS) {
+      const roundIndex = state.currentRound - 1;
+      // Check if hint already used this round
+      if (state.hintUsedInRound[roundIndex]) {
         return state;
       }
+
+      // Mark hint as used for this round
+      const newHintUsedInRound = [...state.hintUsedInRound];
+      newHintUsedInRound[roundIndex] = true;
+
       return {
         ...state,
-        hintsUsed: state.hintsUsed + 1,
+        hintUsedInRound: newHintUsedInRound,
         hintedCardIds: [...state.hintedCardIds, action.cardId],
       };
     }
-
-    case 'FINISH_GAME':
-      return {
-        ...state,
-        phase: 'finished',
-        won: action.won,
-      };
 
     case 'RESTORE_STATE': {
       const { savedState } = action;
       return {
         ...state,
         currentRound: savedState.currentRound ?? state.currentRound,
-        foundSets: savedState.foundSets ?? state.foundSets,
-        incorrectGuesses: savedState.incorrectGuesses ?? state.incorrectGuesses,
-        guessHistory: savedState.guessHistory ?? state.guessHistory,
-        hintsUsed: savedState.hintsUsed ?? state.hintsUsed,
+        roundOutcomes: savedState.roundOutcomes ?? state.roundOutcomes,
+        hintUsedInRound: savedState.hintUsedInRound ?? state.hintUsedInRound,
+        allTrios: savedState.allTrios ?? state.allTrios,
         hintedCardIds: savedState.hintedCardIds ?? state.hintedCardIds,
         cards: savedState.cards ?? state.cards,
-        won: savedState.won ?? state.won,
+        lastFoundSet: savedState.lastFoundSet ?? state.lastFoundSet,
         phase: savedState.phase ?? state.phase,
       };
     }
@@ -237,11 +251,13 @@ interface UseGameStateReturn {
   deselectCard: (cardId: string) => void;
   clearSelection: () => void;
   handleCardClick: (cardId: string) => void;
-  submitSelection: () => 'valid' | 'invalid' | 'duplicate' | null;
+  submitSelection: () => 'valid' | 'invalid' | null;
   revealHint: () => string | null;
   clearRemoving: () => void;
   clearAdding: () => void;
   restoreState: (savedState: Partial<GameState>) => void;
+  dispatchMissedRound: (correctTrio: Card[], correctTrioCardIds: string[]) => void;
+  dispatchAdvanceAfterMiss: () => void;
 }
 
 /**
@@ -291,6 +307,11 @@ export function useGameState(): UseGameStateReturn {
       return;
     }
 
+    // If we're revealing the correct trio, ignore
+    if (state.revealingCorrectTrio) {
+      return;
+    }
+
     // If we already have 3, don't select more
     if (state.selectedCardIds.length >= 3) {
       return;
@@ -298,21 +319,21 @@ export function useGameState(): UseGameStateReturn {
 
     // Select the card
     dispatch({ type: 'SELECT_CARD', cardId });
-  }, [state.selectedCardIds, state.removingCardIds]);
+  }, [state.selectedCardIds, state.removingCardIds, state.revealingCorrectTrio]);
 
   // Manual submit selection
-  const submitSelection = useCallback((): 'valid' | 'invalid' | 'duplicate' | null => {
+  const submitSelection = useCallback((): 'valid' | 'invalid' | null => {
     // Must have exactly 3 cards selected
     if (state.selectedCardIds.length !== 3) {
       return null;
     }
 
-    const cardIds = state.selectedCardIds as [string, string, string];
-
-    // Check for duplicate guess in this round
-    if (isDuplicateGuess(cardIds, state.currentRound, state.guessHistory)) {
-      return 'duplicate';
+    // Can't submit during reveal
+    if (state.revealingCorrectTrio) {
+      return null;
     }
+
+    const cardIds = state.selectedCardIds as [string, string, string];
 
     // Get the selected cards
     const selectedCards = cardIds.map(id =>
@@ -320,32 +341,37 @@ export function useGameState(): UseGameStateReturn {
     );
 
     if (isValidSet(selectedCards as [Card, Card, Card])) {
-      // Valid set found
-      const foundSet: FoundSet = {
-        cardIds,
-        foundAt: Date.now(),
-        round: state.currentRound,
-      };
+      // Valid set found - check if hint was used this round
+      const roundIndex = state.currentRound - 1;
+      const usedHint = state.hintUsedInRound[roundIndex];
+
       // Delay slightly to show selection before removal
       setTimeout(() => {
-        dispatch({ type: 'FOUND_SET', set: foundSet, lastFoundCards: selectedCards });
+        dispatch({ type: 'FOUND_SET', lastFoundCards: selectedCards, usedHint });
       }, 200);
       return 'valid';
     } else {
-      // Invalid set - record the attempt
-      const attempt: GuessAttempt = {
-        cardIds,
-        round: state.currentRound,
-        wasCorrect: false,
-      };
-      dispatch({ type: 'INVALID_GUESS', attempt });
+      // Invalid set - this round is now missed
       return 'invalid';
     }
-  }, [state.selectedCardIds, state.cards, state.currentRound, state.guessHistory]);
+  }, [state.selectedCardIds, state.cards, state.currentRound, state.hintUsedInRound, state.revealingCorrectTrio]);
 
-  // Use a hint - reveals the next card in the valid set
+  // Dispatch missed round action (called from Game.tsx after invalid submission)
+  const dispatchMissedRound = useCallback((correctTrio: Card[], correctTrioCardIds: string[]) => {
+    dispatch({ type: 'MISSED_ROUND', correctTrio, correctTrioCardIds });
+  }, []);
+
+  // Dispatch advance after miss action (called from Game.tsx after reveal timer)
+  const dispatchAdvanceAfterMiss = useCallback(() => {
+    dispatch({ type: 'ADVANCE_AFTER_MISS' });
+  }, []);
+
+  // Use a hint - reveals the first card in the valid set (one per round)
   const revealHint = useCallback((): string | null => {
-    if (state.hintsUsed >= GAME_CONFIG.MAX_HINTS) {
+    const roundIndex = state.currentRound - 1;
+
+    // Check if hint already used this round
+    if (state.hintUsedInRound[roundIndex]) {
       return null;
     }
 
@@ -359,22 +385,17 @@ export function useGameState(): UseGameStateReturn {
       return null;
     }
 
-    // Find the next card to reveal (based on hintsUsed)
-    const targetPosition = roundData.validSetIndices[state.hintsUsed];
+    // Always reveal the first card in the valid set
+    const targetPosition = roundData.validSetIndices[0];
     const targetCard = state.cards.find(c => c.position === targetPosition);
 
     if (!targetCard) {
       return null;
     }
 
-    // Don't hint a card that's already hinted
-    if (state.hintedCardIds.includes(targetCard.id)) {
-      return null;
-    }
-
     dispatch({ type: 'USE_HINT', cardId: targetCard.id });
     return targetCard.id;
-  }, [state.puzzle, state.currentRound, state.hintsUsed, state.cards, state.hintedCardIds]);
+  }, [state.puzzle, state.currentRound, state.hintUsedInRound, state.cards]);
 
   // Restore state from storage
   const restoreState = useCallback((savedState: Partial<GameState>) => {
@@ -394,6 +415,8 @@ export function useGameState(): UseGameStateReturn {
     clearRemoving,
     clearAdding,
     restoreState,
+    dispatchMissedRound,
+    dispatchAdvanceAfterMiss,
   };
 }
 

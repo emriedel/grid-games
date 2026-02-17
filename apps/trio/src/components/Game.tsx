@@ -6,15 +6,18 @@ import { buildShareText, isValidPuzzleNumber } from '@grid-games/shared';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Tableau } from './Tableau';
 import { HowToPlayModal } from './HowToPlayModal';
-import { AttemptsIndicator } from './AttemptsIndicator';
+import { RoundProgress } from './RoundProgress';
 import { HintsIndicator } from './HintsIndicator';
 import { FoundSetDisplay } from './FoundSetDisplay';
+import { AllFoundTrios } from './AllFoundTrios';
 import { useGameState } from '@/hooks/useGameState';
 import {
   loadPuzzleByNumber,
   loadPoolPuzzle,
   createInitialCards,
+  createCardFromTuple,
   getTodayPuzzleNumber,
+  getValidSetIndices,
 } from '@/lib/puzzleLoader';
 import {
   getPuzzleState,
@@ -23,17 +26,14 @@ import {
 } from '@/lib/storage';
 import { PUZZLE_BASE_DATE } from '@/config';
 import { GAME_CONFIG } from '@/constants';
-import type { SequentialPuzzle } from '@/types';
+import type { SequentialPuzzle, Card, RoundOutcome } from '@/types';
 
 // Trio-specific wrapper for ResultsModal
 interface TrioResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
   puzzleNumber?: number;
-  roundsCompleted: number;
-  incorrectGuesses: number;
-  hintsUsed: number;
-  won: boolean;
+  roundOutcomes: RoundOutcome[];
   isArchive?: boolean;
 }
 
@@ -41,51 +41,38 @@ function TrioResultsModal({
   isOpen,
   onClose,
   puzzleNumber,
-  roundsCompleted,
-  incorrectGuesses,
-  hintsUsed,
-  won,
+  roundOutcomes,
   isArchive,
 }: TrioResultsModalProps) {
-  // Build Strands-style emoji grid
-  const buildEmojiGrid = () => {
-    const lines: string[] = [];
+  // Count trios found (found or found-with-hint)
+  const triosFound = roundOutcomes.filter(o => o === 'found' || o === 'found-with-hint').length;
 
-    // Rounds completed (🎯)
-    if (roundsCompleted > 0) {
-      lines.push('🎯'.repeat(roundsCompleted) + (won ? '' : ` (${roundsCompleted}/${GAME_CONFIG.ROUND_COUNT})`));
-    }
+  // Check if perfect (all found without hints)
+  const isPerfect = roundOutcomes.every(o => o === 'found');
 
-    // Wrong guesses (❌) - only show if any
-    if (incorrectGuesses > 0) {
-      lines.push('❌'.repeat(incorrectGuesses));
-    }
-
-    // Hints used (💡) - only show if any
-    if (hintsUsed > 0) {
-      lines.push('💡'.repeat(hintsUsed));
-    }
-
-    return lines.filter(line => line.length > 0).join('\n');
+  // Build 5-emoji line with square emojis
+  const buildEmojiLine = () => {
+    return roundOutcomes.map(outcome => {
+      switch (outcome) {
+        case 'found': return '🟩';
+        case 'found-with-hint': return '🟨';
+        case 'missed': return '🟥';
+        default: return '⬜';
+      }
+    }).join('');
   };
 
-  const emojiGrid = buildEmojiGrid();
+  const emojiLine = buildEmojiLine();
 
   const shareUrl = isArchive && puzzleNumber
     ? `https://nerdcube.games/trio?puzzle=${puzzleNumber}`
     : 'https://nerdcube.games/trio';
 
-  const shareText = buildShareText({
-    gameId: 'trio',
-    gameName: 'Trio',
-    puzzleId: puzzleNumber ? `#${puzzleNumber}` : '',
-    score: roundsCompleted,
-    maxScore: GAME_CONFIG.ROUND_COUNT,
-    emojiGrid,
-    shareUrl,
-  });
-
-  const messageType = won ? 'success' : 'failure';
+  // Build share text with trophy if perfect
+  const gameName = isPerfect ? 'Trio 🏆' : 'Trio';
+  const puzzleId = puzzleNumber ? `#${puzzleNumber}` : '';
+  const scoreText = `${triosFound}/${GAME_CONFIG.ROUND_COUNT} Trios`;
+  const shareText = `${gameName} ${puzzleId}\n${scoreText}\n${emojiLine}\n\n${shareUrl}`;
 
   return (
     <ResultsModal
@@ -95,22 +82,15 @@ function TrioResultsModal({
       gameName="Trio"
       puzzleNumber={puzzleNumber}
       primaryStat={{
-        value: `${roundsCompleted}/${GAME_CONFIG.ROUND_COUNT}`,
-        label: 'rounds'
+        value: `${triosFound}/${GAME_CONFIG.ROUND_COUNT}`,
+        label: 'Trios'
       }}
       shareConfig={{ text: shareText }}
-      messageType={messageType}
+      messageType="success"
     >
-      {/* Emoji summary */}
-      <div className="text-center mb-4 whitespace-pre-line text-2xl">
-        {emojiGrid}
-      </div>
-      <div className="text-center text-[var(--muted)]">
-        {won ? (
-          <span>All {GAME_CONFIG.ROUND_COUNT} rounds completed!</span>
-        ) : (
-          <span>{roundsCompleted}/{GAME_CONFIG.ROUND_COUNT} rounds - better luck next time!</span>
-        )}
+      {/* Emoji summary - single line with 5 squares */}
+      <div className="text-center mb-4 text-2xl tracking-wide">
+        {emojiLine}
       </div>
     </ResultsModal>
   );
@@ -145,6 +125,9 @@ export function Game() {
     revealHint,
     clearRemoving,
     clearAdding,
+    restoreState,
+    dispatchMissedRound,
+    dispatchAdvanceAfterMiss,
   } = useGameState();
 
   // UI state
@@ -159,6 +142,10 @@ export function Game() {
 
   // Animation state tracking
   const animationTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const revealTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Track if we've auto-shown the results modal for this game completion
+  const hasAutoShownResultsRef = useRef(false);
 
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
@@ -204,6 +191,23 @@ export function Game() {
         const puzzleState = getPuzzleState(activePuzzleNumber, puzzle.id);
 
         if (puzzleState?.status === 'completed') {
+          // Restore allTrios for completed state
+          let allTrios: Card[][] = [];
+          if (puzzleState.data.allTrioTuples && puzzleState.data.allTrioTuples.length > 0) {
+            allTrios = puzzleState.data.allTrioTuples.map((trioTuples, trioIdx) =>
+              trioTuples.map((tuple, cardIdx) =>
+                createCardFromTuple(tuple, puzzle.visualMapping, `found-trio-${trioIdx}-${cardIdx}`, -1)
+              )
+            );
+          }
+          // Restore the state with found trios
+          restoreState({
+            roundOutcomes: puzzleState.data.roundOutcomes,
+            hintUsedInRound: puzzleState.data.hintUsedInRound,
+            allTrios,
+            phase: 'finished',
+          });
+          hasAutoShownResultsRef.current = true; // Don't auto-show modal when viewing completed
           if (isArchiveMode) {
             setExitedLanding(true);
           } else {
@@ -274,50 +278,53 @@ export function Game() {
 
   // Save in-progress state when playing
   useEffect(() => {
-    const hasMeaningfulProgress = state.foundSets.length > 0 || state.incorrectGuesses > 0 || state.hintsUsed > 0;
-    if (state.phase === 'playing' && !debugMode && hasMeaningfulProgress) {
-      const cardTuples = state.cards.map(c => c.tuple);
+    const hasProgress = state.allTrios.length > 0 || state.hintUsedInRound.some(h => h);
+    if (state.phase === 'playing' && !debugMode && hasProgress) {
+      // Sort cards by position before saving to ensure correct restoration
+      const sortedCards = [...state.cards].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+      const cardTuples = sortedCards.map(c => c.tuple);
+      // Save last found set tuples for resume display
+      const lastFoundSetTuples = state.lastFoundSet?.map(c => c.tuple);
+      // Save all trio tuples
+      const allTrioTuples = state.allTrios.map(trio => trio.map(c => c.tuple));
       saveInProgressState(
         activePuzzleNumber,
         state.currentRound,
-        state.foundSets,
         cardTuples,
-        state.incorrectGuesses,
-        state.guessHistory,
-        state.hintsUsed,
-        state.hintedCardIds,
+        state.roundOutcomes,
+        state.hintUsedInRound,
+        allTrioTuples,
         state.selectedCardIds,
-        activePuzzleId
+        activePuzzleId,
+        lastFoundSetTuples
       );
     }
-  }, [state.phase, state.foundSets, state.currentRound, state.cards, state.selectedCardIds, state.incorrectGuesses, state.guessHistory, state.hintsUsed, state.hintedCardIds, activePuzzleNumber, activePuzzleId, debugMode]);
+  }, [state.phase, state.currentRound, state.cards, state.selectedCardIds, state.roundOutcomes, state.hintUsedInRound, state.allTrios, state.lastFoundSet, activePuzzleNumber, activePuzzleId, debugMode]);
 
   // Handle game completion
   useEffect(() => {
-    if (state.phase === 'finished') {
+    if (state.phase === 'finished' && state.allTrios.length === GAME_CONFIG.ROUND_COUNT) {
       if (!debugMode) {
+        const allTrioTuples = state.allTrios.map(trio => trio.map(c => c.tuple));
         saveCompletedState(
           activePuzzleNumber,
-          state.currentRound,
-          state.foundSets,
-          state.incorrectGuesses,
-          state.guessHistory,
-          state.hintsUsed,
-          state.won,
+          state.roundOutcomes,
+          state.hintUsedInRound,
+          allTrioTuples,
           activePuzzleId
         );
       }
     }
-  }, [state.phase, state.foundSets, state.currentRound, state.incorrectGuesses, state.guessHistory, state.hintsUsed, state.won, activePuzzleNumber, activePuzzleId, debugMode]);
+  }, [state.phase, state.roundOutcomes, state.hintUsedInRound, state.allTrios, activePuzzleNumber, activePuzzleId, debugMode]);
 
-  // Show results modal when game finishes
-  const shouldShowResults = state.phase === 'finished' && !showResultsModal;
+  // Show results modal when game finishes (only auto-show once)
   useEffect(() => {
-    if (shouldShowResults) {
+    if (state.phase === 'finished' && !hasAutoShownResultsRef.current) {
+      hasAutoShownResultsRef.current = true;
       const timer = setTimeout(() => setShowResultsModal(true), 300);
       return () => clearTimeout(timer);
     }
-  }, [shouldShowResults]);
+  }, [state.phase]);
 
   // Handle removing animation completion
   useEffect(() => {
@@ -351,21 +358,45 @@ export function Game() {
 
   // Handle submit button click
   const handleSubmit = useCallback(() => {
+    if (!activePuzzle) return;
+
     const result = submitSelection();
 
-    if (result === 'duplicate') {
-      toast.show('Already guessed this combination', 'info');
-      return;
-    }
-
     if (result === 'invalid') {
-      // Shake animation
+      // Show shake animation briefly
       setShakingCardIds([...state.selectedCardIds]);
       setTimeout(() => {
         setShakingCardIds([]);
-      }, 500);
+      }, 300);
+
+      // Then trigger the missed round flow
+      setTimeout(() => {
+        // Get the correct trio for this round
+        const validSetIndices = getValidSetIndices(activePuzzle, state.currentRound);
+        const correctTrioCards = validSetIndices.map(pos =>
+          state.cards.find(c => c.position === pos)!
+        );
+        const correctTrioCardIds = correctTrioCards.map(c => c.id);
+
+        // Dispatch missed round
+        dispatchMissedRound(correctTrioCards, correctTrioCardIds);
+
+        // Start timer to advance after reveal
+        revealTimerRef.current = setTimeout(() => {
+          dispatchAdvanceAfterMiss();
+        }, GAME_CONFIG.ANIMATION.REVEAL_CORRECT);
+      }, 400);
     }
-  }, [submitSelection, state.selectedCardIds, toast]);
+  }, [submitSelection, state.selectedCardIds, state.cards, state.currentRound, activePuzzle, dispatchMissedRound, dispatchAdvanceAfterMiss]);
+
+  // Cleanup reveal timer on unmount
+  useEffect(() => {
+    return () => {
+      if (revealTimerRef.current) {
+        clearTimeout(revealTimerRef.current);
+      }
+    };
+  }, []);
 
   // Handle hint button click
   const handleUseHint = useCallback(() => {
@@ -379,8 +410,64 @@ export function Game() {
 
   // Handle resume button from landing screen
   const handleResume = useCallback(() => {
-    startGame();
-  }, [startGame]);
+    const savedState = getPuzzleState(activePuzzleNumber, activePuzzleId);
+
+    if (!savedState || savedState.status !== 'in-progress' || !activePuzzle) {
+      startGame();
+      return;
+    }
+
+    const { data } = savedState;
+
+    // Derive which position was hinted from the round's validSetIndices
+    const roundData = activePuzzle.rounds[data.currentRound - 1];
+    const hintedPosition = roundData && data.hintUsedInRound[data.currentRound - 1]
+      ? roundData.validSetIndices[0]
+      : null;
+
+    // Reconstruct Card objects from saved tuples (tuples are saved in position order)
+    const reconstructedCards: Card[] = [];
+    const newHintedCardIds: string[] = [];
+
+    data.currentCardTuples.forEach((tuple, position) => {
+      const cardId = `card-restored-${data.currentRound}-${position}`;
+      const card = createCardFromTuple(tuple, activePuzzle.visualMapping, cardId, position);
+      reconstructedCards.push(card);
+
+      if (hintedPosition === position) {
+        newHintedCardIds.push(cardId);
+      }
+    });
+
+    // Reconstruct lastFoundSet from saved tuples
+    let lastFoundSet: Card[] | undefined;
+    if (data.lastFoundSetTuples && data.lastFoundSetTuples.length === 3) {
+      lastFoundSet = data.lastFoundSetTuples.map((tuple, idx) =>
+        createCardFromTuple(tuple, activePuzzle.visualMapping, `last-found-${idx}`, -1)
+      );
+    }
+
+    // Reconstruct allTrios from saved tuples
+    let allTrios: Card[][] = [];
+    if (data.allTrioTuples && data.allTrioTuples.length > 0) {
+      allTrios = data.allTrioTuples.map((trioTuples, trioIdx) =>
+        trioTuples.map((tuple, cardIdx) =>
+          createCardFromTuple(tuple, activePuzzle.visualMapping, `found-trio-${trioIdx}-${cardIdx}`, -1)
+        )
+      );
+    }
+
+    restoreState({
+      currentRound: data.currentRound,
+      roundOutcomes: data.roundOutcomes,
+      hintUsedInRound: data.hintUsedInRound,
+      hintedCardIds: newHintedCardIds,
+      cards: reconstructedCards,
+      lastFoundSet,
+      allTrios,
+      phase: 'playing',
+    });
+  }, [activePuzzleNumber, activePuzzleId, activePuzzle, startGame, restoreState]);
 
   // Handle "See Results" from landing screen
   const handleSeeResults = useCallback(() => {
@@ -418,17 +505,24 @@ export function Game() {
     });
 
     return (
-      <LandingScreen
-        gameId="trio"
-        name="Trio"
-        description="Find the matching trio in each round"
-        puzzleInfo={{ number: activePuzzleNumber, date: dateStr }}
-        mode={landingMode}
-        onPlay={handlePlay}
-        onResume={handleResume}
-        onSeeResults={handleSeeResults}
-        archiveHref="/archive"
-      />
+      <>
+        <LandingScreen
+          gameId="trio"
+          name="Trio"
+          description="Find the matching trio in each round"
+          puzzleInfo={{ number: activePuzzleNumber, date: dateStr }}
+          mode={landingMode}
+          onPlay={handlePlay}
+          onResume={handleResume}
+          onSeeResults={handleSeeResults}
+          onRules={() => setShowRulesModal(true)}
+          archiveHref="/archive"
+        />
+        <HowToPlayModal
+          isOpen={showRulesModal}
+          onClose={() => setShowRulesModal(false)}
+        />
+      </>
     );
   }
 
@@ -436,8 +530,9 @@ export function Game() {
   const isFinished = state.phase === 'finished' ||
     (exitedLanding && landingMode === 'completed');
 
-  const roundsCompleted = state.foundSets.length;
   const hasThreeSelected = state.selectedCardIds.length === 3;
+  const roundIndex = state.currentRound - 1;
+  const hintAvailable = !state.hintUsedInRound[roundIndex];
 
   return (
     <>
@@ -449,66 +544,80 @@ export function Game() {
           onRulesClick={() => setShowRulesModal(true)}
           rightContent={
             <div className="flex items-center gap-3 pr-2">
-              {/* Round counter */}
-              <span className="text-lg font-bold text-[var(--accent)]">
-                {state.currentRound}/{GAME_CONFIG.ROUND_COUNT}
-              </span>
-              {/* Attempts indicator */}
-              <AttemptsIndicator incorrectGuesses={state.incorrectGuesses} />
+              {/* Round progress indicator - always visible */}
+              <RoundProgress
+                roundOutcomes={state.roundOutcomes}
+                currentRound={isFinished ? GAME_CONFIG.ROUND_COUNT + 1 : state.currentRound}
+              />
             </div>
           }
         />
       }
     >
-      {/* Game board */}
-      <div className="flex-1 flex flex-col">
-        <Tableau
-          cards={state.cards}
-          selectedCardIds={state.selectedCardIds}
-          removingCardIds={state.removingCardIds}
-          addingCardIds={state.addingCardIds}
-          shakingCardIds={shakingCardIds}
-          hintedCardIds={state.hintedCardIds}
-          onCardClick={handleCardClick}
-        />
-
-        {/* Found set display */}
-        {state.lastFoundSet && state.phase === 'playing' && (
-          <div className="mt-4">
-            <FoundSetDisplay cards={state.lastFoundSet} />
-          </div>
-        )}
-      </div>
-
-      {/* Action buttons */}
-      <div className="flex justify-center items-center gap-4 py-4">
-        {!isFinished && (
+      {/* Game board or finished view */}
+      <div className="flex flex-col flex-shrink-0">
+        {isFinished ? (
+          /* Show all trios when finished */
+          <AllFoundTrios allTrios={state.allTrios} />
+        ) : (
+          /* Show game board when playing */
           <>
-            {/* Hint button */}
-            <HintsIndicator
-              hintsUsed={state.hintsUsed}
-              hasThreeSelected={hasThreeSelected}
-              onUseHint={handleUseHint}
+            <Tableau
+              cards={state.cards}
+              selectedCardIds={state.selectedCardIds}
+              removingCardIds={state.removingCardIds}
+              addingCardIds={state.addingCardIds}
+              shakingCardIds={shakingCardIds}
+              hintedCardIds={state.hintedCardIds}
+              correctTrioCardIds={state.correctTrioCardIds}
+              onCardClick={handleCardClick}
             />
 
-            {/* Submit button - only visible when 3 cards selected */}
-            {hasThreeSelected && (
-              <Button
-                variant="primary"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
+            {/* Reveal message during correct answer reveal */}
+            {state.revealingCorrectTrio && (
+              <div className="mt-4 text-center text-[var(--muted)]">
+                <span className="text-lg">The correct trio...</span>
+              </div>
             )}
           </>
         )}
-        {isFinished && (
-          <Button
-            variant="primary"
-            onClick={() => setShowResultsModal(true)}
-          >
-            See Results
-          </Button>
+
+        {/* Action buttons - directly below game board */}
+        <div className="flex justify-center items-center gap-4 py-4">
+          {!isFinished && !state.revealingCorrectTrio && (
+            <>
+              {/* Hint button */}
+              <HintsIndicator
+                hintAvailable={hintAvailable}
+                hasThreeSelected={hasThreeSelected}
+                onUseHint={handleUseHint}
+              />
+
+              {/* Submit button - always visible, disabled when < 3 cards */}
+              <Button
+                variant="primary"
+                onClick={handleSubmit}
+                disabled={!hasThreeSelected}
+              >
+                Submit
+              </Button>
+            </>
+          )}
+          {isFinished && (
+            <Button
+              variant="primary"
+              onClick={() => setShowResultsModal(true)}
+            >
+              See Results
+            </Button>
+          )}
+        </div>
+
+        {/* Last found trio - below buttons during play */}
+        {!isFinished && state.lastFoundSet && !state.revealingCorrectTrio && (
+          <div className="mt-2">
+            <FoundSetDisplay cards={state.lastFoundSet} />
+          </div>
         )}
       </div>
     </GameContainer>
@@ -518,10 +627,7 @@ export function Game() {
       isOpen={showResultsModal}
       onClose={() => setShowResultsModal(false)}
       puzzleNumber={activePuzzleNumber}
-      roundsCompleted={roundsCompleted}
-      incorrectGuesses={state.incorrectGuesses}
-      hintsUsed={state.hintsUsed}
-      won={state.won}
+      roundOutcomes={state.roundOutcomes}
       isArchive={isArchiveMode}
     />
 

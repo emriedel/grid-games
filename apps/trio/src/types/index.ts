@@ -20,9 +20,8 @@ export type ShapeId =
   | 'circle' | 'triangle' | 'square' | 'diamond' | 'pentagon'
   | 'hexagon' | 'star' | 'cross' | 'heart';
 
-// Color identifiers (pool of available colors)
-export type ColorId =
-  | 'red' | 'green' | 'purple' | 'blue' | 'orange' | 'teal';
+// Color identifiers (3 highly-distinguishable colors)
+export type ColorId = 'red' | 'blue' | 'gold';
 
 // Pattern identifiers (pool of available patterns)
 export type PatternId =
@@ -57,12 +56,8 @@ export interface FoundSet {
   round: number;     // Which round this set was found in (1-5)
 }
 
-// A guess attempt (for duplicate detection)
-export interface GuessAttempt {
-  cardIds: [string, string, string];
-  round: number;
-  wasCorrect: boolean;
-}
+// Outcome for each round
+export type RoundOutcome = 'pending' | 'found' | 'found-with-hint' | 'missed';
 
 // Star rating thresholds (in seconds) - legacy, kept for puzzle files
 export interface StarThresholds {
@@ -97,19 +92,24 @@ export interface GameState {
   phase: 'landing' | 'playing' | 'finished';
   puzzle: SequentialPuzzle | null;
   currentRound: number;           // 1-5
-  cards: Card[];                  // Current 12 cards on the board
+  cards: Card[];                  // Current 9 cards on the board
   selectedCardIds: string[];      // Currently selected (max 3)
-  foundSets: FoundSet[];          // Sets found by player (1 per round)
-  // Attempts system (replaces timer)
-  incorrectGuesses: number;       // 0-4, game over at 4
-  guessHistory: GuessAttempt[];   // For duplicate detection
+
+  // Per-round tracking (new system - one shot per round)
+  roundOutcomes: RoundOutcome[];  // 5 outcomes (one per round)
+  hintUsedInRound: boolean[];     // 5 booleans (one per round)
+  allTrios: Card[][];             // All 5 trios (found + missed)
+
+  // For reveal-correct-answer flow after miss
+  revealingCorrectTrio: boolean;
+  correctTrioCardIds: string[];
+
   // Hint system
-  hintsUsed: number;              // 0-3
-  hintedCardIds: string[];        // Cards revealed by hints
+  hintedCardIds: string[];        // Cards revealed by current hint
+
   // Display
   lastFoundSet?: Card[];          // For bottom display
-  // Win/loss state
-  won: boolean;                   // True if completed all rounds
+
   // Animation state
   removingCardIds: string[];      // Cards being animated out
   addingCardIds: string[];        // Cards being animated in
@@ -123,12 +123,12 @@ export type GameAction =
   | { type: 'DESELECT_CARD'; cardId: string }
   | { type: 'CLEAR_SELECTION' }
   | { type: 'SUBMIT_SELECTION' }
-  | { type: 'FOUND_SET'; set: FoundSet; lastFoundCards: Card[] }
+  | { type: 'FOUND_SET'; lastFoundCards: Card[]; usedHint: boolean }
+  | { type: 'MISSED_ROUND'; correctTrio: Card[]; correctTrioCardIds: string[] }
+  | { type: 'ADVANCE_AFTER_MISS' }
   | { type: 'CLEAR_REMOVING' }
   | { type: 'CLEAR_ADDING' }
-  | { type: 'INVALID_GUESS'; attempt: GuessAttempt }
   | { type: 'USE_HINT'; cardId: string }
-  | { type: 'FINISH_GAME'; won: boolean }
   | { type: 'RESTORE_STATE'; savedState: Partial<GameState> };
 
 // Storage state (for persistence)
@@ -138,15 +138,12 @@ export interface TrioPuzzleState {
   status: 'in-progress' | 'completed';
   data: {
     currentRound: number;
-    foundSets: FoundSet[];
-    currentCardTuples: Tuple[];   // Current board state for restoration
-    incorrectGuesses: number;
-    guessHistory: GuessAttempt[];
-    hintsUsed: number;
-    hintedCardIds: string[];
+    currentCardTuples: Tuple[];      // Current board state for restoration
+    roundOutcomes: RoundOutcome[];   // 5 outcomes (one per round)
+    hintUsedInRound: boolean[];      // 5 booleans (one per round)
+    allTrioTuples: Tuple[][];        // All trios' tuples (found + missed)
     selectedCardIds?: string[];
-    // Completion state
-    won?: boolean;
+    lastFoundSetTuples?: Tuple[];    // Last found trio's tuples (for resume display)
   };
 }
 

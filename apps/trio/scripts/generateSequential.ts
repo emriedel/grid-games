@@ -25,7 +25,7 @@ import type {
   Tuple,
 } from '../src/types';
 import { SHAPES, SHAPE_CONFLICT_GROUPS } from '../src/constants/shapes';
-import { COLORS, COLOR_CONFLICT_GROUPS } from '../src/constants/colors';
+import { COLORS } from '../src/constants/colors';
 import { PATTERNS } from '../src/constants/patterns';
 import { GAME_CONFIG } from '../src/constants';
 
@@ -126,18 +126,6 @@ function hasShapeConflict(shapes: ShapeId[]): boolean {
   return false;
 }
 
-/**
- * Check if a set of colors has any conflicts (similar colors together).
- */
-function hasColorConflict(colors: ColorId[]): boolean {
-  for (const group of COLOR_CONFLICT_GROUPS) {
-    const matchCount = colors.filter(c => group.includes(c)).length;
-    if (matchCount > 1) {
-      return true; // More than one color from the same conflict group
-    }
-  }
-  return false;
-}
 
 /**
  * Select 3 shapes that don't conflict with each other.
@@ -158,21 +146,12 @@ function selectNonConflictingShapes(rng: () => number, maxAttempts: number = 100
 }
 
 /**
- * Select 3 colors that don't conflict with each other.
+ * Get all 3 colors (we now have exactly 3 distinct colors).
  */
-function selectNonConflictingColors(rng: () => number, maxAttempts: number = 100): [ColorId, ColorId, ColorId] {
+function selectAllColors(rng: () => number): [ColorId, ColorId, ColorId] {
   const colorIds = COLORS.map(c => c.id);
-
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const selected = selectN(colorIds, 3, rng) as [ColorId, ColorId, ColorId];
-    if (!hasColorConflict(selected)) {
-      return selected;
-    }
-  }
-
-  // Fallback: just return any 3 colors (shouldn't happen often)
-  console.warn('Could not find non-conflicting colors, using fallback');
-  return selectN(colorIds, 3, rng) as [ColorId, ColorId, ColorId];
+  // Shuffle to randomize which tuple value maps to which color
+  return shuffle(colorIds, rng) as [ColorId, ColorId, ColorId];
 }
 
 // Generate visual mapping
@@ -181,7 +160,7 @@ function generateVisualMapping(rng: () => number): VisualMapping {
 
   return {
     shapes: selectNonConflictingShapes(rng),
-    colors: selectNonConflictingColors(rng),
+    colors: selectAllColors(rng),
     patterns: selectN(patternIds, 3, rng) as [PatternId, PatternId, PatternId],
   };
 }

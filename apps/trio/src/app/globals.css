@@ -10,32 +10,29 @@
   --muted: #a1a1aa;
   --border: #27272a;
 
-  /* Trio theme - Teal accent */
-  --accent: #14b8a6;
+  /* Trio theme - Deep Cyan accent */
+  --accent: #0891b2;
   --accent-foreground: #ffffff;
-  --accent-secondary: #0d9488;
+  --accent-secondary: #0e7490;
 
-  /* Card backgrounds - warm cream tones */
-  --card-bg: #f5f0e6;
-  --card-bg-hover: #ebe5d8;
-  --card-bg-selected: #e0d9c8;
-  --card-bg-hinted: #fff8e6;
+  /* Card backgrounds - soft warm gray */
+  --card-bg: #e8e4de;
+  --card-bg-hover: #ddd9d2;
+  --card-bg-selected: #d0ccc4;
+  --card-bg-hinted: #f0e8d8;
 
-  /* Hint system */
-  --hint-color: #f59e0b;
+  /* Hint system - more saturated orange-gold */
+  --hint-color: #f97316;
 
   /* Tile/card styling (legacy) */
   --tile-bg: #1c1c1c;
   --tile-bg-selected: #2a4a47;
   --tile-border: #3f3f46;
 
-  /* Card colors (for shapes) - rich, saturated colors */
+  /* Card colors (for shapes) - vibrant, saturated palette */
   --trio-red: #dc2626;
-  --trio-green: #059669;
-  --trio-purple: #7c3aed;
   --trio-blue: #2563eb;
-  --trio-orange: #ea580c;
-  --trio-teal: #0d9488;
+  --trio-gold: #f59e0b;
 
   /* Status colors */
   --success: #22c55e;
@@ -75,10 +72,10 @@ body {
 
 @keyframes pulseSubtle {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 0 0 8px rgba(249, 115, 22, 0.4);
   }
 }
 

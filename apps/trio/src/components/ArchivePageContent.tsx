@@ -61,7 +61,7 @@ export function ArchivePageContent() {
     return puzzleIdMatches && isPuzzleInProgress(puzzleNumber, currentPuzzleId);
   }, [puzzleIds]);
 
-  // Get "stars" based on win status (1 = won, 0 = lost/not completed)
+  // Get "stars" based on trios found (1 = found all 5, 0 = missed at least one)
   const getPuzzleStarsWrapper = useCallback((puzzleNumber: number): number => {
     const currentPuzzleId = puzzleIds.get(puzzleNumber);
     const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
@@ -74,14 +74,14 @@ export function ArchivePageContent() {
     const state = findPuzzleState(puzzleNumber);
     if (state?.status !== 'completed') return 0;
 
-    // Return 1 star for wins (all rounds completed)
-    if (state.data.won) return 1;
-    if (state.data.foundSets.length === GAME_CONFIG.ROUND_COUNT) return 1;
-
-    return 0;
+    // Return 1 star if all 5 trios were found (no misses)
+    const triosFound = state.data.roundOutcomes.filter(
+      o => o === 'found' || o === 'found-with-hint'
+    ).length;
+    return triosFound === GAME_CONFIG.ROUND_COUNT ? 1 : 0;
   }, [puzzleIds]);
 
-  // Get score - for Trio, show rounds completed
+  // Get score - for Trio, show trios found
   const getPuzzleScoreWrapper = useCallback((puzzleNumber: number): number | null => {
     const currentPuzzleId = puzzleIds.get(puzzleNumber);
     const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
@@ -94,14 +94,33 @@ export function ArchivePageContent() {
     const state = findPuzzleState(puzzleNumber);
     if (state?.status !== 'completed') return null;
 
-    // Return rounds completed
-    return state.data.foundSets.length;
+    // Return trios found (found or found-with-hint)
+    return state.data.roundOutcomes.filter(
+      o => o === 'found' || o === 'found-with-hint'
+    ).length;
   }, [puzzleIds]);
 
-  // Format score as "X/5 rounds"
+  // Format score as "X/5"
   const formatScore = useCallback((score: number): string => {
     return `${score}/${GAME_CONFIG.ROUND_COUNT}`;
   }, []);
+
+  // Check if a puzzle was completed perfectly (all found without hints)
+  const checkPerfectCompletion = useCallback((puzzleNumber: number): boolean => {
+    const currentPuzzleId = puzzleIds.get(puzzleNumber);
+    const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
+
+    // Only check if puzzleIds match
+    if (currentPuzzleId !== undefined && savedPuzzleId !== currentPuzzleId) {
+      return false;
+    }
+
+    const state = findPuzzleState(puzzleNumber);
+    if (state?.status !== 'completed' || !state.data.roundOutcomes) return false;
+
+    // Perfect = all 'found' (no hints, no misses)
+    return state.data.roundOutcomes.every(o => o === 'found');
+  }, [puzzleIds]);
 
   if (isLoading) {
     return (
@@ -135,6 +154,8 @@ export function ArchivePageContent() {
       formatScore={formatScore}
       onSelectPuzzle={handleSelectPuzzle}
       backHref="/"
+      statusDisplay="checkmark"
+      isPerfectCompletion={checkPerfectCompletion}
     />
   );
 }

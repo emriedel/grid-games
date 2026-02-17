@@ -2,7 +2,7 @@ import type { ColorId } from '@/types';
 
 /**
  * Color definitions for Trio cards.
- * Each color has a primary fill color.
+ * 3 highly-distinguishable colors: Red, Blue, Gold.
  */
 
 export interface ColorDefinition {
@@ -12,52 +12,26 @@ export interface ColorDefinition {
   cssVar: string;     // CSS variable name (defined in globals.css)
 }
 
-// All available colors in the pool - rich, saturated colors
+// 3 highly-distinguishable colors (vibrant, saturated palette)
 export const COLORS: ColorDefinition[] = [
   {
     id: 'red',
     name: 'Red',
-    value: '#dc2626',      // Deeper, richer red
+    value: '#dc2626',  // Tailwind red-600
     cssVar: 'var(--trio-red)',
-  },
-  {
-    id: 'green',
-    name: 'Green',
-    value: '#059669',      // Emerald green - richer
-    cssVar: 'var(--trio-green)',
-  },
-  {
-    id: 'purple',
-    name: 'Purple',
-    value: '#7c3aed',      // Vivid violet
-    cssVar: 'var(--trio-purple)',
   },
   {
     id: 'blue',
     name: 'Blue',
-    value: '#2563eb',      // Royal blue - more saturated
+    value: '#2563eb',  // Tailwind blue-600
     cssVar: 'var(--trio-blue)',
   },
   {
-    id: 'orange',
-    name: 'Orange',
-    value: '#ea580c',      // Deeper orange
-    cssVar: 'var(--trio-orange)',
+    id: 'gold',
+    name: 'Gold',
+    value: '#f59e0b',  // Tailwind amber-500
+    cssVar: 'var(--trio-gold)',
   },
-  {
-    id: 'teal',
-    name: 'Teal',
-    value: '#0d9488',      // Deeper teal
-    cssVar: 'var(--trio-teal)',
-  },
-];
-
-// Color conflict groups - colors that are too similar to appear together
-// Each group can only have ONE color used in a puzzle
-export const COLOR_CONFLICT_GROUPS: ColorId[][] = [
-  ['green', 'teal'],      // Both greenish
-  ['red', 'orange'],      // Both warm/reddish
-  ['blue', 'purple'],     // Both cool, can look similar
 ];
 
 // Map for quick lookup

@@ -29,14 +29,14 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
         <div className="bg-neutral-800 rounded-lg p-3">
           <p className="text-sm mb-2 text-[var(--muted)]">Example: All different shapes, colors, patterns, counts</p>
           <div className="flex justify-center gap-3">
-            <div className="w-14 h-14 bg-[var(--card-bg)] rounded-lg flex items-center justify-center p-2">
+            <div className="w-14 h-14 flex items-center justify-center p-2">
               <CardShape shape="circle" color="red" pattern="solid" count={1} size="sm" />
             </div>
-            <div className="w-14 h-14 bg-[var(--card-bg)] rounded-lg flex items-center justify-center p-2">
-              <CardShape shape="triangle" color="green" pattern="outline" count={2} size="sm" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <CardShape shape="triangle" color="blue" pattern="outline" count={2} size="sm" />
             </div>
-            <div className="w-14 h-14 bg-[var(--card-bg)] rounded-lg flex items-center justify-center p-2">
-              <CardShape shape="square" color="purple" pattern="striped" count={3} size="sm" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <CardShape shape="square" color="gold" pattern="striped" count={3} size="sm" />
             </div>
           </div>
         </div>
@@ -52,16 +52,16 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
         </div>
 
         <div className="space-y-2">
-          <h3 className="font-semibold text-[var(--accent)]">Game over</h3>
+          <h3 className="font-semibold text-[var(--accent)]">One shot per round</h3>
           <p className="text-sm">
-            You have <strong>{GAME_CONFIG.MAX_INCORRECT_GUESSES} attempts</strong> - {GAME_CONFIG.MAX_INCORRECT_GUESSES} wrong guesses and it&apos;s game over!
+            You get <strong>one guess per round</strong>. If you guess wrong, the correct trio is shown and the game moves on to the next round.
           </p>
         </div>
 
         <div className="space-y-2">
           <h3 className="font-semibold text-[var(--accent)]">Hints</h3>
           <p className="text-sm">
-            Stuck? Use a hint (💡) to reveal one card from the valid trio. You have {GAME_CONFIG.MAX_HINTS} hints per puzzle.
+            Stuck? Use the hint button (💡) to reveal one card from the valid trio. You get <strong>one hint per round</strong>.
           </p>
         </div>
       </div>

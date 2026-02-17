@@ -18,12 +18,11 @@ export function FoundSetDisplay({ cards }: FoundSetDisplayProps) {
 
   return (
     <div className="animate-found-set-appear">
-      <div className="text-xs text-[var(--muted)] text-center mb-2">Last found:</div>
       <div className="flex justify-center gap-2">
         {cards.map((card) => (
           <div
             key={card.id}
-            className="w-12 h-12 bg-[var(--card-bg)] rounded-lg flex items-center justify-center p-1"
+            className="w-16 h-16 flex items-center justify-center p-1.5"
           >
             <CardShape
               shape={card.shape}

@@ -12,6 +12,7 @@ interface TableauProps {
   addingCardIds?: string[];
   shakingCardIds?: string[];
   hintedCardIds?: string[];
+  correctTrioCardIds?: string[];
   onCardClick: (cardId: string) => void;
 }
 
@@ -27,9 +28,10 @@ export function Tableau({
   addingCardIds = [],
   shakingCardIds = [],
   hintedCardIds = [],
+  correctTrioCardIds = [],
   onCardClick,
 }: TableauProps) {
-  const { BOARD_COLS, BOARD_ROWS, CARD_COUNT } = GAME_CONFIG;
+  const { BOARD_COLS, CARD_COUNT } = GAME_CONFIG;
 
   // Create a position-indexed array for the grid
   // This ensures cards appear in the correct grid positions
@@ -45,10 +47,10 @@ export function Tableau({
 
   return (
     <div
-      className="grid gap-3 sm:gap-4 w-full"
+      className="grid gap-3 sm:gap-4 w-full max-w-md mx-auto"
       style={{
         gridTemplateColumns: `repeat(${BOARD_COLS}, 1fr)`,
-        gridTemplateRows: `repeat(${BOARD_ROWS}, 1fr)`,
+        // Rows are auto-sized based on aspect-square cards to prevent resizing
       }}
     >
       {positionedCards.map((card, position) => {
@@ -71,6 +73,7 @@ export function Tableau({
             isAdding={addingCardIds.includes(card.id)}
             isShaking={shakingCardIds.includes(card.id)}
             isHinted={hintedCardIds.includes(card.id)}
+            isCorrectReveal={correctTrioCardIds.includes(card.id)}
             onClick={() => onCardClick(card.id)}
           />
         );
