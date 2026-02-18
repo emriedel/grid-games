@@ -37,7 +37,74 @@ import {
 } from '@/lib/storage';
 import { canPlacePiece } from '@/lib/gameLogic';
 import { getAnchorCell } from '@/constants/pentominoes';
-import type { Position, PentominoId, DragData, Rotation, PlacedPiece } from '@/types';
+import type { Position, PentominoId, DragData, Rotation, PlacedPiece, Puzzle } from '@/types';
+import { getPentominoCells } from '@/constants/pentominoes';
+
+/**
+ * Print a visual ASCII representation of the puzzle solution for debugging.
+ * Shows the full board with piece letters and mini previews of each piece at its rotation.
+ */
+function printDebugSolution(puzzle: Puzzle): void {
+  if (!puzzle.solution || puzzle.solution.length === 0) return;
+
+  const shape = puzzle.shape;
+  const rows = shape.length;
+  const cols = shape[0].length;
+
+  // Create a grid filled with the solution
+  const grid: string[][] = shape.map((row) =>
+    row.map((cell) => (cell ? '.' : ' '))
+  );
+
+  // Place each piece on the grid
+  for (const placed of puzzle.solution) {
+    const cells = getPentominoCells(placed.pentominoId, placed.rotation);
+    for (const cell of cells) {
+      const r = placed.position.row + cell.row;
+      const c = placed.position.col + cell.col;
+      if (r >= 0 && r < rows && c >= 0 && c < cols) {
+        grid[r][c] = placed.pentominoId;
+      }
+    }
+  }
+
+  // Build column header (indices)
+  const colHeader = '    ' + Array.from({ length: cols }, (_, i) => i.toString().padStart(2, ' ')).join('');
+
+  // Print the solution board
+  console.log('[Tessera Debug] Solution Board:');
+  console.log(colHeader);
+  console.log('   +' + '--'.repeat(cols) + '+');
+  for (let r = 0; r < rows; r++) {
+    const rowStr = grid[r].map((c) => (c === ' ' ? '  ' : ` ${c}`)).join('');
+    console.log(`${r.toString().padStart(2, ' ')} |${rowStr} |`);
+  }
+  console.log('   +' + '--'.repeat(cols) + '+');
+
+  // Print each piece with its placement info and mini preview
+  console.log('\n[Tessera Debug] Piece Placements:');
+  for (const placed of puzzle.solution) {
+    const cells = getPentominoCells(placed.pentominoId, placed.rotation);
+
+    // Find bounds of this piece
+    const maxR = Math.max(...cells.map((c) => c.row));
+    const maxC = Math.max(...cells.map((c) => c.col));
+
+    // Build mini grid for this piece
+    const mini: string[][] = Array.from({ length: maxR + 1 }, () =>
+      Array.from({ length: maxC + 1 }, () => '.')
+    );
+    for (const cell of cells) {
+      mini[cell.row][cell.col] = '#';
+    }
+
+    // Print piece info and mini preview
+    console.log(`  ${placed.pentominoId}: anchor=(${placed.position.row},${placed.position.col}) rot=${placed.rotation}`);
+    for (const row of mini) {
+      console.log('     ' + row.join(' '));
+    }
+  }
+}
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -129,10 +196,7 @@ export function Game() {
           console.log('[Tessera Debug] Pool ID:', poolIdParam);
         }
         if (puzzle.solution) {
-          console.log('[Tessera Debug] Solution:');
-          puzzle.solution.forEach((p) => {
-            console.log(`  ${p.pentominoId}: (${p.position.row}, ${p.position.col}) rotation=${p.rotation}`);
-          });
+          printDebugSolution(puzzle);
         }
       }
 
