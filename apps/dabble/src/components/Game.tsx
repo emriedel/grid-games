@@ -449,9 +449,8 @@ export function Game() {
 
     // Check if game should end (out of turns OR all tiles used)
     if (newTurnCount >= MAX_TURNS || newLockedIndices.size === PUZZLE_LETTER_COUNT) {
-      setGameState('finished');
-      setShowShareModal(true);
-      // Save completion state with full board and thresholds
+      setGameState('finished');  // Immediate - prevents further moves
+      // Save completion state with full board and thresholds (immediately, before delay)
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
         status: 'completed',
@@ -464,6 +463,11 @@ export function Game() {
           thresholds: puzzle?.thresholds,
         },
       }, activePuzzleId);
+
+      // Delay showing results modal to let user see the final board
+      setTimeout(() => {
+        setShowShareModal(true);
+      }, 750);
     }
 
     setError(null);

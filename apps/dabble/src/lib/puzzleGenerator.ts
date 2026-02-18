@@ -423,6 +423,30 @@ function hasAdjacentBonus(r: number, c: number, bonuses: BonusType[][], size: nu
   return false;
 }
 
+// Minimum distance between DW and TW when in the same row or column
+// Prevents a single word from hitting both bonuses for extremely high scores
+const MIN_DW_TW_SAME_LINE_DISTANCE = 5;
+
+// Check if a position is too close to a TW bonus in the same row or column
+function isTooCloseToTW(
+  r: number,
+  c: number,
+  bonuses: BonusType[][],
+  size: number
+): boolean {
+  for (let br = 0; br < size; br++) {
+    for (let bc = 0; bc < size; bc++) {
+      if (bonuses[br][bc] === 'TW') {
+        // Same row - check column distance
+        if (r === br && Math.abs(c - bc) < MIN_DW_TW_SAME_LINE_DISTANCE) return true;
+        // Same column - check row distance
+        if (c === bc && Math.abs(r - br) < MIN_DW_TW_SAME_LINE_DISTANCE) return true;
+      }
+    }
+  }
+  return false;
+}
+
 // Score a position for bonus placement based on preferences
 function scorePosition(
   r: number,
@@ -495,6 +519,9 @@ function placeBonuses(
 
         // Check adjacent bonus constraint
         if (!config.allowAdjacent && hasAdjacentBonus(r, c, bonuses, size)) continue;
+
+        // DW must not be too close to TW in same row/column (prevents single word hitting both)
+        if (bonusType === 'DW' && isTooCloseToTW(r, c, bonuses, size)) continue;
 
         positions.push([r, c]);
       }
