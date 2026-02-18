@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Check, Clock } from 'lucide-react';
 import { HamburgerMenu, Skeleton } from '@grid-games/ui';
-import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber, didAchieveOptimal, getSavedPuzzleId } from '@/lib/storage';
+import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber, didAchieveOptimal, getSavedPuzzleId, getPuzzleState } from '@/lib/storage';
 import { getPuzzleIdsForRange } from '@/lib/puzzleGenerator';
 
 // Carom launched Feb 1, 2026
@@ -17,6 +17,7 @@ interface ArchiveEntry {
   isCompleted: boolean;
   isInProgress: boolean;
   achievedOptimal: boolean;
+  isCheating: boolean;
 }
 
 export function ArchivePageContent() {
@@ -71,18 +72,28 @@ export function ArchivePageContent() {
       // Get the saved puzzleId from localStorage
       const savedPuzzleId = getSavedPuzzleId(num);
 
-      // Only show as completed if the puzzleIds match (or both are undefined for legacy)
+      // Only show as completed if the puzzleIds match (handles both being undefined for legacy)
       // This ensures regenerated puzzles don't show old completion status
-      const puzzleIdMatches = currentPuzzleId === undefined || savedPuzzleId === currentPuzzleId;
+      const puzzleIdMatches = currentPuzzleId === savedPuzzleId;
       const isCompleted = puzzleIdMatches && isPuzzleCompleted(num, currentPuzzleId);
       const isInProgressState = puzzleIdMatches && isPuzzleInProgress(num, currentPuzzleId);
+
+      // Check for cheating (moveCount < optimalMoves)
+      let isCheating = false;
+      if (isCompleted) {
+        const state = getPuzzleState(num, currentPuzzleId);
+        if (state?.status === 'completed' && state.data.optimalMoves !== undefined) {
+          isCheating = state.data.moveCount < state.data.optimalMoves;
+        }
+      }
 
       entries.push({
         number: num,
         date: dateStr,
         isCompleted,
         isInProgress: isInProgressState,
-        achievedOptimal: isCompleted && didAchieveOptimal(num, currentPuzzleId),
+        achievedOptimal: isCompleted && !isCheating && didAchieveOptimal(num, currentPuzzleId),
+        isCheating,
       });
     }
 
@@ -150,7 +161,9 @@ export function ArchivePageContent() {
                     </div>
                     {entry.isCompleted ? (
                       <div className="flex items-center gap-2">
-                        {entry.achievedOptimal ? (
+                        {entry.isCheating ? (
+                          <span className="text-xl" title="Impossible!">💀</span>
+                        ) : entry.achievedOptimal ? (
                           <span className="text-xl" title="Optimal solution!">🏆</span>
                         ) : (
                           <Check size={18} className="text-[var(--success,#22c55e)]" />

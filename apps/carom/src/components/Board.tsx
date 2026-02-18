@@ -128,6 +128,7 @@ export function Board({
     <div
       ref={containerRef}
       className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-[3px] border-[var(--wall-color)]"
+      style={{ touchAction: 'none' }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={handleBoardClick}

@@ -42,7 +42,7 @@ function CaromResultsModal({
   isOpen,
   onClose,
   moveCount,
-  optimalMoves: _optimalMoves,
+  optimalMoves,
   achievedOptimal,
   puzzleNumber,
   puzzleId,
@@ -52,14 +52,17 @@ function CaromResultsModal({
   const [replayCopied, setReplayCopied] = useState(false);
   const movesText = moveCount === 1 ? 'move' : 'moves';
 
-  // Build share text - no arrow emojis, include trophy if optimal, checkmark otherwise
-  const resultEmoji = achievedOptimal ? ' 🏆' : ' ✅';
+  // Check if user somehow got fewer moves than optimal (cheating/bug)
+  const isCheating = moveCount < optimalMoves;
+
+  // Build share text - skull for cheaters, trophy if optimal, checkmark otherwise
+  const resultEmoji = isCheating ? ' 💀' : (achievedOptimal ? ' 🏆' : ' ✅');
   const baseUrl = 'https://nerdcube.games/carom';
   const puzzleUrl = isArchive ? `${baseUrl}?puzzle=${puzzleNumber}` : baseUrl;
   const shareText = `Carom #${puzzleNumber}\n${moveCount} ${movesText}${resultEmoji}\n\n${puzzleUrl}`;
 
   // Determine message type: success if optimal, neutral otherwise
-  const messageType = achievedOptimal ? 'success' : 'neutral';
+  const messageType = isCheating ? 'neutral' : (achievedOptimal ? 'success' : 'neutral');
 
   // Handle share replay
   const handleShareReplay = useCallback(async () => {
@@ -97,13 +100,18 @@ function CaromResultsModal({
       messageType={messageType}
       additionalActions={shareReplayButton}
     >
-      {/* Trophy display if optimal */}
-      {achievedOptimal && (
+      {/* Trophy display if optimal, skull if cheating */}
+      {isCheating ? (
+        <div className="text-center">
+          <div className="text-4xl mb-2">💀</div>
+          <div className="text-[var(--muted)] font-medium">Impossible!</div>
+        </div>
+      ) : achievedOptimal ? (
         <div className="text-center">
           <div className="text-4xl mb-2">🏆</div>
           <div className="text-[var(--accent)] font-medium">Perfect Solution!</div>
         </div>
-      )}
+      ) : null}
     </ResultsModal>
   );
 }

@@ -42,8 +42,8 @@ export function ArchivePageContent() {
     const currentPuzzleId = puzzleIds.get(puzzleNumber);
     const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
 
-    // Only show as completed if puzzleIds match (or both undefined for legacy)
-    const puzzleIdMatches = currentPuzzleId === undefined || savedPuzzleId === currentPuzzleId;
+    // Only show as completed if puzzleIds match (handles both being undefined for legacy)
+    const puzzleIdMatches = currentPuzzleId === savedPuzzleId;
     return puzzleIdMatches && isPuzzleCompleted(puzzleNumber, currentPuzzleId);
   }, [puzzleIds]);
 
@@ -51,7 +51,8 @@ export function ArchivePageContent() {
     const currentPuzzleId = puzzleIds.get(puzzleNumber);
     const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
 
-    const puzzleIdMatches = currentPuzzleId === undefined || savedPuzzleId === currentPuzzleId;
+    // Only show as in-progress if puzzleIds match (handles both being undefined for legacy)
+    const puzzleIdMatches = currentPuzzleId === savedPuzzleId;
     return puzzleIdMatches && isPuzzleInProgress(puzzleNumber, currentPuzzleId);
   }, [puzzleIds]);
 

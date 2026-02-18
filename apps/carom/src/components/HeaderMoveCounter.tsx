@@ -17,6 +17,9 @@ export function HeaderMoveCounter({
 }: HeaderMoveCounterProps) {
   const isClickable = optimalMoves !== undefined && onClick;
 
+  // Check if user somehow got fewer moves than optimal (cheating/bug)
+  const isCheating = optimalMoves !== undefined && moves < optimalMoves;
+
   return (
     <button
       onClick={isClickable ? onClick : undefined}
@@ -27,7 +30,10 @@ export function HeaderMoveCounter({
     >
       <span className="text-[var(--muted)]">Moves: </span>
       <span className="font-bold text-[var(--accent)] text-2xl">{moves}</span>
-      {isFinished && achievedOptimal && (
+      {isFinished && isCheating && (
+        <span className="text-xl" title="Impossible!">💀</span>
+      )}
+      {isFinished && achievedOptimal && !isCheating && (
         <span className="text-xl" title="Optimal solution!">🏆</span>
       )}
     </button>
