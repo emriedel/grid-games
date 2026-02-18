@@ -21,18 +21,18 @@
   --card-bg-selected: #d0ccc4;
   --card-bg-hinted: #f0e8d8;
 
-  /* Hint system - more saturated orange-gold */
-  --hint-color: #f97316;
+  /* Hint indicator on cards - warm amber for visibility */
+  --hint-color: #f59e0b;
 
   /* Tile/card styling (legacy) */
   --tile-bg: #1c1c1c;
   --tile-bg-selected: #2a4a47;
   --tile-border: #3f3f46;
 
-  /* Card colors (for shapes) - vibrant, saturated palette */
-  --trio-red: #dc2626;
-  --trio-blue: #2563eb;
-  --trio-gold: #f59e0b;
+  /* Card colors (for shapes) - Jewel Tones palette (brightened for dark bg) */
+  --trio-red: #db2777;    /* Ruby */
+  --trio-blue: #3b82f6;   /* Sapphire */
+  --trio-gold: #10b981;   /* Emerald */
 
   /* Status colors */
   --success: #22c55e;
@@ -72,10 +72,10 @@ body {
 
 @keyframes pulseSubtle {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(249, 115, 22, 0.4);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3);
   }
 }
 
@@ -103,7 +103,7 @@ body {
 }
 
 .animate-pulse-subtle {
-  animation: pulseSubtle 1.5s ease-in-out infinite;
+  animation: pulseSubtle 2.5s ease-in-out infinite;
 }
 
 .animate-found-set-appear {

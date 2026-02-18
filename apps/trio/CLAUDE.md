@@ -51,7 +51,7 @@ Then open http://localhost:3005
 Each attribute has exactly 3 values per puzzle:
 
 - **Shape:** 3 shapes per puzzle (from pool: circle, triangle, square, diamond, pentagon, hexagon, star, cross, heart)
-- **Color:** Red (#dc2626), Blue (#2563eb), Gold (#f59e0b) - vibrant, saturated palette
+- **Color:** Ruby (#db2777), Sapphire (#3b82f6), Emerald (#10b981) - Jewel Tones palette
 - **Pattern:** solid, outline, striped
 - **Count:** 1, 2, or 3 shapes (displayed in triangle pattern for count=3)
 
@@ -91,7 +91,7 @@ src/
 ├── components/
 │   ├── Game.tsx         # Main game orchestrator
 │   ├── Tableau.tsx      # 3x3 card grid
-│   ├── Card.tsx         # Interactive card (square, cream bg, hint glow)
+│   ├── Card.tsx         # Interactive card (square, hint glow)
 │   ├── CardShape.tsx    # SVG shape rendering (triangle layout for count=3)
 │   ├── HintsIndicator.tsx      # Hint button
 │   ├── FoundSetDisplay.tsx     # Shows last found trio below buttons
@@ -207,10 +207,11 @@ Load from pool by index: `?debug=true&poolIndex=5`
 ### Card Component
 
 Interactive card with states:
-- Default: Cream background (`--card-bg: #f5f0e6`)
-- Hover: Lighter cream (`--card-bg-hover`)
-- Selected: Darker cream (`--card-bg-selected`) + teal ring
-- Hinted: Golden cream (`--card-bg-hinted`) + pulse animation
+- Default: Transparent (shapes on dark background)
+- Hover: Subtle highlight (`bg-white/5`)
+- Selected: Teal ring + scale up
+- Hinted: Amber ring + pulse animation
+- Correct reveal: Green ring + shadow
 - Shaking: Shake animation for invalid selection
 
 **Card Shape:** Square aspect ratio (1:1) for better visual balance
@@ -231,7 +232,7 @@ Renders SVG shapes with patterns:
 Defined in `globals.css`:
 - `animate-shake`: Shake for invalid sets (0.5s)
 - `animate-card-add`: Fade in + scale for new cards (0.3s)
-- `animate-pulse-subtle`: Golden glow for hinted cards
+- `animate-pulse-subtle`: Amber glow for hinted cards
 - `animate-found-set-appear`: Slide in for found set display
 
 ## Mathematical Foundation: GF(3)^4

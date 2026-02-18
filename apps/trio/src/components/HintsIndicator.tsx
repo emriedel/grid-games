@@ -21,11 +21,10 @@ export function HintsIndicator({ hintAvailable, hasThreeSelected, onUseHint }: H
       className={`
         flex items-center gap-1.5 px-4 py-3 rounded-lg
         text-base font-semibold
-        transition-all duration-150
-        ${isDisabled
-          ? 'bg-[var(--border)] text-[var(--muted)] cursor-not-allowed opacity-50'
-          : 'bg-[var(--hint-color)] text-black hover:brightness-110 active:scale-95'
-        }
+        transition-colors
+        bg-[var(--tile-bg)] text-[var(--foreground)]
+        hover:bg-[var(--tile-bg-selected)]
+        disabled:opacity-50 disabled:cursor-not-allowed
       `}
       aria-label={hintAvailable ? 'Use hint' : 'Hint already used this round'}
     >

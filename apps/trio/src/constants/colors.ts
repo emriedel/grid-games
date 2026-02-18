@@ -12,24 +12,24 @@ export interface ColorDefinition {
   cssVar: string;     // CSS variable name (defined in globals.css)
 }
 
-// 3 highly-distinguishable colors (vibrant, saturated palette)
+// 3 highly-distinguishable colors (Jewel Tones palette - brightened for dark bg)
 export const COLORS: ColorDefinition[] = [
   {
     id: 'red',
-    name: 'Red',
-    value: '#dc2626',  // Tailwind red-600
+    name: 'Ruby',
+    value: '#db2777',  // Jewel tone ruby (pink-600)
     cssVar: 'var(--trio-red)',
   },
   {
     id: 'blue',
-    name: 'Blue',
-    value: '#2563eb',  // Tailwind blue-600
+    name: 'Sapphire',
+    value: '#3b82f6',  // Jewel tone sapphire (blue-500)
     cssVar: 'var(--trio-blue)',
   },
   {
     id: 'gold',
-    name: 'Gold',
-    value: '#f59e0b',  // Tailwind amber-500
+    name: 'Emerald',
+    value: '#10b981',  // Jewel tone emerald (emerald-500)
     cssVar: 'var(--trio-gold)',
   },
 ];

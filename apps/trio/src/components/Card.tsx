@@ -43,7 +43,7 @@ export function Card({ card, isSelected, isRemoving, isAdding, isShaking, isHint
           : isSelected
             ? 'ring-4 ring-[var(--accent)] scale-105'
             : isHinted
-              ? 'ring-[6px] ring-[var(--hint-color)] shadow-lg shadow-orange-500/50 animate-pulse-subtle'
+              ? 'ring-2 ring-[var(--hint-color)] shadow-md shadow-amber-500/30 animate-pulse-subtle'
               : 'hover:scale-[1.02] hover:bg-white/5'
         }
         ${isShaking ? 'animate-shake' : ''}

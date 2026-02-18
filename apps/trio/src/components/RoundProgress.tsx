@@ -12,7 +12,7 @@ interface RoundProgressProps {
  * Shows progress through 5 rounds with visual indicators.
  * - Empty box (with border) = pending (current round highlighted)
  * - Checkmark (green) = found without hint
- * - Lightbulb (orange) = found with hint
+ * - Lightbulb (amber) = found with hint
  * - X (red) = missed
  */
 export function RoundProgress({ roundOutcomes, currentRound }: RoundProgressProps) {
@@ -35,7 +35,7 @@ export function RoundProgress({ roundOutcomes, currentRound }: RoundProgressProp
                 : ''
               }
               ${outcome === 'found' ? 'bg-green-500/20 text-green-400' : ''}
-              ${outcome === 'found-with-hint' ? 'bg-orange-500/20 text-orange-400' : ''}
+              ${outcome === 'found-with-hint' ? 'bg-amber-500/20 text-amber-400' : ''}
               ${outcome === 'missed' ? 'bg-red-500/20 text-red-400' : ''}
             `}
             aria-label={`Round ${index + 1}: ${outcome}`}
