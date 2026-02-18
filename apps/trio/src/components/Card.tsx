@@ -11,6 +11,7 @@ interface CardProps {
   isShaking?: boolean;
   isHinted?: boolean;
   isCorrectReveal?: boolean;
+  isSuccess?: boolean;
   onClick: () => void;
 }
 
@@ -19,7 +20,7 @@ interface CardProps {
  * Shows shapes with proper styling for selected/removed/hinted/reveal states.
  * Uses square aspect ratio with cream background.
  */
-export function Card({ card, isSelected, isRemoving, isAdding, isShaking, isHinted, isCorrectReveal, onClick }: CardProps) {
+export function Card({ card, isSelected, isRemoving, isAdding, isShaking, isHinted, isCorrectReveal, isSuccess, onClick }: CardProps) {
   // Removing animation - fade out and scale down
   if (isRemoving) {
     return (
@@ -38,13 +39,15 @@ export function Card({ card, isSelected, isRemoving, isAdding, isShaking, isHint
         flex items-center justify-center
         transition-all duration-150 ease-out
         cursor-pointer select-none
-        ${isCorrectReveal
-          ? 'ring-4 ring-green-500 scale-105 shadow-lg shadow-green-500/30'
-          : isSelected
-            ? 'ring-4 ring-[var(--accent)] scale-105'
-            : isHinted
-              ? 'ring-2 ring-[var(--hint-color)] shadow-md shadow-amber-500/30 animate-pulse-subtle'
-              : 'hover:scale-[1.02] hover:bg-white/5'
+        ${isSuccess
+          ? 'ring-4 ring-green-500 scale-105 animate-success'
+          : isCorrectReveal
+            ? 'ring-4 ring-green-500 scale-105 shadow-lg shadow-green-500/30'
+            : isSelected
+              ? 'ring-4 ring-[var(--accent)] scale-105'
+              : isHinted
+                ? 'ring-2 ring-[var(--hint-color)] shadow-md shadow-amber-500/30 animate-pulse-subtle'
+                : 'hover:scale-[1.02] hover:bg-white/5'
         }
         ${isShaking ? 'animate-shake' : ''}
         ${isAdding ? 'animate-card-add' : ''}

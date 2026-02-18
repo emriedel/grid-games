@@ -68,11 +68,11 @@ function TrioResultsModal({
     ? `https://nerdcube.games/trio?puzzle=${puzzleNumber}`
     : 'https://nerdcube.games/trio';
 
-  // Build share text with trophy if perfect
-  const gameName = isPerfect ? 'Trio 🏆' : 'Trio';
+  // Build share text with trophy if perfect (trophy after puzzle number)
   const puzzleId = puzzleNumber ? `#${puzzleNumber}` : '';
+  const trophyText = isPerfect ? ' 🏆' : '';
   const scoreText = `${triosFound}/${GAME_CONFIG.ROUND_COUNT} Trios`;
-  const shareText = `${gameName} ${puzzleId}\n${scoreText}\n${emojiLine}\n\n${shareUrl}`;
+  const shareText = `Trio ${puzzleId}${trophyText}\n${scoreText}\n${emojiLine}\n\n${shareUrl}`;
 
   return (
     <ResultsModal
@@ -137,6 +137,7 @@ export function Game() {
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [exitedLanding, setExitedLanding] = useState(false);
   const [shakingCardIds, setShakingCardIds] = useState<string[]>([]);
+  const [successCardIds, setSuccessCardIds] = useState<string[]>([]);
   const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
   const [activePuzzle, setActivePuzzle] = useState<SequentialPuzzle | null>(null);
 
@@ -146,6 +147,13 @@ export function Game() {
 
   // Track if we've auto-shown the results modal for this game completion
   const hasAutoShownResultsRef = useRef(false);
+
+  // Store completed puzzle data for restoring when user exits landing
+  const completedDataRef = useRef<{
+    roundOutcomes: RoundOutcome[];
+    hintUsedInRound: boolean[];
+    allTrios: Card[][];
+  } | null>(null);
 
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
@@ -200,19 +208,26 @@ export function Game() {
               )
             );
           }
-          // Restore the state with found trios
-          restoreState({
+
+          const completedData = {
             roundOutcomes: puzzleState.data.roundOutcomes,
             hintUsedInRound: puzzleState.data.hintUsedInRound,
             allTrios,
-            phase: 'finished',
-          });
-          hasAutoShownResultsRef.current = true; // Don't auto-show modal when viewing completed
+          };
+
           if (isArchiveMode) {
+            // Archive: go directly to finished view
+            restoreState({
+              ...completedData,
+              phase: 'finished',
+            });
             setExitedLanding(true);
           } else {
+            // Today: store data for later, show landing with "View Game" button
+            completedDataRef.current = completedData;
             setLandingMode('completed');
           }
+          hasAutoShownResultsRef.current = true; // Don't auto-show modal when viewing completed
         } else if (puzzleState?.status === 'in-progress') {
           if (isArchiveMode) {
             startGame();
@@ -362,7 +377,14 @@ export function Game() {
 
     const result = submitSelection();
 
-    if (result === 'invalid') {
+    if (result === 'valid') {
+      // Show success animation on the selected cards
+      setSuccessCardIds([...state.selectedCardIds]);
+      // Clear success state after the animation (400ms matches the FOUND_SET delay)
+      setTimeout(() => {
+        setSuccessCardIds([]);
+      }, 400);
+    } else if (result === 'invalid') {
       // Show shake animation briefly
       setShakingCardIds([...state.selectedCardIds]);
       setTimeout(() => {
@@ -471,8 +493,15 @@ export function Game() {
 
   // Handle "See Results" from landing screen
   const handleSeeResults = useCallback(() => {
+    // Restore completed state data if available
+    if (completedDataRef.current) {
+      restoreState({
+        ...completedDataRef.current,
+        phase: 'finished',
+      });
+    }
     setExitedLanding(true);
-  }, []);
+  }, [restoreState]);
 
   // Loading state
   if (isLoading) {
@@ -571,6 +600,7 @@ export function Game() {
               shakingCardIds={shakingCardIds}
               hintedCardIds={state.hintedCardIds}
               correctTrioCardIds={state.correctTrioCardIds}
+              successCardIds={successCardIds}
               onCardClick={handleCardClick}
             />
 

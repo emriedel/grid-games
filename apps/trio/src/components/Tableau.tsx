@@ -13,6 +13,7 @@ interface TableauProps {
   shakingCardIds?: string[];
   hintedCardIds?: string[];
   correctTrioCardIds?: string[];
+  successCardIds?: string[];
   onCardClick: (cardId: string) => void;
 }
 
@@ -29,6 +30,7 @@ export function Tableau({
   shakingCardIds = [],
   hintedCardIds = [],
   correctTrioCardIds = [],
+  successCardIds = [],
   onCardClick,
 }: TableauProps) {
   const { BOARD_COLS, CARD_COUNT } = GAME_CONFIG;
@@ -74,6 +76,7 @@ export function Tableau({
             isShaking={shakingCardIds.includes(card.id)}
             isHinted={hintedCardIds.includes(card.id)}
             isCorrectReveal={correctTrioCardIds.includes(card.id)}
+            isSuccess={successCardIds.includes(card.id)}
             onClick={() => onCardClick(card.id)}
           />
         );

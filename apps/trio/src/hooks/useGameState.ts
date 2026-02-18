@@ -345,10 +345,10 @@ export function useGameState(): UseGameStateReturn {
       const roundIndex = state.currentRound - 1;
       const usedHint = state.hintUsedInRound[roundIndex];
 
-      // Delay slightly to show selection before removal
+      // Delay to show success animation before removal (400ms for green ring animation)
       setTimeout(() => {
         dispatch({ type: 'FOUND_SET', lastFoundCards: selectedCards, usedHint });
-      }, 200);
+      }, 400);
       return 'valid';
     } else {
       // Invalid set - this round is now missed
