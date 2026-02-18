@@ -52,9 +52,9 @@ export const dabbleTheme: GameTheme = {
 /** Jumble game theme - blue accent */
 export const jumbleTheme: GameTheme = {
   ...baseTheme,
-  accent: '#6b8ab8',        // brighter slate blue
+  accent: '#2563eb',        // vibrant blue (blue-600)
   accentForeground: '#ffffff',
-  accentSecondary: '#3d5a7f', // mid-tone navy
+  accentSecondary: '#1d4ed8', // blue-700
   tileBg: '#1a1a2e',
   tileBgSelected: '#4a5580',
   tileBorder: '#2d2d44',
@@ -63,31 +63,31 @@ export const jumbleTheme: GameTheme = {
 /** Edgewise game theme - purple accent */
 export const edgewiseTheme: GameTheme = {
   ...baseTheme,
-  accent: '#a855f7',        // purple-500
-  accentForeground: '#faf5ff',
-  accentSecondary: '#7e22ce', // purple-700
+  accent: '#9333ea',        // deeper purple (purple-600)
+  accentForeground: '#ffffff',
+  accentSecondary: '#7c3aed', // violet-600
   tileBg: '#1e1b4b',        // indigo-950
   tileBgSelected: '#312e81', // indigo-900
   tileBorder: '#4c1d95',    // purple-800
 };
 
-/** Trio game theme - teal accent */
+/** Trio game theme - cyan accent */
 export const trioTheme: GameTheme = {
   ...baseTheme,
-  accent: '#14b8a6',        // teal-500
-  accentForeground: '#ffffff',
-  accentSecondary: '#0d9488', // teal-600
+  accent: '#06b6d4',        // vibrant cyan (cyan-500)
+  accentForeground: '#000000', // dark text for bright cyan
+  accentSecondary: '#0891b2', // cyan-600
   tileBg: '#1c1c1c',
   tileBgSelected: '#2a4a47',
   tileBorder: '#3f3f46',
 };
 
-/** Tessera game theme - forest green accent */
+/** Tessera game theme - emerald green accent */
 export const tesseraTheme: GameTheme = {
   ...baseTheme,
-  accent: '#059669',        // emerald-600
+  accent: '#0da678',        // brighter emerald
   accentForeground: '#ffffff',
-  accentSecondary: '#047857', // emerald-700
+  accentSecondary: '#059669', // emerald-600 (old accent as secondary)
   tileBg: '#1c1c1c',
   tileBgSelected: '#1a4a3a',
   tileBorder: '#3f3f46',

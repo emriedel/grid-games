@@ -10,10 +10,10 @@
   --muted: #a1a1aa;
   --border: #27272a;
 
-  /* Trio theme - Deep Cyan accent */
-  --accent: #0891b2;
-  --accent-foreground: #ffffff;
-  --accent-secondary: #0e7490;
+  /* Trio theme - Vibrant Cyan accent */
+  --accent: #06b6d4;
+  --accent-foreground: #000000;
+  --accent-secondary: #0891b2;
 
   /* Card backgrounds - soft warm gray */
   --card-bg: #e8e4de;

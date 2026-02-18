@@ -10,10 +10,10 @@
   --muted: #a1a1aa;
   --border: #27272a;
 
-  /* Game-specific accent - Purple */
-  --accent: #a855f7;
-  --accent-foreground: #faf5ff;
-  --accent-secondary: #7e22ce;
+  /* Game-specific accent - Deeper Purple */
+  --accent: #9333ea;
+  --accent-foreground: #ffffff;
+  --accent-secondary: #7c3aed;
 
   /* Tile styling */
   --tile-bg: #1e1b4b;

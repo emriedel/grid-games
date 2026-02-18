@@ -10,10 +10,10 @@
   --muted: #a1a1aa;
   --border: #27272a;
 
-  /* Tessera theme - Forest Green accent */
-  --accent: #059669;
+  /* Tessera theme - Brighter Emerald accent */
+  --accent: #0da678;
   --accent-foreground: #ffffff;
-  --accent-secondary: #047857;
+  --accent-secondary: #059669;
 
   /* Board styling */
   --board-bg: #1c1c1c;
@@ -79,10 +79,10 @@ body {
 
 @keyframes pulse-selected {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0);
+    box-shadow: 0 0 0 0 rgba(13, 166, 120, 0);
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.4);
+    box-shadow: 0 0 0 4px rgba(13, 166, 120, 0.4);
   }
 }
 
