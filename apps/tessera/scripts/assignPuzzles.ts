@@ -33,7 +33,7 @@ interface MonthlyAssignedFile {
 }
 
 // Must match the base date in storage.ts and config.ts
-const BASE_DATE = '2026-03-01';
+const BASE_DATE = '2026-02-15';
 const GAME_ID = 'tessera';
 
 function getTodayPuzzleNumber(): number {

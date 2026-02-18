@@ -17,7 +17,7 @@ export interface TesseraPuzzleState extends BasePuzzleState {
   };
 }
 
-const LAUNCH_DATE = new Date('2026-03-01T00:00:00');
+const LAUNCH_DATE = new Date('2026-02-15T00:00:00');
 
 const storage = createArchiveStorage<TesseraPuzzleState>({
   gameId: 'tessera',

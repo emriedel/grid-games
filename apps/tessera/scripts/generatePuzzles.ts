@@ -63,6 +63,134 @@ function createRectangle(rows: number, cols: number, name: string): ShapeDefinit
 }
 
 /**
+ * Check if a shape would create disconnected regions if we mark a cell as dead
+ * Returns true if marking the cell creates multiple disconnected regions
+ */
+function wouldCreateDisconnectedRegions(shape: boolean[][]): boolean {
+  const rows = shape.length;
+  const cols = shape[0].length;
+  const visited: boolean[][] = shape.map((row) => row.map(() => false));
+
+  function floodFill(startR: number, startC: number): number {
+    const stack: Array<[number, number]> = [[startR, startC]];
+    let count = 0;
+
+    while (stack.length > 0) {
+      const [r, c] = stack.pop()!;
+      if (r < 0 || r >= rows || c < 0 || c >= cols) continue;
+      if (visited[r][c] || !shape[r][c]) continue;
+
+      visited[r][c] = true;
+      count++;
+
+      stack.push([r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]);
+    }
+
+    return count;
+  }
+
+  // Count total playable cells
+  let totalPlayable = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (shape[r][c]) totalPlayable++;
+    }
+  }
+
+  // Find first playable cell and flood fill
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (shape[r][c]) {
+        const reachable = floodFill(r, c);
+        // If we can't reach all playable cells, we have disconnected regions
+        return reachable !== totalPlayable;
+      }
+    }
+  }
+
+  return false; // No playable cells (shouldn't happen)
+}
+
+/**
+ * Create a rectangle with random dead spaces (holes)
+ * Ensures:
+ * - Total playable cells divisible by 5
+ * - No isolated regions
+ * - Max 6 pieces (30 cells)
+ */
+function createRectangleWithRandomHoles(
+  rng: () => number,
+  baseRows: number,
+  baseCols: number,
+  deadCellCount: number,
+  variantId: number
+): ShapeDefinition | null {
+  // Start with full rectangle
+  const shape: boolean[][] = [];
+  for (let r = 0; r < baseRows; r++) {
+    shape.push(Array(baseCols).fill(true));
+  }
+
+  const totalCells = baseRows * baseCols;
+  const targetPlayable = totalCells - deadCellCount;
+
+  // Must be divisible by 5 and result in max 6 pieces
+  if (targetPlayable % 5 !== 0 || targetPlayable > 30 || targetPlayable < 20) {
+    return null;
+  }
+
+  // Create list of candidate cells to make dead (avoid corners for stability)
+  const candidates: Array<[number, number]> = [];
+  for (let r = 0; r < baseRows; r++) {
+    for (let c = 0; c < baseCols; c++) {
+      // Skip corners to keep shape more interesting
+      const isCorner =
+        (r === 0 || r === baseRows - 1) && (c === 0 || c === baseCols - 1);
+      if (!isCorner) {
+        candidates.push([r, c]);
+      }
+    }
+  }
+
+  // Shuffle candidates
+  for (let i = candidates.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+  }
+
+  // Try to mark cells as dead one by one
+  let deadCount = 0;
+  for (const [r, c] of candidates) {
+    if (deadCount >= deadCellCount) break;
+
+    // Tentatively mark as dead
+    shape[r][c] = false;
+
+    // Check if this creates disconnected regions
+    if (wouldCreateDisconnectedRegions(shape)) {
+      // Revert
+      shape[r][c] = true;
+    } else {
+      deadCount++;
+    }
+  }
+
+  // Verify we got enough dead cells
+  if (deadCount !== deadCellCount) {
+    return null;
+  }
+
+  const playableCells = shape.flat().filter((c) => c).length;
+  const pieceCount = playableCells / 5;
+
+  return {
+    name: `Rectangle Variant ${variantId}`,
+    shape,
+    pieceCount,
+  };
+}
+
+/**
  * Create an L-shape
  */
 function createLShape(longSide: number, shortSide: number, thickness: number): ShapeDefinition {
@@ -155,44 +283,429 @@ function createRectangleWithHole(
   return { name: 'Frame', shape, pieceCount: cells / 5 };
 }
 
+// ============ Themed Shape Definitions ============
+
+/**
+ * Helper to create a shape from a string pattern
+ * '█' or '#' = playable, '.' or ' ' = dead
+ */
+function createShapeFromPattern(pattern: string[], name: string): ShapeDefinition {
+  const shape: boolean[][] = [];
+  for (const row of pattern) {
+    const boolRow: boolean[] = [];
+    for (const char of row) {
+      boolRow.push(char === '█' || char === '#');
+    }
+    shape.push(boolRow);
+  }
+  const cells = shape.flat().filter((c) => c).length;
+  if (cells % 5 !== 0) {
+    throw new Error(`Shape ${name} has ${cells} cells, not divisible by 5`);
+  }
+  return { name, shape, pieceCount: cells / 5 };
+}
+
+/**
+ * Create a heart shape (25 cells = 5 pieces)
+ * 4+5+5+5+3+3 = 25
+ */
+function createHeart(): ShapeDefinition {
+  const pattern = [
+    '.██.██.',
+    '.█████.',
+    '.█████.',
+    '.█████.',
+    '..███..',
+    '..███..',
+  ];
+  return createShapeFromPattern(pattern, 'Heart');
+}
+
+/**
+ * Create an upward arrow shape (25 cells = 5 pieces)
+ * 1+3+5+1+1+1+5+5+3 = 25
+ */
+function createArrowUp(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '.███.',
+    '█████',
+    '..█..',
+    '..█..',
+    '..█..',
+    '█████',
+    '█████',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'Arrow Up');
+}
+
+/**
+ * Create a tall diamond shape (25 cells = 5 pieces)
+ * 1+3+5+5+5+3+3 = 25
+ */
+function createDiamond(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '.███.',
+    '█████',
+    '█████',
+    '█████',
+    '.███.',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'Diamond');
+}
+
+/**
+ * Create a crown shape (25 cells = 5 pieces)
+ * 3+5+5+5+5+2 = 25
+ */
+function createCrown(): ShapeDefinition {
+  const pattern = [
+    '█.█.█',
+    '█████',
+    '█████',
+    '█████',
+    '█████',
+    '.█.█.',
+  ];
+  return createShapeFromPattern(pattern, 'Crown');
+}
+
+/**
+ * Create a trophy shape (25 cells = 5 pieces)
+ * 5+3+1+1+1+1+3+5+5 = 25
+ */
+function createTrophy(): ShapeDefinition {
+  const pattern = [
+    '█████',
+    '.███.',
+    '..█..',
+    '..█..',
+    '..█..',
+    '..█..',
+    '.███.',
+    '█████',
+    '█████',
+  ];
+  return createShapeFromPattern(pattern, 'Trophy');
+}
+
+/**
+ * Create a house shape with door hole (30 cells = 6 pieces)
+ * 1+3+5+5+5+4+4+3 = 30
+ */
+function createHouse(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '.███.',
+    '█████',
+    '█████',
+    '█████',
+    '██.██',
+    '██.██',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'House');
+}
+
+/**
+ * Create a letter T shape (35 cells = 7 pieces)
+ * 7+7+3+3+3+3+3+3+3 = 35
+ */
+function createLetterT(): ShapeDefinition {
+  const pattern = [
+    '███████',
+    '███████',
+    '..███..',
+    '..███..',
+    '..███..',
+    '..███..',
+    '..███..',
+    '..███..',
+    '..███..',
+  ];
+  return createShapeFromPattern(pattern, 'Letter T');
+}
+
+/**
+ * Create a star shape (20 cells = 4 pieces)
+ * 1+3+4+5+4+3 = 20
+ */
+function createStar(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '.███.',
+    '██.██',
+    '█████',
+    '██.██',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'Star');
+}
+
+/**
+ * Create a vertical key shape (30 cells = 6 pieces)
+ * 3+5+4+5+3+1+1+1+3+1+3 = 30
+ */
+function createKey(): ShapeDefinition {
+  const pattern = [
+    '.███.',
+    '█████',
+    '██.██',
+    '█████',
+    '.███.',
+    '..█..',
+    '..█..',
+    '..█..',
+    '.███.',
+    '..█..',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'Key');
+}
+
+/**
+ * Create a candle/torch shape (25 cells = 5 pieces)
+ * 1+3+3+1+3+3+3+3+5 = 25
+ */
+function createCandle(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '.███.',
+    '.███.',
+    '..█..',
+    '.███.',
+    '.███.',
+    '.███.',
+    '.███.',
+    '█████',
+  ];
+  return createShapeFromPattern(pattern, 'Candle');
+}
+
+/**
+ * Create a letter H shape (30 cells = 6 pieces)
+ * 4+4+4+5+5+4+4 = 30
+ */
+function createLetterH(): ShapeDefinition {
+  const pattern = [
+    '██.██',
+    '██.██',
+    '██.██',
+    '█████',
+    '█████',
+    '██.██',
+    '██.██',
+  ];
+  return createShapeFromPattern(pattern, 'Letter H');
+}
+
+/**
+ * Create a letter E shape (30 cells = 6 pieces)
+ * 5+5+2+4+2+5+5+2 = 30
+ */
+function createLetterE(): ShapeDefinition {
+  const pattern = [
+    '█████',
+    '█████',
+    '██...',
+    '████.',
+    '██...',
+    '█████',
+    '█████',
+    '██...',
+  ];
+  return createShapeFromPattern(pattern, 'Letter E');
+}
+
+/**
+ * Create a tree shape (30 cells = 6 pieces)
+ * 1+3+5+3+5+1+1+1+5+5 = 30
+ */
+function createTree(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '.███.',
+    '█████',
+    '.███.',
+    '█████',
+    '..█..',
+    '..█..',
+    '..█..',
+    '█████',
+    '█████',
+  ];
+  return createShapeFromPattern(pattern, 'Tree');
+}
+
+/**
+ * Create a cross/plus shape (30 cells = 6 pieces)
+ * 3+3+5+5+5+5+3+1 = 30
+ */
+function createCross(): ShapeDefinition {
+  const pattern = [
+    '.███.',
+    '.███.',
+    '█████',
+    '█████',
+    '█████',
+    '█████',
+    '.███.',
+    '..█..',
+  ];
+  return createShapeFromPattern(pattern, 'Cross');
+}
+
+/**
+ * Create a goblet/chalice shape (25 cells = 5 pieces)
+ * 5+3+1+1+1+3+5+3+3 = 25
+ */
+function createGoblet(): ShapeDefinition {
+  const pattern = [
+    '█████',
+    '.███.',
+    '..█..',
+    '..█..',
+    '..█..',
+    '.███.',
+    '█████',
+    '.███.',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'Goblet');
+}
+
+/**
+ * Create a plus sign shape (25 cells = 5 pieces)
+ * 1+1+5+5+5+5+1+1+1 = 25
+ */
+function createPlusSign(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '..█..',
+    '█████',
+    '█████',
+    '█████',
+    '█████',
+    '..█..',
+    '..█..',
+    '..█..',
+  ];
+  return createShapeFromPattern(pattern, 'Plus Sign');
+}
+
+/**
+ * Create a shield shape (30 cells = 6 pieces)
+ * 5+5+5+5+5+3+1+1 = 30
+ */
+function createShield(): ShapeDefinition {
+  const pattern = [
+    '█████',
+    '█████',
+    '█████',
+    '█████',
+    '█████',
+    '.███.',
+    '..█..',
+    '..█..',
+  ];
+  return createShapeFromPattern(pattern, 'Shield');
+}
+
+/**
+ * Create an anchor shape (30 cells = 6 pieces)
+ * 3+5+3+1+1+1+5+5+3+3 = 30
+ */
+function createAnchor(): ShapeDefinition {
+  const pattern = [
+    '.███.',
+    '█████',
+    '.███.',
+    '..█..',
+    '..█..',
+    '..█..',
+    '█████',
+    '█████',
+    '.███.',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'Anchor');
+}
+
 /**
  * Get all valid shape definitions (cells divisible by 5)
+ * Includes randomly generated rectangle variants for variety
  */
 function getShapeDefinitions(): ShapeDefinition[] {
   const shapes: ShapeDefinition[] = [];
 
-  // Simple rectangles
-  shapes.push(createRectangle(5, 6, '5x6 Rectangle')); // 30 cells = 6 pieces
+  // Simple rectangles - only vertical 6x5 (6 rows tall, 5 cols wide)
   shapes.push(createRectangle(6, 5, '6x5 Rectangle')); // 30 cells = 6 pieces
-  shapes.push(createRectangle(5, 8, '5x8 Rectangle')); // 40 cells = 8 pieces
-  shapes.push(createRectangle(8, 5, '8x5 Rectangle')); // 40 cells = 8 pieces
-  shapes.push(createRectangle(4, 10, '4x10 Rectangle')); // 40 cells = 8 pieces
-  shapes.push(createRectangle(10, 4, '10x4 Rectangle')); // 40 cells = 8 pieces
-  shapes.push(createRectangle(5, 10, '5x10 Rectangle')); // 50 cells = 10 pieces
-  shapes.push(createRectangle(10, 5, '10x5 Rectangle')); // 50 cells = 10 pieces
-  shapes.push(createRectangle(6, 10, '6x10 Rectangle')); // 60 cells = 12 pieces (all!)
-  shapes.push(createRectangle(10, 6, '10x6 Rectangle')); // 60 cells = 12 pieces (all!)
 
-  // Staircases
-  shapes.push(createStaircase(5, 2, 3)); // 5 steps, 2 high each, 3 wide each = 90 cells? verify
-  shapes.push(createStaircase(4, 2, 2)); // smaller staircase
+  // Generate rectangle variants with dead cells
+  // Using deterministic seeds for each variant so they're reproducible
+  let variantId = 1;
+  const variantConfigs = [
+    // 7x5 = 35 cells, remove 5 cells = 30 cells = 6 pieces
+    { rows: 7, cols: 5, deadCells: 5 },
+    { rows: 7, cols: 5, deadCells: 5 },
+    { rows: 7, cols: 5, deadCells: 5 },
+    // 8x5 = 40 cells, remove 10 cells = 30 cells = 6 pieces
+    { rows: 8, cols: 5, deadCells: 10 },
+    { rows: 8, cols: 5, deadCells: 10 },
+    // 7x5 = 35 cells, remove 10 cells = 25 cells = 5 pieces
+    { rows: 7, cols: 5, deadCells: 10 },
+    { rows: 7, cols: 5, deadCells: 10 },
+    // 6x5 = 30 cells, remove 5 cells = 25 cells = 5 pieces
+    { rows: 6, cols: 5, deadCells: 5 },
+    { rows: 6, cols: 5, deadCells: 5 },
+  ];
 
-  // Plus shapes
-  const plus = createPlusShape(2, 1); // 5 arms of length 2, thickness 1
-  if (plus.pieceCount >= 3 && plus.pieceCount <= 12) {
-    shapes.push(plus);
+  for (const config of variantConfigs) {
+    const rng = seedrandom(`rectangle-variant-${variantId}`);
+    const variant = createRectangleWithRandomHoles(
+      rng,
+      config.rows,
+      config.cols,
+      config.deadCells,
+      variantId
+    );
+    if (variant) {
+      shapes.push(variant);
+    }
+    variantId++;
   }
 
-  // Rectangles with holes
-  const frame = createRectangleWithHole(7, 7, 2, 2); // 7x7 with 2x2 hole = 49 - 4 = 45 cells = 9 pieces
-  if (frame.pieceCount >= 3 && frame.pieceCount <= 12) {
-    shapes.push(frame);
-  }
+  // Themed shapes - Symbols (portrait orientation)
+  shapes.push(createHeart()); // 25 cells = 5 pieces
+  shapes.push(createArrowUp()); // 25 cells = 5 pieces
+  shapes.push(createDiamond()); // 25 cells = 5 pieces
+  shapes.push(createStar()); // 20 cells = 4 pieces
+  shapes.push(createCross()); // 30 cells = 6 pieces
+  shapes.push(createPlusSign()); // 25 cells = 5 pieces
 
-  // Filter to only valid shapes (3-12 pieces, cells divisible by 5)
+  // Themed shapes - Objects (portrait orientation)
+  shapes.push(createCrown()); // 25 cells = 5 pieces
+  shapes.push(createTrophy()); // 25 cells = 5 pieces
+  shapes.push(createHouse()); // 30 cells = 6 pieces
+  shapes.push(createKey()); // 30 cells = 6 pieces
+  shapes.push(createCandle()); // 25 cells = 5 pieces
+  shapes.push(createTree()); // 30 cells = 6 pieces
+  shapes.push(createGoblet()); // 25 cells = 5 pieces
+  shapes.push(createShield()); // 30 cells = 6 pieces
+  shapes.push(createAnchor()); // 30 cells = 6 pieces
+
+  // Themed shapes - Letters (portrait orientation)
+  shapes.push(createLetterT()); // 35 cells = 7 pieces
+  shapes.push(createLetterH()); // 30 cells = 6 pieces
+  shapes.push(createLetterE()); // 30 cells = 6 pieces
+
+  // Filter to only valid shapes (4-7 pieces for reasonable difficulty)
   return shapes.filter((s) => {
     const cells = s.shape.flat().filter((c) => c).length;
-    return cells % 5 === 0 && s.pieceCount >= 3 && s.pieceCount <= 12;
+    return cells % 5 === 0 && s.pieceCount >= 4 && s.pieceCount <= 7;
   });
 }
 
@@ -200,6 +713,187 @@ function getShapeDefinitions(): ShapeDefinition[] {
 
 function generateId(): string {
   return crypto.randomBytes(8).toString('hex');
+}
+
+/**
+ * Generate a unique key from shape pattern + sorted pieces
+ * Used to detect duplicate puzzles
+ */
+function getPuzzleKey(shape: boolean[][], pieces: PentominoId[]): string {
+  const shapeStr = shape.map((row) => row.map((c) => (c ? '1' : '0')).join('')).join('|');
+  const piecesStr = [...pieces].sort().join(',');
+  return `${shapeStr}::${piecesStr}`;
+}
+
+// ============ Pentomino Cell Helpers (for ASCII output) ============
+
+// These must match the solver.ts definitions exactly
+const PENTOMINO_BASE_CELLS: Record<PentominoId, Array<{ row: number; col: number }>> = {
+  F: [
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 2, col: 1 },
+  ],
+  I: [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 0, col: 3 },
+    { row: 0, col: 4 },
+  ],
+  L: [
+    { row: 0, col: 0 },
+    { row: 1, col: 0 },
+    { row: 2, col: 0 },
+    { row: 3, col: 0 },
+    { row: 3, col: 1 },
+  ],
+  N: [
+    { row: 0, col: 1 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 2, col: 0 },
+    { row: 3, col: 0 },
+  ],
+  P: [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 2, col: 0 },
+  ],
+  T: [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 1, col: 1 },
+    { row: 2, col: 1 },
+  ],
+  U: [
+    { row: 0, col: 0 },
+    { row: 0, col: 2 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 1, col: 2 },
+  ],
+  V: [
+    { row: 0, col: 0 },
+    { row: 1, col: 0 },
+    { row: 2, col: 0 },
+    { row: 2, col: 1 },
+    { row: 2, col: 2 },
+  ],
+  W: [
+    { row: 0, col: 0 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 2, col: 1 },
+    { row: 2, col: 2 },
+  ],
+  X: [
+    { row: 0, col: 1 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 1, col: 2 },
+    { row: 2, col: 1 },
+  ],
+  Y: [
+    { row: 0, col: 1 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+    { row: 2, col: 1 },
+    { row: 3, col: 1 },
+  ],
+  Z: [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 1, col: 1 },
+    { row: 2, col: 1 },
+    { row: 2, col: 2 },
+  ],
+};
+
+function rotateCellCW(cell: { row: number; col: number }): { row: number; col: number } {
+  return { row: cell.col, col: -cell.row };
+}
+
+function normalizeOffsets(
+  offsets: Array<{ row: number; col: number }>
+): Array<{ row: number; col: number }> {
+  const minRow = Math.min(...offsets.map((c) => c.row));
+  const minCol = Math.min(...offsets.map((c) => c.col));
+  return offsets.map((c) => ({ row: c.row - minRow, col: c.col - minCol }));
+}
+
+function getRotatedCells(
+  pentominoId: PentominoId,
+  rotation: 0 | 1 | 2 | 3
+): Array<{ row: number; col: number }> {
+  let cells = PENTOMINO_BASE_CELLS[pentominoId];
+  for (let i = 0; i < rotation; i++) {
+    cells = normalizeOffsets(cells.map(rotateCellCW));
+  }
+  return cells;
+}
+
+function getPieceCellsAtPosition(
+  placed: PlacedPiece
+): Array<{ row: number; col: number }> {
+  const offsets = getRotatedCells(placed.pentominoId, placed.rotation);
+  return offsets.map((offset) => ({
+    row: placed.position.row + offset.row,
+    col: placed.position.col + offset.col,
+  }));
+}
+
+/**
+ * Print ASCII visualization of a solved puzzle
+ */
+function printPuzzleSolution(puzzle: PoolPuzzle): void {
+  const rows = puzzle.shape.length;
+  const cols = puzzle.shape[0].length;
+
+  // Create grid: '#' for dead, '.' for empty playable
+  const grid: string[][] = puzzle.shape.map((row) => row.map((cell) => (cell ? '.' : '#')));
+
+  // Fill in pieces using their letter
+  for (const placed of puzzle.solution) {
+    const cells = getPieceCellsAtPosition(placed);
+    for (const cell of cells) {
+      if (cell.row >= 0 && cell.row < rows && cell.col >= 0 && cell.col < cols) {
+        grid[cell.row][cell.col] = placed.pentominoId;
+      }
+    }
+  }
+
+  // Print with border
+  console.log('┌' + '─'.repeat(cols) + '┐');
+  for (const row of grid) {
+    console.log('│' + row.join('') + '│');
+  }
+  console.log('└' + '─'.repeat(cols) + '┘');
+  console.log(`Pieces: ${puzzle.pentominoIds.join(', ')}`);
+}
+
+/**
+ * Get weighted random shape index
+ * Rectangle variants: weight 1
+ * Themed shapes: weight 3
+ */
+function getWeightedShapeIndex(rng: () => number, shapes: ShapeDefinition[]): number {
+  const weights = shapes.map((s) =>
+    s.name.includes('Rectangle') || s.name.includes('Variant') ? 1 : 3
+  );
+  const totalWeight = weights.reduce((a, b) => a + b, 0);
+  let roll = rng() * totalWeight;
+
+  for (let i = 0; i < shapes.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) return i;
+  }
+  return shapes.length - 1;
 }
 
 function shuffle<T>(rng: () => number, array: T[]): T[] {
@@ -213,10 +907,15 @@ function shuffle<T>(rng: () => number, array: T[]): T[] {
 
 /**
  * Generate a single puzzle
+ * @param seenPuzzles - Set of already seen puzzle keys for uniqueness checking
  */
-function generatePuzzle(rng: () => number, shapes: ShapeDefinition[]): PoolPuzzle | null {
-  // Pick a random shape
-  const shapeIndex = Math.floor(rng() * shapes.length);
+function generatePuzzle(
+  rng: () => number,
+  shapes: ShapeDefinition[],
+  seenPuzzles: Set<string>
+): PoolPuzzle | null {
+  // Pick a random shape using weighted selection (prefer themed shapes)
+  const shapeIndex = getWeightedShapeIndex(rng, shapes);
   const shapeDef = shapes[shapeIndex];
 
   // Pick random pieces
@@ -225,6 +924,12 @@ function generatePuzzle(rng: () => number, shapes: ShapeDefinition[]): PoolPuzzl
 
   // Sort for consistency
   selectedPieces.sort();
+
+  // Check uniqueness before solving (saves time)
+  const puzzleKey = getPuzzleKey(shapeDef.shape, selectedPieces);
+  if (seenPuzzles.has(puzzleKey)) {
+    return null; // Duplicate puzzle
+  }
 
   // Try to solve
   const result = solvePuzzle(shapeDef.shape, selectedPieces);
@@ -238,6 +943,9 @@ function generatePuzzle(rng: () => number, shapes: ShapeDefinition[]): PoolPuzzl
     console.error('Solution verification failed!');
     return null;
   }
+
+  // Mark as seen
+  seenPuzzles.add(puzzleKey);
 
   return {
     id: generateId(),
@@ -286,10 +994,19 @@ async function main() {
   }
   console.log();
 
+  // Track seen puzzles for uniqueness (include existing pool puzzles)
+  const seenPuzzles = new Set<string>();
+  for (const p of pool.puzzles) {
+    const key = getPuzzleKey(p.shape, p.pentominoIds);
+    seenPuzzles.add(key);
+  }
+  console.log(`Tracking ${seenPuzzles.size} existing puzzle keys for uniqueness\n`);
+
   // Generate puzzles
   let generated = 0;
   let attempts = 0;
-  const maxAttempts = targetCount * 20; // Allow many attempts since some combos are unsolvable
+  let duplicates = 0;
+  const maxAttempts = targetCount * 30; // Allow many attempts since some combos are unsolvable or duplicates
 
   while (generated < targetCount && attempts < maxAttempts) {
     attempts++;
@@ -298,7 +1015,7 @@ async function main() {
 
     process.stdout.write(`Attempt ${attempts}: `);
 
-    const puzzle = generatePuzzle(rng, shapes);
+    const puzzle = generatePuzzle(rng, shapes, seenPuzzles);
 
     if (puzzle) {
       pool.puzzles.push(puzzle);
@@ -306,8 +1023,11 @@ async function main() {
       console.log(
         `${puzzle.shapeName} with ${puzzle.pentominoIds.join(',')} - SUCCESS (${generated}/${targetCount})`
       );
+      printPuzzleSolution(puzzle);
+      console.log();
     } else {
-      console.log(`no solution found`);
+      // Check if it was a duplicate (key already in seenPuzzles before this attempt)
+      console.log(`no solution found or duplicate`);
     }
   }
 
