@@ -57,165 +57,187 @@ function generateRotations(base: CellOffset[]): [CellOffset[], CellOffset[], Cel
  *    .X..
  */
 
-const pentominoData: { id: PentominoId; name: string; color: string; base: CellOffset[] }[] = [
+/**
+ * Anchor index for each pentomino - defines the "anchor cell" that aligns
+ * with the clicked/dropped position for intuitive placement.
+ */
+const pentominoData: { id: PentominoId; name: string; color: string; base: CellOffset[]; anchorIndex: number }[] = [
   {
     id: 'F',
     name: 'F-pentomino',
     color: 'var(--piece-F)',
     base: [
-      { row: 0, col: 1 },
-      { row: 0, col: 2 },
-      { row: 1, col: 0 },
-      { row: 1, col: 1 },
-      { row: 2, col: 1 },
+      { row: 0, col: 1 },  // 0
+      { row: 0, col: 2 },  // 1
+      { row: 1, col: 0 },  // 2
+      { row: 1, col: 1 },  // 3 - center cell
+      { row: 2, col: 1 },  // 4
     ],
+    anchorIndex: 3, // Center cell
   },
   {
     id: 'I',
     name: 'I-pentomino',
     color: 'var(--piece-I)',
     base: [
-      { row: 0, col: 0 },
-      { row: 0, col: 1 },
-      { row: 0, col: 2 },
-      { row: 0, col: 3 },
-      { row: 0, col: 4 },
+      { row: 0, col: 0 },  // 0
+      { row: 0, col: 1 },  // 1
+      { row: 0, col: 2 },  // 2 - middle cell
+      { row: 0, col: 3 },  // 3
+      { row: 0, col: 4 },  // 4
     ],
+    anchorIndex: 2, // Middle (3rd) cell
   },
   {
     id: 'L',
     name: 'L-pentomino',
     color: 'var(--piece-L)',
     base: [
-      { row: 0, col: 0 },
-      { row: 1, col: 0 },
-      { row: 2, col: 0 },
-      { row: 3, col: 0 },
-      { row: 3, col: 1 },
+      { row: 0, col: 0 },  // 0
+      { row: 1, col: 0 },  // 1
+      { row: 2, col: 0 },  // 2 - middle of vertical
+      { row: 3, col: 0 },  // 3
+      { row: 3, col: 1 },  // 4
     ],
+    anchorIndex: 2, // Middle of vertical portion
   },
   {
     id: 'N',
     name: 'N-pentomino',
     color: 'var(--piece-N)',
     base: [
-      { row: 0, col: 1 },
-      { row: 1, col: 0 },
-      { row: 1, col: 1 },
-      { row: 2, col: 0 },
-      { row: 3, col: 0 },
+      { row: 0, col: 1 },  // 0
+      { row: 1, col: 0 },  // 1
+      { row: 1, col: 1 },  // 2 - center overlap
+      { row: 2, col: 0 },  // 3
+      { row: 3, col: 0 },  // 4
     ],
+    anchorIndex: 2, // Center overlap cell
   },
   {
     id: 'P',
     name: 'P-pentomino',
     color: 'var(--piece-P)',
     base: [
-      { row: 0, col: 0 },
-      { row: 0, col: 1 },
-      { row: 1, col: 0 },
-      { row: 1, col: 1 },
-      { row: 2, col: 0 },
+      { row: 0, col: 0 },  // 0
+      { row: 0, col: 1 },  // 1
+      { row: 1, col: 0 },  // 2
+      { row: 1, col: 1 },  // 3 - center of 2x2
+      { row: 2, col: 0 },  // 4
     ],
+    anchorIndex: 3, // Center of 2x2 portion
   },
   {
     id: 'T',
     name: 'T-pentomino',
     color: 'var(--piece-T)',
     base: [
-      { row: 0, col: 0 },
-      { row: 0, col: 1 },
-      { row: 0, col: 2 },
-      { row: 1, col: 1 },
-      { row: 2, col: 1 },
+      { row: 0, col: 0 },  // 0
+      { row: 0, col: 1 },  // 1
+      { row: 0, col: 2 },  // 2
+      { row: 1, col: 1 },  // 3 - intersection
+      { row: 2, col: 1 },  // 4
     ],
+    anchorIndex: 3, // Intersection cell (center of T)
   },
   {
     id: 'U',
     name: 'U-pentomino',
     color: 'var(--piece-U)',
     base: [
-      { row: 0, col: 0 },
-      { row: 0, col: 2 },
-      { row: 1, col: 0 },
-      { row: 1, col: 1 },
-      { row: 1, col: 2 },
+      { row: 0, col: 0 },  // 0
+      { row: 0, col: 2 },  // 1
+      { row: 1, col: 0 },  // 2
+      { row: 1, col: 1 },  // 3 - middle bottom cell
+      { row: 1, col: 2 },  // 4
     ],
+    anchorIndex: 3, // Middle bottom cell
   },
   {
     id: 'V',
     name: 'V-pentomino',
     color: 'var(--piece-V)',
     base: [
-      { row: 0, col: 0 },
-      { row: 1, col: 0 },
-      { row: 2, col: 0 },
-      { row: 2, col: 1 },
-      { row: 2, col: 2 },
+      { row: 0, col: 0 },  // 0
+      { row: 1, col: 0 },  // 1
+      { row: 2, col: 0 },  // 2 - corner where arms meet
+      { row: 2, col: 1 },  // 3
+      { row: 2, col: 2 },  // 4
     ],
+    anchorIndex: 2, // Corner cell where arms meet
   },
   {
     id: 'W',
     name: 'W-pentomino',
     color: 'var(--piece-W)',
     base: [
-      { row: 0, col: 0 },
-      { row: 1, col: 0 },
-      { row: 1, col: 1 },
-      { row: 2, col: 1 },
-      { row: 2, col: 2 },
+      { row: 0, col: 0 },  // 0
+      { row: 1, col: 0 },  // 1
+      { row: 1, col: 1 },  // 2 - stair center
+      { row: 2, col: 1 },  // 3
+      { row: 2, col: 2 },  // 4
     ],
+    anchorIndex: 2, // Middle cell (stair center)
   },
   {
     id: 'X',
     name: 'X-pentomino',
     color: 'var(--piece-X)',
     base: [
-      { row: 0, col: 1 },
-      { row: 1, col: 0 },
-      { row: 1, col: 1 },
-      { row: 1, col: 2 },
-      { row: 2, col: 1 },
+      { row: 0, col: 1 },  // 0
+      { row: 1, col: 0 },  // 1
+      { row: 1, col: 1 },  // 2 - center cell
+      { row: 1, col: 2 },  // 3
+      { row: 2, col: 1 },  // 4
     ],
+    anchorIndex: 2, // Center cell (always the middle)
   },
   {
     id: 'Y',
     name: 'Y-pentomino',
     color: 'var(--piece-Y)',
     base: [
-      { row: 0, col: 1 },
-      { row: 1, col: 0 },
-      { row: 1, col: 1 },
-      { row: 2, col: 1 },
-      { row: 3, col: 1 },
+      { row: 0, col: 1 },  // 0
+      { row: 1, col: 0 },  // 1
+      { row: 1, col: 1 },  // 2 - center of vertical
+      { row: 2, col: 1 },  // 3
+      { row: 3, col: 1 },  // 4
     ],
+    anchorIndex: 2, // Center of the vertical portion
   },
   {
     id: 'Z',
     name: 'Z-pentomino',
     color: 'var(--piece-Z)',
     base: [
-      { row: 0, col: 0 },
-      { row: 0, col: 1 },
-      { row: 1, col: 1 },
-      { row: 2, col: 1 },
-      { row: 2, col: 2 },
+      { row: 0, col: 0 },  // 0
+      { row: 0, col: 1 },  // 1
+      { row: 1, col: 1 },  // 2 - center cell
+      { row: 2, col: 1 },  // 3
+      { row: 2, col: 2 },  // 4
     ],
+    anchorIndex: 2, // Center cell
   },
 ];
 
+/** Extended pentomino definition with anchor index */
+interface PentominoDefinitionWithAnchor extends PentominoDefinition {
+  anchorIndex: number;
+}
+
 /** All pentomino definitions with pre-computed rotations */
-export const PENTOMINOES: Record<PentominoId, PentominoDefinition> = Object.fromEntries(
-  pentominoData.map(({ id, name, color, base }) => [
+export const PENTOMINOES: Record<PentominoId, PentominoDefinitionWithAnchor> = Object.fromEntries(
+  pentominoData.map(({ id, name, color, base, anchorIndex }) => [
     id,
     {
       id,
       name,
       color,
       rotations: generateRotations(base),
+      anchorIndex,
     },
   ])
-) as Record<PentominoId, PentominoDefinition>;
+) as Record<PentominoId, PentominoDefinitionWithAnchor>;
 
 /** Get all pentomino IDs */
 export const ALL_PENTOMINO_IDS: PentominoId[] = ['F', 'I', 'L', 'N', 'P', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -236,4 +258,10 @@ export function getPentominoBounds(id: PentominoId, rotation: Rotation): { rows:
 /** Cycle to the next rotation */
 export function nextRotation(rotation: Rotation): Rotation {
   return ((rotation + 1) % 4) as Rotation;
+}
+
+/** Get the anchor cell for a pentomino at a given rotation */
+export function getAnchorCell(id: PentominoId, rotation: Rotation): CellOffset {
+  const anchorIdx = PENTOMINOES[id].anchorIndex;
+  return getPentominoCells(id, rotation)[anchorIdx];
 }

@@ -14,7 +14,7 @@ import type {
   Rotation,
   CellOffset,
 } from '@/types';
-import { getPentominoCells, getPentominoBounds } from '@/constants/pentominoes';
+import { getPentominoCells, getPentominoBounds, getAnchorCell } from '@/constants/pentominoes';
 
 /**
  * Create an empty board from a puzzle shape
@@ -263,9 +263,8 @@ export function applyPlacedPieces(
 }
 
 /**
- * Find the anchor position for a piece such that it covers the clicked cell.
- * Tries each cell of the piece as the "clicked" cell and returns the first
- * valid anchor position, or null if no valid placement exists.
+ * Find the anchor position for a piece such that the designated anchor cell
+ * aligns with the clicked position. Returns null if placement is invalid.
  */
 export function findAnchorForClickedCell(
   board: Board,
@@ -273,18 +272,15 @@ export function findAnchorForClickedCell(
   clickedPosition: Position,
   rotation: Rotation
 ): Position | null {
-  const offsets = getPentominoCells(pentominoId, rotation);
+  // Use the designated anchor cell for this piece/rotation
+  const anchorOffset = getAnchorCell(pentominoId, rotation);
+  const anchor: Position = {
+    row: clickedPosition.row - anchorOffset.row,
+    col: clickedPosition.col - anchorOffset.col,
+  };
 
-  // Try each cell offset - if the piece cell at that offset is the clicked cell,
-  // compute where the anchor (0,0) would be
-  for (const offset of offsets) {
-    const anchor: Position = {
-      row: clickedPosition.row - offset.row,
-      col: clickedPosition.col - offset.col,
-    };
-    if (canPlacePiece(board, pentominoId, anchor, rotation)) {
-      return anchor;
-    }
+  if (canPlacePiece(board, pentominoId, anchor, rotation)) {
+    return anchor;
   }
   return null;
 }

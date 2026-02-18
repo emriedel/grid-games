@@ -113,3 +113,10 @@ export interface TesseraPuzzleState {
     pieceRotations: Record<string, Rotation>;
   };
 }
+
+/** Drag and drop data */
+export interface DragData {
+  type: 'piece';
+  pentominoId: PentominoId;
+  rotation: Rotation;
+}

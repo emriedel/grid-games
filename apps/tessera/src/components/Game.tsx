@@ -1,7 +1,18 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
+import {
+  DndContext,
+  DragOverlay,
+  useSensors,
+  useSensor,
+  PointerSensor,
+  TouchSensor,
+  type DragStartEvent,
+  type DragOverEvent,
+  type DragEndEvent,
+} from '@dnd-kit/core';
 import {
   LandingScreen,
   NavBar,
@@ -13,6 +24,7 @@ import { shareOrCopy } from '@grid-games/shared';
 import { useGameState } from '@/hooks/useGameState';
 import { Board } from './Board';
 import { PieceTray } from './PieceTray';
+import { PiecePreview } from './PiecePreview';
 import { HowToPlayModal } from './HowToPlayModal';
 import {
   loadPuzzleByNumber,
@@ -27,7 +39,9 @@ import {
   hasCompletedPuzzle,
   hasInProgressGame,
 } from '@/lib/storage';
-import type { Position, PentominoId } from '@/types';
+import { canPlacePiece } from '@/lib/gameLogic';
+import { getAnchorCell } from '@/constants/pentominoes';
+import type { Position, PentominoId, DragData, Rotation } from '@/types';
 import { tesseraConfig } from '@/config';
 
 export function Game() {
@@ -45,6 +59,10 @@ export function Game() {
   const [puzzleNumber, setPuzzleNumber] = useState<number>(1);
   const [puzzleId, setPuzzleId] = useState<string | undefined>();
 
+  // Drag and drop state
+  const [activeDrag, setActiveDrag] = useState<DragData | null>(null);
+  const [dragOverCell, setDragOverCell] = useState<Position | null>(null);
+
   // Game state
   const {
     state,
@@ -58,6 +76,16 @@ export function Game() {
     clearAll,
     restoreState,
   } = useGameState();
+
+  // Set up drag sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 },
+    })
+  );
 
   // Determine if this is an archive puzzle
   const isArchiveMode = puzzleParam !== null;
@@ -177,6 +205,58 @@ export function Game() {
     }
   }, [state.placedPieces, removePieceFromBoard]);
 
+  // Drag and drop handlers
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    const data = event.active.data.current as DragData;
+    if (data?.type === 'piece') {
+      setActiveDrag(data);
+      // Deselect any currently selected piece when starting a drag
+      deselectPiece();
+    }
+  }, [deselectPiece]);
+
+  const handleDragOver = useCallback((event: DragOverEvent) => {
+    const { over } = event;
+    if (over?.data.current) {
+      const { row, col } = over.data.current as { row: number; col: number };
+      setDragOverCell({ row, col });
+    } else {
+      setDragOverCell(null);
+    }
+  }, []);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { over } = event;
+
+    if (activeDrag && over?.data.current && state.board) {
+      const { row, col } = over.data.current as { row: number; col: number };
+
+      // Calculate anchor position based on the designated anchor cell
+      const anchorOffset = getAnchorCell(activeDrag.pentominoId, activeDrag.rotation);
+      const anchor: Position = {
+        row: row - anchorOffset.row,
+        col: col - anchorOffset.col,
+      };
+
+      // Check if placement is valid and place the piece
+      if (canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
+        // Select the piece with its rotation, then place it
+        selectPiece(activeDrag.pentominoId);
+        // We need to apply the rotation from the drag
+        tryPlacePiece(anchor);
+      }
+    }
+
+    // Reset drag state
+    setActiveDrag(null);
+    setDragOverCell(null);
+  }, [activeDrag, state.board, selectPiece, tryPlacePiece]);
+
+  const handleDragCancel = useCallback(() => {
+    setActiveDrag(null);
+    setDragOverCell(null);
+  }, []);
+
   // Build share text
   const shareText = `Tessera #${puzzleNumber}
 Completed!
@@ -216,82 +296,89 @@ https://nerdcube.games/tessera`;
   const isFinished = state.phase === 'finished' || (exitedLanding && hasCompletedPuzzle(puzzleNumber, puzzleId));
 
   return (
-    <GameContainer
-      navBar={
-        <NavBar
-          title={`Tessera #${puzzleNumber}`}
-          gameId="tessera"
-          rightContent={
-            <button
-              onClick={() => setShowHowToPlay(true)}
-              className="text-[var(--muted)] hover:text-[var(--foreground)] px-2"
-              aria-label="How to play"
-            >
-              ?
-            </button>
-          }
-        />
-      }
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
     >
-      <div className="flex flex-col items-center gap-4 p-4">
-        {/* Shape name */}
-        <div className="text-center">
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">
-            {state.puzzle.shapeName}
-          </h2>
-        </div>
-
-        {/* Board */}
-        <Board
-          board={state.board}
-          selectedPieceId={state.selectedPieceId}
-          selectedRotation={state.selectedRotation}
-          onCellClick={handleCellClick}
-          onPieceClick={handlePieceClick}
-        />
-
-        {/* Piece tray (only when playing) */}
-        {!isFinished && (
-          <PieceTray
-            availablePieces={state.availablePieces}
+      <GameContainer
+        navBar={
+          <NavBar
+            title={`Tessera #${puzzleNumber}`}
+            gameId="tessera"
+            onRulesClick={() => setShowHowToPlay(true)}
+          />
+        }
+      >
+        <div className="flex flex-col items-center gap-4 p-4">
+          {/* Board */}
+          <Board
+            board={state.board}
             selectedPieceId={state.selectedPieceId}
             selectedRotation={state.selectedRotation}
-            onPieceSelect={selectPiece}
+            activeDrag={activeDrag}
+            dragOverCell={dragOverCell}
+            onCellClick={handleCellClick}
+            onPieceClick={handlePieceClick}
+          />
+
+          {/* Piece tray (only when playing) */}
+          {!isFinished && (
+            <PieceTray
+              allPieces={state.puzzle.pentominoIds}
+              placedPieceIds={new Set(state.placedPieces.map((p) => p.pentominoId))}
+              selectedPieceId={state.selectedPieceId}
+              selectedRotation={state.selectedRotation}
+              onPieceSelect={selectPiece}
+            />
+          )}
+
+          {/* Action buttons */}
+          <div className="flex gap-2">
+            {!isFinished && state.placedPieces.length > 0 && (
+              <Button variant="secondary" onClick={clearAll}>
+                Clear All
+              </Button>
+            )}
+            {isFinished && (
+              <Button variant="primary" onClick={() => setShowResults(true)}>
+                See Results
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* How to Play Modal */}
+        <HowToPlayModal
+          isOpen={showHowToPlay}
+          onClose={() => setShowHowToPlay(false)}
+        />
+
+        {/* Results Modal */}
+        <ResultsModal
+          isOpen={showResults}
+          onClose={() => setShowResults(false)}
+          gameId="tessera"
+          gameName="Tessera"
+          puzzleNumber={puzzleNumber}
+          primaryStat={{ value: 'Complete', label: state.puzzle.shapeName }}
+          shareConfig={{ text: shareText }}
+          messageType="success"
+        />
+      </GameContainer>
+
+      {/* Drag overlay - shows the piece being dragged */}
+      <DragOverlay>
+        {activeDrag && (
+          <PiecePreview
+            pentominoId={activeDrag.pentominoId}
+            rotation={activeDrag.rotation}
+            size="large"
           />
         )}
-
-        {/* Action buttons */}
-        <div className="flex gap-2">
-          {!isFinished && state.placedPieces.length > 0 && (
-            <Button variant="secondary" onClick={clearAll}>
-              Clear All
-            </Button>
-          )}
-          {isFinished && (
-            <Button variant="primary" onClick={() => setShowResults(true)}>
-              See Results
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {/* How to Play Modal */}
-      <HowToPlayModal
-        isOpen={showHowToPlay}
-        onClose={() => setShowHowToPlay(false)}
-      />
-
-      {/* Results Modal */}
-      <ResultsModal
-        isOpen={showResults}
-        onClose={() => setShowResults(false)}
-        gameId="tessera"
-        gameName="Tessera"
-        puzzleNumber={puzzleNumber}
-        primaryStat={{ value: 'Complete', label: state.puzzle.shapeName }}
-        shareConfig={{ text: shareText }}
-        messageType="success"
-      />
-    </GameContainer>
+      </DragOverlay>
+    </DndContext>
   );
 }
