@@ -3,7 +3,7 @@
 ## Overview
 Edgewise is a daily puzzle game combining elements from NYT Connections and So Clover. Players rotate tiles in a 2×2 grid to match word pairs with categories on the border.
 
-**Accent Color:** Purple (#a855f7)
+**Accent Color:** Purple (#9333ea)
 **Dev Port:** 3003
 **Package Name:** `@grid-games/edgewise`
 
@@ -417,9 +417,9 @@ http://localhost:3003/?puzzle=1
 ## Theme Variables
 
 ```css
---accent: #a855f7;           /* Purple */
---accent-foreground: #faf5ff;
---accent-secondary: #7e22ce;
+--accent: #9333ea;           /* Purple */
+--accent-foreground: #ffffff;
+--accent-secondary: #7c3aed;
 --tile-bg: #1e1b4b;
 --tile-bg-selected: #312e81;
 --tile-border: #4c1d95;

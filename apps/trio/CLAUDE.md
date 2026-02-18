@@ -8,7 +8,7 @@ Trio is a daily Set-style puzzle game where players find "trios" - sets of 3 car
 
 **Sequential Draw Mode:** Each puzzle has 5 rounds. Each round shows 9 cards with exactly ONE valid trio. Find it, and 3 new cards replace the found set.
 
-- **Accent Color:** Teal (#14b8a6)
+- **Accent Color:** Cyan (#06b6d4)
 - **Dev Port:** 3005
 - **Package Name:** `@grid-games/trio`
 

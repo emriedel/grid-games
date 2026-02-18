@@ -6,7 +6,7 @@ Part of **Nerdcube Games** monorepo. Uses shared packages: `@grid-games/ui`, `@g
 
 Tessera is a daily pentomino puzzle game where players fill a target shape using 5-8 pentomino pieces. Each pentomino covers exactly 5 squares.
 
-- **Accent Color:** Forest Green (#059669)
+- **Accent Color:** Emerald Green (#0da678)
 - **Dev Port:** 3006
 - **Package Name:** `@grid-games/tessera`
 

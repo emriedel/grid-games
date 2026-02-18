@@ -6,7 +6,7 @@ Part of **Nerdcube Games** monorepo. Uses shared packages: `@grid-games/ui`, `@g
 
 Jumble is a timed word search game where players find words on a Big Boggle-style 5x5 letter grid by connecting adjacent tiles. Same puzzle for all players each day, with shareable results.
 
-- **Accent Color:** Red/Pink (#e94560)
+- **Accent Color:** Blue (#2563eb)
 - **Dev Port:** 3002
 - **Package Name:** `@grid-games/jumble`
 
