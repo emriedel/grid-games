@@ -508,6 +508,7 @@ export function Game() {
       <>
         <LandingScreen
           gameId="trio"
+          icon="https://nerdcube.games/icons/trio.png"
           name="Trio"
           description="Find the matching trio in each round"
           puzzleInfo={{ number: activePuzzleNumber, date: dateStr }}
