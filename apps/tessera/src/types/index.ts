@@ -96,7 +96,7 @@ export type GameAction =
   | { type: 'SELECT_PIECE'; pentominoId: PentominoId }
   | { type: 'DESELECT_PIECE' }
   | { type: 'ROTATE_PIECE' }
-  | { type: 'PLACE_PIECE'; position: Position }
+  | { type: 'PLACE_PIECE'; position: Position; rotation?: Rotation }
   | { type: 'REMOVE_PIECE'; pentominoId: PentominoId }
   | { type: 'ROTATE_PLACED_PIECE'; pentominoId: PentominoId }
   | { type: 'CLEAR_ALL' }

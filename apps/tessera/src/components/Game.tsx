@@ -128,6 +128,12 @@ export function Game() {
         if (poolIdParam) {
           console.log('[Tessera Debug] Pool ID:', poolIdParam);
         }
+        if (puzzle.solution) {
+          console.log('[Tessera Debug] Solution:');
+          puzzle.solution.forEach((p) => {
+            console.log(`  ${p.pentominoId}: (${p.position.row}, ${p.position.col}) rotation=${p.rotation}`);
+          });
+        }
       }
 
       // Check saved state (skip in debug mode)
@@ -272,10 +278,13 @@ export function Game() {
 
       // Check if placement is valid and place the piece
       if (canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
-        // Select the piece with its rotation, then place it
-        selectPiece(activeDrag.pentominoId);
-        // We need to apply the rotation from the drag
-        tryPlacePiece(anchor);
+        // Only select if not already selected (REMOVE_PIECE already selects when dragging from board)
+        // Calling selectPiece on an already-selected piece would rotate it
+        if (state.selectedPieceId !== activeDrag.pentominoId) {
+          selectPiece(activeDrag.pentominoId);
+        }
+        // Pass rotation explicitly from activeDrag
+        tryPlacePiece(anchor, activeDrag.rotation);
       }
       // If placement failed but dropped on board, piece stays in bank
     }
@@ -286,13 +295,14 @@ export function Game() {
     setActiveDrag(null);
     setDragOverCell(null);
     setDragOriginalPlacement(null);
-  }, [activeDrag, state.board, selectPiece, tryPlacePiece]);
+  }, [activeDrag, state.board, state.selectedPieceId, selectPiece, tryPlacePiece]);
 
   const handleDragCancel = useCallback(() => {
-    // If dragging from board and cancelled, restore original
+    // If dragging from board and cancelled, restore original placement with rotation
     if (dragOriginalPlacement) {
       selectPiece(dragOriginalPlacement.pentominoId);
-      tryPlacePiece(dragOriginalPlacement.position);
+      // Pass rotation explicitly when restoring original placement
+      tryPlacePiece(dragOriginalPlacement.position, dragOriginalPlacement.rotation);
     }
     setActiveDrag(null);
     setDragOverCell(null);

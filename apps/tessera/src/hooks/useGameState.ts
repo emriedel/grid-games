@@ -86,11 +86,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'PLACE_PIECE': {
-      const { position } = action;
+      const { position, rotation: explicitRotation } = action;
       if (!state.selectedPieceId || !state.board) return state;
 
       const pentominoId = state.selectedPieceId;
-      const rotation = state.selectedRotation;
+      // Use explicit rotation if provided, otherwise use state
+      const rotation = explicitRotation ?? state.selectedRotation;
 
       // Check if placement is valid
       if (!canPlacePiece(state.board, pentominoId, position, rotation)) {
@@ -260,8 +261,8 @@ export function useGameState() {
     dispatch({ type: 'ROTATE_PIECE' });
   }, []);
 
-  const tryPlacePiece = useCallback((position: Position) => {
-    dispatch({ type: 'PLACE_PIECE', position });
+  const tryPlacePiece = useCallback((position: Position, rotation?: Rotation) => {
+    dispatch({ type: 'PLACE_PIECE', position, rotation });
   }, []);
 
   const removePieceFromBoard = useCallback((pentominoId: PentominoId) => {
