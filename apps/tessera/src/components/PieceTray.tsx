@@ -8,7 +8,10 @@ interface PieceTrayProps {
   placedPieceIds: Set<PentominoId>;
   selectedPieceId: PentominoId | null;
   selectedRotation: Rotation;
+  pieceRotations: Map<PentominoId, Rotation>;
+  errorPieceId: PentominoId | null;
   onPieceSelect: (pentominoId: PentominoId) => void;
+  onPieceRemove: (pentominoId: PentominoId) => void;
 }
 
 export function PieceTray({
@@ -16,23 +19,31 @@ export function PieceTray({
   placedPieceIds,
   selectedPieceId,
   selectedRotation,
+  pieceRotations,
+  errorPieceId,
   onPieceSelect,
+  onPieceRemove,
 }: PieceTrayProps) {
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="flex flex-wrap justify-center gap-2 p-2">
         {allPieces.map((pentominoId) => {
           const isPlaced = placedPieceIds.has(pentominoId);
+          // Use stored rotation for placed pieces, or selectedRotation for selected piece
+          const rotation = selectedPieceId === pentominoId
+            ? selectedRotation
+            : pieceRotations.get(pentominoId) ?? 0;
           return (
             <PiecePreview
               key={pentominoId}
               pentominoId={pentominoId}
-              rotation={selectedPieceId === pentominoId ? selectedRotation : 0}
+              rotation={rotation}
               isSelected={selectedPieceId === pentominoId}
               isPlaced={isPlaced}
+              isError={errorPieceId === pentominoId}
               draggable={!isPlaced}
               size="large"
-              onClick={isPlaced ? undefined : () => onPieceSelect(pentominoId)}
+              onClick={isPlaced ? () => onPieceRemove(pentominoId) : () => onPieceSelect(pentominoId)}
             />
           );
         })}

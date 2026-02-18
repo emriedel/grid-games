@@ -98,6 +98,7 @@ export type GameAction =
   | { type: 'ROTATE_PIECE' }
   | { type: 'PLACE_PIECE'; position: Position }
   | { type: 'REMOVE_PIECE'; pentominoId: PentominoId }
+  | { type: 'ROTATE_PLACED_PIECE'; pentominoId: PentominoId }
   | { type: 'CLEAR_ALL' }
   | { type: 'FINISH_GAME' }
   | { type: 'RESTORE_STATE'; state: Partial<GameState> };
@@ -115,8 +116,6 @@ export interface TesseraPuzzleState {
 }
 
 /** Drag and drop data */
-export interface DragData {
-  type: 'piece';
-  pentominoId: PentominoId;
-  rotation: Rotation;
-}
+export type DragData =
+  | { type: 'piece'; pentominoId: PentominoId; rotation: Rotation }
+  | { type: 'board-piece'; pentominoId: PentominoId; rotation: Rotation; position: Position };

@@ -1,18 +1,18 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useDroppable } from '@dnd-kit/core';
-import type { BoardCell, PentominoId } from '@/types';
+import { useDroppable, useDraggable } from '@dnd-kit/core';
+import type { BoardCell, PentominoId, Rotation, DragData } from '@/types';
 import { PENTOMINOES } from '@/constants/pentominoes';
 
 interface CellProps {
   cell: BoardCell;
   row: number;
   col: number;
-  isValidDropTarget?: boolean;
   isPreview?: boolean;
   previewPentominoId?: PentominoId;
   isDragPreview?: boolean;
+  pieceRotation?: Rotation;
   onClick?: () => void;
   onMouseEnter?: () => void;
 }
@@ -21,19 +21,32 @@ export function Cell({
   cell,
   row,
   col,
-  isValidDropTarget = false,
   isPreview = false,
   previewPentominoId,
   isDragPreview = false,
+  pieceRotation = 0,
   onClick,
   onMouseEnter,
 }: CellProps) {
-  // Set up droppable
-  const { setNodeRef, isOver } = useDroppable({
+  // Set up droppable (for empty playable cells)
+  const { setNodeRef: setDropRef, isOver } = useDroppable({
     id: `cell-${row}-${col}`,
     data: { row, col },
     disabled: cell.state !== 'playable',
   });
+
+  // Set up draggable (for filled cells)
+  const dragData: DragData | undefined = cell.state === 'filled' && cell.pentominoId
+    ? { type: 'board-piece', pentominoId: cell.pentominoId, rotation: pieceRotation, position: { row, col } }
+    : undefined;
+  const { setNodeRef: setDragRef, attributes, listeners, isDragging } = useDraggable({
+    id: `board-piece-${row}-${col}`,
+    data: dragData,
+    disabled: cell.state !== 'filled',
+  });
+
+  // Combine refs - use drag ref for filled cells, drop ref for playable cells
+  const setNodeRef = cell.state === 'filled' ? setDragRef : setDropRef;
 
   const backgroundColor = useMemo(() => {
     if (cell.state === 'dead') {
@@ -45,13 +58,13 @@ export function Cell({
     if (cell.state === 'filled' && cell.pentominoId) {
       return PENTOMINOES[cell.pentominoId].color;
     }
-    if (isValidDropTarget || isOver) {
+    if (isOver) {
       return 'var(--accent-secondary)';
     }
     return 'var(--cell-playable)';
-  }, [cell.state, cell.pentominoId, isValidDropTarget, isPreview, isDragPreview, previewPentominoId, isOver]);
+  }, [cell.state, cell.pentominoId, isPreview, isDragPreview, previewPentominoId, isOver]);
 
-  const opacity = isPreview || isDragPreview ? 0.6 : 1;
+  const opacity = isPreview || isDragPreview || isDragging ? 0.6 : 1;
 
   // Dead cells are not interactive
   if (cell.state === 'dead') {
@@ -63,14 +76,18 @@ export function Cell({
     );
   }
 
+  // For filled cells, add drag attributes
+  const dragProps = cell.state === 'filled' ? { ...attributes, ...listeners } : {};
+
   return (
     <div
       ref={setNodeRef}
+      {...dragProps}
       className={`
         aspect-square rounded-sm cursor-pointer
-        transition-colors duration-150
-        ${cell.state === 'filled' ? 'animate-piece-place' : ''}
-        ${isValidDropTarget ? 'ring-2 ring-[var(--accent)] ring-opacity-50' : ''}
+        transition-colors duration-150 touch-none
+        ${cell.state === 'filled' && !isDragging ? 'animate-piece-place' : ''}
+        ${isDragging ? 'opacity-50' : ''}
       `}
       style={{ backgroundColor, opacity }}
       onClick={onClick}

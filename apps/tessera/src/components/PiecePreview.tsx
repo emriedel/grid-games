@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import type { PentominoId, Rotation, DragData } from '@/types';
 import { PENTOMINOES, getPentominoCells, getPentominoBounds, getAnchorCell } from '@/constants/pentominoes';
@@ -10,6 +10,7 @@ interface PiecePreviewProps {
   rotation: Rotation;
   isSelected?: boolean;
   isPlaced?: boolean;
+  isError?: boolean;
   draggable?: boolean;
   size?: 'small' | 'medium' | 'large';
   onClick?: () => void;
@@ -20,6 +21,7 @@ export function PiecePreview({
   rotation,
   isSelected = false,
   isPlaced = false,
+  isError = false,
   draggable = false,
   size = 'medium',
   onClick,
@@ -36,6 +38,30 @@ export function PiecePreview({
     data: dragData,
     disabled: isPlaced || !draggable,
   });
+
+  // Track drag state to prevent click from firing after drag
+  const dragStartedRef = useRef(false);
+  const lastDragEndRef = useRef(0);
+
+  useEffect(() => {
+    if (isDragging) {
+      dragStartedRef.current = true;
+    } else if (dragStartedRef.current) {
+      // Drag just ended - record the timestamp
+      lastDragEndRef.current = Date.now();
+      dragStartedRef.current = false;
+    }
+  }, [isDragging]);
+
+  // Handle click - skip if we just finished dragging (within 100ms)
+  const handleClick = () => {
+    const timeSinceDragEnd = Date.now() - lastDragEndRef.current;
+    if (timeSinceDragEnd < 100) {
+      return;
+    }
+    onClick?.();
+  };
+
 
   // Create a grid representation with anchor info
   const grid = useMemo(() => {
@@ -62,11 +88,14 @@ export function PiecePreview({
   };
 
   const config = sizeConfig[size];
-  const totalWidth = bounds.cols * config.cellSize + (bounds.cols - 1) * config.gap + config.padding * 2;
-  const totalHeight = bounds.rows * config.cellSize + (bounds.rows - 1) * config.gap + config.padding * 2;
 
-  // Make the container square for consistent layout
-  const containerSize = Math.max(totalWidth, totalHeight, size === 'small' ? 44 : size === 'medium' ? 56 : 72);
+  // Fixed container sizes for consistent layout across all piece shapes
+  const containerSizes = {
+    small: 48,
+    medium: 60,
+    large: 80,  // Accommodate largest piece (I-piece at 5 cells)
+  };
+  const containerSize = containerSizes[size];
 
   return (
     <button
@@ -74,23 +103,25 @@ export function PiecePreview({
       {...(draggable && !isPlaced ? { ...attributes, ...listeners } : {})}
       className={`
         flex items-center justify-center rounded-lg
-        transition-all duration-150 touch-none
-        ${isSelected ? 'ring-2 ring-[var(--accent)] animate-pulse-selected' : ''}
-        ${onClick && !isPlaced ? 'cursor-pointer hover:bg-[var(--tile-bg-selected)]' : ''}
-        ${isPlaced ? 'opacity-40 grayscale pointer-events-none' : ''}
+        transition-all duration-150 touch-none select-none
+        ${isSelected && !isError ? 'ring-2 ring-[var(--accent)] animate-pulse-selected' : ''}
+        ${isError ? 'ring-2 ring-red-500 animate-shake' : ''}
+        ${onClick ? 'cursor-pointer hover:bg-[var(--tile-bg-selected)]' : ''}
+        ${isPlaced ? 'opacity-40 grayscale' : ''}
         ${isDragging ? 'opacity-50' : ''}
       `}
       style={{
         width: containerSize,
         height: containerSize,
-        backgroundColor: isSelected ? 'var(--tile-bg-selected)' : 'var(--tile-bg)',
+        backgroundColor: isError ? 'rgba(239, 68, 68, 0.2)' : isSelected ? 'var(--tile-bg-selected)' : 'var(--tile-bg)',
       }}
-      onClick={isPlaced ? undefined : onClick}
-      disabled={isPlaced}
+      onClick={handleClick}
+      disabled={false}
       aria-label={`${pentomino.name}${isSelected ? ' (selected)' : ''}${isPlaced ? ' (placed)' : ''}`}
       aria-pressed={isSelected}
     >
       <div
+        className="pointer-events-none"
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${bounds.cols}, ${config.cellSize}px)`,
@@ -102,7 +133,7 @@ export function PiecePreview({
           row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className="rounded-sm"
+              className="rounded-sm pointer-events-none"
               style={{
                 backgroundColor: cell.filled ? pentomino.color : 'transparent',
                 width: config.cellSize,

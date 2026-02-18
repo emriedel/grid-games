@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useCallback } from 'react';
-import type { Board as BoardType, Position, PentominoId, Rotation, DragData } from '@/types';
+import type { Board as BoardType, Position, PentominoId, Rotation, DragData, PlacedPiece } from '@/types';
 import { Cell } from './Cell';
 import { getPieceCells, canPlacePiece, findAnchorForClickedCell } from '@/lib/gameLogic';
 import { getAnchorCell } from '@/constants/pentominoes';
@@ -12,8 +12,10 @@ interface BoardProps {
   selectedRotation: Rotation;
   activeDrag: DragData | null;
   dragOverCell: Position | null;
+  placedPieces: PlacedPiece[];
   onCellClick: (position: Position) => void;
   onPieceClick: (pentominoId: PentominoId) => void;
+  onInvalidPlacement?: () => void;
 }
 
 export function Board({
@@ -22,29 +24,13 @@ export function Board({
   selectedRotation,
   activeDrag,
   dragOverCell,
+  placedPieces,
   onCellClick,
   onPieceClick,
+  onInvalidPlacement,
 }: BoardProps) {
   // Track hover position for preview
   const [hoverPosition, setHoverPosition] = useState<Position | null>(null);
-
-  // Calculate valid drop targets for selected piece (cells that can be clicked to place)
-  const validDropTargets = useMemo(() => {
-    if (!selectedPieceId) return new Set<string>();
-
-    const targets = new Set<string>();
-    for (let row = 0; row < board.rows; row++) {
-      for (let col = 0; col < board.cols; col++) {
-        const clickPosition = { row, col };
-        // Check if clicking this cell would result in a valid placement
-        const anchor = findAnchorForClickedCell(board, selectedPieceId, clickPosition, selectedRotation);
-        if (anchor) {
-          targets.add(`${row},${col}`);
-        }
-      }
-    }
-    return targets;
-  }, [board, selectedPieceId, selectedRotation]);
 
   // Calculate preview cells for hover position (click-to-place)
   const hoverPreviewCells = useMemo(() => {
@@ -82,6 +68,18 @@ export function Board({
     return new Set(cells.map((c) => `${c.row},${c.col}`));
   }, [board, activeDrag, dragOverCell]);
 
+  // Build a map of pentominoId -> rotation from placedPieces
+  const pieceRotationMap = useMemo(() => {
+    const map = new Map<PentominoId, Rotation>();
+    for (const piece of placedPieces) {
+      map.set(piece.pentominoId, piece.rotation);
+    }
+    return map;
+  }, [placedPieces]);
+
+  // Get the pentominoId currently being dragged from board (to hide its cells)
+  const draggingFromBoardPieceId = activeDrag?.type === 'board-piece' ? activeDrag.pentominoId : null;
+
   const handleCellClick = (row: number, col: number) => {
     const cell = board.cells[row][col];
     const clickPosition = { row, col };
@@ -97,7 +95,13 @@ export function Board({
       const anchor = findAnchorForClickedCell(board, selectedPieceId, clickPosition, selectedRotation);
       if (anchor) {
         onCellClick(anchor);
+      } else {
+        // Invalid placement - notify parent
+        onInvalidPlacement?.();
       }
+    } else if (selectedPieceId && cell.state === 'dead') {
+      // Clicked on dead cell with selected piece - also invalid
+      onInvalidPlacement?.();
     }
   };
 
@@ -127,18 +131,23 @@ export function Board({
         {board.cells.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const key = `${rowIndex},${colIndex}`;
-            const isValidDropTarget =
-              selectedPieceId !== null && validDropTargets.has(key);
             const isHoverPreview = hoverPreviewCells.has(key);
             const isDragPreview = dragPreviewCells.has(key);
+
+            // Hide cells of piece being dragged from board
+            const isBeingDragged = draggingFromBoardPieceId !== null &&
+              cell.state === 'filled' &&
+              cell.pentominoId === draggingFromBoardPieceId;
+
+            // Get rotation for this cell's piece (for drag data)
+            const pieceRotation = cell.pentominoId ? pieceRotationMap.get(cell.pentominoId) ?? 0 : 0;
 
             return (
               <Cell
                 key={key}
-                cell={cell}
+                cell={isBeingDragged ? { state: 'playable' } : cell}
                 row={rowIndex}
                 col={colIndex}
-                isValidDropTarget={isValidDropTarget && !isHoverPreview && !isDragPreview}
                 isPreview={isHoverPreview}
                 isDragPreview={isDragPreview}
                 previewPentominoId={
@@ -148,6 +157,7 @@ export function Board({
                       ? selectedPieceId ?? undefined
                       : undefined
                 }
+                pieceRotation={pieceRotation}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
                 onMouseEnter={() => handleCellHover(rowIndex, colIndex)}
               />

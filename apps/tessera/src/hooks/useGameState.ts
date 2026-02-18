@@ -146,6 +146,43 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'ROTATE_PLACED_PIECE': {
+      const { pentominoId } = action;
+      if (!state.board) return state;
+
+      // Find the placed piece
+      const placedPiece = state.placedPieces.find((p) => p.pentominoId === pentominoId);
+      if (!placedPiece) return state;
+
+      // Calculate next rotation
+      const newRotation = nextRotation(placedPiece.rotation);
+
+      // Remove piece from board temporarily
+      const boardWithoutPiece = removePiece(state.board, pentominoId);
+
+      // Check if the new rotation is valid at the same position
+      if (!canPlacePiece(boardWithoutPiece, pentominoId, placedPiece.position, newRotation)) {
+        // Rotation invalid - return state unchanged (caller can show toast)
+        return state;
+      }
+
+      // Place piece with new rotation
+      const newBoard = placePiece(boardWithoutPiece, pentominoId, placedPiece.position, newRotation);
+
+      // Update the placed piece with new rotation
+      const newPlacedPieces = state.placedPieces.map((p) =>
+        p.pentominoId === pentominoId
+          ? { ...p, rotation: newRotation }
+          : p
+      );
+
+      return {
+        ...state,
+        board: newBoard,
+        placedPieces: newPlacedPieces,
+      };
+    }
+
     case 'CLEAR_ALL': {
       if (!state.board || !state.puzzle) return state;
 
@@ -231,6 +268,15 @@ export function useGameState() {
     dispatch({ type: 'REMOVE_PIECE', pentominoId });
   }, []);
 
+  const rotatePlacedPiece = useCallback((pentominoId: PentominoId): boolean => {
+    // Get current state to check if rotation succeeded
+    const prevPlacedPieces = state.placedPieces;
+    dispatch({ type: 'ROTATE_PLACED_PIECE', pentominoId });
+    // Note: This returns immediately - caller should check if rotation changed
+    // For now, return true optimistically (toast will be handled differently)
+    return true;
+  }, [state.placedPieces]);
+
   const clearAll = useCallback(() => {
     dispatch({ type: 'CLEAR_ALL' });
   }, []);
@@ -248,6 +294,7 @@ export function useGameState() {
     rotatePiece,
     tryPlacePiece,
     removePieceFromBoard,
+    rotatePlacedPiece,
     clearAll,
     restoreState,
   };

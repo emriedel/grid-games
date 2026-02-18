@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   DndContext,
-  DragOverlay,
   useSensors,
   useSensor,
   PointerSensor,
@@ -20,11 +19,9 @@ import {
   ResultsModal,
   Button,
 } from '@grid-games/ui';
-import { shareOrCopy } from '@grid-games/shared';
 import { useGameState } from '@/hooks/useGameState';
 import { Board } from './Board';
 import { PieceTray } from './PieceTray';
-import { PiecePreview } from './PiecePreview';
 import { HowToPlayModal } from './HowToPlayModal';
 import {
   loadPuzzleByNumber,
@@ -37,12 +34,10 @@ import {
   saveInProgressState,
   saveCompletedState,
   hasCompletedPuzzle,
-  hasInProgressGame,
 } from '@/lib/storage';
 import { canPlacePiece } from '@/lib/gameLogic';
 import { getAnchorCell } from '@/constants/pentominoes';
-import type { Position, PentominoId, DragData, Rotation } from '@/types';
-import { tesseraConfig } from '@/config';
+import type { Position, PentominoId, DragData, Rotation, PlacedPiece } from '@/types';
 
 export function Game() {
   const searchParams = useSearchParams();
@@ -62,6 +57,11 @@ export function Game() {
   // Drag and drop state
   const [activeDrag, setActiveDrag] = useState<DragData | null>(null);
   const [dragOverCell, setDragOverCell] = useState<Position | null>(null);
+  // Store original placement when dragging from board (for cancel restoration)
+  const [dragOriginalPlacement, setDragOriginalPlacement] = useState<PlacedPiece | null>(null);
+
+  // Error feedback state - briefly shows error on bank piece
+  const [errorPieceId, setErrorPieceId] = useState<PentominoId | null>(null);
 
   // Game state
   const {
@@ -197,13 +197,36 @@ export function Game() {
     }
   }, [state.selectedPieceId, tryPlacePiece]);
 
+  // Handler for invalid placement attempts - show error feedback on bank piece
+  const handleInvalidPlacement = useCallback(() => {
+    if (state.selectedPieceId) {
+      setErrorPieceId(state.selectedPieceId);
+      // Clear error after brief animation
+      setTimeout(() => setErrorPieceId(null), 400);
+    }
+  }, [state.selectedPieceId]);
+
   const handlePieceClick = useCallback((pentominoId: PentominoId) => {
-    // If clicking on a placed piece, remove it
+    // If clicking on a placed piece on the board, remove it
     const isPlaced = state.placedPieces.some((p) => p.pentominoId === pentominoId);
     if (isPlaced) {
       removePieceFromBoard(pentominoId);
     }
   }, [state.placedPieces, removePieceFromBoard]);
+
+  // Handler for tapping placed pieces in the bank (remove from board)
+  const handlePieceRemove = useCallback((pentominoId: PentominoId) => {
+    removePieceFromBoard(pentominoId);
+  }, [removePieceFromBoard]);
+
+  // Build rotation map from placed pieces (for syncing bank icon rotation)
+  const pieceRotations = useMemo(() => {
+    const map = new Map<PentominoId, Rotation>();
+    for (const piece of state.placedPieces) {
+      map.set(piece.pentominoId, piece.rotation);
+    }
+    return map;
+  }, [state.placedPieces]);
 
   // Drag and drop handlers
   const handleDragStart = useCallback((event: DragStartEvent) => {
@@ -212,8 +235,17 @@ export function Game() {
       setActiveDrag(data);
       // Deselect any currently selected piece when starting a drag
       deselectPiece();
+    } else if (data?.type === 'board-piece') {
+      // Dragging from board - store original placement and remove from board
+      const placement = state.placedPieces.find((p) => p.pentominoId === data.pentominoId);
+      if (placement) {
+        setDragOriginalPlacement(placement);
+        removePieceFromBoard(data.pentominoId);
+        // Set active drag with the piece data
+        setActiveDrag({ type: 'piece', pentominoId: data.pentominoId, rotation: data.rotation });
+      }
     }
-  }, [deselectPiece]);
+  }, [deselectPiece, state.placedPieces, removePieceFromBoard]);
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
     const { over } = event;
@@ -245,17 +277,27 @@ export function Game() {
         // We need to apply the rotation from the drag
         tryPlacePiece(anchor);
       }
+      // If placement failed but dropped on board, piece stays in bank
     }
+    // If dropped off board (no over target), piece stays in bank
+    // (piece was already removed from board when drag started)
 
     // Reset drag state
     setActiveDrag(null);
     setDragOverCell(null);
+    setDragOriginalPlacement(null);
   }, [activeDrag, state.board, selectPiece, tryPlacePiece]);
 
   const handleDragCancel = useCallback(() => {
+    // If dragging from board and cancelled, restore original
+    if (dragOriginalPlacement) {
+      selectPiece(dragOriginalPlacement.pentominoId);
+      tryPlacePiece(dragOriginalPlacement.position);
+    }
     setActiveDrag(null);
     setDragOverCell(null);
-  }, []);
+    setDragOriginalPlacement(null);
+  }, [dragOriginalPlacement, selectPiece, tryPlacePiece]);
 
   // Build share text
   const shareText = `Tessera #${puzzleNumber}
@@ -320,8 +362,10 @@ https://nerdcube.games/tessera`;
             selectedRotation={state.selectedRotation}
             activeDrag={activeDrag}
             dragOverCell={dragOverCell}
+            placedPieces={state.placedPieces}
             onCellClick={handleCellClick}
             onPieceClick={handlePieceClick}
+            onInvalidPlacement={handleInvalidPlacement}
           />
 
           {/* Piece tray (only when playing) */}
@@ -331,7 +375,10 @@ https://nerdcube.games/tessera`;
               placedPieceIds={new Set(state.placedPieces.map((p) => p.pentominoId))}
               selectedPieceId={state.selectedPieceId}
               selectedRotation={state.selectedRotation}
+              pieceRotations={pieceRotations}
+              errorPieceId={errorPieceId}
               onPieceSelect={selectPiece}
+              onPieceRemove={handlePieceRemove}
             />
           )}
 
@@ -369,16 +416,6 @@ https://nerdcube.games/tessera`;
         />
       </GameContainer>
 
-      {/* Drag overlay - shows the piece being dragged */}
-      <DragOverlay>
-        {activeDrag && (
-          <PiecePreview
-            pentominoId={activeDrag.pentominoId}
-            rotation={activeDrag.rotation}
-            size="large"
-          />
-        )}
-      </DragOverlay>
     </DndContext>
   );
 }
