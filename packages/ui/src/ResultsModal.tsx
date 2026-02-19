@@ -6,6 +6,7 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { GAMES, getIconUrl } from '@grid-games/config';
 import { shareOrCopy } from '@grid-games/shared';
+import { useGameCompletion } from './useGameCompletion';
 
 const SUCCESS_MESSAGES = [
   'Nice work! 🎉',
@@ -90,6 +91,7 @@ export function ResultsModal({
   additionalActions,
 }: ResultsModalProps) {
   const [copied, setCopied] = useState(false);
+  const completionStatus = useGameCompletion();
 
   // Pick message once on mount based on message type to avoid hydration mismatch
   const resultMessage = useMemo(() => {
@@ -104,7 +106,13 @@ export function ResultsModal({
 
   // Get current game info and other games
   const currentGame = GAMES.find((g) => g.id === gameId);
-  const otherGames = GAMES.filter((g) => g.id !== gameId).slice(0, 2);
+  const otherGames = GAMES.filter((g) => {
+    // Exclude current game
+    if (g.id === gameId) return false;
+    // Exclude completed games (only if we have completion data loaded)
+    if (completionStatus.size > 0 && completionStatus.get(g.id)) return false;
+    return true;
+  }).slice(0, 3); // Show up to 3 other games (total 4 items with Archive)
 
   const handleShare = async () => {
     const result = await shareOrCopy(shareConfig.text);
