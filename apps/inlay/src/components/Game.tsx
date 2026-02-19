@@ -375,8 +375,7 @@ export function Game() {
   }, [dragOriginalPlacement, selectPiece, tryPlacePiece]);
 
   // Build share text
-  const shareText = `Inlay #${puzzleNumber}
-Completed!
+  const shareText = `Inlay #${puzzleNumber} ✅
 
 https://nerdcube.games/inlay`;
 
@@ -486,7 +485,7 @@ https://nerdcube.games/inlay`;
           gameId="inlay"
           gameName="Inlay"
           puzzleNumber={puzzleNumber}
-          primaryStat={{ value: 'Complete', label: state.puzzle.shapeName }}
+          primaryStat={{ value: '✅' }}
           shareConfig={{ text: shareText }}
           messageType="success"
         />
