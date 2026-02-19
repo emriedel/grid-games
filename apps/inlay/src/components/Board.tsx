@@ -123,11 +123,10 @@ export function Board({
 
   return (
     <div
-      className="w-full bg-[var(--board-bg)] p-1.5 sm:p-2 rounded-lg overflow-hidden"
-      style={{ aspectRatio: `${board.cols} / ${board.rows}` }}
+      className="w-full bg-[var(--board-bg)] p-1 sm:p-1.5 rounded-lg overflow-hidden"
       onMouseLeave={handleBoardLeave}
     >
-      <div style={gridStyle} className="h-full">
+      <div style={gridStyle}>
         {board.cells.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const key = `${rowIndex},${colIndex}`;
