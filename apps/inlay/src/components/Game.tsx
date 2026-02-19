@@ -493,7 +493,7 @@ https://nerdcube.games/inlay`;
           gameId="inlay"
           gameName="Inlay"
           puzzleNumber={puzzleNumber}
-          primaryStat={{ value: '✅' }}
+          primaryStat={{ value: '✅', label: '' }}
           shareConfig={{ text: shareText }}
           messageType="success"
         />
