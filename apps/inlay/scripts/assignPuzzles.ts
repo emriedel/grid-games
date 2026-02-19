@@ -1,5 +1,5 @@
 /**
- * Tessera Puzzle Assignment Script
+ * Inlay Puzzle Assignment Script
  *
  * Assigns puzzles from pool.json to monthly assigned files.
  * Puzzles are MOVED from pool to assigned (full data, not just ID).
@@ -34,7 +34,7 @@ interface MonthlyAssignedFile {
 
 // Must match the base date in storage.ts and config.ts
 const BASE_DATE = '2026-02-15';
-const GAME_ID = 'tessera';
+const GAME_ID = 'inlay';
 
 function getTodayPuzzleNumber(): number {
   const baseDate = new Date(BASE_DATE + 'T00:00:00');
@@ -103,7 +103,7 @@ async function main() {
   const todayNumber = getTodayPuzzleNumber();
   const targetCount = countArg ? parseInt(countArg, 10) : todayNumber;
 
-  console.log(`\nTessera Puzzle Assignment`);
+  console.log(`\nInlay Puzzle Assignment`);
   console.log(`=========================\n`);
   console.log(`Base date: ${BASE_DATE}`);
   console.log(`Today's puzzle number: ${todayNumber}`);

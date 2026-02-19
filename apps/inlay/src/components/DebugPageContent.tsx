@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, NavBar, GameContainer } from '@grid-games/ui';
-import { tesseraConfig } from '@/config';
+import { inlayConfig } from '@/config';
 import { getPoolPuzzles, getFutureAssignedPuzzles } from '@/lib/puzzleLoader';
 import { PENTOMINOES } from '@/constants/pentominoes';
 import type { Puzzle, PentominoId } from '@/types';
@@ -159,7 +159,7 @@ export function DebugPageContent() {
     return (
       <GameContainer
         maxWidth="md"
-        navBar={<NavBar title="Debug" gameId={tesseraConfig.id} />}
+        navBar={<NavBar title="Debug" gameId={inlayConfig.id} />}
       >
         <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
           <div className="text-2xl font-bold text-[var(--danger)] mb-4">
@@ -178,7 +178,7 @@ export function DebugPageContent() {
     return (
       <GameContainer
         maxWidth="md"
-        navBar={<NavBar title="Debug" gameId={tesseraConfig.id} />}
+        navBar={<NavBar title="Debug" gameId={inlayConfig.id} />}
       >
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="text-xl text-[var(--foreground)]">Loading puzzles...</div>
@@ -192,7 +192,7 @@ export function DebugPageContent() {
     return (
       <GameContainer
         maxWidth="md"
-        navBar={<NavBar title="Debug" gameId={tesseraConfig.id} />}
+        navBar={<NavBar title="Debug" gameId={inlayConfig.id} />}
       >
         <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
           <div className="text-xl text-[var(--muted)]">
@@ -216,7 +216,7 @@ export function DebugPageContent() {
   return (
     <GameContainer
       maxWidth="md"
-      navBar={<NavBar title="Debug - Puzzle Browser" gameId={tesseraConfig.id} />}
+      navBar={<NavBar title="Debug - Puzzle Browser" gameId={inlayConfig.id} />}
     >
       <div className="flex flex-col items-center gap-6 py-8 w-full max-w-md mx-auto px-4">
         {/* Navigation */}

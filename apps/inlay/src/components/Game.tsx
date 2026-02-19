@@ -72,7 +72,7 @@ function printDebugSolution(puzzle: Puzzle): void {
   const colHeader = '    ' + Array.from({ length: cols }, (_, i) => i.toString().padStart(2, ' ')).join('');
 
   // Print the solution board
-  console.log('[Tessera Debug] Solution Board:');
+  console.log('[Inlay Debug] Solution Board:');
   console.log(colHeader);
   console.log('   +' + '--'.repeat(cols) + '+');
   for (let r = 0; r < rows; r++) {
@@ -82,7 +82,7 @@ function printDebugSolution(puzzle: Puzzle): void {
   console.log('   +' + '--'.repeat(cols) + '+');
 
   // Print each piece with its placement info and mini preview
-  console.log('\n[Tessera Debug] Piece Placements:');
+  console.log('\n[Inlay Debug] Piece Placements:');
   for (const placed of puzzle.solution) {
     const cells = getPentominoCells(placed.pentominoId, placed.rotation);
 
@@ -189,11 +189,11 @@ export function Game() {
 
       // Debug output
       if (debugMode) {
-        console.log('[Tessera Debug] Puzzle #', num);
-        console.log('[Tessera Debug] Shape:', puzzle.shapeName);
-        console.log('[Tessera Debug] Pieces:', puzzle.pentominoIds.join(', '));
+        console.log('[Inlay Debug] Puzzle #', num);
+        console.log('[Inlay Debug] Shape:', puzzle.shapeName);
+        console.log('[Inlay Debug] Pieces:', puzzle.pentominoIds.join(', '));
         if (poolIdParam) {
-          console.log('[Tessera Debug] Pool ID:', poolIdParam);
+          console.log('[Inlay Debug] Pool ID:', poolIdParam);
         }
         if (puzzle.solution) {
           printDebugSolution(puzzle);
@@ -374,10 +374,10 @@ export function Game() {
   }, [dragOriginalPlacement, selectPiece, tryPlacePiece]);
 
   // Build share text
-  const shareText = `Tessera #${puzzleNumber}
+  const shareText = `Inlay #${puzzleNumber}
 Completed!
 
-https://nerdcube.games/tessera`;
+https://nerdcube.games/inlay`;
 
   // Loading state
   if (isLoading || !state.puzzle || !state.board) {
@@ -395,8 +395,8 @@ https://nerdcube.games/tessera`;
   if (showLanding) {
     return (
       <LandingScreen
-        gameId="tessera"
-        name="Tessera"
+        gameId="inlay"
+        name="Inlay"
         description="Fill the target shape using pentomino pieces"
         puzzleInfo={{ number: puzzleNumber, date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}
         mode={landingMode}
@@ -422,8 +422,8 @@ https://nerdcube.games/tessera`;
       <GameContainer
         navBar={
           <NavBar
-            title={`Tessera #${puzzleNumber}`}
-            gameId="tessera"
+            title={`Inlay #${puzzleNumber}`}
+            gameId="inlay"
             onRulesClick={() => setShowHowToPlay(true)}
           />
         }
@@ -481,8 +481,8 @@ https://nerdcube.games/tessera`;
         <ResultsModal
           isOpen={showResults}
           onClose={() => setShowResults(false)}
-          gameId="tessera"
-          gameName="Tessera"
+          gameId="inlay"
+          gameName="Inlay"
           puzzleNumber={puzzleNumber}
           primaryStat={{ value: 'Complete', label: state.puzzle.shapeName }}
           shareConfig={{ text: shareText }}

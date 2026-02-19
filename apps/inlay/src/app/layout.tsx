@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tessera | Nerdcube Games",
+  title: "Inlay | Nerdcube Games",
   description: "A daily pentomino puzzle. Fill the target shape using the given pieces!",
-  keywords: ["pentomino", "puzzle", "tessera", "daily game", "shape puzzle", "tile puzzle"],
+  keywords: ["pentomino", "puzzle", "inlay", "daily game", "shape puzzle", "tile puzzle"],
   icons: {
-    icon: "https://nerdcube.games/icons/tessera.png",
-    apple: "https://nerdcube.games/icons/tessera.png",
+    icon: "https://nerdcube.games/icons/inlay.png",
+    apple: "https://nerdcube.games/icons/inlay.png",
   },
 };
 

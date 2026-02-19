@@ -1,5 +1,5 @@
 /**
- * Tessera Puzzle Generator
+ * Inlay Puzzle Generator
  *
  * Generates pentomino puzzles into pool.json. Each puzzle gets a unique ID.
  * Use assignPuzzles.ts to assign puzzles from the pool to specific dates.
@@ -962,7 +962,7 @@ async function main() {
   const countArg = process.argv[2];
   const targetCount = countArg ? parseInt(countArg, 10) : 50;
 
-  console.log(`\nTessera Puzzle Generator`);
+  console.log(`\nInlay Puzzle Generator`);
   console.log(`========================\n`);
   console.log(`Target puzzles: ${targetCount}\n`);
 
@@ -979,10 +979,10 @@ async function main() {
       pool = JSON.parse(fs.readFileSync(poolPath, 'utf-8'));
       console.log(`Loaded existing pool with ${pool.puzzles.length} puzzles\n`);
     } catch {
-      pool = { gameId: 'tessera', generatedAt: '', puzzles: [] };
+      pool = { gameId: 'inlay', generatedAt: '', puzzles: [] };
     }
   } else {
-    pool = { gameId: 'tessera', generatedAt: '', puzzles: [] };
+    pool = { gameId: 'inlay', generatedAt: '', puzzles: [] };
   }
 
   const startingCount = pool.puzzles.length;
@@ -1010,7 +1010,7 @@ async function main() {
 
   while (generated < targetCount && attempts < maxAttempts) {
     attempts++;
-    const seed = `tessera-${Date.now()}-${attempts}-${Math.random()}`;
+    const seed = `inlay-${Date.now()}-${attempts}-${Math.random()}`;
     const rng = seedrandom(seed);
 
     process.stdout.write(`Attempt ${attempts}: `);

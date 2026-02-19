@@ -82,8 +82,8 @@ export const trioTheme: GameTheme = {
   tileBorder: '#3f3f46',
 };
 
-/** Tessera game theme - emerald green accent */
-export const tesseraTheme: GameTheme = {
+/** Inlay game theme - emerald green accent */
+export const inlayTheme: GameTheme = {
   ...baseTheme,
   accent: '#0da678',        // brighter emerald
   accentForeground: '#ffffff',
@@ -94,7 +94,7 @@ export const tesseraTheme: GameTheme = {
 };
 
 /** Game identifiers */
-export type GameId = 'dabble' | 'jumble' | 'edgewise' | 'trio' | 'tessera';
+export type GameId = 'dabble' | 'jumble' | 'edgewise' | 'trio' | 'inlay';
 
 /** Map of all game themes */
 export const gameThemes: Record<GameId, GameTheme> = {
@@ -102,7 +102,7 @@ export const gameThemes: Record<GameId, GameTheme> = {
   jumble: jumbleTheme,
   edgewise: edgewiseTheme,
   trio: trioTheme,
-  tessera: tesseraTheme,
+  inlay: inlayTheme,
 };
 
 /**

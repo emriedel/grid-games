@@ -1,5 +1,5 @@
 /**
- * Tessera Game Logic
+ * Inlay Game Logic
  *
  * Core functions for pentomino placement, collision detection, and win condition.
  */

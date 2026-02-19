@@ -1,5 +1,5 @@
 /**
- * Tessera Storage Module
+ * Inlay Storage Module
  *
  * Handles persistence of game state using the shared archive storage pattern.
  */
@@ -7,7 +7,7 @@
 import { createArchiveStorage, type BasePuzzleState } from '@grid-games/shared';
 import type { PlacedPiece, Rotation, GameState } from '@/types';
 
-export interface TesseraPuzzleState extends BasePuzzleState {
+export interface InlayPuzzleState extends BasePuzzleState {
   puzzleNumber: number;
   puzzleId?: string;
   status: 'in-progress' | 'completed';
@@ -19,8 +19,8 @@ export interface TesseraPuzzleState extends BasePuzzleState {
 
 const LAUNCH_DATE = new Date('2026-02-15T00:00:00');
 
-const storage = createArchiveStorage<TesseraPuzzleState>({
-  gameId: 'tessera',
+const storage = createArchiveStorage<InlayPuzzleState>({
+  gameId: 'inlay',
   launchDate: LAUNCH_DATE,
 });
 
@@ -105,6 +105,6 @@ export function hasInProgressGame(puzzleNumber: number, puzzleId?: string): bool
 /**
  * Get saved puzzle state
  */
-export function getSavedState(puzzleNumber: number, puzzleId?: string): TesseraPuzzleState | null {
+export function getSavedState(puzzleNumber: number, puzzleId?: string): InlayPuzzleState | null {
   return getPuzzleState(puzzleNumber, puzzleId);
 }

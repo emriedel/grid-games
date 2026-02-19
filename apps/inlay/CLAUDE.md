@@ -1,14 +1,14 @@
-# Tessera - Daily Pentomino Puzzle Game
+# Inlay - Daily Pentomino Puzzle Game
 
 Part of **Nerdcube Games** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
 
 ## Project Overview
 
-Tessera is a daily pentomino puzzle game where players fill a target shape using 5-8 pentomino pieces. Each pentomino covers exactly 5 squares.
+Inlay is a daily pentomino puzzle game where players fill a target shape using 5-8 pentomino pieces. Each pentomino covers exactly 5 squares.
 
 - **Accent Color:** Emerald Green (#0da678)
 - **Dev Port:** 3006
-- **Package Name:** `@grid-games/tessera`
+- **Package Name:** `@grid-games/inlay`
 
 **Theme:** Always use CSS variables, never hardcode colors:
 ```tsx
@@ -20,7 +20,7 @@ Tessera is a daily pentomino puzzle game where players fill a target shape using
 
 ```bash
 # From monorepo root
-npx turbo dev --filter=@grid-games/tessera
+npx turbo dev --filter=@grid-games/inlay
 
 # Or run all apps
 npm run dev
@@ -266,11 +266,11 @@ Browse and replay past puzzles at `/archive`:
 
 Uses `createArchiveStorage` from `@grid-games/shared`:
 
-**Storage Key Format:** `tessera-{puzzleNumber}-{puzzleId}`
+**Storage Key Format:** `inlay-{puzzleNumber}-{puzzleId}`
 
 **Puzzle State Interface:**
 ```typescript
-interface TesseraPuzzleState {
+interface InlayPuzzleState {
   puzzleNumber: number;
   puzzleId?: string;
   status: 'in-progress' | 'completed';
@@ -286,9 +286,9 @@ interface TesseraPuzzleState {
 Add `?debug=true` to URL:
 - Bypasses localStorage saved state
 - Console output:
-  - `[Tessera Debug] Puzzle #X`
-  - `[Tessera Debug] Shape: X`
-  - `[Tessera Debug] Pieces: F, I, L, ...`
+  - `[Inlay Debug] Puzzle #X`
+  - `[Inlay Debug] Shape: X`
+  - `[Inlay Debug] Pieces: F, I, L, ...`
 
 ## Puzzle Generation
 
@@ -328,7 +328,7 @@ interface PoolPuzzle {
 **Monthly File Format:**
 ```typescript
 interface MonthlyAssignedFile {
-  gameId: "tessera";
+  gameId: "inlay";
   baseDate: string;        // First day of month "YYYY-MM-01"
   puzzles: Record<string, PoolPuzzle>;  // Keyed by puzzle number
 }

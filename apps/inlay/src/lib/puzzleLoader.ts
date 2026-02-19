@@ -1,5 +1,5 @@
 /**
- * Tessera Puzzle Loader
+ * Inlay Puzzle Loader
  *
  * Loads puzzles from pre-generated monthly files or generates fallback puzzles.
  */
@@ -28,7 +28,7 @@ export async function loadPuzzleByNumber(puzzleNumber: number): Promise<Puzzle |
   try {
     const monthKey = getMonthForPuzzleNumber(puzzleNumber, PUZZLE_BASE_DATE_STRING);
     const basePath = getBasePath();
-    const data = await loadMonthlyFile<Puzzle & PuzzleWithId>(monthKey, 'tessera', basePath);
+    const data = await loadMonthlyFile<Puzzle & PuzzleWithId>(monthKey, 'inlay', basePath);
 
     if (data && data[String(puzzleNumber)]) {
       const puzzle = data[String(puzzleNumber)];
@@ -56,7 +56,7 @@ export async function loadPuzzleIdsForRange(
   endNum: number
 ): Promise<Map<number, string>> {
   const basePath = getBasePath();
-  return getPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'tessera', basePath);
+  return getPuzzleIdsForRange(startNum, endNum, PUZZLE_BASE_DATE_STRING, 'inlay', basePath);
 }
 
 /**
@@ -157,7 +157,7 @@ export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number
 
     try {
       const basePath = getBasePath();
-      const data = await loadMonthlyFile<Puzzle & PuzzleWithId>(monthKey, 'tessera', basePath);
+      const data = await loadMonthlyFile<Puzzle & PuzzleWithId>(monthKey, 'inlay', basePath);
       if (!data) continue;
 
       for (const [numStr, puzzle] of Object.entries(data)) {

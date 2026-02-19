@@ -30,7 +30,7 @@ export function ArchivePageContent() {
         const ids = await loadPuzzleIdsForRange(1, todayPuzzleNumber - 1);
         setPuzzleIds(ids);
       } catch (error) {
-        console.warn('[tessera] Failed to load puzzle IDs for archive:', error);
+        console.warn('[inlay] Failed to load puzzle IDs for archive:', error);
       } finally {
         setIsLoading(false);
       }
@@ -60,7 +60,7 @@ export function ArchivePageContent() {
     return puzzleIdMatches && isPuzzleInProgress(puzzleNumber, currentPuzzleId);
   }, [puzzleIds]);
 
-  // Get "stars" - for Tessera, 1 star for completion
+  // Get "stars" - for Inlay, 1 star for completion
   const getPuzzleStarsWrapper = useCallback((puzzleNumber: number): number => {
     const currentPuzzleId = puzzleIds.get(puzzleNumber);
     const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
@@ -73,11 +73,11 @@ export function ArchivePageContent() {
     const state = findPuzzleState(puzzleNumber);
     if (state?.status !== 'completed') return 0;
 
-    // Tessera always awards 1 star for completion
+    // Inlay always awards 1 star for completion
     return 1;
   }, [puzzleIds]);
 
-  // Score - for Tessera, return number of pieces placed (null if not completed)
+  // Score - for Inlay, return number of pieces placed (null if not completed)
   const getPuzzleScoreWrapper = useCallback((puzzleNumber: number): number | null => {
     const currentPuzzleId = puzzleIds.get(puzzleNumber);
     const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
@@ -104,7 +104,7 @@ export function ArchivePageContent() {
       <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
         <div className="w-full max-w-md mx-auto flex items-center justify-center px-4 py-3 border-b border-[var(--border,#27272a)]">
           <h1 className="text-lg font-bold text-[var(--foreground,#ededed)]">
-            Tessera Archive
+            Inlay Archive
           </h1>
         </div>
         <div className="w-full max-w-md flex-1 flex flex-col px-4 py-4">
@@ -120,8 +120,8 @@ export function ArchivePageContent() {
 
   return (
     <ArchivePage
-      gameName="Tessera"
-      gameId="tessera"
+      gameName="Inlay"
+      gameId="inlay"
       baseDate={PUZZLE_BASE_DATE_STRING}
       todayPuzzleNumber={todayPuzzleNumber}
       isPuzzleCompleted={checkPuzzleCompleted}

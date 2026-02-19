@@ -1,5 +1,5 @@
 /**
- * Tessera Game Types
+ * Inlay Game Types
  */
 
 /** Rotation state (0-3 representing 0°, 90°, 180°, 270°) */
@@ -104,7 +104,7 @@ export type GameAction =
   | { type: 'RESTORE_STATE'; state: Partial<GameState> };
 
 /** Puzzle state for storage */
-export interface TesseraPuzzleState {
+export interface InlayPuzzleState {
   puzzleNumber: number;
   puzzleId?: string;
   status: 'in-progress' | 'completed';

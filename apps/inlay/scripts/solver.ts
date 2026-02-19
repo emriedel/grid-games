@@ -1,5 +1,5 @@
 /**
- * Tessera Pentomino Solver
+ * Inlay Pentomino Solver
  *
  * Backtracking solver to find valid pentomino placements.
  * Used by the puzzle generator to verify that puzzles are solvable.
@@ -532,7 +532,7 @@ function printSolution(shape: boolean[][], solution: PlacedPiece[]): void {
 }
 
 async function main() {
-  console.log('Tessera Pentomino Solver');
+  console.log('Inlay Pentomino Solver');
   console.log('========================\n');
 
   // Test puzzle: 6x5 rectangle (30 cells = 6 pieces)
