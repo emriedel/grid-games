@@ -37,6 +37,7 @@ import {
 } from '@/lib/storage';
 import { canPlacePiece } from '@/lib/gameLogic';
 import { getAnchorCell } from '@/constants/pentominoes';
+import { inlayConfig } from '@/config';
 import type { Position, PentominoId, DragData, Rotation, PlacedPiece, Puzzle } from '@/types';
 import { getPentominoCells } from '@/constants/pentominoes';
 
@@ -397,6 +398,7 @@ https://nerdcube.games/inlay`;
       <LandingScreen
         gameId="inlay"
         name="Inlay"
+        icon={inlayConfig.icon}
         description="Fill the target shape using pentomino pieces"
         puzzleInfo={{ number: puzzleNumber, date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}
         mode={landingMode}
