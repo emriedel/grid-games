@@ -12,7 +12,7 @@ export interface ColorDefinition {
   cssVar: string;     // CSS variable name (defined in globals.css)
 }
 
-// 3 highly-distinguishable colors (Jewel Tones palette - brightened for dark bg)
+// 3 highly-distinguishable colors (colorblind-accessible: ruby, sapphire, gold)
 export const COLORS: ColorDefinition[] = [
   {
     id: 'red',
@@ -28,8 +28,8 @@ export const COLORS: ColorDefinition[] = [
   },
   {
     id: 'gold',
-    name: 'Emerald',
-    value: '#10b981',  // Jewel tone emerald (emerald-500)
+    name: 'Gold',
+    value: '#fbbf24',  // Golden yellow (amber-400) - colorblind accessible
     cssVar: 'var(--trio-gold)',
   },
 ];
