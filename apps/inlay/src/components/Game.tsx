@@ -394,18 +394,25 @@ https://nerdcube.games/inlay`;
   // Landing screen
   if (showLanding) {
     return (
-      <LandingScreen
-        gameId="inlay"
-        name="Inlay"
-        icon={inlayConfig.icon}
-        description="Fill the target shape using pentomino pieces"
-        puzzleInfo={{ number: puzzleNumber, date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}
-        mode={landingMode}
-        onPlay={handlePlay}
-        onResume={handleResume}
-        onSeeResults={handleSeeResults}
-        archiveHref="/archive"
-      />
+      <>
+        <LandingScreen
+          gameId="inlay"
+          name="Inlay"
+          icon={inlayConfig.icon}
+          description="Fill the target shape using pentomino pieces"
+          puzzleInfo={{ number: puzzleNumber, date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}
+          mode={landingMode}
+          onPlay={handlePlay}
+          onResume={handleResume}
+          onSeeResults={handleSeeResults}
+          onRules={() => setShowHowToPlay(true)}
+          archiveHref="/archive"
+        />
+        <HowToPlayModal
+          isOpen={showHowToPlay}
+          onClose={() => setShowHowToPlay(false)}
+        />
+      </>
     );
   }
 
@@ -429,7 +436,7 @@ https://nerdcube.games/inlay`;
           />
         }
       >
-        <div className="flex flex-col items-center gap-4 p-4">
+        <div className="flex flex-col items-center gap-4 py-4 w-full max-w-md">
           {/* Board */}
           <Board
             board={state.board}
