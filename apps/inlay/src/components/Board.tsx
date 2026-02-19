@@ -123,7 +123,7 @@ export function Board({
 
   return (
     <div
-      className="w-full max-w-md mx-auto bg-[var(--board-bg)] p-2 rounded-lg"
+      className="w-full bg-[var(--board-bg)] p-1.5 sm:p-2 rounded-lg overflow-hidden"
       style={{ aspectRatio: `${board.cols} / ${board.rows}` }}
       onMouseLeave={handleBoardLeave}
     >

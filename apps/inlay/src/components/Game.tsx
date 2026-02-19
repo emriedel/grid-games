@@ -435,8 +435,9 @@ https://nerdcube.games/inlay`;
             onRulesClick={() => setShowHowToPlay(true)}
           />
         }
+        maxWidth="full"
       >
-        <div className="flex flex-col items-center gap-4 py-4 w-full max-w-md">
+        <div className="flex flex-col items-center gap-4 py-4 px-2 sm:px-4 w-full max-w-md mx-auto">
           {/* Board */}
           <Board
             board={state.board}

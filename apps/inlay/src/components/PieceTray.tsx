@@ -25,7 +25,7 @@ export function PieceTray({
   onPieceRemove,
 }: PieceTrayProps) {
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full">
       <div className="flex flex-wrap justify-center gap-2 p-2">
         {allPieces.map((pentominoId) => {
           const isPlaced = placedPieceIds.has(pentominoId);
