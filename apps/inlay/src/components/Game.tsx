@@ -37,8 +37,9 @@ import {
   saveInProgressState,
   saveCompletedState,
   hasCompletedPuzzle,
+  clearPuzzleState,
 } from '@/lib/storage';
-import { canPlacePiece, findAnchorForClickedCell } from '@/lib/gameLogic';
+import { findAnchorForClickedCell, findNearestValidPlacement } from '@/lib/gameLogic';
 import { inlayConfig } from '@/config';
 import type { Position, PentominoId, DragData, Rotation, PlacedPiece, Puzzle } from '@/types';
 import { getPentominoCells } from '@/constants/pentominoes';
@@ -250,11 +251,16 @@ export function Game() {
     init();
   }, [debugMode, targetPuzzleNumber, isArchiveMode, poolIdParam, loadPuzzle, restoreState, startGame]);
 
-  // Save state during gameplay
+  // Save state during gameplay - only if pieces have been placed
   useEffect(() => {
     if (state.phase === 'playing' && !debugMode && state.puzzle) {
-      // Use state.puzzle.id to ensure we always have the correct puzzle ID
-      saveInProgressState(puzzleNumber, state, state.puzzle.id);
+      if (state.placedPieces.length > 0) {
+        // Use state.puzzle.id to ensure we always have the correct puzzle ID
+        saveInProgressState(puzzleNumber, state, state.puzzle.id);
+      } else {
+        // Clear in-progress state when no pieces are placed (e.g., after Clear All)
+        clearPuzzleState(puzzleNumber, state.puzzle.id);
+      }
     }
   }, [state, puzzleNumber, debugMode]);
 
@@ -341,17 +347,17 @@ export function Game() {
   }, [state.placedPieces, bankRotations]);
 
   // Calculate if current drag position is valid
-  // When grabOffset exists, use it to check the exact placement position
+  // Uses sticky tolerance to match the actual drop behavior
   const isDragValid = useMemo(() => {
     if (!activeDrag || !dragOverCell || !state.board) return false;
 
-    // If we have a grabOffset, check the exact placement
+    // If we have a grabOffset, use sticky tolerance to find valid placement
     if (activeDrag.grabOffset) {
-      const anchor = {
+      const exactAnchor = {
         row: dragOverCell.row - activeDrag.grabOffset.row,
         col: dragOverCell.col - activeDrag.grabOffset.col,
       };
-      return canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation);
+      return findNearestValidPlacement(state.board, activeDrag.pentominoId, exactAnchor, activeDrag.rotation, 1) !== null;
     }
 
     // Fallback: check if any valid placement exists
@@ -438,18 +444,16 @@ export function Game() {
     // This ensures the drop position matches where the preview was shown
 
     if (activeDrag && dragOverCell && state.board) {
-      let anchor: Position | null;
+      let anchor: Position | null = null;
 
-      // If we have a grabOffset, calculate exact anchor
+      // If we have a grabOffset, calculate exact anchor and use sticky tolerance
       if (activeDrag.grabOffset) {
-        anchor = {
+        const exactAnchor = {
           row: dragOverCell.row - activeDrag.grabOffset.row,
           col: dragOverCell.col - activeDrag.grabOffset.col,
         };
-        // Validate placement
-        if (!canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
-          anchor = null;
-        }
+        // Use tolerance to find nearest valid placement (snaps to valid positions)
+        anchor = findNearestValidPlacement(state.board, activeDrag.pentominoId, exactAnchor, activeDrag.rotation, 1);
       } else {
         // Fallback: find any valid anchor
         anchor = findAnchorForClickedCell(state.board, activeDrag.pentominoId, dragOverCell, activeDrag.rotation);

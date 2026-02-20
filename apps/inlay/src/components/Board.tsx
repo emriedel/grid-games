@@ -3,7 +3,7 @@
 import { useMemo, useState, useCallback, useRef, useEffect, forwardRef } from 'react';
 import type { Board as BoardType, Position, PentominoId, Rotation, DragData, PlacedPiece } from '@/types';
 import { Cell } from './Cell';
-import { getPieceCells, canPlacePiece, findAnchorForClickedCell } from '@/lib/gameLogic';
+import { findAnchorForClickedCell, findNearestValidPlacement, getPieceCells } from '@/lib/gameLogic';
 
 interface BoardProps {
   board: BoardType;
@@ -66,24 +66,17 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
     };
   }, [onCellSizeChange]);
 
-  // Calculate preview cells for hover position (click-to-place)
-  const hoverPreviewCells = useMemo(() => {
-    if (!selectedPieceId || !hoverPosition) {
-      return new Set<string>();
-    }
-
+  // Check if hover position is eligible for click-to-place
+  // Only show highlight when piece is selected, not dragging, and cell is a valid target
+  const isHoverEligible = useMemo(() => {
+    if (!selectedPieceId || !hoverPosition || activeDrag) return false;
     const anchor = findAnchorForClickedCell(board, selectedPieceId, hoverPosition, selectedRotation);
-    if (!anchor) {
-      return new Set<string>();
-    }
-
-    const cells = getPieceCells(selectedPieceId, anchor, selectedRotation);
-    return new Set(cells.map((c) => `${c.row},${c.col}`));
-  }, [board, selectedPieceId, selectedRotation, hoverPosition]);
+    return anchor !== null;
+  }, [board, selectedPieceId, selectedRotation, hoverPosition, activeDrag]);
 
   // Calculate preview cells for drag-and-drop
-  // When grabOffset exists, use it to calculate exact anchor position
-  // This ensures board preview matches the overlay position exactly
+  // When grabOffset exists, use sticky tolerance to find nearest valid placement
+  // This shows where the piece will actually land when dropped
   const dragPreviewCells = useMemo(() => {
     if (!activeDrag || !dragOverCell) {
       return new Set<string>();
@@ -91,14 +84,15 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
 
     let anchor: Position | null;
 
-    // If we have a grabOffset, calculate exact anchor position
+    // If we have a grabOffset, use sticky tolerance to find nearest valid placement
     if (activeDrag.grabOffset) {
-      anchor = {
+      const exactAnchor = {
         row: dragOverCell.row - activeDrag.grabOffset.row,
         col: dragOverCell.col - activeDrag.grabOffset.col,
       };
-      // Validate this specific placement
-      if (!canPlacePiece(board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
+      // Use sticky tolerance (same as handleDragEnd)
+      anchor = findNearestValidPlacement(board, activeDrag.pentominoId, exactAnchor, activeDrag.rotation, 1);
+      if (!anchor) {
         return new Set<string>();
       }
     } else {
@@ -185,8 +179,12 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
         {board.cells.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const key = `${rowIndex},${colIndex}`;
-            const isHoverPreview = hoverPreviewCells.has(key);
             const isDragPreview = dragPreviewCells.has(key);
+
+            // Check if this specific cell should show hover highlight
+            const isHoverHighlight = isHoverEligible &&
+              hoverPosition?.row === rowIndex &&
+              hoverPosition?.col === colIndex;
 
             // Hide cells of piece being dragged from board
             const isBeingDragged = draggingFromBoardPieceId !== null &&
@@ -202,15 +200,9 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
                 cell={isBeingDragged ? { state: 'playable' } : cell}
                 row={rowIndex}
                 col={colIndex}
-                isPreview={isHoverPreview}
                 isDragPreview={isDragPreview}
-                previewPentominoId={
-                  isDragPreview
-                    ? activeDrag?.pentominoId
-                    : isHoverPreview
-                      ? selectedPieceId ?? undefined
-                      : undefined
-                }
+                isHoverHighlight={isHoverHighlight}
+                previewPentominoId={isDragPreview ? activeDrag?.pentominoId : undefined}
                 pieceRotation={pieceRotation}
                 pieceAnchorPosition={cell.pentominoId ? pieceAnchorMap.get(cell.pentominoId) : undefined}
                 onClick={() => handleCellClick(rowIndex, colIndex)}

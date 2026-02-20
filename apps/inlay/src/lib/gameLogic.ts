@@ -284,3 +284,44 @@ export function findAnchorForClickedCell(
   }
   return null;
 }
+
+/**
+ * Find a valid placement near the target position.
+ * Tries the exact position first, then searches nearby cells within tolerance.
+ * Used for "sticky" drag-and-drop that snaps to valid positions.
+ */
+export function findNearestValidPlacement(
+  board: Board,
+  pentominoId: PentominoId,
+  targetAnchor: Position,
+  rotation: Rotation,
+  maxDistance: number = 1
+): Position | null {
+  // Try exact position first
+  if (canPlacePiece(board, pentominoId, targetAnchor, rotation)) {
+    return targetAnchor;
+  }
+
+  // Collect nearby positions with their Manhattan distances
+  const candidates: { pos: Position; dist: number }[] = [];
+
+  for (let dr = -maxDistance; dr <= maxDistance; dr++) {
+    for (let dc = -maxDistance; dc <= maxDistance; dc++) {
+      if (dr === 0 && dc === 0) continue; // Already tried exact
+      const pos = { row: targetAnchor.row + dr, col: targetAnchor.col + dc };
+      const dist = Math.abs(dr) + Math.abs(dc);
+      candidates.push({ pos, dist });
+    }
+  }
+
+  // Sort by distance (prefer closer positions)
+  candidates.sort((a, b) => a.dist - b.dist);
+
+  for (const { pos } of candidates) {
+    if (canPlacePiece(board, pentominoId, pos, rotation)) {
+      return pos;
+    }
+  }
+
+  return null;
+}

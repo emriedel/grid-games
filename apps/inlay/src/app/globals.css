@@ -18,6 +18,7 @@
   /* Board styling */
   --board-bg: #1c1c1c;
   --cell-playable: #2a2a2a;
+  --cell-hover: #3a3a3a;
   --cell-dead: #0f0f0f;
   --cell-border: #3f3f46;
 

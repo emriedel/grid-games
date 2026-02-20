@@ -9,7 +9,7 @@ interface CellProps {
   cell: BoardCell;
   row: number;
   col: number;
-  isPreview?: boolean;
+  isHoverHighlight?: boolean;
   previewPentominoId?: PentominoId;
   isDragPreview?: boolean;
   pieceRotation?: Rotation;
@@ -22,7 +22,7 @@ export function Cell({
   cell,
   row,
   col,
-  isPreview = false,
+  isHoverHighlight = false,
   previewPentominoId,
   isDragPreview = false,
   pieceRotation = 0,
@@ -63,17 +63,20 @@ export function Cell({
     if (cell.state === 'dead') {
       return 'var(--cell-dead)';
     }
-    if ((isPreview || isDragPreview) && previewPentominoId) {
+    if (isDragPreview && previewPentominoId) {
       return PENTOMINOES[previewPentominoId].color;
     }
     if (cell.state === 'filled' && cell.pentominoId) {
       return PENTOMINOES[cell.pentominoId].color;
     }
-    // Note: removed isOver highlighting since drag preview already shows where piece will land
+    // Hover highlight: brighter background for eligible click targets
+    if (isHoverHighlight) {
+      return 'var(--cell-hover)';
+    }
     return 'var(--cell-playable)';
-  }, [cell.state, cell.pentominoId, isPreview, isDragPreview, previewPentominoId]);
+  }, [cell.state, cell.pentominoId, isDragPreview, previewPentominoId, isHoverHighlight]);
 
-  const opacity = isPreview || isDragPreview || isDragging ? 0.6 : 1;
+  const opacity = isDragPreview || isDragging ? 0.6 : 1;
 
   // Dead cells are not interactive
   if (cell.state === 'dead') {
