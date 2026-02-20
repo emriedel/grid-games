@@ -10,7 +10,7 @@ export const trioConfig = defineGameConfig({
   id: 'trio',
   name: 'Trio',
   icon: 'https://nerdcube.games/icons/trio.png',
-  description: 'Find all five Trios of shapes!',
+  description: 'Find all five Trios of shapes',
   theme: trioTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {

@@ -10,6 +10,15 @@ export interface GameInfo {
 
 export const GAMES: GameInfo[] = [
   {
+    id: 'dabble',
+    name: 'Dabble',
+    description: 'Build the highest-scoring words on a unique daily board',
+    accentColor: '#c41e3a',
+    href: '/dabble',
+    hasArchive: true,
+    launchDate: '2026-02-01',
+  },
+  {
     id: 'carom',
     name: 'Carom',
     description: 'Slide pieces around a grid to reach the goal in the fewest moves',
@@ -19,11 +28,20 @@ export const GAMES: GameInfo[] = [
     launchDate: '2026-02-01',
   },
   {
-    id: 'dabble',
-    name: 'Dabble',
-    description: 'Build the highest-scoring words on a unique daily board',
-    accentColor: '#c41e3a',
-    href: '/dabble',
+    id: 'inlay',
+    name: 'Inlay',
+    description: 'Fill the target shape using pentomino pieces',
+    accentColor: '#0da678',
+    href: '/inlay',
+    hasArchive: true,
+    launchDate: '2026-02-01',
+  },
+  {
+    id: 'trio',
+    name: 'Trio',
+    description: 'Find all five groups of shapes that make up a Trio',
+    accentColor: '#06b6d4',
+    href: '/trio',
     hasArchive: true,
     launchDate: '2026-02-01',
   },
@@ -36,15 +54,6 @@ export const GAMES: GameInfo[] = [
     hasArchive: true,
     launchDate: '2026-02-01',
   },
-  {
-    id: 'trio',
-    name: 'Trio',
-    description: 'Find all five sets of three matching cards',
-    accentColor: '#06b6d4',
-    href: '/trio',
-    hasArchive: true,
-    launchDate: '2026-02-01',
-  },
   // {
   //   id: 'edgewise',
   //   name: 'Edgewise',
@@ -52,17 +61,8 @@ export const GAMES: GameInfo[] = [
   //   accentColor: '#9333ea',
   //   href: '/edgewise',
   //   hasArchive: true,
-  //   launchDate: '2026-01-25',
+  //   launchDate: '2026-02-01',
   // },
-  {
-    id: 'inlay',
-    name: 'Inlay',
-    description: 'Fill the target shape using pentomino pieces',
-    accentColor: '#0da678',
-    href: '/inlay',
-    hasArchive: true,
-    launchDate: '2026-02-01',
-  },
 ];
 
 export function getIconUrl(gameId: string): string {
