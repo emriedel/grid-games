@@ -12,7 +12,7 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
     <Modal isOpen={isOpen} onClose={onClose} title="How to Play">
       <div className="space-y-4 text-[var(--foreground)]">
         <p className="text-[var(--muted)]">
-          Fill the shape completely using the given pentomino pieces. Each piece covers exactly 5 squares.
+          Fill the shape completely using the given pentomino pieces.
         </p>
 
         <section>
@@ -20,7 +20,7 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
           <ul className="list-disc list-inside text-[var(--muted)] space-y-1">
             <li><strong>Tap a piece</strong> to select it</li>
             <li><strong>Tap again</strong> to rotate 90°</li>
-            <li><strong>Tap the board</strong> to place</li>
+            <li><strong>Tap the board</strong> or <strong>drag a piece</strong> to place</li>
             <li><strong>Tap a placed piece</strong> to remove it</li>
           </ul>
         </section>
