@@ -295,9 +295,10 @@ export function Game() {
       // Store rotation before removing so piece returns to bank with same orientation
       setBankRotations((prev) => new Map(prev).set(pentominoId, placement.rotation));
       removePieceFromBoard(pentominoId);
-      deselectPiece();
+      // Note: Don't call deselectPiece() here - REMOVE_PIECE already selects the
+      // removed piece with its rotation preserved, allowing immediate re-rotation
     }
-  }, [state.placedPieces, removePieceFromBoard, deselectPiece]);
+  }, [state.placedPieces, removePieceFromBoard]);
 
   // Handler for tapping placed pieces in the bank (remove from board)
   const handlePieceRemove = useCallback((pentominoId: PentominoId) => {
