@@ -32,7 +32,7 @@ export function PiecePreview({
   const anchorCell = getAnchorCell(pentominoId, rotation);
 
   // Set up draggable
-  const dragData: DragData = { type: 'piece', pentominoId, rotation };
+  const dragData: DragData = { type: 'piece', pentominoId, rotation, grabOffset: anchorCell };
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `piece-${pentominoId}`,
     data: dragData,

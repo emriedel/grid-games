@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   DndContext,
+  DragOverlay,
   useSensors,
   useSensor,
   PointerSensor,
@@ -23,6 +24,7 @@ import { useGameState } from '@/hooks/useGameState';
 import { Board } from './Board';
 import { PieceTray } from './PieceTray';
 import { HowToPlayModal } from './HowToPlayModal';
+import { DragOverlayPiece } from './DragOverlayPiece';
 import {
   loadPuzzleByNumber,
   getTodayPuzzleNumber,
@@ -35,8 +37,7 @@ import {
   saveCompletedState,
   hasCompletedPuzzle,
 } from '@/lib/storage';
-import { canPlacePiece } from '@/lib/gameLogic';
-import { getAnchorCell } from '@/constants/pentominoes';
+import { canPlacePiece, findAnchorForClickedCell } from '@/lib/gameLogic';
 import { inlayConfig } from '@/config';
 import type { Position, PentominoId, DragData, Rotation, PlacedPiece, Puzzle } from '@/types';
 import { getPentominoCells } from '@/constants/pentominoes';
@@ -130,6 +131,12 @@ export function Game() {
 
   // Error feedback state - briefly shows error on bank piece
   const [errorPieceId, setErrorPieceId] = useState<PentominoId | null>(null);
+
+  // Track rotations of pieces returned to the bank
+  const [bankRotations, setBankRotations] = useState<Map<PentominoId, Rotation>>(new Map());
+
+  // Board cell size for DragOverlay
+  const [boardCellSize, setBoardCellSize] = useState(40);
 
   // Game state
   const {
@@ -279,44 +286,81 @@ export function Game() {
 
   const handlePieceClick = useCallback((pentominoId: PentominoId) => {
     // If clicking on a placed piece on the board, remove it
-    const isPlaced = state.placedPieces.some((p) => p.pentominoId === pentominoId);
-    if (isPlaced) {
+    const placement = state.placedPieces.find((p) => p.pentominoId === pentominoId);
+    if (placement) {
+      // Store rotation before removing so piece returns to bank with same orientation
+      setBankRotations((prev) => new Map(prev).set(pentominoId, placement.rotation));
       removePieceFromBoard(pentominoId);
+      deselectPiece();
     }
-  }, [state.placedPieces, removePieceFromBoard]);
+  }, [state.placedPieces, removePieceFromBoard, deselectPiece]);
 
   // Handler for tapping placed pieces in the bank (remove from board)
   const handlePieceRemove = useCallback((pentominoId: PentominoId) => {
+    const placement = state.placedPieces.find((p) => p.pentominoId === pentominoId);
+    if (placement) {
+      // Store rotation before removing so piece returns to bank with same orientation
+      setBankRotations((prev) => new Map(prev).set(pentominoId, placement.rotation));
+    }
     removePieceFromBoard(pentominoId);
-  }, [removePieceFromBoard]);
+  }, [state.placedPieces, removePieceFromBoard]);
 
-  // Build rotation map from placed pieces (for syncing bank icon rotation)
+  // Build rotation map from bank rotations and placed pieces
+  // Bank rotations are used for pieces returned to tray, placed pieces override them
   const pieceRotations = useMemo(() => {
-    const map = new Map<PentominoId, Rotation>();
+    const map = new Map<PentominoId, Rotation>(bankRotations);
     for (const piece of state.placedPieces) {
       map.set(piece.pentominoId, piece.rotation);
     }
     return map;
-  }, [state.placedPieces]);
+  }, [state.placedPieces, bankRotations]);
+
+  // Calculate if current drag position is valid
+  // When grabOffset exists, use it to check the exact placement position
+  const isDragValid = useMemo(() => {
+    if (!activeDrag || !dragOverCell || !state.board) return false;
+
+    // If we have a grabOffset, check the exact placement
+    if (activeDrag.grabOffset) {
+      const anchor = {
+        row: dragOverCell.row - activeDrag.grabOffset.row,
+        col: dragOverCell.col - activeDrag.grabOffset.col,
+      };
+      return canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation);
+    }
+
+    // Fallback: check if any valid placement exists
+    const anchor = findAnchorForClickedCell(state.board, activeDrag.pentominoId, dragOverCell, activeDrag.rotation);
+    return anchor !== null;
+  }, [activeDrag, dragOverCell, state.board]);
+
+  // Calculate pixel offset for DragOverlay to align with board preview
+  const dragOverlayOffset = useMemo(() => {
+    if (!activeDrag?.grabOffset) return { x: 0, y: 0 };
+    const gap = 2; // Must match DragOverlayPiece gap
+    return {
+      x: -(activeDrag.grabOffset.col * (boardCellSize + gap)),
+      y: -(activeDrag.grabOffset.row * (boardCellSize + gap)),
+    };
+  }, [activeDrag?.grabOffset, boardCellSize]);
 
   // Drag and drop handlers
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const data = event.active.data.current as DragData;
     if (data?.type === 'piece') {
       setActiveDrag(data);
-      // Deselect any currently selected piece when starting a drag
-      deselectPiece();
+      // DON'T deselect - keep the piece selected to preserve rotation state in tray
     } else if (data?.type === 'board-piece') {
       // Dragging from board - store original placement and remove from board
       const placement = state.placedPieces.find((p) => p.pentominoId === data.pentominoId);
       if (placement) {
         setDragOriginalPlacement(placement);
         removePieceFromBoard(data.pentominoId);
-        // Set active drag with the piece data
-        setActiveDrag({ type: 'piece', pentominoId: data.pentominoId, rotation: data.rotation });
+        // Set active drag with the piece data, preserving grab offset
+        setActiveDrag({ type: 'piece', pentominoId: data.pentominoId, rotation: data.rotation, grabOffset: data.grabOffset });
       }
     }
-  }, [deselectPiece, state.placedPieces, removePieceFromBoard]);
+  }, [state.placedPieces, removePieceFromBoard]);
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
     const { over } = event;
@@ -333,16 +377,27 @@ export function Game() {
 
     if (activeDrag && over?.data.current && state.board) {
       const { row, col } = over.data.current as { row: number; col: number };
+      const dropCell = { row, col };
 
-      // Calculate anchor position based on the designated anchor cell
-      const anchorOffset = getAnchorCell(activeDrag.pentominoId, activeDrag.rotation);
-      const anchor: Position = {
-        row: row - anchorOffset.row,
-        col: col - anchorOffset.col,
-      };
+      let anchor: Position | null;
+
+      // If we have a grabOffset, calculate exact anchor
+      if (activeDrag.grabOffset) {
+        anchor = {
+          row: dropCell.row - activeDrag.grabOffset.row,
+          col: dropCell.col - activeDrag.grabOffset.col,
+        };
+        // Validate placement
+        if (!canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
+          anchor = null;
+        }
+      } else {
+        // Fallback: find any valid anchor
+        anchor = findAnchorForClickedCell(state.board, activeDrag.pentominoId, dropCell, activeDrag.rotation);
+      }
 
       // Check if placement is valid and place the piece
-      if (canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
+      if (anchor) {
         // Only select if not already selected (REMOVE_PIECE already selects when dragging from board)
         // Calling selectPiece on an already-selected piece would rotate it
         if (state.selectedPieceId !== activeDrag.pentominoId) {
@@ -350,17 +405,18 @@ export function Game() {
         }
         // Pass rotation explicitly from activeDrag
         tryPlacePiece(anchor, activeDrag.rotation);
+        // Deselect after successful placement
+        deselectPiece();
       }
-      // If placement failed but dropped on board, piece stays in bank
+      // If placement failed, piece stays in bank with rotation preserved (still selected)
     }
-    // If dropped off board (no over target), piece stays in bank
-    // (piece was already removed from board when drag started)
+    // If dropped off board (no over target), piece stays in bank with rotation preserved
 
     // Reset drag state
     setActiveDrag(null);
     setDragOverCell(null);
     setDragOriginalPlacement(null);
-  }, [activeDrag, state.board, state.selectedPieceId, selectPiece, tryPlacePiece]);
+  }, [activeDrag, state.board, state.selectedPieceId, selectPiece, tryPlacePiece, deselectPiece]);
 
   const handleDragCancel = useCallback(() => {
     // If dragging from board and cancelled, restore original placement with rotation
@@ -449,6 +505,7 @@ https://nerdcube.games/inlay`;
             onCellClick={handleCellClick}
             onPieceClick={handlePieceClick}
             onInvalidPlacement={handleInvalidPlacement}
+            onCellSizeChange={setBoardCellSize}
           />
 
           {/* Piece tray (only when playing) */}
@@ -499,6 +556,19 @@ https://nerdcube.games/inlay`;
         />
       </GameContainer>
 
+      {/* Drag Overlay - shows piece at cursor during drag */}
+      <DragOverlay dropAnimation={null}>
+        {activeDrag && (
+          <div style={{ transform: `translate(${dragOverlayOffset.x}px, ${dragOverlayOffset.y}px)` }}>
+            <DragOverlayPiece
+              pentominoId={activeDrag.pentominoId}
+              rotation={activeDrag.rotation}
+              cellSize={boardCellSize}
+              isValid={isDragValid}
+            />
+          </div>
+        )}
+      </DragOverlay>
     </DndContext>
   );
 }

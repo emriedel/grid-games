@@ -117,5 +117,5 @@ export interface InlayPuzzleState {
 
 /** Drag and drop data */
 export type DragData =
-  | { type: 'piece'; pentominoId: PentominoId; rotation: Rotation }
-  | { type: 'board-piece'; pentominoId: PentominoId; rotation: Rotation; position: Position };
+  | { type: 'piece'; pentominoId: PentominoId; rotation: Rotation; grabOffset?: CellOffset }
+  | { type: 'board-piece'; pentominoId: PentominoId; rotation: Rotation; position: Position; grabOffset?: CellOffset };

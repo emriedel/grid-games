@@ -10,7 +10,7 @@ export const inlayConfig = defineGameConfig({
   id: 'inlay',
   name: 'Inlay',
   icon: 'https://nerdcube.games/icons/inlay.png',
-  description: 'Fill the target shape using pentomino pieces',
+  description: 'Fill the shape using the given pentomino pieces',
   theme: inlayTheme,
   homeUrl: '/',
   getPuzzleInfo: () => {

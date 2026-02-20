@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
-import type { BoardCell, PentominoId, Rotation, DragData } from '@/types';
+import type { BoardCell, PentominoId, Rotation, DragData, Position } from '@/types';
 import { PENTOMINOES } from '@/constants/pentominoes';
 
 interface CellProps {
@@ -13,6 +13,7 @@ interface CellProps {
   previewPentominoId?: PentominoId;
   isDragPreview?: boolean;
   pieceRotation?: Rotation;
+  pieceAnchorPosition?: Position;
   onClick?: () => void;
   onMouseEnter?: () => void;
 }
@@ -25,6 +26,7 @@ export function Cell({
   previewPentominoId,
   isDragPreview = false,
   pieceRotation = 0,
+  pieceAnchorPosition,
   onClick,
   onMouseEnter,
 }: CellProps) {
@@ -37,7 +39,16 @@ export function Cell({
 
   // Set up draggable (for filled cells)
   const dragData: DragData | undefined = cell.state === 'filled' && cell.pentominoId
-    ? { type: 'board-piece', pentominoId: cell.pentominoId, rotation: pieceRotation, position: { row, col } }
+    ? {
+        type: 'board-piece',
+        pentominoId: cell.pentominoId,
+        rotation: pieceRotation,
+        position: { row, col },
+        grabOffset: pieceAnchorPosition ? {
+          row: row - pieceAnchorPosition.row,
+          col: col - pieceAnchorPosition.col,
+        } : undefined,
+      }
     : undefined;
   const { setNodeRef: setDragRef, attributes, listeners, isDragging } = useDraggable({
     id: `board-piece-${row}-${col}`,
@@ -58,11 +69,9 @@ export function Cell({
     if (cell.state === 'filled' && cell.pentominoId) {
       return PENTOMINOES[cell.pentominoId].color;
     }
-    if (isOver) {
-      return 'var(--accent-secondary)';
-    }
+    // Note: removed isOver highlighting since drag preview already shows where piece will land
     return 'var(--cell-playable)';
-  }, [cell.state, cell.pentominoId, isPreview, isDragPreview, previewPentominoId, isOver]);
+  }, [cell.state, cell.pentominoId, isPreview, isDragPreview, previewPentominoId]);
 
   const opacity = isPreview || isDragPreview || isDragging ? 0.6 : 1;
 

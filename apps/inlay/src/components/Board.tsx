@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import type { Board as BoardType, Position, PentominoId, Rotation, DragData, PlacedPiece } from '@/types';
 import { Cell } from './Cell';
 import { getPieceCells, canPlacePiece, findAnchorForClickedCell } from '@/lib/gameLogic';
-import { getAnchorCell } from '@/constants/pentominoes';
 
 interface BoardProps {
   board: BoardType;
@@ -16,6 +15,7 @@ interface BoardProps {
   onCellClick: (position: Position) => void;
   onPieceClick: (pentominoId: PentominoId) => void;
   onInvalidPlacement?: () => void;
+  onCellSizeChange?: (size: number) => void;
 }
 
 export function Board({
@@ -28,9 +28,43 @@ export function Board({
   onCellClick,
   onPieceClick,
   onInvalidPlacement,
+  onCellSizeChange,
 }: BoardProps) {
   // Track hover position for preview
   const [hoverPosition, setHoverPosition] = useState<Position | null>(null);
+
+  // Ref to measure cell size
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // Measure and report cell size on mount and resize
+  useEffect(() => {
+    if (!onCellSizeChange || !gridRef.current) return;
+
+    const measureCellSize = () => {
+      if (!gridRef.current) return;
+      // Find the first cell element and measure it
+      const firstCell = gridRef.current.querySelector('[role="button"], div');
+      if (firstCell) {
+        const rect = firstCell.getBoundingClientRect();
+        // Use width since cells are square (aspect-square)
+        if (rect.width > 0) {
+          onCellSizeChange(rect.width);
+        }
+      }
+    };
+
+    // Initial measurement after layout
+    const timer = setTimeout(measureCellSize, 0);
+
+    // Set up ResizeObserver for responsive changes
+    const observer = new ResizeObserver(measureCellSize);
+    observer.observe(gridRef.current);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [onCellSizeChange]);
 
   // Calculate preview cells for hover position (click-to-place)
   const hoverPreviewCells = useMemo(() => {
@@ -48,20 +82,31 @@ export function Board({
   }, [board, selectedPieceId, selectedRotation, hoverPosition]);
 
   // Calculate preview cells for drag-and-drop
+  // When grabOffset exists, use it to calculate exact anchor position
+  // This ensures board preview matches the overlay position exactly
   const dragPreviewCells = useMemo(() => {
     if (!activeDrag || !dragOverCell) {
       return new Set<string>();
     }
 
-    // Use anchor-based positioning for drag preview too
-    const anchorOffset = getAnchorCell(activeDrag.pentominoId, activeDrag.rotation);
-    const anchor: Position = {
-      row: dragOverCell.row - anchorOffset.row,
-      col: dragOverCell.col - anchorOffset.col,
-    };
+    let anchor: Position | null;
 
-    if (!canPlacePiece(board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
-      return new Set<string>();
+    // If we have a grabOffset, calculate exact anchor position
+    if (activeDrag.grabOffset) {
+      anchor = {
+        row: dragOverCell.row - activeDrag.grabOffset.row,
+        col: dragOverCell.col - activeDrag.grabOffset.col,
+      };
+      // Validate this specific placement
+      if (!canPlacePiece(board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
+        return new Set<string>();
+      }
+    } else {
+      // Fallback: find any valid anchor (for tray pieces without grabOffset)
+      anchor = findAnchorForClickedCell(board, activeDrag.pentominoId, dragOverCell, activeDrag.rotation);
+      if (!anchor) {
+        return new Set<string>();
+      }
     }
 
     const cells = getPieceCells(activeDrag.pentominoId, anchor, activeDrag.rotation);
@@ -73,6 +118,15 @@ export function Board({
     const map = new Map<PentominoId, Rotation>();
     for (const piece of placedPieces) {
       map.set(piece.pentominoId, piece.rotation);
+    }
+    return map;
+  }, [placedPieces]);
+
+  // Build a map of pentominoId -> anchor position from placedPieces
+  const pieceAnchorMap = useMemo(() => {
+    const map = new Map<PentominoId, Position>();
+    for (const piece of placedPieces) {
+      map.set(piece.pentominoId, piece.position);
     }
     return map;
   }, [placedPieces]);
@@ -126,7 +180,7 @@ export function Board({
       className="w-full bg-[var(--board-bg)] p-1 sm:p-1.5 rounded-lg overflow-hidden"
       onMouseLeave={handleBoardLeave}
     >
-      <div style={gridStyle}>
+      <div ref={gridRef} style={gridStyle}>
         {board.cells.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const key = `${rowIndex},${colIndex}`;
@@ -157,6 +211,7 @@ export function Board({
                       : undefined
                 }
                 pieceRotation={pieceRotation}
+                pieceAnchorPosition={cell.pentominoId ? pieceAnchorMap.get(cell.pentominoId) : undefined}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
                 onMouseEnter={() => handleCellHover(rowIndex, colIndex)}
               />
