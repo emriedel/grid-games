@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   DndContext,
@@ -12,6 +12,7 @@ import {
   type DragStartEvent,
   type DragOverEvent,
   type DragEndEvent,
+  type DragMoveEvent,
 } from '@dnd-kit/core';
 import {
   LandingScreen,
@@ -137,6 +138,9 @@ export function Game() {
 
   // Board cell size for DragOverlay
   const [boardCellSize, setBoardCellSize] = useState(40);
+
+  // Board ref for calculating drag overlay position
+  const boardRef = useRef<HTMLDivElement>(null);
 
   // Game state
   const {
@@ -362,30 +366,64 @@ export function Game() {
     }
   }, [state.placedPieces, removePieceFromBoard]);
 
-  const handleDragOver = useCallback((event: DragOverEvent) => {
-    const { over } = event;
-    if (over?.data.current) {
-      const { row, col } = over.data.current as { row: number; col: number };
-      setDragOverCell({ row, col });
+  // Calculate dragOverCell from pointer position
+  // The grabbed cell of the overlay is always at the pointer (because dragOverlayOffset shifts it there)
+  // So we use the pointer position to calculate which board cell the grabbed cell is over
+  const handleDragMove = useCallback((event: DragMoveEvent) => {
+    if (!boardRef.current) return;
+
+    // Get initial pointer position from the activator event
+    const activatorEvent = event.activatorEvent as PointerEvent | MouseEvent | TouchEvent;
+    let initialX: number;
+    let initialY: number;
+
+    if ('touches' in activatorEvent && activatorEvent.touches.length > 0) {
+      initialX = activatorEvent.touches[0].clientX;
+      initialY = activatorEvent.touches[0].clientY;
+    } else if ('clientX' in activatorEvent) {
+      initialX = activatorEvent.clientX;
+      initialY = activatorEvent.clientY;
     } else {
-      setDragOverCell(null);
+      return;
     }
+
+    // Current pointer position = initial + delta
+    const pointerX = initialX + event.delta.x;
+    const pointerY = initialY + event.delta.y;
+
+    // The grabbed cell of the overlay is at the pointer position
+    // (because dragOverlayOffset shifts the overlay so grabbed cell aligns with cursor)
+
+    // Convert pointer to board cell coordinates
+    const boardRect = boardRef.current.getBoundingClientRect();
+    const gap = 2;
+    const cellStride = boardCellSize + gap;
+    const computedStyle = window.getComputedStyle(boardRef.current);
+    const boardPadding = parseFloat(computedStyle.paddingLeft) || 4;
+
+    const col = Math.floor((pointerX - boardRect.left - boardPadding) / cellStride);
+    const row = Math.floor((pointerY - boardRect.top - boardPadding) / cellStride);
+
+    setDragOverCell({ row, col });
+  }, [boardCellSize]);
+
+  const handleDragOver = useCallback((_event: DragOverEvent) => {
+    // dragOverCell is now calculated in handleDragMove
+    // This handler is kept for potential future use
   }, []);
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { over } = event;
+  const handleDragEnd = useCallback((_event: DragEndEvent) => {
+    // Use dragOverCell which is calculated from overlay position (not collision detection)
+    // This ensures the drop position matches where the preview was shown
 
-    if (activeDrag && over?.data.current && state.board) {
-      const { row, col } = over.data.current as { row: number; col: number };
-      const dropCell = { row, col };
-
+    if (activeDrag && dragOverCell && state.board) {
       let anchor: Position | null;
 
       // If we have a grabOffset, calculate exact anchor
       if (activeDrag.grabOffset) {
         anchor = {
-          row: dropCell.row - activeDrag.grabOffset.row,
-          col: dropCell.col - activeDrag.grabOffset.col,
+          row: dragOverCell.row - activeDrag.grabOffset.row,
+          col: dragOverCell.col - activeDrag.grabOffset.col,
         };
         // Validate placement
         if (!canPlacePiece(state.board, activeDrag.pentominoId, anchor, activeDrag.rotation)) {
@@ -393,7 +431,7 @@ export function Game() {
         }
       } else {
         // Fallback: find any valid anchor
-        anchor = findAnchorForClickedCell(state.board, activeDrag.pentominoId, dropCell, activeDrag.rotation);
+        anchor = findAnchorForClickedCell(state.board, activeDrag.pentominoId, dragOverCell, activeDrag.rotation);
       }
 
       // Check if placement is valid and place the piece
@@ -416,7 +454,7 @@ export function Game() {
     setActiveDrag(null);
     setDragOverCell(null);
     setDragOriginalPlacement(null);
-  }, [activeDrag, state.board, state.selectedPieceId, selectPiece, tryPlacePiece, deselectPiece]);
+  }, [activeDrag, dragOverCell, state.board, state.selectedPieceId, selectPiece, tryPlacePiece, deselectPiece]);
 
   const handleDragCancel = useCallback(() => {
     // If dragging from board and cancelled, restore original placement with rotation
@@ -479,6 +517,7 @@ https://nerdcube.games/inlay`;
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
+      onDragMove={handleDragMove}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
@@ -496,6 +535,7 @@ https://nerdcube.games/inlay`;
         <div className="flex flex-col items-center gap-4 py-4 px-2 sm:px-4 w-full max-w-md mx-auto">
           {/* Board */}
           <Board
+            ref={boardRef}
             board={state.board}
             selectedPieceId={state.selectedPieceId}
             selectedRotation={state.selectedRotation}

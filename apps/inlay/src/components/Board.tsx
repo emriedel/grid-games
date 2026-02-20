@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useCallback, useRef, useEffect } from 'react';
+import { useMemo, useState, useCallback, useRef, useEffect, forwardRef } from 'react';
 import type { Board as BoardType, Position, PentominoId, Rotation, DragData, PlacedPiece } from '@/types';
 import { Cell } from './Cell';
 import { getPieceCells, canPlacePiece, findAnchorForClickedCell } from '@/lib/gameLogic';
@@ -18,7 +18,7 @@ interface BoardProps {
   onCellSizeChange?: (size: number) => void;
 }
 
-export function Board({
+export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   board,
   selectedPieceId,
   selectedRotation,
@@ -29,7 +29,7 @@ export function Board({
   onPieceClick,
   onInvalidPlacement,
   onCellSizeChange,
-}: BoardProps) {
+}, ref) {
   // Track hover position for preview
   const [hoverPosition, setHoverPosition] = useState<Position | null>(null);
 
@@ -177,6 +177,7 @@ export function Board({
 
   return (
     <div
+      ref={ref}
       className="w-full bg-[var(--board-bg)] p-1 sm:p-1.5 rounded-lg overflow-hidden"
       onMouseLeave={handleBoardLeave}
     >
@@ -221,4 +222,4 @@ export function Board({
       </div>
     </div>
   );
-}
+});
