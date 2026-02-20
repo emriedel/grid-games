@@ -41,6 +41,45 @@ interface PoolFile {
 const MAX_BOARD_ROWS = 7;
 const MAX_BOARD_COLS = 6;
 
+// ============ Shape Trimming ============
+
+/**
+ * Trim dead rows/columns from edges of a shape.
+ * Returns a new shape with dead edges removed.
+ */
+function trimShape(shape: boolean[][]): boolean[][] {
+  if (shape.length === 0) return shape;
+
+  // Find first/last rows with playable cells
+  let firstRow = 0;
+  let lastRow = shape.length - 1;
+  while (firstRow < shape.length && shape[firstRow].every((cell) => !cell)) {
+    firstRow++;
+  }
+  while (lastRow >= 0 && shape[lastRow].every((cell) => !cell)) {
+    lastRow--;
+  }
+
+  // Find first/last cols with playable cells
+  const cols = shape[0].length;
+  let firstCol = 0;
+  let lastCol = cols - 1;
+  while (firstCol < cols && shape.every((row) => !row[firstCol])) {
+    firstCol++;
+  }
+  while (lastCol >= 0 && shape.every((row) => !row[lastCol])) {
+    lastCol--;
+  }
+
+  // Extract trimmed shape
+  const trimmed: boolean[][] = [];
+  for (let r = firstRow; r <= lastRow; r++) {
+    trimmed.push(shape[r].slice(firstCol, lastCol + 1));
+  }
+
+  return trimmed;
+}
+
 // ============ All Pentomino IDs ============
 
 const ALL_PENTOMINO_IDS: PentominoId[] = ['F', 'I', 'L', 'N', 'P', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -140,8 +179,8 @@ function createRectangleWithRandomHoles(
   const totalCells = baseRows * baseCols;
   const targetPlayable = totalCells - deadCellCount;
 
-  // Must be divisible by 5 and result in max 6 pieces
-  if (targetPlayable % 5 !== 0 || targetPlayable > 30 || targetPlayable < 20) {
+  // Must be divisible by 5 and result in 5-6 pieces (25-30 cells)
+  if (targetPlayable % 5 !== 0 || targetPlayable > 30 || targetPlayable < 25) {
     return null;
   }
 
@@ -186,12 +225,15 @@ function createRectangleWithRandomHoles(
     return null;
   }
 
-  const playableCells = shape.flat().filter((c) => c).length;
+  // Trim dead edges from the shape
+  const trimmedShape = trimShape(shape);
+
+  const playableCells = trimmedShape.flat().filter((c) => c).length;
   const pieceCount = playableCells / 5;
 
   return {
     name: `Rectangle Variant ${variantId}`,
-    shape,
+    shape: trimmedShape,
     pieceCount,
   };
 }
@@ -296,7 +338,7 @@ function createRectangleWithHole(
  * '█' or '#' = playable, '.' or ' ' = dead
  */
 function createShapeFromPattern(pattern: string[], name: string): ShapeDefinition {
-  const shape: boolean[][] = [];
+  let shape: boolean[][] = [];
   for (const row of pattern) {
     const boolRow: boolean[] = [];
     for (const char of row) {
@@ -304,6 +346,8 @@ function createShapeFromPattern(pattern: string[], name: string): ShapeDefinitio
     }
     shape.push(boolRow);
   }
+  // Trim dead edges from the shape
+  shape = trimShape(shape);
   const cells = shape.flat().filter((c) => c).length;
   if (cells % 5 !== 0) {
     throw new Error(`Shape ${name} has ${cells} cells, not divisible by 5`);
@@ -712,7 +756,6 @@ function getShapeDefinitions(): ShapeDefinition[] {
   // Simple rectangles - vertical orientations that fit within constraints
   shapes.push(createRectangle(5, 5, '5x5 Rectangle')); // 25 cells = 5 pieces, 5 rows
   shapes.push(createRectangle(6, 5, '6x5 Rectangle')); // 30 cells = 6 pieces, 6 rows
-  shapes.push(createRectangle(7, 5, '7x5 Rectangle')); // 35 cells = 7 pieces, 7 rows (max height)
   shapes.push(create6x5Rectangle()); // 30 cells = 6 pieces, 5 rows x 6 cols
 
   // Generate rectangle variants with dead cells (only those that fit in 7 rows)
@@ -753,7 +796,6 @@ function getShapeDefinitions(): ShapeDefinition[] {
   // Themed shapes - Classic (all 6-7 rows, 5-6 cols)
   shapes.push(createHeart()); // 25 cells = 5 pieces, 6 rows
   shapes.push(createDiamond()); // 25 cells = 5 pieces, 7 rows
-  shapes.push(createStar()); // 20 cells = 4 pieces, 6 rows
   shapes.push(createCrown()); // 25 cells = 5 pieces, 6 rows
   shapes.push(createLetterH()); // 30 cells = 6 pieces, 7 rows
 
@@ -779,15 +821,15 @@ function getShapeDefinitions(): ShapeDefinition[] {
   shapes.push(createShield()); // 25 cells = 5 pieces, 7 rows (redesigned)
   shapes.push(createLetterE()); // 25 cells = 5 pieces, 7 rows (redesigned)
 
-  // Filter to only valid shapes that fit within constraints
+  // Filter to only valid shapes that fit within constraints (5-6 pieces only)
   return shapes.filter((s) => {
     const cells = s.shape.flat().filter((c) => c).length;
     const rows = s.shape.length;
     const cols = s.shape[0].length;
     return (
       cells % 5 === 0 &&
-      s.pieceCount >= 4 &&
-      s.pieceCount <= 7 &&
+      s.pieceCount >= 5 &&
+      s.pieceCount <= 6 &&
       rows <= MAX_BOARD_ROWS &&
       cols <= MAX_BOARD_COLS
     );
