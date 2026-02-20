@@ -17,7 +17,7 @@ export interface InlayPuzzleState extends BasePuzzleState {
   };
 }
 
-const LAUNCH_DATE = new Date('2026-02-15T00:00:00');
+const LAUNCH_DATE = new Date('2026-02-01T00:00:00');
 
 const storage = createArchiveStorage<InlayPuzzleState>({
   gameId: 'inlay',
@@ -51,6 +51,7 @@ export function saveInProgressState(
     pieceRotations[piece.pentominoId] = piece.rotation;
   }
 
+  // Pass puzzleId as third argument so it's included in the storage key
   savePuzzleState(puzzleNumber, {
     puzzleNumber,
     puzzleId,
@@ -59,7 +60,7 @@ export function saveInProgressState(
       placedPieces: state.placedPieces,
       pieceRotations,
     },
-  });
+  }, puzzleId);
 }
 
 /**
@@ -77,6 +78,7 @@ export function saveCompletedState(
     pieceRotations[piece.pentominoId] = piece.rotation;
   }
 
+  // Pass puzzleId as third argument so it's included in the storage key
   savePuzzleState(puzzleNumber, {
     puzzleNumber,
     puzzleId,
@@ -85,26 +87,37 @@ export function saveCompletedState(
       placedPieces: state.placedPieces,
       pieceRotations,
     },
-  });
+  }, puzzleId);
 }
 
 /**
  * Check if a puzzle is completed (any version)
+ * Uses getSavedState for backward compatibility
  */
 export function hasCompletedPuzzle(puzzleNumber: number, puzzleId?: string): boolean {
-  return isPuzzleCompleted(puzzleNumber, puzzleId);
+  const state = getSavedState(puzzleNumber, puzzleId);
+  return state?.status === 'completed';
 }
 
 /**
  * Check if there's an in-progress game (any version)
+ * Uses getSavedState for backward compatibility
  */
 export function hasInProgressGame(puzzleNumber: number, puzzleId?: string): boolean {
-  return isPuzzleInProgress(puzzleNumber, puzzleId);
+  const state = getSavedState(puzzleNumber, puzzleId);
+  return state?.status === 'in-progress';
 }
 
 /**
  * Get saved puzzle state
+ * Uses findPuzzleState for backward compatibility with old saves that didn't include puzzleId in key
  */
 export function getSavedState(puzzleNumber: number, puzzleId?: string): InlayPuzzleState | null {
-  return getPuzzleState(puzzleNumber, puzzleId);
+  // First try exact match with puzzleId
+  if (puzzleId) {
+    const exactMatch = getPuzzleState(puzzleNumber, puzzleId);
+    if (exactMatch) return exactMatch;
+  }
+  // Fall back to scanning for any matching key (backward compatibility)
+  return findPuzzleState(puzzleNumber);
 }

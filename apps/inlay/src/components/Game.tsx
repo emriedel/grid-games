@@ -225,7 +225,22 @@ export function Game() {
             setLandingMode('completed');
           }
         } else if (savedState?.status === 'in-progress') {
-          setLandingMode('in-progress');
+          // Only show in-progress if there are actually pieces placed
+          if (savedState.data.placedPieces.length > 0) {
+            if (isArchiveMode) {
+              // For archive, restore state and start playing
+              restoreState({ placedPieces: savedState.data.placedPieces });
+              startGame();
+            } else {
+              setLandingMode('in-progress');
+            }
+          } else if (isArchiveMode) {
+            // Fresh archive puzzle with empty in-progress state
+            startGame();
+          }
+        } else if (isArchiveMode) {
+          // Fresh archive puzzle - start immediately
+          startGame();
         }
       }
 
@@ -233,24 +248,29 @@ export function Game() {
     }
 
     init();
-  }, [debugMode, targetPuzzleNumber, isArchiveMode, poolIdParam, loadPuzzle, restoreState]);
+  }, [debugMode, targetPuzzleNumber, isArchiveMode, poolIdParam, loadPuzzle, restoreState, startGame]);
 
   // Save state during gameplay
   useEffect(() => {
     if (state.phase === 'playing' && !debugMode && state.puzzle) {
-      saveInProgressState(puzzleNumber, state, puzzleId);
+      // Use state.puzzle.id to ensure we always have the correct puzzle ID
+      saveInProgressState(puzzleNumber, state, state.puzzle.id);
     }
-  }, [state, puzzleNumber, puzzleId, debugMode]);
+  }, [state, puzzleNumber, debugMode]);
 
   // Handle completion
   useEffect(() => {
     if (state.phase === 'finished' && state.won) {
       if (!debugMode && state.puzzle) {
-        saveCompletedState(puzzleNumber, state, puzzleId);
+        // Use state.puzzle.id to ensure we always have the correct puzzle ID
+        saveCompletedState(puzzleNumber, state, state.puzzle.id);
       }
-      setShowResults(true);
+      // Only auto-show results if we just completed the puzzle (not viewing a completed puzzle)
+      if (!exitedLanding) {
+        setShowResults(true);
+      }
     }
-  }, [state.phase, state.won, debugMode, puzzleNumber, puzzleId, state]);
+  }, [state.phase, state.won, debugMode, puzzleNumber, state, exitedLanding]);
 
   // Handlers
   const handlePlay = useCallback(() => {

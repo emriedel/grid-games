@@ -35,6 +35,12 @@ interface PoolFile {
   puzzles: PoolPuzzle[];
 }
 
+// ============ Board Constraints ============
+
+// Maximum board dimensions to ensure pieces fit on mobile
+const MAX_BOARD_ROWS = 7;
+const MAX_BOARD_COLS = 6;
+
 // ============ All Pentomino IDs ============
 
 const ALL_PENTOMINO_IDS: PentominoId[] = ['F', 'I', 'L', 'N', 'P', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -306,42 +312,23 @@ function createShapeFromPattern(pattern: string[], name: string): ShapeDefinitio
 }
 
 /**
- * Create a heart shape (25 cells = 5 pieces)
- * 4+5+5+5+3+3 = 25
+ * Create a heart shape (25 cells = 5 pieces) - 6 rows, 6 cols
+ * 4+6+6+4+3+2 = 25
  */
 function createHeart(): ShapeDefinition {
   const pattern = [
-    '.██.██.',
-    '.█████.',
-    '.█████.',
-    '.█████.',
-    '..███..',
-    '..███..',
+    '██.███',
+    '██████',
+    '██████',
+    '.████.',
+    '.███..',
+    '..█...',
   ];
   return createShapeFromPattern(pattern, 'Heart');
 }
 
 /**
- * Create an upward arrow shape (25 cells = 5 pieces)
- * 1+3+5+1+1+1+5+5+3 = 25
- */
-function createArrowUp(): ShapeDefinition {
-  const pattern = [
-    '..█..',
-    '.███.',
-    '█████',
-    '..█..',
-    '..█..',
-    '..█..',
-    '█████',
-    '█████',
-    '.███.',
-  ];
-  return createShapeFromPattern(pattern, 'Arrow Up');
-}
-
-/**
- * Create a tall diamond shape (25 cells = 5 pieces)
+ * Create a tall diamond shape (25 cells = 5 pieces) - 7 rows
  * 1+3+5+5+5+3+3 = 25
  */
 function createDiamond(): ShapeDefinition {
@@ -358,7 +345,7 @@ function createDiamond(): ShapeDefinition {
 }
 
 /**
- * Create a crown shape (25 cells = 5 pieces)
+ * Create a crown shape (25 cells = 5 pieces) - 6 rows
  * 3+5+5+5+5+2 = 25
  */
 function createCrown(): ShapeDefinition {
@@ -374,63 +361,7 @@ function createCrown(): ShapeDefinition {
 }
 
 /**
- * Create a trophy shape (25 cells = 5 pieces)
- * 5+3+1+1+1+1+3+5+5 = 25
- */
-function createTrophy(): ShapeDefinition {
-  const pattern = [
-    '█████',
-    '.███.',
-    '..█..',
-    '..█..',
-    '..█..',
-    '..█..',
-    '.███.',
-    '█████',
-    '█████',
-  ];
-  return createShapeFromPattern(pattern, 'Trophy');
-}
-
-/**
- * Create a house shape with door hole (30 cells = 6 pieces)
- * 1+3+5+5+5+4+4+3 = 30
- */
-function createHouse(): ShapeDefinition {
-  const pattern = [
-    '..█..',
-    '.███.',
-    '█████',
-    '█████',
-    '█████',
-    '██.██',
-    '██.██',
-    '.███.',
-  ];
-  return createShapeFromPattern(pattern, 'House');
-}
-
-/**
- * Create a letter T shape (35 cells = 7 pieces)
- * 7+7+3+3+3+3+3+3+3 = 35
- */
-function createLetterT(): ShapeDefinition {
-  const pattern = [
-    '███████',
-    '███████',
-    '..███..',
-    '..███..',
-    '..███..',
-    '..███..',
-    '..███..',
-    '..███..',
-    '..███..',
-  ];
-  return createShapeFromPattern(pattern, 'Letter T');
-}
-
-/**
- * Create a star shape (20 cells = 4 pieces)
+ * Create a star shape (20 cells = 4 pieces) - 6 rows
  * 1+3+4+5+4+3 = 20
  */
 function createStar(): ShapeDefinition {
@@ -446,47 +377,7 @@ function createStar(): ShapeDefinition {
 }
 
 /**
- * Create a vertical key shape (30 cells = 6 pieces)
- * 3+5+4+5+3+1+1+1+3+1+3 = 30
- */
-function createKey(): ShapeDefinition {
-  const pattern = [
-    '.███.',
-    '█████',
-    '██.██',
-    '█████',
-    '.███.',
-    '..█..',
-    '..█..',
-    '..█..',
-    '.███.',
-    '..█..',
-    '.███.',
-  ];
-  return createShapeFromPattern(pattern, 'Key');
-}
-
-/**
- * Create a candle/torch shape (25 cells = 5 pieces)
- * 1+3+3+1+3+3+3+3+5 = 25
- */
-function createCandle(): ShapeDefinition {
-  const pattern = [
-    '..█..',
-    '.███.',
-    '.███.',
-    '..█..',
-    '.███.',
-    '.███.',
-    '.███.',
-    '.███.',
-    '█████',
-  ];
-  return createShapeFromPattern(pattern, 'Candle');
-}
-
-/**
- * Create a letter H shape (30 cells = 6 pieces)
+ * Create a letter H shape (30 cells = 6 pieces) - 7 rows
  * 4+4+4+5+5+4+4 = 30
  */
 function createLetterH(): ShapeDefinition {
@@ -502,53 +393,239 @@ function createLetterH(): ShapeDefinition {
   return createShapeFromPattern(pattern, 'Letter H');
 }
 
+// ============ New Mobile-Friendly Shapes ============
+
 /**
- * Create a letter E shape (30 cells = 6 pieces)
- * 5+5+2+4+2+5+5+2 = 30
+ * 6x5 Rectangle (30 cells = 6 pieces) - 5 rows, 6 cols
  */
-function createLetterE(): ShapeDefinition {
+function create6x5Rectangle(): ShapeDefinition {
   const pattern = [
-    '█████',
-    '█████',
-    '██...',
-    '████.',
-    '██...',
-    '█████',
-    '█████',
-    '██...',
+    '██████',
+    '██████',
+    '██████',
+    '██████',
+    '██████',
   ];
-  return createShapeFromPattern(pattern, 'Letter E');
+  return createShapeFromPattern(pattern, '6x5 Wide Rectangle');
 }
 
 /**
- * Create a tree shape (30 cells = 6 pieces)
- * 1+3+5+3+5+1+1+1+5+5 = 30
+ * Hexagon shape (25 cells = 5 pieces) - 5 rows, 6 cols
+ * 4+6+5+6+4 = 25
  */
-function createTree(): ShapeDefinition {
+function createHexagon(): ShapeDefinition {
+  const pattern = [
+    '.████.',
+    '██████',
+    '██.███',
+    '██████',
+    '.████.',
+  ];
+  return createShapeFromPattern(pattern, 'Hexagon');
+}
+
+/**
+ * Cloud shape (25 cells = 5 pieces) - 5 rows, 6 cols
+ * 4+6+6+6+3 = 25
+ */
+function createCloud(): ShapeDefinition {
+  const pattern = [
+    '.████.',
+    '██████',
+    '██████',
+    '██████',
+    '.█.██.',
+  ];
+  return createShapeFromPattern(pattern, 'Cloud');
+}
+
+/**
+ * Castle shape (30 cells = 6 pieces) - 6 rows, 6 cols
+ * 4+6+6+6+6+2 = 30
+ */
+function createCastle(): ShapeDefinition {
+  const pattern = [
+    '█.██.█',
+    '██████',
+    '██████',
+    '██████',
+    '██████',
+    '.█..█.',
+  ];
+  return createShapeFromPattern(pattern, 'Castle');
+}
+
+/**
+ * Wide Crown shape (25 cells = 5 pieces) - 5 rows, 6 cols
+ * 4+6+6+5+4 = 25
+ */
+function createWideCrown(): ShapeDefinition {
+  const pattern = [
+    '█.██.█',
+    '██████',
+    '██████',
+    '█████.',
+    '.████.',
+  ];
+  return createShapeFromPattern(pattern, 'Wide Crown');
+}
+
+/**
+ * Ghost shape (25 cells = 5 pieces) - 6 rows, 6 cols
+ * 4+6+6+5+3+1 = 25
+ */
+function createGhost(): ShapeDefinition {
+  const pattern = [
+    '.████.',
+    '██████',
+    '██████',
+    '█████.',
+    '.███..',
+    '..█...',
+  ];
+  return createShapeFromPattern(pattern, 'Ghost');
+}
+
+/**
+ * Mushroom shape (25 cells = 5 pieces) - 6 rows, 6 cols
+ * 4+6+6+2+3+4 = 25
+ */
+function createMushroom(): ShapeDefinition {
+  const pattern = [
+    '.████.',
+    '██████',
+    '██████',
+    '..██..',
+    '.███..',
+    '.████.',
+  ];
+  return createShapeFromPattern(pattern, 'Mushroom');
+}
+
+/**
+ * Bell shape (25 cells = 5 pieces) - 6 rows, 6 cols
+ * 2+4+6+6+5+2 = 25
+ */
+function createBell(): ShapeDefinition {
+  const pattern = [
+    '..██..',
+    '.████.',
+    '██████',
+    '██████',
+    '█████.',
+    '.█..█.',
+  ];
+  return createShapeFromPattern(pattern, 'Bell');
+}
+
+/**
+ * Lightning shape (25 cells = 5 pieces) - 7 rows, 6 cols
+ * 3+3+6+4+4+3+2 = 25
+ */
+function createLightning(): ShapeDefinition {
+  const pattern = [
+    '.███..',
+    '.███..',
+    '██████',
+    '..████',
+    '..████',
+    '..███.',
+    '..██..',
+  ];
+  return createShapeFromPattern(pattern, 'Lightning');
+}
+
+/**
+ * Moon/Crescent shape (25 cells = 5 pieces) - 6 rows, 6 cols
+ * 4+5+5+5+5+1 = 25
+ */
+function createMoon(): ShapeDefinition {
+  const pattern = [
+    '.████.',
+    '█████.',
+    '█████.',
+    '█████.',
+    '█████.',
+    '..█...',
+  ];
+  return createShapeFromPattern(pattern, 'Moon');
+}
+
+/**
+ * Rocket shape (25 cells = 5 pieces) - 7 rows, 5 cols
+ * 1+3+3+5+5+5+3 = 25
+ */
+function createRocket(): ShapeDefinition {
+  const pattern = [
+    '..█..',
+    '.███.',
+    '.███.',
+    '█████',
+    '█████',
+    '█████',
+    '.███.',
+  ];
+  return createShapeFromPattern(pattern, 'Rocket');
+}
+
+/**
+ * Vase shape (25 cells = 5 pieces) - 7 rows, 5 cols
+ * 3+3+1+3+5+5+5 = 25
+ */
+function createVase(): ShapeDefinition {
+  const pattern = [
+    '.███.',
+    '.███.',
+    '..█..',
+    '.███.',
+    '█████',
+    '█████',
+    '█████',
+  ];
+  return createShapeFromPattern(pattern, 'Vase');
+}
+
+/**
+ * Cup shape (25 cells = 5 pieces) - 6 rows, 6 cols
+ * 5+5+5+5+4+1 = 25
+ */
+function createCup(): ShapeDefinition {
+  const pattern = [
+    '█████.',
+    '█████.',
+    '█████.',
+    '█████.',
+    '████..',
+    '..█...',
+  ];
+  return createShapeFromPattern(pattern, 'Cup');
+}
+
+/**
+ * Redesigned House shape (25 cells = 5 pieces) - 7 rows, 5 cols
+ * 1+3+5+5+5+4+2 = 25
+ */
+function createHouse(): ShapeDefinition {
   const pattern = [
     '..█..',
     '.███.',
     '█████',
-    '.███.',
-    '█████',
-    '..█..',
-    '..█..',
-    '..█..',
     '█████',
     '█████',
+    '██.██',
+    '.█.█.',
   ];
-  return createShapeFromPattern(pattern, 'Tree');
+  return createShapeFromPattern(pattern, 'House');
 }
 
 /**
- * Create a cross/plus shape (30 cells = 6 pieces)
- * 3+3+5+5+5+5+3+1 = 30
+ * Redesigned Cross shape (25 cells = 5 pieces) - 7 rows, 5 cols
+ * Shorter version that fits mobile
  */
 function createCross(): ShapeDefinition {
   const pattern = [
     '.███.',
     '.███.',
-    '█████',
     '█████',
     '█████',
     '█████',
@@ -559,46 +636,8 @@ function createCross(): ShapeDefinition {
 }
 
 /**
- * Create a goblet/chalice shape (25 cells = 5 pieces)
- * 5+3+1+1+1+3+5+3+3 = 25
- */
-function createGoblet(): ShapeDefinition {
-  const pattern = [
-    '█████',
-    '.███.',
-    '..█..',
-    '..█..',
-    '..█..',
-    '.███.',
-    '█████',
-    '.███.',
-    '.███.',
-  ];
-  return createShapeFromPattern(pattern, 'Goblet');
-}
-
-/**
- * Create a plus sign shape (25 cells = 5 pieces)
- * 1+1+5+5+5+5+1+1+1 = 25
- */
-function createPlusSign(): ShapeDefinition {
-  const pattern = [
-    '..█..',
-    '..█..',
-    '█████',
-    '█████',
-    '█████',
-    '█████',
-    '..█..',
-    '..█..',
-    '..█..',
-  ];
-  return createShapeFromPattern(pattern, 'Plus Sign');
-}
-
-/**
- * Create a shield shape (30 cells = 6 pieces)
- * 5+5+5+5+5+3+1+1 = 30
+ * Redesigned Shield shape (25 cells = 5 pieces) - 6 rows, 5 cols
+ * 5+5+5+5+3+2 = 25
  */
 function createShield(): ShapeDefinition {
   const pattern = [
@@ -606,61 +645,94 @@ function createShield(): ShapeDefinition {
     '█████',
     '█████',
     '█████',
-    '█████',
     '.███.',
-    '..█..',
-    '..█..',
+    '.██..',
   ];
   return createShapeFromPattern(pattern, 'Shield');
 }
 
 /**
- * Create an anchor shape (30 cells = 6 pieces)
- * 3+5+3+1+1+1+5+5+3+3 = 30
+ * Redesigned Letter E shape (25 cells = 5 pieces) - 7 rows, 5 cols
+ * 5+2+2+4+2+5+5 = 25
  */
-function createAnchor(): ShapeDefinition {
+function createLetterE(): ShapeDefinition {
   const pattern = [
-    '.███.',
     '█████',
-    '.███.',
-    '..█..',
-    '..█..',
-    '..█..',
+    '██...',
+    '██...',
+    '████.',
+    '██...',
     '█████',
     '█████',
-    '.███.',
-    '.███.',
   ];
-  return createShapeFromPattern(pattern, 'Anchor');
+  return createShapeFromPattern(pattern, 'Letter E');
+}
+
+/**
+ * Hourglass shape (30 cells = 6 pieces) - 7 rows, 6 cols
+ * 6+6+4+2+4+4+4 = 30
+ */
+function createHourglass(): ShapeDefinition {
+  const pattern = [
+    '██████',
+    '██████',
+    '.████.',
+    '..██..',
+    '.████.',
+    '.████.',
+    '.████.',
+  ];
+  return createShapeFromPattern(pattern, 'Hourglass');
+}
+
+/**
+ * Rounded Rectangle shape (30 cells = 6 pieces) - 6 rows, 6 cols
+ * 4+6+6+6+6+2 = 30
+ */
+function createRoundedRect(): ShapeDefinition {
+  const pattern = [
+    '.████.',
+    '██████',
+    '██████',
+    '██████',
+    '██████',
+    '..██..',
+  ];
+  return createShapeFromPattern(pattern, 'Rounded Rectangle');
 }
 
 /**
  * Get all valid shape definitions (cells divisible by 5)
  * Includes randomly generated rectangle variants for variety
+ * All shapes must fit within MAX_BOARD_ROWS x MAX_BOARD_COLS
  */
 function getShapeDefinitions(): ShapeDefinition[] {
   const shapes: ShapeDefinition[] = [];
 
-  // Simple rectangles - only vertical 6x5 (6 rows tall, 5 cols wide)
-  shapes.push(createRectangle(6, 5, '6x5 Rectangle')); // 30 cells = 6 pieces
+  // Simple rectangles - vertical orientations that fit within constraints
+  shapes.push(createRectangle(5, 5, '5x5 Rectangle')); // 25 cells = 5 pieces, 5 rows
+  shapes.push(createRectangle(6, 5, '6x5 Rectangle')); // 30 cells = 6 pieces, 6 rows
+  shapes.push(createRectangle(7, 5, '7x5 Rectangle')); // 35 cells = 7 pieces, 7 rows (max height)
+  shapes.push(create6x5Rectangle()); // 30 cells = 6 pieces, 5 rows x 6 cols
 
-  // Generate rectangle variants with dead cells
-  // Using deterministic seeds for each variant so they're reproducible
+  // Generate rectangle variants with dead cells (only those that fit in 7 rows)
   let variantId = 1;
   const variantConfigs = [
-    // 7x5 = 35 cells, remove 5 cells = 30 cells = 6 pieces
+    // 7x5 = 35 cells, remove 5 cells = 30 cells = 6 pieces (fits in 7 rows)
     { rows: 7, cols: 5, deadCells: 5 },
     { rows: 7, cols: 5, deadCells: 5 },
     { rows: 7, cols: 5, deadCells: 5 },
-    // 8x5 = 40 cells, remove 10 cells = 30 cells = 6 pieces
-    { rows: 8, cols: 5, deadCells: 10 },
-    { rows: 8, cols: 5, deadCells: 10 },
     // 7x5 = 35 cells, remove 10 cells = 25 cells = 5 pieces
     { rows: 7, cols: 5, deadCells: 10 },
     { rows: 7, cols: 5, deadCells: 10 },
     // 6x5 = 30 cells, remove 5 cells = 25 cells = 5 pieces
     { rows: 6, cols: 5, deadCells: 5 },
     { rows: 6, cols: 5, deadCells: 5 },
+    // 6x6 = 36 cells, remove 6 cells = 30 cells = 6 pieces (6-wide variants)
+    { rows: 6, cols: 6, deadCells: 6 },
+    { rows: 6, cols: 6, deadCells: 6 },
+    // 7x6 = 42 cells, remove 12 cells = 30 cells = 6 pieces
+    { rows: 7, cols: 6, deadCells: 12 },
   ];
 
   for (const config of variantConfigs) {
@@ -678,34 +750,47 @@ function getShapeDefinitions(): ShapeDefinition[] {
     variantId++;
   }
 
-  // Themed shapes - Symbols (portrait orientation)
-  shapes.push(createHeart()); // 25 cells = 5 pieces
-  shapes.push(createArrowUp()); // 25 cells = 5 pieces
-  shapes.push(createDiamond()); // 25 cells = 5 pieces
-  shapes.push(createStar()); // 20 cells = 4 pieces
-  shapes.push(createCross()); // 30 cells = 6 pieces
-  shapes.push(createPlusSign()); // 25 cells = 5 pieces
+  // Themed shapes - Classic (all 6-7 rows, 5-6 cols)
+  shapes.push(createHeart()); // 25 cells = 5 pieces, 6 rows
+  shapes.push(createDiamond()); // 25 cells = 5 pieces, 7 rows
+  shapes.push(createStar()); // 20 cells = 4 pieces, 6 rows
+  shapes.push(createCrown()); // 25 cells = 5 pieces, 6 rows
+  shapes.push(createLetterH()); // 30 cells = 6 pieces, 7 rows
 
-  // Themed shapes - Objects (portrait orientation)
-  shapes.push(createCrown()); // 25 cells = 5 pieces
-  shapes.push(createTrophy()); // 25 cells = 5 pieces
-  shapes.push(createHouse()); // 30 cells = 6 pieces
-  shapes.push(createKey()); // 30 cells = 6 pieces
-  shapes.push(createCandle()); // 25 cells = 5 pieces
-  shapes.push(createTree()); // 30 cells = 6 pieces
-  shapes.push(createGoblet()); // 25 cells = 5 pieces
-  shapes.push(createShield()); // 30 cells = 6 pieces
-  shapes.push(createAnchor()); // 30 cells = 6 pieces
+  // New themed shapes - 6-wide options
+  shapes.push(createHexagon()); // 25 cells = 5 pieces, 5 rows
+  shapes.push(createCloud()); // 25 cells = 5 pieces, 5 rows
+  shapes.push(createCastle()); // 30 cells = 6 pieces, 6 rows
+  shapes.push(createWideCrown()); // 25 cells = 5 pieces, 5 rows
+  shapes.push(createGhost()); // 25 cells = 5 pieces, 6 rows
+  shapes.push(createMushroom()); // 25 cells = 5 pieces, 6 rows
+  shapes.push(createBell()); // 25 cells = 5 pieces, 6 rows
+  shapes.push(createLightning()); // 25 cells = 5 pieces, 7 rows
+  shapes.push(createMoon()); // 25 cells = 5 pieces, 6 rows
+  shapes.push(createRocket()); // 25 cells = 5 pieces, 7 rows
+  shapes.push(createVase()); // 25 cells = 5 pieces, 7 rows
+  shapes.push(createCup()); // 25 cells = 5 pieces, 6 rows
+  shapes.push(createHourglass()); // 30 cells = 6 pieces, 7 rows
+  shapes.push(createRoundedRect()); // 30 cells = 6 pieces, 6 rows
 
-  // Themed shapes - Letters (portrait orientation)
-  shapes.push(createLetterT()); // 35 cells = 7 pieces
-  shapes.push(createLetterH()); // 30 cells = 6 pieces
-  shapes.push(createLetterE()); // 30 cells = 6 pieces
+  // Redesigned shapes (shorter versions)
+  shapes.push(createHouse()); // 25 cells = 5 pieces, 7 rows (redesigned)
+  shapes.push(createCross()); // 25 cells = 5 pieces, 7 rows (redesigned)
+  shapes.push(createShield()); // 25 cells = 5 pieces, 7 rows (redesigned)
+  shapes.push(createLetterE()); // 25 cells = 5 pieces, 7 rows (redesigned)
 
-  // Filter to only valid shapes (4-7 pieces for reasonable difficulty)
+  // Filter to only valid shapes that fit within constraints
   return shapes.filter((s) => {
     const cells = s.shape.flat().filter((c) => c).length;
-    return cells % 5 === 0 && s.pieceCount >= 4 && s.pieceCount <= 7;
+    const rows = s.shape.length;
+    const cols = s.shape[0].length;
+    return (
+      cells % 5 === 0 &&
+      s.pieceCount >= 4 &&
+      s.pieceCount <= 7 &&
+      rows <= MAX_BOARD_ROWS &&
+      cols <= MAX_BOARD_COLS
+    );
   });
 }
 
@@ -1006,7 +1091,7 @@ async function main() {
   let generated = 0;
   let attempts = 0;
   let duplicates = 0;
-  const maxAttempts = targetCount * 30; // Allow many attempts since some combos are unsolvable or duplicates
+  const maxAttempts = targetCount * 100; // Allow many attempts since some combos are unsolvable or duplicates
 
   while (generated < targetCount && attempts < maxAttempts) {
     attempts++;

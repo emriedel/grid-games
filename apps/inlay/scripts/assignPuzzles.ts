@@ -33,7 +33,7 @@ interface MonthlyAssignedFile {
 }
 
 // Must match the base date in storage.ts and config.ts
-const BASE_DATE = '2026-02-15';
+const BASE_DATE = '2026-02-01';
 const GAME_ID = 'inlay';
 
 function getTodayPuzzleNumber(): number {

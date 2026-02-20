@@ -3,7 +3,7 @@ import { formatDisplayDate, getTodayDateString, getPuzzleNumber } from '@grid-ga
 
 // Base date for puzzle numbering (first puzzle date)
 // Exported in both formats for different use cases
-export const PUZZLE_BASE_DATE_STRING = '2026-02-15';
+export const PUZZLE_BASE_DATE_STRING = '2026-02-01';
 export const PUZZLE_BASE_DATE = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
 
 export const inlayConfig = defineGameConfig({

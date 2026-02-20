@@ -8,7 +8,6 @@ import {
   isPuzzleInProgress,
   getTodayPuzzleNumber,
   getSavedPuzzleId,
-  findPuzzleState,
 } from '@/lib/storage';
 import { PUZZLE_BASE_DATE_STRING } from '@/config';
 import { loadPuzzleIdsForRange } from '@/lib/puzzleLoader';
@@ -60,45 +59,6 @@ export function ArchivePageContent() {
     return puzzleIdMatches && isPuzzleInProgress(puzzleNumber, currentPuzzleId);
   }, [puzzleIds]);
 
-  // Get "stars" - for Inlay, 1 star for completion
-  const getPuzzleStarsWrapper = useCallback((puzzleNumber: number): number => {
-    const currentPuzzleId = puzzleIds.get(puzzleNumber);
-    const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
-
-    // Only return stars if puzzleIds match
-    if (currentPuzzleId !== undefined && savedPuzzleId !== currentPuzzleId) {
-      return 0;
-    }
-
-    const state = findPuzzleState(puzzleNumber);
-    if (state?.status !== 'completed') return 0;
-
-    // Inlay always awards 1 star for completion
-    return 1;
-  }, [puzzleIds]);
-
-  // Score - for Inlay, return number of pieces placed (null if not completed)
-  const getPuzzleScoreWrapper = useCallback((puzzleNumber: number): number | null => {
-    const currentPuzzleId = puzzleIds.get(puzzleNumber);
-    const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
-
-    // Only return score if puzzleIds match
-    if (currentPuzzleId !== undefined && savedPuzzleId !== currentPuzzleId) {
-      return null;
-    }
-
-    const state = findPuzzleState(puzzleNumber);
-    if (state?.status !== 'completed') return null;
-
-    // Return pieces placed count
-    return state.data.placedPieces?.length ?? 0;
-  }, [puzzleIds]);
-
-  // Format score - show pieces count
-  const formatScore = useCallback((score: number): string => {
-    return `${score} pieces`;
-  }, []);
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
@@ -126,11 +86,9 @@ export function ArchivePageContent() {
       todayPuzzleNumber={todayPuzzleNumber}
       isPuzzleCompleted={checkPuzzleCompleted}
       isPuzzleInProgress={checkPuzzleInProgress}
-      getPuzzleStars={getPuzzleStarsWrapper}
-      getPuzzleScore={getPuzzleScoreWrapper}
-      formatScore={formatScore}
       onSelectPuzzle={handleSelectPuzzle}
       backHref="/"
+      statusDisplay="checkmark"
     />
   );
 }

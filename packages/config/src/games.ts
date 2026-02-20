@@ -54,15 +54,15 @@ export const GAMES: GameInfo[] = [
   //   hasArchive: true,
   //   launchDate: '2026-01-25',
   // },
-  // {
-  //   id: 'inlay',
-  //   name: 'Inlay',
-  //   description: 'Fill the target shape using pentomino pieces',
-  //   accentColor: '#0da678',
-  //   href: '/inlay',
-  //   hasArchive: true,
-  //   launchDate: '2026-03-01',
-  // },
+  {
+    id: 'inlay',
+    name: 'Inlay',
+    description: 'Fill the target shape using pentomino pieces',
+    accentColor: '#0da678',
+    href: '/inlay',
+    hasArchive: true,
+    launchDate: '2026-02-01',
+  },
 ];
 
 export function getIconUrl(gameId: string): string {
