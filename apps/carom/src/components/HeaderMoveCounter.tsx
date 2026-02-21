@@ -24,8 +24,10 @@ export function HeaderMoveCounter({
     <button
       onClick={isClickable ? onClick : undefined}
       disabled={!isClickable}
-      className={`flex items-center gap-2 text-md pr-2 ${
-        isClickable ? 'cursor-pointer hover:opacity-80 transition-opacity' : 'cursor-default'
+      className={`flex items-center gap-1.5 text-md ${
+        isClickable
+          ? 'px-2.5 py-1 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)] cursor-pointer transition-colors'
+          : 'cursor-default'
       }`}
     >
       <span className="text-[var(--muted)]">Moves: </span>
@@ -35,6 +37,15 @@ export function HeaderMoveCounter({
       )}
       {isFinished && achievedOptimal && !isCheating && (
         <span className="text-xl" title="Optimal solution!">🏆</span>
+      )}
+      {isClickable && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="text-[var(--muted)]">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
       )}
     </button>
   );

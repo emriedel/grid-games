@@ -72,7 +72,7 @@ interface PoolFile {
 // Configuration
 const BOARD_SIZE = 8;
 const NUM_BLOCKERS = 3;
-const MIN_OPTIMAL_SOLUTION = 10;
+const MIN_OPTIMAL_SOLUTION = 9;
 const MAX_OPTIMAL_SOLUTION = 20;
 const L_WALLS_TOTAL_MIN = 6;
 const L_WALLS_TOTAL_MAX = 8;
