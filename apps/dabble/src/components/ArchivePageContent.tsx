@@ -3,6 +3,7 @@
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArchivePage, Skeleton } from '@grid-games/ui';
+import { getAvailableMonths, listPuzzlesForMonth, getTodayDateString } from '@grid-games/shared';
 import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber, getSavedPuzzleId, findPuzzleState } from '@/lib/storage';
 import { PUZZLE_BASE_DATE_STRING } from '@/config';
 import { getPuzzleIdsForRange } from '@/lib/puzzleGenerator';
@@ -14,24 +15,58 @@ export function ArchivePageContent() {
   const [puzzleIds, setPuzzleIds] = useState<Map<number, string>>(new Map());
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load puzzleIds from monthly files
+  // Get available months for pagination
+  const availableMonths = useMemo(() => {
+    const today = getTodayDateString();
+    return getAvailableMonths(PUZZLE_BASE_DATE_STRING, today);
+  }, []);
+
+  // State for monthly puzzle lists
+  const [monthlyPuzzles, setMonthlyPuzzles] = useState<Map<string, Array<{ puzzleNumber: number; date: string }>>>(new Map());
+
+  // Get puzzles for a specific month
+  const getPuzzlesForMonth = useCallback((month: string): Array<{ puzzleNumber: number; date: string }> => {
+    return monthlyPuzzles.get(month) || [];
+  }, [monthlyPuzzles]);
+
+  // Load puzzleIds from monthly files and monthly puzzle lists
   useEffect(() => {
-    async function loadPuzzleIds() {
+    async function loadPuzzleData() {
       if (todayPuzzleNumber <= 1) {
         setIsLoading(false);
         return;
       }
       try {
+        // Load puzzle IDs for verification
         const ids = await getPuzzleIdsForRange(1, todayPuzzleNumber - 1);
         setPuzzleIds(ids);
+
+        // Load puzzle lists for all available months
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+        const newMonthlyPuzzles = new Map<string, Array<{ puzzleNumber: number; date: string }>>();
+
+        for (const month of availableMonths) {
+          const list = await listPuzzlesForMonth(month, 'dabble', basePath);
+          const formattedList = list.map(entry => ({
+            puzzleNumber: entry.puzzleNumber,
+            date: new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            }),
+          }));
+          newMonthlyPuzzles.set(month, formattedList);
+        }
+
+        setMonthlyPuzzles(newMonthlyPuzzles);
       } catch (error) {
-        console.warn('[dabble] Failed to load puzzle IDs for archive:', error);
+        console.warn('[dabble] Failed to load puzzle data for archive:', error);
       } finally {
         setIsLoading(false);
       }
     }
-    loadPuzzleIds();
-  }, [todayPuzzleNumber]);
+    loadPuzzleData();
+  }, [todayPuzzleNumber, availableMonths]);
 
   const handleSelectPuzzle = useCallback((puzzleNumber: number) => {
     router.push(`/?puzzle=${puzzleNumber}`);
@@ -132,7 +167,9 @@ export function ArchivePageContent() {
       getPuzzleStars={getPuzzleStarsWrapper}
       getPuzzleScore={getPuzzleScoreWrapper}
       onSelectPuzzle={handleSelectPuzzle}
-      backHref="/"
+      backHref="/dabble"
+      availableMonths={availableMonths}
+      getPuzzlesForMonth={getPuzzlesForMonth}
     />
   );
 }

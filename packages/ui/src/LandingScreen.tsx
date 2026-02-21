@@ -7,7 +7,7 @@ import { HamburgerMenu } from './HamburgerMenu';
 import { useGameCompletion } from './useGameCompletion';
 
 /** Landing screen mode determines the UI state */
-export type LandingScreenMode = 'fresh' | 'in-progress' | 'completed';
+export type LandingScreenMode = 'fresh' | 'in-progress' | 'completed' | 'unavailable';
 
 interface LandingScreenProps {
   /** Game emoji (deprecated, use icon instead) */
@@ -47,10 +47,11 @@ interface LandingScreenProps {
 /**
  * Landing screen for games
  * Shows game identity, puzzle info, and action buttons
- * Supports three modes:
+ * Supports four modes:
  * - 'fresh': New game, shows description with How to Play + Play buttons
  * - 'in-progress': Saved game exists, shows resume message with How to Play + Resume buttons
  * - 'completed': Today's puzzle completed, shows congrats message with See Results button
+ * - 'unavailable': No puzzle for today, shows "no game today" message with How to Play + Archive buttons
  */
 export function LandingScreen({
   emoji,
@@ -76,6 +77,8 @@ export function LandingScreen({
     ? description
     : mode === 'in-progress'
     ? 'You have a game in progress'
+    : mode === 'unavailable'
+    ? 'No puzzle available today. Check back tomorrow!'
     : "Great job on today's game!";
 
   // Check if archive is available (either as href or click handler)
@@ -130,6 +133,18 @@ export function LandingScreen({
           >
             Resume
           </Button>
+        );
+
+      case 'unavailable':
+        return (
+          <>
+            {onRules && (
+              <Button variant="secondary" fullWidth onClick={onRules}>
+                How to Play
+              </Button>
+            )}
+            {hasArchive && renderArchiveButton('Archive')}
+          </>
         );
 
       case 'fresh':
@@ -190,10 +205,12 @@ export function LandingScreen({
         {children}
       </div>
 
-      {/* Puzzle info below buttons */}
-      <div className="text-[var(--muted,#a1a1aa)] text-base mt-6">
-        {puzzleInfo.number ? `#${puzzleInfo.number} · ${puzzleInfo.date}` : puzzleInfo.date}
-      </div>
+      {/* Puzzle info below buttons (hidden in unavailable mode) */}
+      {mode !== 'unavailable' && (
+        <div className="text-[var(--muted,#a1a1aa)] text-base mt-6">
+          {puzzleInfo.number ? `#${puzzleInfo.number} · ${puzzleInfo.date}` : puzzleInfo.date}
+        </div>
+      )}
     </div>
   );
 }

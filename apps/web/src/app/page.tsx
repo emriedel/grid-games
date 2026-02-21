@@ -17,7 +17,7 @@ export default function Home() {
 
       <div className="max-w-xl mx-auto px-4 py-12">
         {/* Header */}
-        <header className="mb-10 text-center">
+        <header className="mb-4 text-center">
           {/* Icon */}
           <div className="mb-3 flex justify-center">
             <Image

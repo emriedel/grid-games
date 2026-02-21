@@ -181,7 +181,7 @@ export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: 
                   {isExpanded && game.hasArchive && (
                     <a
                       href={`${game.href}/archive`}
-                      className="block pl-[4.25rem] pr-4 py-2 text-sm text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
+                      className="block pl-[4.75rem] pr-4 py-2 text-sm text-[var(--muted,#a1a1aa)] hover:text-[var(--foreground,#ededed)] hover:bg-[var(--tile-bg,#27272a)] transition-colors"
                     >
                       {game.name} Archive
                     </a>

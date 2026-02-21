@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
-import { ArrowLeft, Check, Clock } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ArrowLeft, Check, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { NavBar } from './NavBar';
 import { HamburgerMenu } from './HamburgerMenu';
 
@@ -32,6 +32,12 @@ export interface ArchivePageProps {
   statusDisplay?: 'stars' | 'checkmark';
   /** For 'checkmark' mode: is this a "perfect" completion? Shows trophy instead of checkmark */
   isPerfectCompletion?: (puzzleNumber: number) => boolean;
+  /** For 'checkmark' mode: did the user cheat? Shows skull instead of checkmark */
+  isCheating?: (puzzleNumber: number) => boolean;
+  /** Available months with puzzles, newest first (e.g., ["2026-03", "2026-02"]) */
+  availableMonths?: string[];
+  /** Puzzle entries by month (alternative to baseDate calculation) */
+  getPuzzlesForMonth?: (month: string) => Array<{ puzzleNumber: number; date: string }>;
 }
 
 interface ArchiveEntry {
@@ -42,6 +48,7 @@ interface ArchiveEntry {
   stars: number;
   score: number | null;
   isPerfect: boolean;
+  isCheating: boolean;
 }
 
 /**
@@ -62,38 +69,83 @@ export function ArchivePage({
   backHref,
   statusDisplay = 'stars',
   isPerfectCompletion,
+  isCheating,
+  availableMonths,
+  getPuzzlesForMonth,
 }: ArchivePageProps) {
+  // State for monthly pagination
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
+
+  // If availableMonths is provided, use monthly pagination
+  const useMonthlyPagination = availableMonths && availableMonths.length > 0;
+  const currentMonth = useMonthlyPagination ? availableMonths[currentMonthIndex] : null;
+  const hasPrevMonth = useMonthlyPagination && currentMonthIndex < availableMonths.length - 1;
+  const hasNextMonth = useMonthlyPagination && currentMonthIndex > 0;
+
+  // Format month for display (e.g., "2026-02" -> "February 2026")
+  const formatMonth = (month: string): string => {
+    const [year, monthNum] = month.split('-');
+    const date = new Date(parseInt(year), parseInt(monthNum) - 1, 1);
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
   // Calculate archive entries (puzzle #1 to yesterday's puzzle)
   const archiveEntries = useMemo(() => {
     const entries: ArchiveEntry[] = [];
-    const baseDateObj = new Date(baseDate + 'T00:00:00');
 
-    // Archive includes puzzles 1 through (todayNumber - 1)
-    for (let num = todayPuzzleNumber - 1; num >= 1; num--) {
-      // Calculate date for this puzzle number
-      const puzzleDate = new Date(baseDateObj);
-      puzzleDate.setDate(puzzleDate.getDate() + num - 1);
+    // If using monthly pagination with getPuzzlesForMonth, use that
+    if (useMonthlyPagination && currentMonth && getPuzzlesForMonth) {
+      const monthPuzzles = getPuzzlesForMonth(currentMonth);
+      // Sort by puzzle number descending (newest first)
+      const sortedPuzzles = [...monthPuzzles].sort((a, b) => b.puzzleNumber - a.puzzleNumber);
 
-      const dateStr = puzzleDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      });
+      for (const { puzzleNumber: num, date } of sortedPuzzles) {
+        // Skip today's puzzle and future puzzles
+        if (num >= todayPuzzleNumber) continue;
 
-      const isCompleted = isPuzzleCompleted(num);
-      entries.push({
-        number: num,
-        date: dateStr,
-        isCompleted,
-        isInProgress: isPuzzleInProgress?.(num) ?? false,
-        stars: isCompleted && getPuzzleStars ? getPuzzleStars(num) : 0,
-        score: isCompleted && getPuzzleScore ? getPuzzleScore(num) : null,
-        isPerfect: isCompleted && isPerfectCompletion ? isPerfectCompletion(num) : false,
-      });
+        const isCompleted = isPuzzleCompleted(num);
+        entries.push({
+          number: num,
+          date,
+          isCompleted,
+          isInProgress: isPuzzleInProgress?.(num) ?? false,
+          stars: isCompleted && getPuzzleStars ? getPuzzleStars(num) : 0,
+          score: isCompleted && getPuzzleScore ? getPuzzleScore(num) : null,
+          isPerfect: isCompleted && isPerfectCompletion ? isPerfectCompletion(num) : false,
+          isCheating: isCompleted && isCheating ? isCheating(num) : false,
+        });
+      }
+    } else {
+      // Legacy mode: calculate from baseDate
+      const baseDateObj = new Date(baseDate + 'T00:00:00');
+
+      // Archive includes puzzles 1 through (todayNumber - 1)
+      for (let num = todayPuzzleNumber - 1; num >= 1; num--) {
+        // Calculate date for this puzzle number
+        const puzzleDate = new Date(baseDateObj);
+        puzzleDate.setDate(puzzleDate.getDate() + num - 1);
+
+        const dateStr = puzzleDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        });
+
+        const isCompleted = isPuzzleCompleted(num);
+        entries.push({
+          number: num,
+          date: dateStr,
+          isCompleted,
+          isInProgress: isPuzzleInProgress?.(num) ?? false,
+          stars: isCompleted && getPuzzleStars ? getPuzzleStars(num) : 0,
+          score: isCompleted && getPuzzleScore ? getPuzzleScore(num) : null,
+          isPerfect: isCompleted && isPerfectCompletion ? isPerfectCompletion(num) : false,
+          isCheating: isCompleted && isCheating ? isCheating(num) : false,
+        });
+      }
     }
 
     return entries;
-  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getPuzzleScore, isPerfectCompletion]);
+  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getPuzzleScore, isPerfectCompletion, isCheating, useMonthlyPagination, currentMonth, getPuzzlesForMonth]);
 
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
@@ -107,20 +159,43 @@ export function ArchivePage({
           {gameName} Archive
         </h1>
 
-        {/* Spacer for centering */}
-        <div className="w-8" />
+        {/* Back button */}
+        <a
+          href={backHref}
+          className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--tile-bg,#1a1a2e)] hover:bg-[var(--tile-bg-selected,#4a4a6e)] transition-colors"
+          aria-label={`Back to ${gameName}`}
+        >
+          <ArrowLeft size={18} className="text-[var(--foreground,#ededed)]" />
+        </a>
       </div>
 
       {/* Content container with max width */}
       <div className="w-full max-w-md flex-1 flex flex-col px-4">
-        {/* Back link */}
-        <a
-          href={backHref}
-          className="flex items-center gap-2 py-3 text-[var(--accent)] hover:underline"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to {gameName}</span>
-        </a>
+
+        {/* Month navigation (if using pagination) */}
+        {useMonthlyPagination && currentMonth && (
+          <div className="flex items-center justify-between py-4">
+            <button
+              onClick={() => setCurrentMonthIndex(i => i + 1)}
+              disabled={!hasPrevMonth}
+              className="p-2 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--tile-bg)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Previous month"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <span className="font-semibold text-[var(--foreground,#ededed)]">
+              {formatMonth(currentMonth)}
+            </span>
+            <button
+              onClick={() => setCurrentMonthIndex(i => i - 1)}
+              disabled={!hasNextMonth}
+              className="p-2 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--tile-bg)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Next month"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+        )}
 
         {/* Content */}
         <div className="flex-1 pb-8">
@@ -159,8 +234,10 @@ export function ArchivePage({
                           </>
                         )}
                         {statusDisplay === 'checkmark' ? (
-                          // Checkmark/Trophy mode
-                          entry.isPerfect ? (
+                          // Checkmark/Trophy/Skull mode
+                          entry.isCheating ? (
+                            <span className="text-xl" title="Impossible!">💀</span>
+                          ) : entry.isPerfect ? (
                             <span className="text-xl" title="Perfect!">🏆</span>
                           ) : (
                             <Check size={18} className="text-[var(--success,#22c55e)]" />

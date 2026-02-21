@@ -133,7 +133,7 @@ export function ArchivePageContent() {
       getPuzzleStars={getVerifiedPuzzleStars}
       getPuzzleScore={getVerifiedPuzzleScore}
       onSelectPuzzle={handleSelectPuzzle}
-      backHref="/"
+      backHref="/jumble"
     />
   );
 }

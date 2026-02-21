@@ -11,6 +11,7 @@ import {
   getPuzzleNumber,
   loadMonthlyFile,
   getMonthForPuzzleNumber,
+  getDateForPuzzleNumber,
   type PuzzleWithId,
 } from '@grid-games/shared';
 import { PUZZLE_BASE_DATE, PUZZLE_BASE_DATE_STRING } from '@/config';
@@ -41,9 +42,24 @@ export async function loadPuzzleByNumber(puzzleNumber: number): Promise<Sequenti
     const basePath = getBasePath();
     const data = await loadMonthlyFile<SequentialPuzzle & PuzzleWithId>(monthKey, 'trio', basePath);
 
-    if (data && data[String(puzzleNumber)]) {
-      const puzzle = data[String(puzzleNumber)];
-      return { ...puzzle, puzzleNumber };
+    if (!data) return null;
+
+    // Try number key (legacy format)
+    if (data[String(puzzleNumber)]) {
+      return { ...data[String(puzzleNumber)], puzzleNumber };
+    }
+
+    // Try date key (new format)
+    const dateKey = getDateForPuzzleNumber(PUZZLE_BASE_DATE, puzzleNumber);
+    if (data[dateKey]) {
+      return { ...data[dateKey], puzzleNumber };
+    }
+
+    // Scan for matching puzzleNumber field
+    for (const puzzle of Object.values(data)) {
+      if (puzzle.puzzleNumber === puzzleNumber) {
+        return { ...puzzle, puzzleNumber };
+      }
     }
 
     return null;

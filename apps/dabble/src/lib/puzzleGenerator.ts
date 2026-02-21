@@ -1,6 +1,7 @@
 import seedrandom from 'seedrandom';
 import {
   getMonthForPuzzleNumber,
+  getDateForPuzzleNumber,
   loadMonthlyFile,
   getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
   type PuzzleWithId,
@@ -898,7 +899,25 @@ export async function fetchDailyPuzzle(dateString?: string): Promise<DailyPuzzle
   const puzzles = await fetchMonthlyFile(month);
 
   if (puzzles) {
-    const puzzle = puzzles[String(puzzleNumber)];
+    // Try number key (legacy format)
+    let puzzle = puzzles[String(puzzleNumber)];
+
+    // Try date key (new format)
+    if (!puzzle) {
+      const dateKey = getDateForPuzzleNumber(PUZZLE_BASE_DATE, puzzleNumber);
+      puzzle = puzzles[dateKey];
+    }
+
+    // Scan for matching puzzleNumber field
+    if (!puzzle) {
+      for (const p of Object.values(puzzles)) {
+        if (p.puzzleNumber === puzzleNumber) {
+          puzzle = p;
+          break;
+        }
+      }
+    }
+
     if (puzzle) {
       return convertAssignedPuzzle(puzzle, date);
     }

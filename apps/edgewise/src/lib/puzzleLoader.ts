@@ -3,6 +3,7 @@ import { Puzzle, SquareState, Rotation, PuzzleSquare } from '@/types';
 import {
   getTodayDateString,
   getMonthForPuzzleNumber,
+  getDateForPuzzleNumber as sharedGetDateForPuzzleNumber,
   loadMonthlyFile,
   getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
 } from '@grid-games/shared';
@@ -66,7 +67,25 @@ export async function loadPuzzleByNumber(puzzleNumber: number): Promise<{
   try {
     const puzzles = await loadMonthlyFile<AssignedPuzzle>(month, 'edgewise', basePath);
     if (puzzles) {
-      const puzzle = puzzles[String(puzzleNumber)];
+      // Try number key (legacy format)
+      let puzzle = puzzles[String(puzzleNumber)];
+
+      // Try date key (new format)
+      if (!puzzle) {
+        const dateKey = sharedGetDateForPuzzleNumber(PUZZLE_BASE_DATE, puzzleNumber);
+        puzzle = puzzles[dateKey];
+      }
+
+      // Scan for matching puzzleNumber field
+      if (!puzzle) {
+        for (const p of Object.values(puzzles)) {
+          if ((p as AssignedPuzzle & { puzzleNumber?: number }).puzzleNumber === puzzleNumber) {
+            puzzle = p;
+            break;
+          }
+        }
+      }
+
       if (puzzle) {
         return {
           puzzle: {

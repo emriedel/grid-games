@@ -132,7 +132,7 @@ export function Game() {
 
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed' | 'unavailable'>('fresh');
   const [guessedConfigs, setGuessedConfigs] = useState<Set<string>>(new Set());
   const [shake, setShake] = useState(false);
 
@@ -172,6 +172,7 @@ export function Game() {
         result = await loadPuzzleFromPoolById(poolIdParam);
         if (!result) {
           console.error(`[edgewise] Failed to load pool puzzle: ${poolIdParam}`);
+          setLandingMode('unavailable');
           setIsLoading(false);
           return;
         }
@@ -179,6 +180,7 @@ export function Game() {
         result = await loadPuzzleByNumber(requestedPuzzleNumber);
         if (!result) {
           console.error(`[edgewise] Failed to load puzzle #${requestedPuzzleNumber}`);
+          setLandingMode('unavailable');
           setIsLoading(false);
           return;
         }
@@ -370,7 +372,8 @@ export function Game() {
   }
 
   // Render landing screen (only for today's puzzle, not archive or pool puzzles)
-  if (gameState === 'landing' && !isArchive && !isPoolPuzzle) {
+  // Also show landing for unavailable mode
+  if ((gameState === 'landing' || landingMode === 'unavailable') && !isArchive && !isPoolPuzzle) {
     return (
       <>
         <LandingScreen

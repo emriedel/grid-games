@@ -154,7 +154,7 @@ export function Game() {
   const [showOptimalInfo, setShowOptimalInfo] = useState(false);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed' | 'unavailable'>('fresh');
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
   const [achievedOptimal, setAchievedOptimal] = useState(false);
 
@@ -163,7 +163,7 @@ export function Game() {
     async function loadPuzzle() {
       setIsLoading(true);
       try {
-        let loadedPuzzle: Puzzle;
+        let loadedPuzzle: Puzzle | null = null;
 
         // Pool mode: load from pool by ID (debug only)
         if (isPoolMode && poolIdParam) {
@@ -182,6 +182,13 @@ export function Game() {
             : undefined; // undefined = today
 
           loadedPuzzle = await getDailyPuzzle(puzzleDateString);
+        }
+
+        // Handle no puzzle available
+        if (!loadedPuzzle) {
+          setLandingMode('unavailable');
+          setIsLoading(false);
+          return;
         }
 
         setPuzzle(loadedPuzzle);
@@ -356,7 +363,7 @@ export function Game() {
   }, []);
 
   // Loading state - show while puzzle is being fetched
-  if (isLoading || !puzzle) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
         <div className="text-xl text-[var(--foreground)]">Loading...</div>
@@ -364,12 +371,12 @@ export function Game() {
     );
   }
 
-  // Landing screen
-  if (state.phase === 'landing') {
-    const puzzleInfo = {
+  // Landing screen (including unavailable mode when no puzzle)
+  if (state.phase === 'landing' || landingMode === 'unavailable') {
+    const puzzleInfo = puzzle ? {
       number: puzzle.puzzleNumber,
       date: formatDisplayDate(puzzle.date),
-    };
+    } : { date: '' };
 
     return (
       <>
@@ -390,6 +397,11 @@ export function Game() {
         <HowToPlayModal isOpen={showRules} onClose={() => setShowRules(false)} />
       </>
     );
+  }
+
+  // If no puzzle is loaded after landing, don't render game
+  if (!puzzle) {
+    return null;
   }
 
   // Playing / Finished states

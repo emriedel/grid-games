@@ -1,24 +1,19 @@
 'use client';
 
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, Check, Clock } from 'lucide-react';
-import { HamburgerMenu, Skeleton } from '@grid-games/ui';
-import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber, didAchieveOptimal, getSavedPuzzleId, getPuzzleState } from '@/lib/storage';
+import { ArchivePage, Skeleton } from '@grid-games/ui';
+import { getAvailableMonths, listPuzzlesForMonth, getTodayDateString } from '@grid-games/shared';
+import {
+  isPuzzleCompleted,
+  isPuzzleInProgress,
+  getTodayPuzzleNumber,
+  didAchieveOptimal,
+  getSavedPuzzleId,
+  getPuzzleState,
+} from '@/lib/storage';
 import { getPuzzleIdsForRange } from '@/lib/puzzleGenerator';
-
-// Carom launched Feb 1, 2026
-const PUZZLE_BASE_DATE = '2026-02-01';
-
-interface ArchiveEntry {
-  number: number;
-  date: string;
-  isCompleted: boolean;
-  isInProgress: boolean;
-  achievedOptimal: boolean;
-  isCheating: boolean;
-}
+import { CAROM_LAUNCH_DATE_STRING } from '@/config';
 
 export function ArchivePageContent() {
   const router = useRouter();
@@ -26,9 +21,23 @@ export function ArchivePageContent() {
   const [puzzleIds, setPuzzleIds] = useState<Map<number, string>>(new Map());
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load puzzleIds from monthly files
+  // Get available months for pagination
+  const availableMonths = useMemo(() => {
+    const today = getTodayDateString();
+    return getAvailableMonths(CAROM_LAUNCH_DATE_STRING, today);
+  }, []);
+
+  // State for monthly puzzle lists
+  const [monthlyPuzzles, setMonthlyPuzzles] = useState<Map<string, Array<{ puzzleNumber: number; date: string }>>>(new Map());
+
+  // Get puzzles for a specific month
+  const getPuzzlesForMonth = useCallback((month: string): Array<{ puzzleNumber: number; date: string }> => {
+    return monthlyPuzzles.get(month) || [];
+  }, [monthlyPuzzles]);
+
+  // Load puzzleIds from monthly files and monthly puzzle lists
   useEffect(() => {
-    async function loadPuzzleIds() {
+    async function loadPuzzleData() {
       if (todayPuzzleNumber <= 1) {
         setIsLoading(false);
         return;
@@ -36,149 +45,132 @@ export function ArchivePageContent() {
       try {
         const ids = await getPuzzleIdsForRange(1, todayPuzzleNumber - 1);
         setPuzzleIds(ids);
+
+        // Load puzzle lists for all available months
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+        const newMonthlyPuzzles = new Map<string, Array<{ puzzleNumber: number; date: string }>>();
+
+        for (const month of availableMonths) {
+          const list = await listPuzzlesForMonth(month, 'carom', basePath);
+          const formattedList = list.map(entry => ({
+            puzzleNumber: entry.puzzleNumber,
+            date: new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            }),
+          }));
+          newMonthlyPuzzles.set(month, formattedList);
+        }
+
+        setMonthlyPuzzles(newMonthlyPuzzles);
       } catch (error) {
-        console.warn('[carom] Failed to load puzzle IDs for archive:', error);
+        console.warn('[carom] Failed to load puzzle data for archive:', error);
       } finally {
         setIsLoading(false);
       }
     }
-    loadPuzzleIds();
-  }, [todayPuzzleNumber]);
+    loadPuzzleData();
+  }, [todayPuzzleNumber, availableMonths]);
 
-  const handleSelectPuzzle = useCallback((puzzleNumber: number) => {
-    router.push(`/?puzzle=${puzzleNumber}`);
-  }, [router]);
+  const handleSelectPuzzle = useCallback(
+    (puzzleNumber: number) => {
+      router.push(`/?puzzle=${puzzleNumber}`);
+    },
+    [router]
+  );
 
-  // Calculate archive entries (puzzle #1 to yesterday's puzzle)
-  // Uses puzzleIds to check completion for correct puzzle version
-  const archiveEntries = useMemo(() => {
-    const entries: ArchiveEntry[] = [];
-    const baseDateObj = new Date(PUZZLE_BASE_DATE + 'T00:00:00');
-
-    // Archive includes puzzles 1 through (todayNumber - 1)
-    for (let num = todayPuzzleNumber - 1; num >= 1; num--) {
-      // Calculate date for this puzzle number
-      const puzzleDate = new Date(baseDateObj);
-      puzzleDate.setDate(puzzleDate.getDate() + num - 1);
-
-      const dateStr = puzzleDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      });
-
-      // Get the current puzzleId for this puzzle number
-      const currentPuzzleId = puzzleIds.get(num);
-      // Get the saved puzzleId from localStorage
-      const savedPuzzleId = getSavedPuzzleId(num);
-
-      // Only show as completed if the puzzleIds match (handles both being undefined for legacy)
-      // This ensures regenerated puzzles don't show old completion status
+  // Check completion with puzzleId verification
+  const checkPuzzleCompleted = useCallback(
+    (puzzleNumber: number): boolean => {
+      const currentPuzzleId = puzzleIds.get(puzzleNumber);
+      const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
       const puzzleIdMatches = currentPuzzleId === savedPuzzleId;
-      const isCompleted = puzzleIdMatches && isPuzzleCompleted(num, currentPuzzleId);
-      const isInProgressState = puzzleIdMatches && isPuzzleInProgress(num, currentPuzzleId);
+      return puzzleIdMatches && isPuzzleCompleted(puzzleNumber, currentPuzzleId);
+    },
+    [puzzleIds]
+  );
 
-      // Check for cheating (moveCount < optimalMoves)
-      let isCheating = false;
-      if (isCompleted) {
-        const state = getPuzzleState(num, currentPuzzleId);
-        if (state?.status === 'completed' && state.data.optimalMoves !== undefined) {
-          isCheating = state.data.moveCount < state.data.optimalMoves;
-        }
+  // Check in-progress with puzzleId verification
+  const checkPuzzleInProgress = useCallback(
+    (puzzleNumber: number): boolean => {
+      const currentPuzzleId = puzzleIds.get(puzzleNumber);
+      const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
+      const puzzleIdMatches = currentPuzzleId === savedPuzzleId;
+      return puzzleIdMatches && isPuzzleInProgress(puzzleNumber, currentPuzzleId);
+    },
+    [puzzleIds]
+  );
+
+  // Check if achieved optimal (for trophy display)
+  const checkPerfectCompletion = useCallback(
+    (puzzleNumber: number): boolean => {
+      const currentPuzzleId = puzzleIds.get(puzzleNumber);
+      const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
+      if (currentPuzzleId !== savedPuzzleId) return false;
+
+      // Also need to verify not cheating
+      const state = getPuzzleState(puzzleNumber, currentPuzzleId);
+      if (state?.status === 'completed' && state.data.optimalMoves !== undefined) {
+        const isCheating = state.data.moveCount < state.data.optimalMoves;
+        if (isCheating) return false;
       }
 
-      entries.push({
-        number: num,
-        date: dateStr,
-        isCompleted,
-        isInProgress: isInProgressState,
-        achievedOptimal: isCompleted && !isCheating && didAchieveOptimal(num, currentPuzzleId),
-        isCheating,
-      });
-    }
+      return didAchieveOptimal(puzzleNumber, currentPuzzleId);
+    },
+    [puzzleIds]
+  );
 
-    return entries;
-  }, [todayPuzzleNumber, puzzleIds]);
+  // Check for cheating (moveCount < optimalMoves)
+  const checkIsCheating = useCallback(
+    (puzzleNumber: number): boolean => {
+      const currentPuzzleId = puzzleIds.get(puzzleNumber);
+      const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
+      if (currentPuzzleId !== savedPuzzleId) return false;
 
-  return (
-    <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
-      {/* Header */}
-      <div className="w-full max-w-md mx-auto flex items-center justify-between px-4 py-3 border-b border-[var(--border,#27272a)]">
-        {/* Menu button */}
-        <HamburgerMenu currentGameId="carom" />
+      const state = getPuzzleState(puzzleNumber, currentPuzzleId);
+      if (state?.status === 'completed' && state.data.optimalMoves !== undefined) {
+        return state.data.moveCount < state.data.optimalMoves;
+      }
+      return false;
+    },
+    [puzzleIds]
+  );
 
-        {/* Title */}
-        <h1 className="text-lg font-bold text-[var(--foreground,#ededed)]">
-          Carom Archive
-        </h1>
-
-        {/* Spacer for centering */}
-        <div className="w-8" />
-      </div>
-
-      {/* Content container with max width */}
-      <div className="w-full max-w-md flex-1 flex flex-col px-4">
-        {/* Back link */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 py-3 text-[var(--accent)] hover:underline"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Carom</span>
-        </Link>
-
-        {/* Content */}
-        <div className="flex-1 pb-8">
-          {isLoading ? (
-            <div className="space-y-2">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Skeleton key={i} className="h-14 w-full rounded-lg" />
-              ))}
-            </div>
-          ) : archiveEntries.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-[var(--muted,#a1a1aa)]">
-                No archive puzzles available yet.
-                <br />
-                Check back tomorrow!
-              </p>
-            </div>
-          ) : (
-            <>
-              {/* Puzzle list */}
-              <div className="space-y-2">
-                {archiveEntries.map((entry) => (
-                  <button
-                    key={entry.number}
-                    onClick={() => handleSelectPuzzle(entry.number)}
-                    className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-[var(--tile-bg,#1a1a2e)] hover:bg-[var(--tile-bg-selected,#2a2a4e)] transition-colors text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-[var(--accent)] font-bold">
-                        #{entry.number}
-                      </span>
-                      <span className="text-[var(--foreground,#ededed)]">{entry.date}</span>
-                    </div>
-                    {entry.isCompleted ? (
-                      <div className="flex items-center gap-2">
-                        {entry.isCheating ? (
-                          <span className="text-xl" title="Impossible!">💀</span>
-                        ) : entry.achievedOptimal ? (
-                          <span className="text-xl" title="Optimal solution!">🏆</span>
-                        ) : (
-                          <Check size={18} className="text-[var(--success,#22c55e)]" />
-                        )}
-                      </div>
-                    ) : entry.isInProgress ? (
-                      <Clock size={18} className="text-[var(--warning,#f59e0b)]" />
-                    ) : null}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
+        <div className="w-full max-w-md mx-auto flex items-center justify-center px-4 py-3 border-b border-[var(--border,#27272a)]">
+          <h1 className="text-lg font-bold text-[var(--foreground,#ededed)]">
+            Carom Archive
+          </h1>
+        </div>
+        <div className="w-full max-w-md flex-1 flex flex-col px-4 py-4">
+          <div className="space-y-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Skeleton key={i} className="h-14 w-full rounded-lg" />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <ArchivePage
+      gameName="Carom"
+      gameId="carom"
+      baseDate={CAROM_LAUNCH_DATE_STRING}
+      todayPuzzleNumber={todayPuzzleNumber}
+      isPuzzleCompleted={checkPuzzleCompleted}
+      isPuzzleInProgress={checkPuzzleInProgress}
+      onSelectPuzzle={handleSelectPuzzle}
+      backHref="/carom"
+      statusDisplay="checkmark"
+      isPerfectCompletion={checkPerfectCompletion}
+      isCheating={checkIsCheating}
+      availableMonths={availableMonths}
+      getPuzzlesForMonth={getPuzzlesForMonth}
+    />
   );
 }

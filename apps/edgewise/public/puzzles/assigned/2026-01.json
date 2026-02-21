@@ -2,7 +2,7 @@
   "gameId": "edgewise",
   "baseDate": "2026-01-01",
   "puzzles": {
-    "1": {
+    "2026-01-25": {
       "date": "2026-01-25",
       "categories": {
         "top": "Bodies of Water",
@@ -36,9 +36,10 @@
           "left": "HENGE"
         }
       ],
-      "id": "fb6065bf"
+      "id": "fb6065bf",
+      "puzzleNumber": 1
     },
-    "2": {
+    "2026-01-26": {
       "date": "2026-01-26",
       "categories": {
         "top": "Dog Breeds",
@@ -72,9 +73,10 @@
           "left": "CRYSTAL"
         }
       ],
-      "id": "ee8bb7bd"
+      "id": "ee8bb7bd",
+      "puzzleNumber": 2
     },
-    "3": {
+    "2026-01-27": {
       "date": "2026-01-27",
       "categories": {
         "top": "Planets",
@@ -108,9 +110,10 @@
           "left": "WALTZ"
         }
       ],
-      "id": "83d62b7f"
+      "id": "83d62b7f",
+      "puzzleNumber": 3
     },
-    "4": {
+    "2026-01-28": {
       "date": "2026-01-28",
       "categories": {
         "top": "Weather Terms",
@@ -144,9 +147,10 @@
           "left": "LADLE"
         }
       ],
-      "id": "d84416c7"
+      "id": "d84416c7",
+      "puzzleNumber": 4
     },
-    "5": {
+    "2026-01-29": {
       "date": "2026-01-29",
       "categories": {
         "top": "Gemstones",
@@ -180,7 +184,8 @@
           "left": "TAPE"
         }
       ],
-      "id": "40f9a44e"
+      "id": "40f9a44e",
+      "puzzleNumber": 5
     }
   }
 }

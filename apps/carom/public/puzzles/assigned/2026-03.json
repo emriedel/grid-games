@@ -2,7 +2,7 @@
   "gameId": "carom",
   "baseDate": "2026-03-01",
   "puzzles": {
-    "29": {
+    "2026-03-01": {
       "id": "4756889a4e5ef7fe",
       "walls": [
         [
@@ -158,9 +158,10 @@
           "pieceId": "target",
           "direction": "up"
         }
-      ]
+      ],
+      "puzzleNumber": 29
     },
-    "30": {
+    "2026-03-02": {
       "id": "836207027d805805",
       "walls": [
         [
@@ -316,9 +317,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 30
     },
-    "31": {
+    "2026-03-03": {
       "id": "a58986903caecfa6",
       "walls": [
         [
@@ -474,9 +476,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 31
     },
-    "32": {
+    "2026-03-04": {
       "id": "95631f3e77f9c04f",
       "walls": [
         [
@@ -632,9 +635,10 @@
           "pieceId": "target",
           "direction": "down"
         }
-      ]
+      ],
+      "puzzleNumber": 32
     },
-    "33": {
+    "2026-03-05": {
       "id": "afb32d45d0f25fca",
       "walls": [
         [
@@ -806,9 +810,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 33
     },
-    "34": {
+    "2026-03-06": {
       "id": "df8e6c72d6cec360",
       "walls": [
         [
@@ -968,9 +973,10 @@
           "pieceId": "target",
           "direction": "up"
         }
-      ]
+      ],
+      "puzzleNumber": 34
     },
-    "35": {
+    "2026-03-07": {
       "id": "e17f209db66f78ed",
       "walls": [
         [
@@ -1126,9 +1132,10 @@
           "pieceId": "target",
           "direction": "down"
         }
-      ]
+      ],
+      "puzzleNumber": 35
     },
-    "36": {
+    "2026-03-08": {
       "id": "d310fdd7a3548d7a",
       "walls": [
         [
@@ -1288,9 +1295,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 36
     },
-    "37": {
+    "2026-03-09": {
       "id": "133c4d1d9c07bd8a",
       "walls": [
         [
@@ -1446,9 +1454,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 37
     },
-    "38": {
+    "2026-03-10": {
       "id": "e406ab7936aed0d6",
       "walls": [
         [
@@ -1604,9 +1613,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 38
     },
-    "39": {
+    "2026-03-11": {
       "id": "090d49066b04a11e",
       "walls": [
         [
@@ -1766,9 +1776,10 @@
           "pieceId": "target",
           "direction": "down"
         }
-      ]
+      ],
+      "puzzleNumber": 39
     },
-    "40": {
+    "2026-03-12": {
       "id": "4a35a41134677fde",
       "walls": [
         [
@@ -1928,9 +1939,10 @@
           "pieceId": "target",
           "direction": "up"
         }
-      ]
+      ],
+      "puzzleNumber": 40
     },
-    "41": {
+    "2026-03-13": {
       "id": "f177f691cdb951f1",
       "walls": [
         [
@@ -2086,9 +2098,10 @@
           "pieceId": "target",
           "direction": "down"
         }
-      ]
+      ],
+      "puzzleNumber": 41
     },
-    "42": {
+    "2026-03-14": {
       "id": "ea7bfade3d13bf58",
       "walls": [
         [
@@ -2244,9 +2257,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 42
     },
-    "43": {
+    "2026-03-15": {
       "id": "da40a69965cd30f4",
       "walls": [
         [
@@ -2402,9 +2416,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 43
     },
-    "44": {
+    "2026-03-16": {
       "id": "ebb73b0176fd6c0e",
       "walls": [
         [
@@ -2560,9 +2575,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 44
     },
-    "45": {
+    "2026-03-17": {
       "id": "99bf90c7585df962",
       "walls": [
         [
@@ -2722,9 +2738,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 45
     },
-    "46": {
+    "2026-03-18": {
       "id": "9ba59c6a7e3e1018",
       "walls": [
         [
@@ -2884,9 +2901,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 46
     },
-    "47": {
+    "2026-03-19": {
       "id": "d8f979e32985ea62",
       "walls": [
         [
@@ -3050,9 +3068,10 @@
           "pieceId": "target",
           "direction": "down"
         }
-      ]
+      ],
+      "puzzleNumber": 47
     },
-    "48": {
+    "2026-03-20": {
       "id": "11a33b84149d60fc",
       "walls": [
         [
@@ -3208,9 +3227,10 @@
           "pieceId": "target",
           "direction": "down"
         }
-      ]
+      ],
+      "puzzleNumber": 48
     },
-    "49": {
+    "2026-03-21": {
       "id": "75a94cec8e37dd71",
       "walls": [
         [
@@ -3370,9 +3390,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 49
     },
-    "50": {
+    "2026-03-22": {
       "id": "5d22ca87a2bacdf0",
       "walls": [
         [
@@ -3536,9 +3557,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 50
     },
-    "51": {
+    "2026-03-23": {
       "id": "6a61fa714509d818",
       "walls": [
         [
@@ -3694,9 +3716,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 51
     },
-    "52": {
+    "2026-03-24": {
       "id": "cc9ff71abe9415c2",
       "walls": [
         [
@@ -3852,9 +3875,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 52
     },
-    "53": {
+    "2026-03-25": {
       "id": "e18d23847878754c",
       "walls": [
         [
@@ -4010,9 +4034,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 53
     },
-    "54": {
+    "2026-03-26": {
       "id": "51adee2c501e9596",
       "walls": [
         [
@@ -4176,9 +4201,10 @@
           "pieceId": "target",
           "direction": "right"
         }
-      ]
+      ],
+      "puzzleNumber": 54
     },
-    "55": {
+    "2026-03-27": {
       "id": "fe1eee73527ca1bc",
       "walls": [
         [
@@ -4338,9 +4364,10 @@
           "pieceId": "target",
           "direction": "up"
         }
-      ]
+      ],
+      "puzzleNumber": 55
     },
-    "56": {
+    "2026-03-28": {
       "id": "94c1040f4dca3e95",
       "walls": [
         [
@@ -4496,9 +4523,10 @@
           "pieceId": "target",
           "direction": "up"
         }
-      ]
+      ],
+      "puzzleNumber": 56
     },
-    "57": {
+    "2026-03-29": {
       "id": "ded7e93525a83c4c",
       "walls": [
         [
@@ -4658,9 +4686,10 @@
           "pieceId": "target",
           "direction": "left"
         }
-      ]
+      ],
+      "puzzleNumber": 57
     },
-    "58": {
+    "2026-03-30": {
       "id": "f7a9fa9c6d729abe",
       "walls": [
         [
@@ -4820,9 +4849,10 @@
           "pieceId": "target",
           "direction": "down"
         }
-      ]
+      ],
+      "puzzleNumber": 58
     },
-    "59": {
+    "2026-03-31": {
       "id": "e6a77ea6493adb8b",
       "walls": [
         [
@@ -4982,7 +5012,8 @@
           "pieceId": "target",
           "direction": "up"
         }
-      ]
+      ],
+      "puzzleNumber": 59
     }
   }
 }

@@ -29,7 +29,6 @@ import { DragOverlayPiece } from './DragOverlayPiece';
 import {
   loadPuzzleByNumber,
   getTodayPuzzleNumber,
-  generateFallbackPuzzle,
   loadPoolPuzzleById,
 } from '@/lib/puzzleLoader';
 import {
@@ -118,7 +117,7 @@ export function Game() {
 
   // Loading and UI state
   const [isLoading, setIsLoading] = useState(true);
-  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed' | 'unavailable'>('fresh');
   const [exitedLanding, setExitedLanding] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -189,14 +188,17 @@ export function Game() {
       if (!puzzle) {
         setPuzzleNumber(num);
         puzzle = await loadPuzzleByNumber(num);
-
-        // Fallback to generated puzzle
-        if (!puzzle) {
-          puzzle = generateFallbackPuzzle(num);
-        }
       }
 
       setPuzzleNumber(num);
+
+      // Handle no puzzle available
+      if (!puzzle) {
+        setLandingMode('unavailable');
+        setIsLoading(false);
+        return;
+      }
+
       setPuzzleId(puzzle.id);
       loadPuzzle(puzzle);
 
@@ -499,7 +501,7 @@ export function Game() {
 https://nerdcube.games/inlay`;
 
   // Loading state
-  if (isLoading || !state.puzzle || !state.board) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-neutral-900">
         <div className="text-white text-lg">Loading puzzle...</div>
@@ -507,10 +509,10 @@ https://nerdcube.games/inlay`;
     );
   }
 
-  // Determine if we should show landing
-  const showLanding = !exitedLanding && state.phase === 'landing' && !isArchiveMode;
+  // Determine if we should show landing (including unavailable mode when no puzzle)
+  const showLanding = !exitedLanding && (state.phase === 'landing' || landingMode === 'unavailable') && !isArchiveMode;
 
-  // Landing screen
+  // Landing screen (including unavailable mode)
   if (showLanding) {
     return (
       <>
@@ -533,6 +535,11 @@ https://nerdcube.games/inlay`;
         />
       </>
     );
+  }
+
+  // If no puzzle is loaded, don't render the game (shouldn't happen after landing check)
+  if (!state.puzzle || !state.board) {
+    return null;
   }
 
   // Determine display state

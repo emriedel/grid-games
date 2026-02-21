@@ -87,7 +87,7 @@ export function ArchivePageContent() {
       isPuzzleCompleted={checkPuzzleCompleted}
       isPuzzleInProgress={checkPuzzleInProgress}
       onSelectPuzzle={handleSelectPuzzle}
-      backHref="/"
+      backHref="/inlay"
       statusDisplay="checkmark"
     />
   );

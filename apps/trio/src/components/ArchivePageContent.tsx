@@ -153,7 +153,7 @@ export function ArchivePageContent() {
       getPuzzleScore={getPuzzleScoreWrapper}
       formatScore={formatScore}
       onSelectPuzzle={handleSelectPuzzle}
-      backHref="/"
+      backHref="/trio"
       statusDisplay="checkmark"
       isPerfectCompletion={checkPerfectCompletion}
     />

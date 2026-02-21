@@ -4,6 +4,7 @@ import { useState, useMemo, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { Modal } from './Modal';
 import { Button } from './Button';
+import { CompletionBadge } from './CompletionBadge';
 import { GAMES, getIconUrl } from '@grid-games/config';
 import { shareOrCopy } from '@grid-games/shared';
 import { useGameCompletion } from './useGameCompletion';
@@ -104,15 +105,20 @@ export function ResultsModal({
     return SUCCESS_MESSAGES[Math.floor(Math.random() * SUCCESS_MESSAGES.length)];
   }, [messageType]);
 
-  // Get current game info and other games
+  // Get current game info and calculate display games
   const currentGame = GAMES.find((g) => g.id === gameId);
-  const otherGames = GAMES.filter((g) => {
-    // Exclude current game
-    if (g.id === gameId) return false;
-    // Exclude completed games (only if we have completion data loaded)
-    if (completionStatus.size > 0 && completionStatus.get(g.id)) return false;
-    return true;
-  }).slice(0, 3); // Show up to 3 other games (total 4 items with Archive)
+  const hasArchive = currentGame?.hasArchive ?? false;
+
+  // Build list: prioritize incomplete games, then add completed games to fill 4 slots
+  const displayGames = useMemo(() => {
+    const otherGamesList = GAMES.filter(g => g.id !== gameId);
+    const incompleteGames = otherGamesList.filter(g => !completionStatus.get(g.id));
+    const completedGames = otherGamesList.filter(g => completionStatus.get(g.id));
+
+    // Archive counts as 1 item if available, so we have 3 slots for games; otherwise 4
+    const slotsForGames = hasArchive ? 3 : 4;
+    return [...incompleteGames, ...completedGames].slice(0, slotsForGames);
+  }, [gameId, completionStatus, hasArchive]);
 
   const handleShare = async () => {
     const result = await shareOrCopy(shareConfig.text);
@@ -182,8 +188,8 @@ export function ResultsModal({
         {children && <div className="mb-6">{children}</div>}
 
         {/* Share button and additional actions */}
-        <div className="flex flex-col gap-2 mb-6">
-          <Button variant="primary" fullWidth onClick={handleShare}>
+        <div className="flex flex-col items-center gap-2 mb-6">
+          <Button variant="primary" onClick={handleShare} className="min-w-[200px]">
             {copied ? 'Copied!' : 'Share Results'}
           </Button>
           {additionalActions}
@@ -196,13 +202,13 @@ export function ResultsModal({
         <div className="text-center">
           <p className="text-sm text-[var(--muted)] mb-3">Try another game</p>
           <div className="flex justify-center gap-4">
-            {/* Archive link for current game (if available) */}
-            {currentGame?.hasArchive && (
+            {/* Archive link for current game (if available) - always first */}
+            {hasArchive && currentGame && (
               <a
                 href={`${currentGame.href}/archive`}
                 className="flex flex-col items-center gap-1 group"
               >
-                <div className="w-12 h-12 rounded-lg overflow-hidden bg-[var(--tile-bg)] flex items-center justify-center transition-transform group-hover:scale-105">
+                <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-[var(--tile-bg)] flex items-center justify-center transition-transform group-hover:scale-105">
                   <img
                     src={getIconUrl(currentGame.id)}
                     alt={`${currentGame.name} Archive`}
@@ -214,18 +220,19 @@ export function ResultsModal({
                 </span>
               </a>
             )}
-            {otherGames.map((game) => (
+            {displayGames.map((game) => (
               <a
                 key={game.id}
                 href={game.href}
                 className="flex flex-col items-center gap-1 group"
               >
-                <div className="w-12 h-12 rounded-lg overflow-hidden bg-[var(--tile-bg)] flex items-center justify-center transition-transform group-hover:scale-105">
+                <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-[var(--tile-bg)] flex items-center justify-center transition-transform group-hover:scale-105">
                   <img
                     src={getIconUrl(game.id)}
                     alt={game.name}
                     className="w-full h-full object-cover"
                   />
+                  <CompletionBadge show={completionStatus.get(game.id) ?? false} size="sm" />
                 </div>
                 <span className="text-xs text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors">
                   {game.name}

@@ -2,7 +2,7 @@
   "gameId": "trio",
   "baseDate": "2026-02-01",
   "puzzles": {
-    "1": {
+    "2026-02-01": {
       "id": "vskeqa71",
       "visualMapping": {
         "shapes": [
@@ -197,9 +197,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 1
     },
-    "2": {
+    "2026-02-02": {
       "id": "hxc7emfh",
       "visualMapping": {
         "shapes": [
@@ -394,9 +395,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 2
     },
-    "3": {
+    "2026-02-03": {
       "id": "wx9wn649",
       "visualMapping": {
         "shapes": [
@@ -591,9 +593,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 3
     },
-    "4": {
+    "2026-02-04": {
       "id": "9hfmunkj",
       "visualMapping": {
         "shapes": [
@@ -788,9 +791,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 4
     },
-    "5": {
+    "2026-02-05": {
       "id": "hjblsegp",
       "visualMapping": {
         "shapes": [
@@ -985,9 +989,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 5
     },
-    "6": {
+    "2026-02-06": {
       "id": "e5mkt331",
       "visualMapping": {
         "shapes": [
@@ -1182,9 +1187,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 6
     },
-    "7": {
+    "2026-02-07": {
       "id": "3iwybeci",
       "visualMapping": {
         "shapes": [
@@ -1379,9 +1385,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 7
     },
-    "8": {
+    "2026-02-08": {
       "id": "1h24nghp",
       "visualMapping": {
         "shapes": [
@@ -1576,9 +1583,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 8
     },
-    "9": {
+    "2026-02-09": {
       "id": "cefyfr30",
       "visualMapping": {
         "shapes": [
@@ -1773,9 +1781,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 9
     },
-    "10": {
+    "2026-02-10": {
       "id": "ua71o9ii",
       "visualMapping": {
         "shapes": [
@@ -1970,9 +1979,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 10
     },
-    "11": {
+    "2026-02-11": {
       "id": "jzpmtop7",
       "visualMapping": {
         "shapes": [
@@ -2167,9 +2177,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 11
     },
-    "12": {
+    "2026-02-12": {
       "id": "pb7t4uto",
       "visualMapping": {
         "shapes": [
@@ -2364,9 +2375,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 12
     },
-    "13": {
+    "2026-02-13": {
       "id": "jcvxlmce",
       "visualMapping": {
         "shapes": [
@@ -2561,9 +2573,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 13
     },
-    "14": {
+    "2026-02-14": {
       "id": "qo6ftrr5",
       "visualMapping": {
         "shapes": [
@@ -2758,9 +2771,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 14
     },
-    "15": {
+    "2026-02-15": {
       "id": "xpff2o7m",
       "visualMapping": {
         "shapes": [
@@ -2955,9 +2969,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 15
     },
-    "16": {
+    "2026-02-16": {
       "id": "o4sbbp0o",
       "visualMapping": {
         "shapes": [
@@ -3152,9 +3167,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 16
     },
-    "17": {
+    "2026-02-17": {
       "id": "ym5zamy0",
       "visualMapping": {
         "shapes": [
@@ -3349,9 +3365,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 17
     },
-    "18": {
+    "2026-02-18": {
       "id": "utdaaum9",
       "visualMapping": {
         "shapes": [
@@ -3546,9 +3563,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 18
     },
-    "19": {
+    "2026-02-19": {
       "id": "cvzxbxux",
       "visualMapping": {
         "shapes": [
@@ -3743,9 +3761,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 19
     },
-    "20": {
+    "2026-02-20": {
       "id": "3bpwwz34",
       "visualMapping": {
         "shapes": [
@@ -3940,9 +3959,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 20
     },
-    "21": {
+    "2026-02-21": {
       "id": "qqut810c",
       "visualMapping": {
         "shapes": [
@@ -4137,9 +4157,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 21
     },
-    "22": {
+    "2026-02-22": {
       "id": "jix6ial9",
       "visualMapping": {
         "shapes": [
@@ -4334,9 +4355,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 22
     },
-    "23": {
+    "2026-02-23": {
       "id": "1j5j9npe",
       "visualMapping": {
         "shapes": [
@@ -4531,9 +4553,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 23
     },
-    "24": {
+    "2026-02-24": {
       "id": "ig1sgnra",
       "visualMapping": {
         "shapes": [
@@ -4728,9 +4751,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 24
     },
-    "25": {
+    "2026-02-25": {
       "id": "2gebqe3b",
       "visualMapping": {
         "shapes": [
@@ -4925,9 +4949,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 25
     },
-    "26": {
+    "2026-02-26": {
       "id": "e7ec49o0",
       "visualMapping": {
         "shapes": [
@@ -5122,9 +5147,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 26
     },
-    "27": {
+    "2026-02-27": {
       "id": "m5fneyul",
       "visualMapping": {
         "shapes": [
@@ -5319,9 +5345,10 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 27
     },
-    "28": {
+    "2026-02-28": {
       "id": "f6g5oaqe",
       "visualMapping": {
         "shapes": [
@@ -5516,7 +5543,8 @@
       "thresholds": {
         "threeStar": 45,
         "twoStar": 90
-      }
+      },
+      "puzzleNumber": 28
     }
   }
 }

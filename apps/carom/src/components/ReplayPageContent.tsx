@@ -43,6 +43,12 @@ export function ReplayPageContent() {
         const dateStr = getDateForPuzzleNumber(CAROM_LAUNCH_DATE, params.puzzleNumber);
         const loadedPuzzle = await getDailyPuzzle(dateStr);
 
+        if (!loadedPuzzle) {
+          setError('Puzzle not found. The puzzle may not exist for this date.');
+          setIsLoading(false);
+          return;
+        }
+
         setPuzzle(loadedPuzzle);
         setMoves(params.moves);
         setPuzzleNumber(params.puzzleNumber);

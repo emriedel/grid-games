@@ -134,7 +134,7 @@ export function Game() {
   const [isLoading, setIsLoading] = useState(true);
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [showRulesModal, setShowRulesModal] = useState(false);
-  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed' | 'unavailable'>('fresh');
   const [exitedLanding, setExitedLanding] = useState(false);
   const [shakingCardIds, setShakingCardIds] = useState<string[]>([]);
   const [successCardIds, setSuccessCardIds] = useState<string[]>([]);
@@ -183,6 +183,7 @@ export function Game() {
 
       if (!puzzle) {
         console.error('Failed to load puzzle');
+        setLandingMode('unavailable');
         setIsLoading(false);
         return;
       }
@@ -512,17 +513,20 @@ export function Game() {
     );
   }
 
-  // Error state
-  if (!activePuzzle || state.cards.length === 0) {
+  // Determine if we should show landing screen (including unavailable mode)
+  const showLanding = !exitedLanding && !isArchiveMode && (
+    landingMode === 'unavailable' ||
+    (state.phase !== 'playing' && state.phase !== 'finished')
+  );
+
+  // Error state (only show after exiting landing or in archive mode)
+  if (!showLanding && (!activePuzzle || state.cards.length === 0)) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-neutral-900">
         <div className="text-white text-lg">Failed to load puzzle</div>
       </div>
     );
   }
-
-  // Determine if we should show landing screen
-  const showLanding = !exitedLanding && !isArchiveMode && state.phase !== 'playing' && state.phase !== 'finished';
 
   // Landing screen
   if (showLanding) {

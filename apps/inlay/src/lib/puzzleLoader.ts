@@ -1,18 +1,19 @@
 /**
  * Inlay Puzzle Loader
  *
- * Loads puzzles from pre-generated monthly files or generates fallback puzzles.
+ * Loads puzzles from pre-generated monthly files.
  */
 
 import {
   getPuzzleNumber,
   loadMonthlyFile,
   getMonthForPuzzleNumber,
+  getDateForPuzzleNumber,
   getPuzzleIdsForRange,
   verifyPuzzleIdMatch,
   type PuzzleWithId,
 } from '@grid-games/shared';
-import type { Puzzle, PentominoId } from '@/types';
+import type { Puzzle } from '@/types';
 import { PUZZLE_BASE_DATE_STRING, PUZZLE_BASE_DATE } from '@/config';
 
 function getBasePath(): string {
@@ -30,10 +31,26 @@ export async function loadPuzzleByNumber(puzzleNumber: number): Promise<Puzzle |
     const basePath = getBasePath();
     const data = await loadMonthlyFile<Puzzle & PuzzleWithId>(monthKey, 'inlay', basePath);
 
-    if (data && data[String(puzzleNumber)]) {
-      const puzzle = data[String(puzzleNumber)];
-      return { ...puzzle, puzzleNumber };
+    if (!data) return null;
+
+    // Try number key (legacy format)
+    if (data[String(puzzleNumber)]) {
+      return { ...data[String(puzzleNumber)], puzzleNumber };
     }
+
+    // Try date key (new format)
+    const dateKey = getDateForPuzzleNumber(PUZZLE_BASE_DATE, puzzleNumber);
+    if (data[dateKey]) {
+      return { ...data[dateKey], puzzleNumber };
+    }
+
+    // Scan for matching puzzleNumber field
+    for (const puzzle of Object.values(data)) {
+      if (puzzle.puzzleNumber === puzzleNumber) {
+        return { ...puzzle, puzzleNumber };
+      }
+    }
+
     return null;
   } catch (error) {
     console.error(`Failed to load puzzle #${puzzleNumber}:`, error);
@@ -83,34 +100,6 @@ export async function loadPoolPuzzle(index: number): Promise<Puzzle | null> {
     console.error('Failed to load pool puzzle:', error);
     return null;
   }
-}
-
-/**
- * Generate a simple fallback puzzle
- * Used when no pre-generated puzzle is available
- */
-export function generateFallbackPuzzle(puzzleNumber: number): Puzzle {
-  // Simple 10x6 rectangle that fits exactly 12 pentominoes (60 cells = 12 × 5)
-  // For now, we'll use a subset of 6 pieces (30 cells)
-  const shape: boolean[][] = [];
-  for (let row = 0; row < 6; row++) {
-    const rowCells: boolean[] = [];
-    for (let col = 0; col < 5; col++) {
-      rowCells.push(true);
-    }
-    shape.push(rowCells);
-  }
-
-  // Use 6 pentominoes (30 cells = 6 × 5)
-  const pentominoIds: PentominoId[] = ['F', 'I', 'L', 'P', 'T', 'V'];
-
-  return {
-    id: `fallback-${puzzleNumber}`,
-    puzzleNumber,
-    shape,
-    shapeName: 'Rectangle',
-    pentominoIds,
-  };
 }
 
 /**

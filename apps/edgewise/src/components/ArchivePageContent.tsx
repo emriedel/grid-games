@@ -52,13 +52,19 @@ export function ArchivePageContent() {
     router.push(`/?puzzle=${puzzleNumber}`);
   }, [router]);
 
-  // Calculate archive entries (puzzle #1 to yesterday's puzzle)
+  // Calculate archive entries (only puzzles that exist in monthly files)
   const archiveEntries = useMemo(() => {
     const entries: ArchiveEntry[] = [];
     const baseDateObj = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
 
-    // Archive includes puzzles 1 through (todayNumber - 1)
+    // Only show puzzles that actually exist (have a puzzleId in the monthly files)
     for (let num = todayPuzzleNumber - 1; num >= 1; num--) {
+      // Get the current puzzleId for this puzzle number
+      const currentPuzzleId = puzzleIds.get(num);
+
+      // Skip puzzles that don't exist in the monthly files
+      if (!currentPuzzleId) continue;
+
       // Calculate date for this puzzle number
       const puzzleDate = new Date(baseDateObj);
       puzzleDate.setDate(puzzleDate.getDate() + num - 1);
@@ -69,13 +75,11 @@ export function ArchivePageContent() {
         year: 'numeric',
       });
 
-      // Get the current puzzleId for this puzzle number
-      const currentPuzzleId = puzzleIds.get(num);
       // Get the saved puzzleId from localStorage
       const savedPuzzleId = getSavedPuzzleId(num);
 
-      // Only show as completed if the puzzleIds match (or both are undefined for legacy)
-      const puzzleIdMatches = currentPuzzleId === undefined || savedPuzzleId === currentPuzzleId;
+      // Only show as completed if the puzzleIds match
+      const puzzleIdMatches = savedPuzzleId === currentPuzzleId;
       const isCompleted = puzzleIdMatches && isPuzzleCompleted(num, currentPuzzleId);
       const isInProgressState = puzzleIdMatches && isPuzzleInProgress(num, currentPuzzleId);
 
@@ -118,8 +122,8 @@ export function ArchivePageContent() {
       <div className="w-full max-w-md flex-1 flex flex-col px-4">
         {/* Back link */}
         <Link
-          href="/"
-          className="flex items-center gap-2 py-3 text-[var(--accent)] hover:underline"
+          href="/edgewise"
+          className="inline-flex items-center gap-2 py-2 px-3 -ml-3 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--tile-bg)] transition-colors"
         >
           <ArrowLeft size={16} />
           <span>Back to Edgewise</span>

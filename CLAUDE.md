@@ -61,13 +61,19 @@ Games use: `landing` → `playing` → `finished`
 **LandingScreen Modes:**
 ```tsx
 <LandingScreen
-  mode={landingMode}  // 'fresh' | 'in-progress' | 'completed'
+  mode={landingMode}  // 'fresh' | 'in-progress' | 'completed' | 'unavailable'
   onPlay={handlePlay}
   onResume={handleResume}
   onSeeResults={handleSeeResults}
   archiveHref="/archive"  // Link to archive page (relative to basePath)
 />
 ```
+
+**Mode Descriptions:**
+- `'fresh'` - New game, shows description with How to Play + Play buttons
+- `'in-progress'` - Saved game exists, shows resume message with Resume button
+- `'completed'` - Today's puzzle completed, shows congrats with View Game button
+- `'unavailable'` - No puzzle for today, shows "No puzzle available" with How to Play + Archive buttons
 
 **Critical Patterns:**
 
@@ -77,11 +83,12 @@ Games use: `landing` → `playing` → `finished`
 const landingMode = hasCompletedToday() ? 'completed' : 'fresh';
 
 // GOOD - defer to client-side
-const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed' | 'unavailable'>('fresh');
 useEffect(() => {
-  if (hasCompletedToday()) setLandingMode('completed');
+  if (!puzzle) setLandingMode('unavailable');
+  else if (hasCompletedToday()) setLandingMode('completed');
   else if (hasInProgressGame()) setLandingMode('in-progress');
-}, []);
+}, [puzzle]);
 ```
 
 2. **Hook Order** - All hooks MUST be defined BEFORE any early returns:
@@ -178,14 +185,26 @@ public/puzzles/
 2. Run assignment script to MOVE puzzles from pool to `assigned/{YYYY-MM}.json`
 3. Runtime loads from monthly files with caching
 
-**Monthly File Format:**
+**Monthly File Format (Date-Keyed):**
 ```typescript
 interface MonthlyAssignedFile {
   gameId: string;           // e.g., "dabble", "carom"
   baseDate: string;         // First day of month "YYYY-MM-01"
-  puzzles: Record<string, PuzzleData>;  // Keyed by puzzle number
+  puzzles: Record<string, PuzzleData>;  // Keyed by date string (YYYY-MM-DD)
+}
+
+// Each puzzle has an explicit puzzleNumber field for sequential numbering
+interface PuzzleData {
+  id: string;               // Unique puzzle ID
+  puzzleNumber: number;     // Sequential puzzle number (1-indexed, no gaps)
+  // ... game-specific fields
 }
 ```
+
+**Key Features:**
+- **Date-keyed**: Puzzles keyed by date string (e.g., `"2026-02-01"`)
+- **Sequential numbering**: `puzzleNumber` field is sequential with no gaps
+- **Skip missing days**: If no puzzle on a date, that date has no entry
 
 ### Archive Storage Pattern (Shared Utilities)
 
@@ -271,6 +290,34 @@ const currentPuzzleId = puzzleIds.get(puzzleNumber);
 const savedPuzzleId = getSavedPuzzleId(puzzleNumber);
 const isCompleted = verifyPuzzleIdMatch(currentPuzzleId, savedPuzzleId)
   && isPuzzleCompleted(num, currentPuzzleId);
+```
+
+**Archive Page with Monthly Pagination:**
+```tsx
+import { getAvailableMonths, listPuzzlesForMonth, getTodayDateString } from '@grid-games/shared';
+
+// Get available months for pagination (newest first)
+const availableMonths = useMemo(() => {
+  const today = getTodayDateString();
+  return getAvailableMonths(PUZZLE_BASE_DATE_STRING, today);
+}, []);
+
+// Load monthly puzzle lists
+const [monthlyPuzzles, setMonthlyPuzzles] = useState<Map<string, Array<{ puzzleNumber: number; date: string }>>>(new Map());
+
+useEffect(() => {
+  for (const month of availableMonths) {
+    const list = await listPuzzlesForMonth(month, 'mygame', basePath);
+    // Format and store...
+  }
+}, [availableMonths]);
+
+// Pass to ArchivePage
+<ArchivePage
+  ...
+  availableMonths={availableMonths}
+  getPuzzlesForMonth={(month) => monthlyPuzzles.get(month) || []}
+/>
 ```
 
 **Commands:**
