@@ -390,6 +390,25 @@ Features:
 - "Play This Puzzle" button to test any puzzle
 - Only available on localhost - shows "not available" on production
 
+### Admin Dashboard (Puzzle Status)
+
+```
+http://localhost:3000/admin/puzzles
+```
+
+Features:
+- Shows puzzle pool size and generation date for each game
+- Displays runway (days of puzzles remaining) with color-coded urgency
+- Provides quick links to game debug pages
+- Lists commands for generating and assigning puzzles
+
+Urgency thresholds:
+- **Critical** (red): < 30 days runway
+- **Warning** (yellow): < 60 days runway
+- **Good** (green): 60+ days runway
+
+Only available on localhost - shows "not available" on production.
+
 ---
 
 ## Commands
