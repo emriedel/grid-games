@@ -26,10 +26,14 @@ interface PoolFile {
   puzzles: PoolPuzzle[];
 }
 
+interface AssignedPuzzle extends PoolPuzzle {
+  puzzleNumber: number;
+}
+
 interface MonthlyAssignedFile {
   gameId: string;
   baseDate: string;
-  puzzles: Record<string, PoolPuzzle>; // Key: puzzle number (string), Value: full puzzle data
+  puzzles: Record<string, AssignedPuzzle>; // Key: date string (YYYY-MM-DD), Value: full puzzle data
 }
 
 // Must match the base date in storage.ts and config.ts
@@ -141,8 +145,11 @@ async function main() {
       const monthlyFile = loadMonthlyFile(assignedDir, month);
       if (monthlyFile) {
         monthlyFiles.set(month, monthlyFile);
-        for (const numStr of Object.keys(monthlyFile.puzzles)) {
-          assignedNumbers.add(parseInt(numStr, 10));
+        // Keys are dates (YYYY-MM-DD), puzzles have puzzleNumber field
+        for (const puzzle of Object.values(monthlyFile.puzzles)) {
+          if (puzzle.puzzleNumber) {
+            assignedNumbers.add(puzzle.puzzleNumber);
+          }
         }
       }
     }
@@ -189,7 +196,8 @@ async function main() {
     }
 
     const monthlyFile = monthlyFiles.get(month)!;
-    monthlyFile.puzzles[String(num)] = puzzle;
+    // Key is the date string, add puzzleNumber to the puzzle
+    monthlyFile.puzzles[dateStr] = { ...puzzle, puzzleNumber: num };
     monthsModified.add(month);
 
     assignedIds.add(puzzle.id);

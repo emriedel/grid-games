@@ -39,7 +39,7 @@ interface PoolFile {
 
 // Maximum board dimensions to ensure pieces fit on mobile
 const MAX_BOARD_ROWS = 7;
-const MAX_BOARD_COLS = 6;
+const MAX_BOARD_COLS = 7;
 
 // ============ Shape Trimming ============
 
@@ -745,6 +745,164 @@ function createRoundedRect(): ShapeDefinition {
   return createShapeFromPattern(pattern, 'Rounded Rectangle');
 }
 
+// ============ 7-Wide Themed Shapes ============
+
+/**
+ * Wide Heart shape (25 cells = 5 pieces) - 5 rows, 7 cols
+ * 4+7+7+5+2 = 25
+ */
+function createWideHeart(): ShapeDefinition {
+  const pattern = [
+    '.██.██.',
+    '███████',
+    '███████',
+    '.█████.',
+    '..██...',
+  ];
+  return createShapeFromPattern(pattern, 'Wide Heart');
+}
+
+/**
+ * Ship shape (25 cells = 5 pieces) - 5 rows, 7 cols
+ * 1+3+7+7+7 = 25
+ */
+function createShip(): ShapeDefinition {
+  const pattern = [
+    '....█..',
+    '..███..',
+    '███████',
+    '███████',
+    '███████',
+  ];
+  return createShapeFromPattern(pattern, 'Ship');
+}
+
+/**
+ * Butterfly shape (25 cells = 5 pieces) - 5 rows, 7 cols
+ * 5+5+5+5+5 = 25
+ */
+function createButterfly(): ShapeDefinition {
+  const pattern = [
+    '██.█.██',
+    '██.█.██',
+    '██.█.██',
+    '██.█.██',
+    '██.█.██',
+  ];
+  return createShapeFromPattern(pattern, 'Butterfly');
+}
+
+/**
+ * Tree shape (30 cells = 6 pieces) - 6 rows, 7 cols
+ * 1+3+5+7+7+7 = 30
+ */
+function createTree(): ShapeDefinition {
+  const pattern = [
+    '...█...',
+    '..███..',
+    '.█████.',
+    '███████',
+    '███████',
+    '███████',
+  ];
+  return createShapeFromPattern(pattern, 'Tree');
+}
+
+/**
+ * Wide Castle shape (30 cells = 6 pieces) - 6 rows, 7 cols
+ * 5+7+7+5+5+1 = 30
+ */
+function createWideCastle(): ShapeDefinition {
+  const pattern = [
+    '█.███.█',
+    '███████',
+    '███████',
+    '█████..',
+    '█████..',
+    '..█....',
+  ];
+  return createShapeFromPattern(pattern, 'Wide Castle');
+}
+
+/**
+ * Wide Diamond shape (25 cells = 5 pieces) - 5 rows, 7 cols
+ * 1+3+7+7+7 = 25
+ */
+function createWideDiamond(): ShapeDefinition {
+  const pattern = [
+    '...█...',
+    '..███..',
+    '███████',
+    '███████',
+    '███████',
+  ];
+  return createShapeFromPattern(pattern, 'Wide Diamond');
+}
+
+/**
+ * Arrow shape (25 cells = 5 pieces) - 7 rows, 7 cols
+ * 1+3+5+7+5+3+1 = 25
+ */
+function createArrow(): ShapeDefinition {
+  const pattern = [
+    '...█...',
+    '..███..',
+    '.█████.',
+    '███████',
+    '.█████.',
+    '..███..',
+    '...█...',
+  ];
+  return createShapeFromPattern(pattern, 'Arrow');
+}
+
+/**
+ * Anchor shape (30 cells = 6 pieces) - 7 rows, 7 cols
+ * 1+5+3+5+7+5+4 = 30
+ */
+function createAnchor(): ShapeDefinition {
+  const pattern = [
+    '...█...',
+    '.█████.',
+    '..███..',
+    '.█████.',
+    '███████',
+    '.█████.',
+    '██...██',
+  ];
+  return createShapeFromPattern(pattern, 'Anchor');
+}
+
+/**
+ * Spaceship shape (25 cells = 5 pieces) - 5 rows, 7 cols
+ * 1+5+7+7+5 = 25
+ */
+function createSpaceship(): ShapeDefinition {
+  const pattern = [
+    '...█...',
+    '.█████.',
+    '███████',
+    '███████',
+    '.█████.',
+  ];
+  return createShapeFromPattern(pattern, 'Spaceship');
+}
+
+/**
+ * Wave shape (25 cells = 5 pieces) - 5 rows, 7 cols
+ * 5+7+5+7+1 = 25
+ */
+function createWave(): ShapeDefinition {
+  const pattern = [
+    '█████..',
+    '███████',
+    '..█████',
+    '███████',
+    '..█....',
+  ];
+  return createShapeFromPattern(pattern, 'Wave');
+}
+
 /**
  * Get all valid shape definitions (cells divisible by 5)
  * Includes randomly generated rectangle variants for variety
@@ -776,6 +934,18 @@ function getShapeDefinitions(): ShapeDefinition[] {
     { rows: 6, cols: 6, deadCells: 6 },
     // 7x6 = 42 cells, remove 12 cells = 30 cells = 6 pieces
     { rows: 7, cols: 6, deadCells: 12 },
+    // 7-wide rectangle variants
+    // 5x7 = 35 cells, remove 5 cells = 30 cells = 6 pieces
+    { rows: 5, cols: 7, deadCells: 5 },
+    { rows: 5, cols: 7, deadCells: 5 },
+    // 5x7 = 35 cells, remove 10 cells = 25 cells = 5 pieces
+    { rows: 5, cols: 7, deadCells: 10 },
+    { rows: 5, cols: 7, deadCells: 10 },
+    // 6x7 = 42 cells, remove 12 cells = 30 cells = 6 pieces
+    { rows: 6, cols: 7, deadCells: 12 },
+    { rows: 6, cols: 7, deadCells: 12 },
+    // 6x7 = 42 cells, remove 17 cells = 25 cells = 5 pieces
+    { rows: 6, cols: 7, deadCells: 17 },
   ];
 
   for (const config of variantConfigs) {
@@ -820,6 +990,18 @@ function getShapeDefinitions(): ShapeDefinition[] {
   shapes.push(createCross()); // 25 cells = 5 pieces, 7 rows (redesigned)
   shapes.push(createShield()); // 25 cells = 5 pieces, 7 rows (redesigned)
   shapes.push(createLetterE()); // 25 cells = 5 pieces, 7 rows (redesigned)
+
+  // 7-wide themed shapes
+  shapes.push(createWideHeart()); // 25 cells = 5 pieces, 5 rows x 7 cols
+  shapes.push(createShip()); // 25 cells = 5 pieces, 5 rows x 7 cols
+  shapes.push(createButterfly()); // 25 cells = 5 pieces, 5 rows x 7 cols
+  shapes.push(createTree()); // 30 cells = 6 pieces, 6 rows x 7 cols
+  shapes.push(createWideCastle()); // 30 cells = 6 pieces, 6 rows x 7 cols
+  shapes.push(createWideDiamond()); // 25 cells = 5 pieces, 5 rows x 7 cols
+  shapes.push(createArrow()); // 25 cells = 5 pieces, 5 rows x 7 cols
+  shapes.push(createAnchor()); // 30 cells = 6 pieces, 6 rows x 7 cols
+  shapes.push(createSpaceship()); // 25 cells = 5 pieces, 5 rows x 7 cols
+  shapes.push(createWave()); // 25 cells = 5 pieces, 5 rows x 7 cols
 
   // Filter to only valid shapes that fit within constraints (5-6 pieces only)
   return shapes.filter((s) => {
@@ -1121,13 +1303,33 @@ async function main() {
   }
   console.log();
 
-  // Track seen puzzles for uniqueness (include existing pool puzzles)
+  // Track seen puzzles for uniqueness
   const seenPuzzles = new Set<string>();
+
+  // Load assigned puzzle keys first (to avoid generating duplicates of published puzzles)
+  const assignedDir = path.join(outputDir, 'assigned');
+  if (fs.existsSync(assignedDir)) {
+    const files = fs.readdirSync(assignedDir).filter((f) => f.endsWith('.json'));
+    for (const file of files) {
+      try {
+        const data = JSON.parse(fs.readFileSync(path.join(assignedDir, file), 'utf-8'));
+        for (const puzzle of Object.values(data.puzzles) as PoolPuzzle[]) {
+          const key = getPuzzleKey(puzzle.shape, puzzle.pentominoIds);
+          seenPuzzles.add(key);
+        }
+        console.log(`Loaded ${Object.keys(data.puzzles).length} assigned puzzles from ${file}`);
+      } catch (e) {
+        console.error(`Error loading ${file}:`, e);
+      }
+    }
+  }
+
+  // Include existing pool puzzles
   for (const p of pool.puzzles) {
     const key = getPuzzleKey(p.shape, p.pentominoIds);
     seenPuzzles.add(key);
   }
-  console.log(`Tracking ${seenPuzzles.size} existing puzzle keys for uniqueness\n`);
+  console.log(`Tracking ${seenPuzzles.size} existing puzzle keys for uniqueness (pool + assigned)\n`);
 
   // Generate puzzles
   let generated = 0;

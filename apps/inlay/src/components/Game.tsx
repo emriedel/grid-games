@@ -121,6 +121,7 @@ export function Game() {
   const [exitedLanding, setExitedLanding] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [showCompletionAnimation, setShowCompletionAnimation] = useState(false);
   const [puzzleNumber, setPuzzleNumber] = useState<number>(1);
   const [puzzleId, setPuzzleId] = useState<string | undefined>();
 
@@ -275,7 +276,13 @@ export function Game() {
       }
       // Only auto-show results if we just completed the puzzle (not viewing a completed puzzle)
       if (!exitedLanding) {
-        setShowResults(true);
+        // Start the completion animation
+        setShowCompletionAnimation(true);
+        // Show results modal after animation completes
+        const timer = setTimeout(() => {
+          setShowResults(true);
+        }, 1200);
+        return () => clearTimeout(timer);
       }
     }
   }, [state.phase, state.won, debugMode, puzzleNumber, state, exitedLanding]);
@@ -574,6 +581,7 @@ https://nerdcube.games/inlay`;
             activeDrag={activeDrag}
             dragOverCell={dragOverCell}
             placedPieces={state.placedPieces}
+            isComplete={showCompletionAnimation}
             onCellClick={handleCellClick}
             onPieceClick={handlePieceClick}
             onInvalidPlacement={handleInvalidPlacement}

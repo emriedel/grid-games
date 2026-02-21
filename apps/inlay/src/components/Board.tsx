@@ -12,6 +12,7 @@ interface BoardProps {
   activeDrag: DragData | null;
   dragOverCell: Position | null;
   placedPieces: PlacedPiece[];
+  isComplete?: boolean;
   onCellClick: (position: Position) => void;
   onPieceClick: (pentominoId: PentominoId) => void;
   onInvalidPlacement?: () => void;
@@ -25,6 +26,7 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   activeDrag,
   dragOverCell,
   placedPieces,
+  isComplete,
   onCellClick,
   onPieceClick,
   onInvalidPlacement,
@@ -172,7 +174,7 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   return (
     <div
       ref={ref}
-      className="w-full bg-[var(--board-bg)] p-1 sm:p-1.5 rounded-lg overflow-hidden"
+      className={`w-full bg-[var(--board-bg)] p-1 sm:p-1.5 rounded-lg overflow-hidden ${isComplete ? 'animate-completion-glow' : ''}`}
       onMouseLeave={handleBoardLeave}
     >
       <div ref={gridRef} style={gridStyle}>

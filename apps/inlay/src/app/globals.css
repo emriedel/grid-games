@@ -112,3 +112,14 @@ body {
 .animate-shake {
   animation: shake 0.4s ease-in-out;
 }
+
+/* Completion animation - green glow pulse */
+@keyframes completion-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(13, 166, 120, 0); }
+  33% { box-shadow: 0 0 20px 4px rgba(13, 166, 120, 0.6); }
+  66% { box-shadow: 0 0 20px 4px rgba(13, 166, 120, 0.3); }
+}
+
+.animate-completion-glow {
+  animation: completion-glow 1.2s ease-out forwards;
+}
