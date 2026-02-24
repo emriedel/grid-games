@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight, Mail, Bug, LayoutGrid } from 'lucide-react';
 import { GAMES, getIconUrl } from '@grid-games/config';
 import { CompletionBadge } from './CompletionBadge';
+import { useBodyScrollLock } from './useBodyScrollLock';
 
 interface HamburgerMenuProps {
   /** Current game ID to highlight */
@@ -37,6 +38,9 @@ export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: 
     }
   }, [currentGameId]);
 
+  // Lock body scroll when menu is open (reference-counted to avoid conflicts with Modal)
+  useBodyScrollLock(isOpen);
+
   // Handle escape key
   useEffect(() => {
     if (!isOpen) return;
@@ -48,11 +52,9 @@ export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: 
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
     };
   }, [isOpen, handleClose]);
 
@@ -84,7 +86,7 @@ export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: 
 
       {/* Overlay and panel */}
       <div
-        className="fixed inset-0 z-50 transition-opacity duration-300"
+        className="fixed inset-0 z-50 transition-opacity duration-200"
         style={{
           opacity: isOpen ? 1 : 0,
           pointerEvents: isOpen ? 'auto' : 'none',
@@ -96,7 +98,7 @@ export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: 
 
         {/* Slide-out panel */}
         <div
-          className="absolute left-0 top-0 h-full w-72 bg-[var(--background,#0a0a0a)] border-r border-[var(--border,#27272a)] shadow-2xl transition-transform duration-300 ease-out"
+          className="absolute left-0 top-0 h-full w-72 bg-[var(--background,#0a0a0a)] border-r border-[var(--border,#27272a)] shadow-2xl transition-transform duration-200 ease-out"
           style={{
             transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
           }}

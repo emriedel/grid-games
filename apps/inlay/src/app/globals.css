@@ -80,10 +80,10 @@ body {
 
 @keyframes pulse-selected {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(13, 166, 120, 0);
+    outline: 2px solid transparent;
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(13, 166, 120, 0.4);
+    outline: 2px solid rgba(13, 166, 120, 0.6);
   }
 }
 

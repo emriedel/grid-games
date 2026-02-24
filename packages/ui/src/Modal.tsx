@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback, type ReactNode } from 'react';
+import { useBodyScrollLock } from './useBodyScrollLock';
 
 interface ModalProps {
   isOpen: boolean;
@@ -54,15 +55,15 @@ export function Modal({
     [closeOnEscape, onClose]
   );
 
+  // Lock body scroll when modal is open (reference-counted to avoid conflicts with HamburgerMenu)
+  useBodyScrollLock(isOpen);
+
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = 'hidden';
     }
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
     };
   }, [isOpen, handleKeyDown]);
 

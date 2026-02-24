@@ -69,6 +69,7 @@ export function useReplay(
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const prevMoveHistoryLengthRef = useRef(moveHistory.length);
 
   const totalSteps = moveHistory.length;
@@ -102,11 +103,14 @@ export function useReplay(
     }
   }, [isAtEnd, isPlaying]);
 
-  // Cleanup interval on unmount
+  // Cleanup interval and animation timeout on unmount
   useEffect(() => {
     return () => {
       if (playIntervalRef.current) {
         clearInterval(playIntervalRef.current);
+      }
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
       }
     };
   }, []);
@@ -123,13 +127,19 @@ export function useReplay(
           }
           return Math.min(next, totalSteps);
         });
-        // Clear animating flag after animation completes
-        setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+        // Clear any pending animation timeout before scheduling new one
+        if (animationTimeoutRef.current) {
+          clearTimeout(animationTimeoutRef.current);
+        }
+        animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
       }, TOTAL_STEP_TIME);
 
       return () => {
         if (playIntervalRef.current) {
           clearInterval(playIntervalRef.current);
+        }
+        if (animationTimeoutRef.current) {
+          clearTimeout(animationTimeoutRef.current);
         }
       };
     }
@@ -157,7 +167,10 @@ export function useReplay(
     if (currentStep < totalSteps) {
       setIsAnimating(true);
       setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
-      setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
     }
   }, [currentStep, totalSteps]);
 
@@ -165,7 +178,10 @@ export function useReplay(
     if (currentStep > 0) {
       setIsAnimating(true);
       setCurrentStep((prev) => Math.max(prev - 1, 0));
-      setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
     }
   }, [currentStep]);
 
@@ -173,14 +189,20 @@ export function useReplay(
     pause();
     setIsAnimating(true);
     setCurrentStep(0);
-    setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
   }, [pause]);
 
   const goToEnd = useCallback(() => {
     pause();
     setIsAnimating(true);
     setCurrentStep(totalSteps);
-    setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
   }, [pause, totalSteps]);
 
   return {
@@ -212,6 +234,7 @@ export function useReplayFromMoves(
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const totalSteps = moves.length;
   const isAtEnd = currentStep >= totalSteps;
@@ -247,11 +270,14 @@ export function useReplayFromMoves(
     }
   }, [isAtEnd, isPlaying]);
 
-  // Cleanup interval on unmount
+  // Cleanup interval and animation timeout on unmount
   useEffect(() => {
     return () => {
       if (playIntervalRef.current) {
         clearInterval(playIntervalRef.current);
+      }
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
       }
     };
   }, []);
@@ -268,12 +294,19 @@ export function useReplayFromMoves(
           }
           return Math.min(next, totalSteps);
         });
-        setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+        // Clear any pending animation timeout before scheduling new one
+        if (animationTimeoutRef.current) {
+          clearTimeout(animationTimeoutRef.current);
+        }
+        animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
       }, TOTAL_STEP_TIME);
 
       return () => {
         if (playIntervalRef.current) {
           clearInterval(playIntervalRef.current);
+        }
+        if (animationTimeoutRef.current) {
+          clearTimeout(animationTimeoutRef.current);
         }
       };
     }
@@ -299,7 +332,10 @@ export function useReplayFromMoves(
     if (currentStep < totalSteps) {
       setIsAnimating(true);
       setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
-      setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
     }
   }, [currentStep, totalSteps]);
 
@@ -307,7 +343,10 @@ export function useReplayFromMoves(
     if (currentStep > 0) {
       setIsAnimating(true);
       setCurrentStep((prev) => Math.max(prev - 1, 0));
-      setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
     }
   }, [currentStep]);
 
@@ -315,14 +354,20 @@ export function useReplayFromMoves(
     pause();
     setIsAnimating(true);
     setCurrentStep(0);
-    setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
   }, [pause]);
 
   const goToEnd = useCallback(() => {
     pause();
     setIsAnimating(true);
     setCurrentStep(totalSteps);
-    setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), SLIDE_ANIMATION_DURATION);
   }, [pause, totalSteps]);
 
   return {

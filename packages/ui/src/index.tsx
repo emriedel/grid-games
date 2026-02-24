@@ -24,3 +24,4 @@ export { ArchivePage } from './ArchivePage';
 export type { ArchivePageProps } from './ArchivePage';
 export { CompletionBadge } from './CompletionBadge';
 export { useGameCompletion } from './useGameCompletion';
+export { useBodyScrollLock } from './useBodyScrollLock';
