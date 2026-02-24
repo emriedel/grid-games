@@ -144,6 +144,9 @@ export function Game() {
   // Animation state tracking
   const animationTimerRef = useRef<NodeJS.Timeout | null>(null);
   const revealTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const successAnimationTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const shakeAnimationTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const missedFlowTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Track if we've auto-shown the results modal for this game completion
   const hasAutoShownResultsRef = useRef(false);
@@ -382,18 +385,18 @@ export function Game() {
       // Show success animation on the selected cards
       setSuccessCardIds([...state.selectedCardIds]);
       // Clear success state after the animation (400ms matches the FOUND_SET delay)
-      setTimeout(() => {
+      successAnimationTimerRef.current = setTimeout(() => {
         setSuccessCardIds([]);
       }, 400);
     } else if (result === 'invalid') {
       // Show shake animation briefly
       setShakingCardIds([...state.selectedCardIds]);
-      setTimeout(() => {
+      shakeAnimationTimerRef.current = setTimeout(() => {
         setShakingCardIds([]);
       }, 300);
 
       // Then trigger the missed round flow
-      setTimeout(() => {
+      missedFlowTimerRef.current = setTimeout(() => {
         // Get the correct trio for this round
         const validSetIndices = getValidSetIndices(activePuzzle, state.currentRound);
         const correctTrioCards = validSetIndices.map(pos =>
@@ -412,11 +415,20 @@ export function Game() {
     }
   }, [submitSelection, state.selectedCardIds, state.cards, state.currentRound, activePuzzle, dispatchMissedRound, dispatchAdvanceAfterMiss]);
 
-  // Cleanup reveal timer on unmount
+  // Cleanup animation timers on unmount
   useEffect(() => {
     return () => {
       if (revealTimerRef.current) {
         clearTimeout(revealTimerRef.current);
+      }
+      if (successAnimationTimerRef.current) {
+        clearTimeout(successAnimationTimerRef.current);
+      }
+      if (shakeAnimationTimerRef.current) {
+        clearTimeout(shakeAnimationTimerRef.current);
+      }
+      if (missedFlowTimerRef.current) {
+        clearTimeout(missedFlowTimerRef.current);
       }
     };
   }, []);

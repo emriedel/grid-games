@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -208,6 +208,10 @@ export function Game() {
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
   const [showThresholdsModal, setShowThresholdsModal] = useState(false);
   const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
+  const [pendingResultsModal, setPendingResultsModal] = useState(false);
+
+  // Ref to track mounted state for timeout cleanup
+  const resultsModalTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -334,6 +338,23 @@ export function Game() {
       }
     }
   }, [debugMode, puzzle]);
+
+  // Handle delayed results modal with proper cleanup
+  useEffect(() => {
+    if (pendingResultsModal) {
+      resultsModalTimerRef.current = setTimeout(() => {
+        setShowShareModal(true);
+        setPendingResultsModal(false);
+      }, 750);
+
+      return () => {
+        if (resultsModalTimerRef.current) {
+          clearTimeout(resultsModalTimerRef.current);
+          resultsModalTimerRef.current = null;
+        }
+      };
+    }
+  }, [pendingResultsModal]);
 
   // Save in-progress state when playing (only if meaningful progress made)
   useEffect(() => {
@@ -464,10 +485,8 @@ export function Game() {
         },
       }, activePuzzleId);
 
-      // Delay showing results modal to let user see the final board
-      setTimeout(() => {
-        setShowShareModal(true);
-      }, 750);
+      // Trigger delayed results modal via state (proper cleanup in useEffect)
+      setPendingResultsModal(true);
     }
 
     setError(null);

@@ -180,7 +180,17 @@ export function createArchiveStorage<TState extends BasePuzzleState>(
       const stateWithId = { ...state, puzzleId };
       localStorage.setItem(key, JSON.stringify(stateWithId));
     } catch (error) {
-      console.warn(`[${gameId}] Failed to save puzzle state:`, error);
+      // Check for QuotaExceededError (storage is full)
+      // This is rare - most browsers allow 5-10MB and puzzle states are small.
+      // We handle it silently since the game still works, just won't persist.
+      if (error instanceof DOMException && (
+        error.name === 'QuotaExceededError' ||
+        error.name === 'NS_ERROR_DOM_QUOTA_REACHED' // Firefox
+      )) {
+        console.warn(`[${gameId}] Storage quota exceeded - puzzle #${puzzleNumber} progress will not be saved`);
+      } else {
+        console.warn(`[${gameId}] Failed to save puzzle state:`, error);
+      }
     }
   }
 

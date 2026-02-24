@@ -133,6 +133,7 @@ export function Game() {
 
   // Error feedback state - briefly shows error on bank piece
   const [errorPieceId, setErrorPieceId] = useState<PentominoId | null>(null);
+  const errorFeedbackTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Track rotations of pieces returned to the bank
   const [bankRotations, setBankRotations] = useState<Map<PentominoId, Rotation>>(new Map());
@@ -320,11 +321,24 @@ export function Game() {
   // Handler for invalid placement attempts - show error feedback on bank piece
   const handleInvalidPlacement = useCallback(() => {
     if (state.selectedPieceId) {
+      // Clear any existing timer
+      if (errorFeedbackTimerRef.current) {
+        clearTimeout(errorFeedbackTimerRef.current);
+      }
       setErrorPieceId(state.selectedPieceId);
       // Clear error after brief animation
-      setTimeout(() => setErrorPieceId(null), 400);
+      errorFeedbackTimerRef.current = setTimeout(() => setErrorPieceId(null), 400);
     }
   }, [state.selectedPieceId]);
+
+  // Cleanup error feedback timer on unmount
+  useEffect(() => {
+    return () => {
+      if (errorFeedbackTimerRef.current) {
+        clearTimeout(errorFeedbackTimerRef.current);
+      }
+    };
+  }, []);
 
   const handlePieceClick = useCallback((pentominoId: PentominoId) => {
     // If clicking on a placed piece on the board, remove it
