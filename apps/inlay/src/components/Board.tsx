@@ -13,6 +13,7 @@ interface BoardProps {
   dragOverCell: Position | null;
   placedPieces: PlacedPiece[];
   isComplete?: boolean;
+  disabled?: boolean;
   onCellClick: (position: Position) => void;
   onPieceClick: (pentominoId: PentominoId) => void;
   onInvalidPlacement?: () => void;
@@ -27,6 +28,7 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   dragOverCell,
   placedPieces,
   isComplete,
+  disabled,
   onCellClick,
   onPieceClick,
   onInvalidPlacement,
@@ -69,12 +71,12 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   }, [onCellSizeChange]);
 
   // Check if hover position is eligible for click-to-place
-  // Only show highlight when piece is selected, not dragging, and cell is a valid target
+  // Only show highlight when piece is selected, not dragging, not disabled, and cell is a valid target
   const isHoverEligible = useMemo(() => {
-    if (!selectedPieceId || !hoverPosition || activeDrag) return false;
+    if (disabled || !selectedPieceId || !hoverPosition || activeDrag) return false;
     const anchor = findAnchorForClickedCell(board, selectedPieceId, hoverPosition, selectedRotation);
     return anchor !== null;
-  }, [board, selectedPieceId, selectedRotation, hoverPosition, activeDrag]);
+  }, [disabled, board, selectedPieceId, selectedRotation, hoverPosition, activeDrag]);
 
   // Calculate preview cells for drag-and-drop
   // When grabOffset exists, use sticky tolerance to find nearest valid placement
@@ -131,6 +133,9 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   const draggingFromBoardPieceId = activeDrag?.type === 'board-piece' ? activeDrag.pentominoId : null;
 
   const handleCellClick = (row: number, col: number) => {
+    // Don't process clicks when disabled (puzzle completed)
+    if (disabled) return;
+
     const cell = board.cells[row][col];
     const clickPosition = { row, col };
 
@@ -156,8 +161,10 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   };
 
   const handleCellHover = useCallback((row: number, col: number) => {
+    // Don't track hover when disabled
+    if (disabled) return;
     setHoverPosition({ row, col });
-  }, []);
+  }, [disabled]);
 
   const handleBoardLeave = useCallback(() => {
     setHoverPosition(null);

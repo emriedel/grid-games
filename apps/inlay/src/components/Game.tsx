@@ -171,6 +171,9 @@ export function Game() {
   const isArchiveMode = puzzleParam !== null;
   const targetPuzzleNumber = puzzleParam ? parseInt(puzzleParam, 10) : getTodayPuzzleNumber();
 
+  // Determine if puzzle is finished (needed early for disabling interactions)
+  const isFinished = state.phase === 'finished' || (exitedLanding && hasCompletedPuzzle(puzzleNumber, puzzleId));
+
   // Initialize game
   useEffect(() => {
     async function init() {
@@ -386,6 +389,9 @@ export function Game() {
 
   // Drag and drop handlers
   const handleDragStart = useCallback((event: DragStartEvent) => {
+    // Don't allow dragging when puzzle is finished
+    if (isFinished) return;
+
     const data = event.active.data.current as DragData;
     if (data?.type === 'piece') {
       setActiveDrag(data);
@@ -400,7 +406,7 @@ export function Game() {
         setActiveDrag({ type: 'piece', pentominoId: data.pentominoId, rotation: data.rotation, grabOffset: data.grabOffset });
       }
     }
-  }, [state.placedPieces, removePieceFromBoard]);
+  }, [isFinished, state.placedPieces, removePieceFromBoard]);
 
   // Calculate dragOverCell from pointer position
   // The grabbed cell of the overlay is always at the pointer (because dragOverlayOffset shifts it there)
@@ -549,9 +555,6 @@ https://nerdcube.games/inlay`;
     return null;
   }
 
-  // Determine display state
-  const isFinished = state.phase === 'finished' || (exitedLanding && hasCompletedPuzzle(puzzleNumber, puzzleId));
-
   return (
     <DndContext
       sensors={sensors}
@@ -582,6 +585,7 @@ https://nerdcube.games/inlay`;
             dragOverCell={dragOverCell}
             placedPieces={state.placedPieces}
             isComplete={showCompletionAnimation}
+            disabled={isFinished}
             onCellClick={handleCellClick}
             onPieceClick={handlePieceClick}
             onInvalidPlacement={handleInvalidPlacement}

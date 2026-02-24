@@ -81,8 +81,8 @@ function CaromResultsModal({
   const shareReplayButton = puzzleId && moveHistory.length > 0 ? (
     <Button
       variant="secondary"
-      fullWidth
       onClick={handleShareReplay}
+      className="min-w-[200px]"
     >
       {replayCopied ? 'Link Copied!' : 'Share Replay'}
     </Button>
