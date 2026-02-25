@@ -189,7 +189,7 @@ export function ResultsModal({
 
         {/* Share button and additional actions */}
         <div className="flex flex-col items-center gap-2 mb-6">
-          <Button variant="primary" onClick={handleShare} className="min-w-[200px]">
+          <Button variant="primary" onClick={handleShare} className="min-w-[200px]" data-testid="share-button">
             {copied ? 'Copied!' : 'Share Results'}
           </Button>
           {additionalActions}

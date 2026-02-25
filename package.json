@@ -11,7 +11,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean && rm -rf node_modules",
+    "test:e2e": "npm run test -w @grid-games/e2e"
   },
   "devDependencies": {
     "@tailwindcss/oxide": "^4.1.0",
