@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { TrioPage, LandingPage } from '../../page-objects';
+import {
+  TRIO_PUZZLE_1_SOLUTION,
+  TRIO_PUZZLE_1_ROUNDS,
+} from '../../helpers/solutions/trio';
 
 /**
  * Trio game-specific tests.
@@ -98,6 +102,74 @@ test.describe('Trio Game', () => {
       expect(card0Pressed).toBe('true');
       expect(card1Pressed).toBe('true');
       expect(card2Pressed).toBe('true');
+    });
+  });
+
+  test.describe('Puzzle Completion', () => {
+    test.beforeEach(async ({ context }) => {
+      await context.clearCookies();
+    });
+
+    test('can complete puzzle #1 with all valid trios', async ({ page }) => {
+      await page.goto('/?puzzle=1');
+      const trio = new TrioPage(page);
+      await trio.waitForBoard();
+
+      // Verify we have 9 cards initially
+      const initialCardCount = await trio.cards.count();
+      expect(initialCardCount).toBe(9);
+
+      // Play through all 5 rounds
+      await trio.playSolution(TRIO_PUZZLE_1_SOLUTION);
+
+      // Wait for game to detect completion
+      await page.waitForTimeout(500);
+
+      // Verify game is finished (See Results button should be visible)
+      const finished = await trio.isFinished();
+      expect(finished).toBe(true);
+    });
+
+    test('shows results modal after completion', async ({ page }) => {
+      await page.goto('/?puzzle=1');
+      const trio = new TrioPage(page);
+      await trio.waitForBoard();
+
+      // Complete the puzzle
+      await trio.playSolution(TRIO_PUZZLE_1_SOLUTION);
+
+      // Wait for results modal to auto-open
+      await trio.resultsModal.waitForOpen();
+
+      // Verify modal is open
+      expect(await trio.resultsModal.isOpen()).toBe(true);
+
+      // Should show 5/5 trios found
+      await expect(page.getByRole('dialog').getByText('5/5')).toBeVisible();
+      await expect(page.getByRole('dialog').getByText('Trios')).toBeVisible();
+
+      // All green squares should appear (perfect game - all found without hints)
+      // The modal shows 5 green squares for the 5 rounds
+      const greenSquares = page.getByRole('dialog').locator('div').filter({ hasText: /^$/ });
+      // Just verify the modal shows success message
+      await expect(page.getByRole('dialog').getByText(/nice work/i)).toBeVisible();
+    });
+
+    test('saves completion to localStorage', async ({ page }) => {
+      await page.goto('/?puzzle=1');
+      const trio = new TrioPage(page);
+      await trio.waitForBoard();
+
+      // Complete the puzzle
+      await trio.playSolution(TRIO_PUZZLE_1_SOLUTION);
+      await page.waitForTimeout(500);
+
+      // Check localStorage has completion data
+      const hasStorage = await page.evaluate(() => {
+        const keys = Object.keys(localStorage);
+        return keys.some(k => k.startsWith('trio-1-'));
+      });
+      expect(hasStorage).toBe(true);
     });
   });
 });
