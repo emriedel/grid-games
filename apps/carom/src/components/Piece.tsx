@@ -51,6 +51,7 @@ export function Piece({ piece, isSelected, onClick, cellSize }: PieceProps) {
         zIndex: isSelected ? 10 : 1,
       }}
       aria-label={`${piece.type} piece at row ${piece.position.row + 1}, column ${piece.position.col + 1}${isSelected ? ', selected' : ''}`}
+      data-piece-id={piece.id}
     />
   );
 }

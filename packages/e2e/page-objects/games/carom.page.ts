@@ -31,14 +31,11 @@ export class CaromPage extends BaseGamePage {
    * Select a piece by its ID (target, blocker-0, blocker-1, blocker-2)
    */
   async selectPiece(pieceId: string) {
-    if (pieceId === 'target') {
-      await this.targetPiece.click();
-    } else {
-      // For blockers, we need to find them by index
-      const index = parseInt(pieceId.replace('blocker-', ''), 10);
-      await this.blockerPieces.nth(index).click();
-    }
-    await this.page.waitForTimeout(100);
+    // Select by data-piece-id attribute for reliable identification
+    const piece = this.page.locator(`button[data-piece-id="${pieceId}"]`);
+    await piece.click();
+    // Wait for selection state to update and arrows to render
+    await this.page.waitForTimeout(300);
   }
 
   /**
@@ -47,20 +44,11 @@ export class CaromPage extends BaseGamePage {
   async move(direction: Direction) {
     // Arrows have aria-label like "Move up", "Move down", etc.
     const arrow = this.page.locator(`button[aria-label="Move ${direction}"]`);
-    if (await arrow.isVisible({ timeout: 1000 })) {
-      await arrow.click();
-    } else {
-      // Fallback: use keyboard
-      const keyMap: Record<Direction, string> = {
-        up: 'ArrowUp',
-        down: 'ArrowDown',
-        left: 'ArrowLeft',
-        right: 'ArrowRight',
-      };
-      await this.page.keyboard.press(keyMap[direction]);
-    }
-    // Wait for slide animation
-    await this.page.waitForTimeout(250);
+    // Wait for arrow to appear (up to 2 seconds)
+    await arrow.waitFor({ state: 'visible', timeout: 2000 });
+    await arrow.click();
+    // Wait for slide animation to complete
+    await this.page.waitForTimeout(400);
   }
 
   /**
@@ -74,10 +62,16 @@ export class CaromPage extends BaseGamePage {
 
   /**
    * Execute a full solution (array of moves).
+   * Only selects a piece if it's different from the currently selected one.
    */
   async playSolution(moves: Array<{ pieceId: string; direction: Direction }>) {
+    let lastSelectedPiece: string | null = null;
     for (const move of moves) {
-      await this.selectPiece(move.pieceId);
+      // Only select if different from last selected piece
+      if (move.pieceId !== lastSelectedPiece) {
+        await this.selectPiece(move.pieceId);
+        lastSelectedPiece = move.pieceId;
+      }
       await this.move(move.direction);
     }
   }
