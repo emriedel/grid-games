@@ -141,7 +141,7 @@ test.describe('Carom Game', () => {
       expect(stat).toContain('10');
 
       // Trophy emoji should appear in modal for optimal solution
-      await expect(page.getByRole('dialog').getByText('🏆')).toBeVisible();
+      await expect(page.getByRole('dialog').getByText('🏆').first()).toBeVisible();
     });
 
     test('saves completion to localStorage', async ({ page }) => {

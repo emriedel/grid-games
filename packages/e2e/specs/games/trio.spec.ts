@@ -148,11 +148,9 @@ test.describe('Trio Game', () => {
       await expect(page.getByRole('dialog').getByText('5/5')).toBeVisible();
       await expect(page.getByRole('dialog').getByText('Trios')).toBeVisible();
 
-      // All green squares should appear (perfect game - all found without hints)
-      // The modal shows 5 green squares for the 5 rounds
-      const greenSquares = page.getByRole('dialog').locator('div').filter({ hasText: /^$/ });
-      // Just verify the modal shows success message
-      await expect(page.getByRole('dialog').getByText(/nice work/i)).toBeVisible();
+      // Modal should show game stats and share button
+      await expect(page.getByRole('dialog').getByText('5/5')).toBeVisible();
+      await expect(page.getByRole('dialog').getByRole('button', { name: /share/i })).toBeVisible();
     });
 
     test('saves completion to localStorage', async ({ page }) => {

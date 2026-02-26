@@ -2,12 +2,70 @@ import { type Page, type Locator } from '@playwright/test';
 import { BaseGamePage } from './base-game.page';
 
 type Rotation = 0 | 1 | 2 | 3;
+type CellOffset = { row: number; col: number };
 
 interface PlacementInfo {
   pentominoId: string;
   row: number;
   col: number;
   rotation: Rotation;
+}
+
+/**
+ * Pentomino cell definitions (base rotation 0) and anchor indices.
+ * Each pentomino covers 5 cells relative to bounding box (0,0).
+ * The anchorIndex indicates which cell is the "click target" for placement.
+ */
+const PENTOMINO_DATA: Record<string, { cells: CellOffset[]; anchorIndex: number }> = {
+  F: { cells: [{ row: 0, col: 1 }, { row: 0, col: 2 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 1 }], anchorIndex: 3 },
+  I: { cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }, { row: 0, col: 3 }, { row: 0, col: 4 }], anchorIndex: 2 },
+  L: { cells: [{ row: 0, col: 0 }, { row: 1, col: 0 }, { row: 2, col: 0 }, { row: 3, col: 0 }, { row: 3, col: 1 }], anchorIndex: 2 },
+  N: { cells: [{ row: 0, col: 1 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 0 }, { row: 3, col: 0 }], anchorIndex: 2 },
+  P: { cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 0 }], anchorIndex: 3 },
+  T: { cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }, { row: 1, col: 1 }, { row: 2, col: 1 }], anchorIndex: 3 },
+  U: { cells: [{ row: 0, col: 0 }, { row: 0, col: 2 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 1, col: 2 }], anchorIndex: 3 },
+  V: { cells: [{ row: 0, col: 0 }, { row: 1, col: 0 }, { row: 2, col: 0 }, { row: 2, col: 1 }, { row: 2, col: 2 }], anchorIndex: 2 },
+  W: { cells: [{ row: 0, col: 0 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 1 }, { row: 2, col: 2 }], anchorIndex: 2 },
+  X: { cells: [{ row: 0, col: 1 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 1, col: 2 }, { row: 2, col: 1 }], anchorIndex: 2 },
+  Y: { cells: [{ row: 0, col: 1 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 1 }, { row: 3, col: 1 }], anchorIndex: 2 },
+  Z: { cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 1 }, { row: 2, col: 1 }, { row: 2, col: 2 }], anchorIndex: 2 },
+};
+
+/**
+ * Rotate a cell offset 90° clockwise
+ */
+function rotateCW(cell: CellOffset): CellOffset {
+  return { row: cell.col, col: -cell.row };
+}
+
+/**
+ * Normalize offsets so minimum row and col are 0
+ */
+function normalizeOffsets(offsets: CellOffset[]): CellOffset[] {
+  const minRow = Math.min(...offsets.map(c => c.row));
+  const minCol = Math.min(...offsets.map(c => c.col));
+  return offsets.map(c => ({ row: c.row - minRow, col: c.col - minCol }));
+}
+
+/**
+ * Get pentomino cells for a specific rotation
+ */
+function getPentominoCells(id: string, rotation: Rotation): CellOffset[] {
+  let cells = PENTOMINO_DATA[id]?.cells || [];
+  for (let i = 0; i < rotation; i++) {
+    cells = normalizeOffsets(cells.map(rotateCW));
+  }
+  return cells;
+}
+
+/**
+ * Get the anchor cell offset for a pentomino at a specific rotation.
+ * This is the cell that should be clicked to place the piece.
+ */
+function getAnchorCell(id: string, rotation: Rotation): CellOffset {
+  const anchorIndex = PENTOMINO_DATA[id]?.anchorIndex ?? 0;
+  const cells = getPentominoCells(id, rotation);
+  return cells[anchorIndex];
 }
 
 /**
@@ -30,27 +88,27 @@ export class InlayPage extends BaseGamePage {
 
   /**
    * Select a piece from the tray by its pentomino ID (e.g., 'F', 'I', 'L').
-   * PiecePreview uses aria-label with the piece name.
+   * Pieces have aria-labels like "X-pentomino" or "U-pentomino (selected)"
    */
   async selectPiece(pentominoId: string) {
-    // Aria-label format: "F", "I (selected)", "L (placed)"
-    const piece = this.page.locator(`button[aria-label^="${pentominoId}"]`).first();
-    if (await piece.isVisible({ timeout: 1000 })) {
-      await piece.click();
-    }
-    await this.page.waitForTimeout(100);
+    // Find piece button by aria-label starting with the ID
+    const piece = this.page.getByRole('button', { name: new RegExp(`^${pentominoId}-pentomino`) });
+    await piece.waitFor({ state: 'visible', timeout: 2000 });
+    await piece.click({ force: true });
+    await this.page.waitForTimeout(200);
   }
 
   /**
    * Rotate the selected piece by clicking it again.
+   * A selected piece has aria-label containing "(selected)" or aria-pressed="true"
    */
   async rotatePiece() {
-    // Clicking a selected piece rotates it
-    const selectedPiece = this.page.locator('[class*="selected"][data-pentomino-id], [class*="ring"][data-pentomino-id]');
-    if (await selectedPiece.isVisible()) {
+    // Find the selected piece by aria-label or aria-pressed
+    const selectedPiece = this.page.locator('button[aria-label*="(selected)"], button[aria-pressed="true"]').first();
+    if (await selectedPiece.isVisible({ timeout: 500 })) {
       await selectedPiece.click();
+      await this.page.waitForTimeout(150);
     }
-    await this.page.waitForTimeout(100);
   }
 
   /**
@@ -65,34 +123,35 @@ export class InlayPage extends BaseGamePage {
 
   /**
    * Place the selected piece at a board position by clicking the cell.
+   * Cells have aria-labels like "Cell (row, col) playable" or "Cell (row, col) filled by X"
    */
   async placeAtCell(row: number, col: number) {
-    const cell = this.page.locator(`[data-row="${row}"][data-col="${col}"]`);
-    if (await cell.isVisible()) {
-      await cell.click();
-    } else {
-      // Fallback: click by position in grid
-      const allCells = await this.boardCells.all();
-      // Assume cells are in row-major order
-      const boardWidth = 6; // Typical for inlay puzzles
-      const index = row * boardWidth + col;
-      if (allCells[index]) {
-        await allCells[index].click();
-      }
-    }
+    const cell = this.page.getByRole('button', { name: new RegExp(`Cell \\(${row}, ${col}\\)`) });
+    await cell.waitFor({ state: 'visible', timeout: 2000 });
+    await cell.click();
     await this.page.waitForTimeout(200);
   }
 
   /**
    * Place a piece with rotation at specified position.
+   * The position is the bounding box top-left.
+   * We need to click on the ANCHOR cell position for the game to accept placement.
    */
   async placePiece(placement: PlacementInfo) {
     await this.selectPiece(placement.pentominoId);
-    // Assume piece starts at rotation 0, rotate to target
+    // Rotate to target rotation
     for (let i = 0; i < placement.rotation; i++) {
       await this.rotatePiece();
     }
-    await this.placeAtCell(placement.row, placement.col);
+
+    // Get the anchor cell offset for this piece at this rotation
+    const anchorOffset = getAnchorCell(placement.pentominoId, placement.rotation);
+
+    // Calculate the board position where we need to click (anchor cell position)
+    const clickRow = placement.row + anchorOffset.row;
+    const clickCol = placement.col + anchorOffset.col;
+
+    await this.placeAtCell(clickRow, clickCol);
   }
 
   /**
