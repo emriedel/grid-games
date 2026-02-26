@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter, useToast } from '@grid-games/ui';
-import { buildShareText, isValidPuzzleNumber } from '@grid-games/shared';
+import { buildShareText, isValidPuzzleNumber, trackGameStart, trackGameComplete } from '@grid-games/shared';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Tableau } from './Tableau';
 import { HowToPlayModal } from './HowToPlayModal';
@@ -150,6 +150,9 @@ export function Game() {
 
   // Track if we've auto-shown the results modal for this game completion
   const hasAutoShownResultsRef = useRef(false);
+
+  // Track completion analytics once per game session
+  const hasTrackedCompletionRef = useRef(false);
 
   // Store completed puzzle data for restoring when user exits landing
   const completedDataRef = useRef<{
@@ -323,6 +326,23 @@ export function Game() {
   // Handle game completion
   useEffect(() => {
     if (state.phase === 'finished' && state.allTrios.length === GAME_CONFIG.ROUND_COUNT) {
+      // Track completion only once per session
+      if (!hasTrackedCompletionRef.current) {
+        hasTrackedCompletionRef.current = true;
+        const triosFound = state.roundOutcomes.filter(o => o === 'found' || o === 'found-with-hint').length;
+        const isPerfect = state.roundOutcomes.every(o => o === 'found');
+
+        trackGameComplete({
+          game: 'trio',
+          puzzleNumber: activePuzzleNumber,
+          puzzleId: activePuzzleId,
+          isArchive: isArchiveMode,
+          triosFound,
+          isPerfect,
+          roundOutcomes: state.roundOutcomes,
+        });
+      }
+
       if (!debugMode) {
         const allTrioTuples = state.allTrios.map(trio => trio.map(c => c.tuple));
         saveCompletedState(
@@ -334,7 +354,7 @@ export function Game() {
         );
       }
     }
-  }, [state.phase, state.roundOutcomes, state.hintUsedInRound, state.allTrios, activePuzzleNumber, activePuzzleId, debugMode]);
+  }, [state.phase, state.roundOutcomes, state.hintUsedInRound, state.allTrios, activePuzzleNumber, activePuzzleId, debugMode, isArchiveMode]);
 
   // Show results modal when game finishes (only auto-show once)
   useEffect(() => {
@@ -440,8 +460,15 @@ export function Game() {
 
   // Handle play button from landing screen
   const handlePlay = useCallback(() => {
+    trackGameStart({
+      game: 'trio',
+      puzzleNumber: activePuzzleNumber,
+      puzzleId: activePuzzleId,
+      isArchive: isArchiveMode,
+      isResume: false,
+    });
     startGame();
-  }, [startGame]);
+  }, [startGame, activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Handle resume button from landing screen
   const handleResume = useCallback(() => {
@@ -451,6 +478,14 @@ export function Game() {
       startGame();
       return;
     }
+
+    trackGameStart({
+      game: 'trio',
+      puzzleNumber: activePuzzleNumber,
+      puzzleId: activePuzzleId,
+      isArchive: isArchiveMode,
+      isResume: true,
+    });
 
     const { data } = savedState;
 

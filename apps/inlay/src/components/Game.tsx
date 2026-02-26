@@ -40,6 +40,7 @@ import {
 } from '@/lib/storage';
 import { findAnchorForClickedCell, findNearestValidPlacement } from '@/lib/gameLogic';
 import { inlayConfig } from '@/config';
+import { trackGameStart, trackGameComplete } from '@grid-games/shared';
 import type { Position, PentominoId, DragData, Rotation, PlacedPiece, Puzzle } from '@/types';
 import { getPentominoCells } from '@/constants/pentominoes';
 
@@ -143,6 +144,9 @@ export function Game() {
 
   // Board ref for calculating drag overlay position
   const boardRef = useRef<HTMLDivElement>(null);
+
+  // Track completion analytics once per game session
+  const hasTrackedCompletionRef = useRef(false);
 
   // Game state
   const {
@@ -274,6 +278,19 @@ export function Game() {
   // Handle completion
   useEffect(() => {
     if (state.phase === 'finished' && state.won) {
+      // Track completion only once per session
+      if (!hasTrackedCompletionRef.current) {
+        hasTrackedCompletionRef.current = true;
+        trackGameComplete({
+          game: 'inlay',
+          puzzleNumber,
+          puzzleId: state.puzzle?.id,
+          isArchive: isArchiveMode,
+          solved: true,
+          piecesPlaced: state.placedPieces.length,
+        });
+      }
+
       if (!debugMode && state.puzzle) {
         // Use state.puzzle.id to ensure we always have the correct puzzle ID
         saveCompletedState(puzzleNumber, state, state.puzzle.id);
@@ -289,20 +306,34 @@ export function Game() {
         return () => clearTimeout(timer);
       }
     }
-  }, [state.phase, state.won, debugMode, puzzleNumber, state, exitedLanding]);
+  }, [state.phase, state.won, debugMode, puzzleNumber, state, exitedLanding, isArchiveMode]);
 
   // Handlers
   const handlePlay = useCallback(() => {
+    trackGameStart({
+      game: 'inlay',
+      puzzleNumber,
+      puzzleId,
+      isArchive: isArchiveMode,
+      isResume: false,
+    });
     startGame();
-  }, [startGame]);
+  }, [startGame, puzzleNumber, puzzleId, isArchiveMode]);
 
   const handleResume = useCallback(() => {
+    trackGameStart({
+      game: 'inlay',
+      puzzleNumber,
+      puzzleId,
+      isArchive: isArchiveMode,
+      isResume: true,
+    });
     const savedState = getSavedState(puzzleNumber, puzzleId);
     if (savedState?.data.placedPieces) {
       restoreState({ placedPieces: savedState.data.placedPieces });
     }
     startGame();
-  }, [puzzleNumber, puzzleId, restoreState, startGame]);
+  }, [puzzleNumber, puzzleId, restoreState, startGame, isArchiveMode]);
 
   const handleSeeResults = useCallback(() => {
     const savedState = getSavedState(puzzleNumber, puzzleId);

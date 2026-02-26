@@ -15,5 +15,8 @@
   },
   "devDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "mixpanel-browser": "^2.75.0"
   }
 }

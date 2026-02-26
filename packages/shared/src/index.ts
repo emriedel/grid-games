@@ -4,3 +4,4 @@ export * from './storage';
 export * from './archiveStorage';
 export * from './archivePuzzles';
 export * from './gameCompletion';
+export * from './analytics';

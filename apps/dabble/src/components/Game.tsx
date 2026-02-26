@@ -12,7 +12,7 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal, useBugReporter } from '@grid-games/ui';
-import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber, isValidPuzzleNumber } from '@grid-games/shared';
+import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber, isValidPuzzleNumber, trackGameStart, trackGameComplete } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
 import { WordList } from './WordList';
@@ -471,6 +471,24 @@ export function Game() {
     // Check if game should end (out of turns OR all tiles used)
     if (newTurnCount >= MAX_TURNS || newLockedIndices.size === PUZZLE_LETTER_COUNT) {
       setGameState('finished');  // Immediate - prevents further moves
+
+      const finalScore = totalScore + turnScore;
+      const letterBonus = getLetterUsageBonus(newLockedIndices.size);
+      const finalScoreWithBonus = finalScore + letterBonus;
+      const stars = calculateStars(finalScoreWithBonus, puzzle?.thresholds);
+
+      // Track game completion
+      trackGameComplete({
+        game: 'dabble',
+        puzzleNumber: activePuzzleNumber,
+        puzzleId: activePuzzleId,
+        isArchive: isArchiveMode,
+        score: finalScoreWithBonus,
+        stars,
+        lettersUsed: newLockedIndices.size,
+        letterBonus,
+      });
+
       // Save completion state with full board and thresholds (immediately, before delay)
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
@@ -480,7 +498,7 @@ export function Game() {
           rackLetters: [],
           submittedWords: [...submittedWords, ...result.words],
           lockedRackIndices: Array.from(newLockedIndices),
-          totalScore: totalScore + turnScore,
+          totalScore: finalScore,
           thresholds: puzzle?.thresholds,
         },
       }, activePuzzleId);
@@ -509,6 +527,23 @@ export function Game() {
     }
     setGameState('finished');
     setShowShareModal(true);
+
+    const letterBonus = getLetterUsageBonus(lockedRackIndices.size);
+    const finalScoreWithBonus = totalScore + letterBonus;
+    const stars = calculateStars(finalScoreWithBonus, puzzle?.thresholds);
+
+    // Track game completion
+    trackGameComplete({
+      game: 'dabble',
+      puzzleNumber: activePuzzleNumber,
+      puzzleId: activePuzzleId,
+      isArchive: isArchiveMode,
+      score: finalScoreWithBonus,
+      stars,
+      lettersUsed: lockedRackIndices.size,
+      letterBonus,
+    });
+
     // Save completion state with full board and thresholds
     savePuzzleState(activePuzzleNumber, {
       puzzleNumber: activePuzzleNumber,
@@ -522,7 +557,7 @@ export function Game() {
         thresholds: puzzle?.thresholds,
       },
     }, activePuzzleId);
-  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId]);
+  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Replay the same puzzle (clear state and start fresh)
   const handleReplay = useCallback(() => {
@@ -619,13 +654,27 @@ export function Game() {
 
   // Start playing
   const handlePlay = useCallback(() => {
+    trackGameStart({
+      game: 'dabble',
+      puzzleNumber: activePuzzleNumber,
+      puzzleId: activePuzzleId,
+      isArchive: isArchiveMode,
+      isResume: false,
+    });
     setGameState('playing');
-  }, []);
+  }, [activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Handle resume (in-progress)
   const handleResume = useCallback(() => {
+    trackGameStart({
+      game: 'dabble',
+      puzzleNumber: activePuzzleNumber,
+      puzzleId: activePuzzleId,
+      isArchive: isArchiveMode,
+      isResume: true,
+    });
     setGameState('playing');
-  }, []);
+  }, [activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Handle see results (completed)
   const handleSeeResults = useCallback(() => {

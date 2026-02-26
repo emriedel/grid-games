@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { GAMES, getIconUrl } from '@grid-games/config';
 import { HamburgerMenu, CompletionBadge, useGameCompletion, useBugReporter } from '@grid-games/ui';
+import { trackGameClick } from '@grid-games/shared';
 
 export default function Home() {
   const completionStatus = useGameCompletion();
@@ -45,6 +46,7 @@ export default function Home() {
             <a
               key={game.id}
               href={game.href}
+              onClick={() => trackGameClick(game.id)}
               className="flex items-center gap-4 py-5 group"
             >
               <div className="relative w-20 h-20 flex-shrink-0">

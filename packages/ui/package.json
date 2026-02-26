@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@grid-games/config": "^0.1.0",
+    "@grid-games/shared": "^0.1.0",
     "lucide-react": "^0.563.0"
   }
 }

@@ -6,7 +6,7 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { CompletionBadge } from './CompletionBadge';
 import { GAMES, getIconUrl } from '@grid-games/config';
-import { shareOrCopy } from '@grid-games/shared';
+import { shareOrCopy, trackShare } from '@grid-games/shared';
 import { useGameCompletion } from './useGameCompletion';
 
 const SUCCESS_MESSAGES = [
@@ -122,9 +122,14 @@ export function ResultsModal({
 
   const handleShare = async () => {
     const result = await shareOrCopy(shareConfig.text);
-    if (result.success && result.method === 'clipboard') {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    if (result.success) {
+      // Track the share event
+      trackShare(gameId, puzzleNumber ?? 0, result.method === 'share' ? 'share' : 'clipboard');
+
+      if (result.method === 'clipboard') {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
     }
     onShare?.();
   };

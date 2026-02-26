@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Undo2 } from 'lucide-react';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter } from '@grid-games/ui';
-import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber, shareOrCopy } from '@grid-games/shared';
+import { formatDisplayDate, getDateForPuzzleNumber, isValidPuzzleNumber, shareOrCopy, trackGameStart, trackGameComplete } from '@grid-games/shared';
 import { caromConfig, CAROM_LAUNCH_DATE } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { useReplay } from '@/hooks/useReplay';
@@ -158,6 +158,9 @@ export function Game() {
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
   const [achievedOptimal, setAchievedOptimal] = useState(false);
 
+  // Track completion analytics once per game session
+  const hasTrackedCompletionRef = useRef(false);
+
   // Initialize puzzle on mount
   useEffect(() => {
     async function loadPuzzle() {
@@ -272,14 +275,29 @@ export function Game() {
   // Handle game start (fresh)
   const handlePlay = useCallback(() => {
     if (puzzle) {
+      trackGameStart({
+        game: 'carom',
+        puzzleNumber: activePuzzleNumber,
+        puzzleId: activePuzzleId,
+        isArchive: isArchiveMode,
+        isResume: false,
+      });
       setWasPlayingThisSession(true);
       startGame(puzzle);
     }
-  }, [puzzle, startGame]);
+  }, [puzzle, startGame, activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Handle resume (in-progress)
   const handleResume = useCallback(() => {
     if (!puzzle) return;
+
+    trackGameStart({
+      game: 'carom',
+      puzzleNumber: activePuzzleNumber,
+      puzzleId: activePuzzleId,
+      isArchive: isArchiveMode,
+      isResume: true,
+    });
 
     setWasPlayingThisSession(true);
     const inProgress = getInProgressState();
@@ -288,7 +306,7 @@ export function Game() {
     } else {
       startGame(puzzle);
     }
-  }, [puzzle, restoreGame, startGame]);
+  }, [puzzle, restoreGame, startGame, activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Handle see results (completed)
   const handleSeeResults = useCallback(() => {
@@ -330,6 +348,20 @@ export function Game() {
       const isOptimal = state.moveCount === state.puzzle.optimalMoves;
       setAchievedOptimal(isOptimal);
 
+      // Track completion only once per session
+      if (!hasTrackedCompletionRef.current) {
+        hasTrackedCompletionRef.current = true;
+        trackGameComplete({
+          game: 'carom',
+          puzzleNumber: activePuzzleNumber,
+          puzzleId: activePuzzleId,
+          isArchive: isArchiveMode,
+          moveCount: state.moveCount,
+          optimalMoves: state.puzzle.optimalMoves,
+          achievedOptimal: isOptimal,
+        });
+      }
+
       // Save using puzzle-number-based storage
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
@@ -347,15 +379,26 @@ export function Game() {
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession, activePuzzleNumber, activePuzzleId]);
+  }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession, activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Handle replay - reset game state and start fresh
   const handleReplay = useCallback(() => {
     setShowResults(false);
     setWasPlayingThisSession(true);
     setAchievedOptimal(false);
+    hasTrackedCompletionRef.current = false;
+
+    // Track new game start
+    trackGameStart({
+      game: 'carom',
+      puzzleNumber: activePuzzleNumber,
+      puzzleId: activePuzzleId,
+      isArchive: isArchiveMode,
+      isResume: false,
+    });
+
     replay();
-  }, [replay]);
+  }, [replay, activePuzzleNumber, activePuzzleId, isArchiveMode]);
 
   // Handle optimal info click
   const handleOptimalInfoClick = useCallback(() => {

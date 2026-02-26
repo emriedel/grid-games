@@ -1,7 +1,8 @@
 'use client';
 
 import { BugReporterProvider } from '@grid-games/ui';
-import { type ReactNode } from 'react';
+import { initAnalytics } from '@grid-games/shared';
+import { useEffect, type ReactNode } from 'react';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -14,6 +15,10 @@ const API_ENDPOINT = process.env.NODE_ENV === 'development'
   : '/api/feedback';
 
 export function Providers({ children }: ProvidersProps) {
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
   return (
     <BugReporterProvider apiEndpoint={API_ENDPOINT}>
       {children}

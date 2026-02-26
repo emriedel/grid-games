@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Board, FoundWord, GameStatus, Position, StarThresholds } from '@/types';
 import { loadDictionary, isValidWord } from '@/lib/dictionary';
@@ -13,6 +13,7 @@ import {
   clearPuzzleState,
   getTodayPuzzleNumber,
 } from '@/lib/storage';
+import { trackGameStart, trackGameComplete } from '@grid-games/shared';
 import {
   getDailyPuzzle,
   getPuzzleByNumber,
@@ -79,6 +80,9 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
   const [thresholds, setThresholds] = useState<StarThresholds>(STAR_THRESHOLDS);
   const [hasInProgress, setHasInProgress] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
+
+  // Track completion analytics once per game session
+  const hasTrackedCompletionRef = useRef(false);
 
   const handleGameEnd = useCallback(() => {
     setStatus('finished');
@@ -238,6 +242,22 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
   useEffect(() => {
     if (status === 'finished' && foundWords.length > 0 && puzzleId) {
       const finalStars = calculateStars(totalScore, thresholds);
+
+      // Track completion only once per session
+      if (!hasTrackedCompletionRef.current) {
+        hasTrackedCompletionRef.current = true;
+        trackGameComplete({
+          game: 'jumble',
+          puzzleNumber: puzzleNumber || activePuzzleNumber,
+          puzzleId,
+          isArchive: isArchiveMode,
+          score: totalScore,
+          stars: finalStars,
+          wordsFound: foundWords.length,
+          timeRemaining,
+        });
+      }
+
       savePuzzleState(
         puzzleNumber || activePuzzleNumber,
         {
@@ -264,17 +284,28 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
     allValidWords.size,
     totalScore,
     maxPossibleScore,
+    isArchiveMode,
+    timeRemaining,
+    thresholds,
   ]);
 
   // Start game (fresh)
   const startGame = useCallback(() => {
     if (status !== 'ready') return;
 
+    trackGameStart({
+      game: 'jumble',
+      puzzleNumber: puzzleNumber || activePuzzleNumber,
+      puzzleId,
+      isArchive: isArchiveMode,
+      isResume: false,
+    });
+
     setStatus('playing');
     setFoundWords([]);
     resetTimer(TIMER_DURATION);
     startTimer();
-  }, [status, resetTimer, startTimer]);
+  }, [status, puzzleNumber, activePuzzleNumber, puzzleId, isArchiveMode, resetTimer, startTimer]);
 
   // Resume game (from in-progress state)
   const resumeGame = useCallback(() => {
@@ -282,6 +313,14 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
 
     const puzzleState = findPuzzleState(puzzleNumber || activePuzzleNumber);
     if (puzzleState?.status === 'in-progress') {
+      trackGameStart({
+        game: 'jumble',
+        puzzleNumber: puzzleNumber || activePuzzleNumber,
+        puzzleId,
+        isArchive: isArchiveMode,
+        isResume: true,
+      });
+
       setFoundWords(puzzleState.data.foundWords);
       setTime(puzzleState.data.timeRemaining ?? TIMER_DURATION);
       setStatus('playing');
@@ -290,7 +329,7 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
       // Fall back to fresh start
       startGame();
     }
-  }, [status, puzzleNumber, activePuzzleNumber, setTime, startTimer, startGame]);
+  }, [status, puzzleNumber, activePuzzleNumber, puzzleId, isArchiveMode, setTime, startTimer, startGame]);
 
   // End game manually
   const endGame = useCallback(() => {
@@ -309,11 +348,23 @@ export function useGameState(props?: UseGameStateProps): UseGameStateReturn {
     setHasCompleted(false);
     setHasInProgress(false);
 
+    // Reset tracking ref for new game session
+    hasTrackedCompletionRef.current = false;
+
+    // Track new game start
+    trackGameStart({
+      game: 'jumble',
+      puzzleNumber: puzzleNumber || activePuzzleNumber,
+      puzzleId,
+      isArchive: isArchiveMode,
+      isResume: false,
+    });
+
     // Reset timer and start playing
     resetTimer(TIMER_DURATION);
     setStatus('playing');
     startTimer();
-  }, [puzzleNumber, activePuzzleNumber, puzzleId, resetTimer, startTimer]);
+  }, [puzzleNumber, activePuzzleNumber, puzzleId, isArchiveMode, resetTimer, startTimer]);
 
   // Regenerate puzzle (debug mode only)
   const regeneratePuzzle = useCallback(async () => {
