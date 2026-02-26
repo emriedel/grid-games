@@ -11,7 +11,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
-import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal, useBugReporter } from '@grid-games/ui';
+import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal, useBugReporter, useToast } from '@grid-games/ui';
 import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber, isValidPuzzleNumber, trackGameStart, trackGameComplete } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
@@ -175,6 +175,7 @@ export function Game() {
 
   const router = useRouter();
   const bugReporter = useBugReporter();
+  const toast = useToast();
 
   // Block access to future puzzles (unless in debug mode)
   useEffect(() => {
@@ -197,7 +198,6 @@ export function Game() {
   const [submittedWords, setSubmittedWords] = useState<Word[]>([]);
   const [turnCount, setTurnCount] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showRulesModal, setShowRulesModal] = useState(false);
@@ -386,7 +386,6 @@ export function Game() {
     } else {
       setSelectedRackIndex(index);
     }
-    setError(null);
   }, [selectedRackIndex, usedRackIndices, lockedRackIndices]);
 
   // Handle board cell click
@@ -415,7 +414,6 @@ export function Game() {
       }
 
       setSelectedCell(null);
-      setError(null);
       return;
     }
 
@@ -426,7 +424,6 @@ export function Game() {
       setUsedRackIndices((prev) => new Set([...prev, selectedRackIndex]));
       setSelectedRackIndex(null);
       setSelectedCell(null);
-      setError(null);
     } else {
       setSelectedCell({ row, col });
     }
@@ -435,7 +432,7 @@ export function Game() {
   // Submit current placement
   const handleSubmit = useCallback(() => {
     if (!board || placedTiles.length === 0) {
-      setError('Place some tiles first');
+      toast.show('Place some tiles first', 'error');
       return;
     }
 
@@ -443,7 +440,7 @@ export function Game() {
     const result = validatePlacement(board, placedTiles, isFirstWord);
 
     if (!result.valid) {
-      setError(result.error || 'Invalid placement');
+      toast.show(result.error || 'Invalid placement', 'error');
       return;
     }
 
@@ -506,9 +503,7 @@ export function Game() {
       // Trigger delayed results modal via state (proper cleanup in useEffect)
       setPendingResultsModal(true);
     }
-
-    setError(null);
-  }, [board, placedTiles, submittedWords, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber, activePuzzleId]);
+  }, [board, placedTiles, submittedWords, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber, activePuzzleId, toast]);
 
   // Clear current placement
   const handleClear = useCallback(() => {
@@ -516,13 +511,12 @@ export function Game() {
     setUsedRackIndices(new Set());
     setSelectedRackIndex(null);
     setSelectedCell(null);
-    setError(null);
   }, []);
 
   // Finish game and show share modal
   const handleFinish = useCallback(() => {
     if (submittedWords.length === 0 || !board) {
-      setError('Submit at least one word first');
+      toast.show('Submit at least one word first', 'error');
       return;
     }
     setGameState('finished');
@@ -557,7 +551,7 @@ export function Game() {
         thresholds: puzzle?.thresholds,
       },
     }, activePuzzleId);
-  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId, isArchiveMode]);
+  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId, isArchiveMode, toast]);
 
   // Replay the same puzzle (clear state and start fresh)
   const handleReplay = useCallback(() => {
@@ -577,7 +571,6 @@ export function Game() {
     setSubmittedWords([]);
     setTurnCount(0);
     setTotalScore(0);
-    setError(null);
     setShowShareModal(false);
     setGameState('playing');
   }, [puzzle, activePuzzleNumber, activePuzzleId]);
@@ -619,7 +612,6 @@ export function Game() {
           next.delete(rackIndex);
           return next;
         });
-        setError(null);
         return;
       }
 
@@ -638,7 +630,6 @@ export function Game() {
           const { letter, rackIndex } = dragData;
           setPlacedTiles((prev) => [...prev, { row, col, letter, rackIndex }]);
           setUsedRackIndices((prev) => new Set([...prev, rackIndex]));
-          setError(null);
         } else if (dragData.type === 'board-tile') {
           const { letter, rackIndex, row: fromRow, col: fromCol } = dragData;
           setPlacedTiles((prev) =>
@@ -646,7 +637,6 @@ export function Game() {
               .filter((t) => !(t.row === fromRow && t.col === fromCol))
               .concat({ row, col, letter, rackIndex })
           );
-          setError(null);
         }
       }
     }
@@ -815,17 +805,6 @@ export function Game() {
               </div>
             )}
           </div>
-
-          {/* Error message */}
-          {error && (
-            <div className={`text-sm font-medium px-4 py-2 rounded ${
-              error.includes('bonus')
-                ? 'text-[var(--success)] bg-[var(--success)]/20'
-                : 'text-[var(--danger)] bg-[var(--danger)]/20'
-            }`}>
-              {error}
-            </div>
-          )}
 
           {/* Letter Rack */}
           <LetterRack

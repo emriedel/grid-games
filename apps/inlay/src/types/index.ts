@@ -93,7 +93,7 @@ export interface GameState {
 export type GameAction =
   | { type: 'LOAD_PUZZLE'; puzzle: Puzzle }
   | { type: 'START_GAME' }
-  | { type: 'SELECT_PIECE'; pentominoId: PentominoId }
+  | { type: 'SELECT_PIECE'; pentominoId: PentominoId; initialRotation?: Rotation }
   | { type: 'DESELECT_PIECE' }
   | { type: 'ROTATE_PIECE' }
   | { type: 'PLACE_PIECE'; position: Position; rotation?: Rotation }

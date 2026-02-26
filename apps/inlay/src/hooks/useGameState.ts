@@ -54,7 +54,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'SELECT_PIECE': {
-      const { pentominoId } = action;
+      const { pentominoId, initialRotation } = action;
       // If already selected, rotate instead
       if (state.selectedPieceId === pentominoId) {
         return {
@@ -65,7 +65,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         selectedPieceId: pentominoId,
-        selectedRotation: 0,
+        selectedRotation: initialRotation ?? 0,
       };
     }
 
@@ -249,8 +249,8 @@ export function useGameState() {
     dispatch({ type: 'START_GAME' });
   }, []);
 
-  const selectPiece = useCallback((pentominoId: PentominoId) => {
-    dispatch({ type: 'SELECT_PIECE', pentominoId });
+  const selectPiece = useCallback((pentominoId: PentominoId, initialRotation?: Rotation) => {
+    dispatch({ type: 'SELECT_PIECE', pentominoId, initialRotation });
   }, []);
 
   const deselectPiece = useCallback(() => {

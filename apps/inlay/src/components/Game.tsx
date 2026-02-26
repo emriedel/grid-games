@@ -371,6 +371,21 @@ export function Game() {
     };
   }, []);
 
+  // Custom select that saves current piece's rotation before switching
+  const handleSelectPiece = useCallback((pentominoId: PentominoId) => {
+    // If there's a currently selected piece (in tray, not placed), save its rotation
+    if (state.selectedPieceId && state.selectedPieceId !== pentominoId) {
+      const isCurrentPiecePlaced = state.placedPieces.some((p) => p.pentominoId === state.selectedPieceId);
+      if (!isCurrentPiecePlaced) {
+        // Save the current piece's rotation to bankRotations before switching
+        setBankRotations((prev) => new Map(prev).set(state.selectedPieceId!, state.selectedRotation));
+      }
+    }
+    // Use stored rotation for the new piece (if clicking same piece, it will rotate in reducer)
+    const storedRotation = bankRotations.get(pentominoId);
+    selectPiece(pentominoId, storedRotation);
+  }, [state.selectedPieceId, state.selectedRotation, state.placedPieces, selectPiece, bankRotations]);
+
   const handlePieceClick = useCallback((pentominoId: PentominoId) => {
     // If clicking on a placed piece on the board, remove it
     const placement = state.placedPieces.find((p) => p.pentominoId === pentominoId);
@@ -439,6 +454,14 @@ export function Game() {
 
     const data = event.active.data.current as DragData;
     if (data?.type === 'piece') {
+      // If there's a currently selected piece (in tray, not placed) that's different from what we're dragging,
+      // save its rotation to bankRotations before starting the drag
+      if (state.selectedPieceId && state.selectedPieceId !== data.pentominoId) {
+        const isCurrentPiecePlaced = state.placedPieces.some((p) => p.pentominoId === state.selectedPieceId);
+        if (!isCurrentPiecePlaced) {
+          setBankRotations((prev) => new Map(prev).set(state.selectedPieceId!, state.selectedRotation));
+        }
+      }
       setActiveDrag(data);
       // DON'T deselect - keep the piece selected to preserve rotation state in tray
     } else if (data?.type === 'board-piece') {
@@ -451,7 +474,7 @@ export function Game() {
         setActiveDrag({ type: 'piece', pentominoId: data.pentominoId, rotation: data.rotation, grabOffset: data.grabOffset });
       }
     }
-  }, [isFinished, state.placedPieces, removePieceFromBoard]);
+  }, [isFinished, state.placedPieces, state.selectedPieceId, state.selectedRotation, removePieceFromBoard]);
 
   // Calculate dragOverCell from pointer position
   // The grabbed cell of the overlay is always at the pointer (because dragOverlayOffset shifts it there)
@@ -646,7 +669,7 @@ https://nerdcube.games/inlay`;
               selectedRotation={state.selectedRotation}
               pieceRotations={pieceRotations}
               errorPieceId={errorPieceId}
-              onPieceSelect={selectPiece}
+              onPieceSelect={handleSelectPiece}
               onPieceRemove={handlePieceRemove}
             />
           )}

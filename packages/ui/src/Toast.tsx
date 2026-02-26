@@ -29,6 +29,8 @@ interface ToastProviderProps {
   position?: 'top' | 'bottom';
   /** Auto-dismiss duration in ms */
   duration?: number;
+  /** Custom top offset class (e.g., 'top-20' for 80px). Only used when position='top' */
+  topOffset?: string;
 }
 
 /**
@@ -39,6 +41,7 @@ export function ToastProvider({
   children,
   position = 'top',
   duration = 3000,
+  topOffset,
 }: ToastProviderProps) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -58,6 +61,7 @@ export function ToastProvider({
         toasts={toasts}
         position={position}
         duration={duration}
+        topOffset={topOffset}
         onDismiss={dismiss}
       />
     </ToastContext.Provider>
@@ -79,6 +83,7 @@ interface ToastContainerProps {
   toasts: Toast[];
   position: 'top' | 'bottom';
   duration: number;
+  topOffset?: string;
   onDismiss: (id: string) => void;
 }
 
@@ -86,10 +91,11 @@ function ToastContainer({
   toasts,
   position,
   duration,
+  topOffset,
   onDismiss,
 }: ToastContainerProps) {
-  // top-16 (64px) clears typical nav headers
-  const positionClasses = position === 'top' ? 'top-16' : 'bottom-20';
+  // Default: top-16 (64px) clears typical nav headers, but can be customized
+  const positionClasses = position === 'top' ? (topOffset || 'top-16') : 'bottom-20';
 
   return (
     <div

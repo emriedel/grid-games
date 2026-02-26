@@ -1,6 +1,6 @@
 'use client';
 
-import { BugReporterProvider } from '@grid-games/ui';
+import { BugReporterProvider, ToastProvider } from '@grid-games/ui';
 import { initAnalytics } from '@grid-games/shared';
 import { useEffect, type ReactNode } from 'react';
 
@@ -20,8 +20,10 @@ export function Providers({ children }: ProvidersProps) {
   }, []);
 
   return (
-    <BugReporterProvider apiEndpoint={API_ENDPOINT}>
-      {children}
-    </BugReporterProvider>
+    <ToastProvider topOffset="top-20">
+      <BugReporterProvider apiEndpoint={API_ENDPOINT}>
+        {children}
+      </BugReporterProvider>
+    </ToastProvider>
   );
 }
