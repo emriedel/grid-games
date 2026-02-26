@@ -28,6 +28,8 @@ export function initAnalytics(): void {
   mixpanel.init(token, {
     track_pageview: true,
     persistence: 'localStorage',
+    // Proxy through our domain to avoid ad blockers
+    api_host: '/mp',
   });
 
   isInitialized = true;
