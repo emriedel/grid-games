@@ -92,4 +92,108 @@ test.describe('Jumble Game', () => {
       expect(col).toBeTruthy();
     });
   });
+
+  test.describe('Puzzle Completion', () => {
+    test.beforeEach(async ({ context }) => {
+      await context.clearCookies();
+    });
+
+    test('can trace words and finish puzzle #1', async ({ page }) => {
+      await page.goto('/?puzzle=1&debug=true');
+      const jumble = new JumblePage(page);
+      await jumble.waitForBoard();
+
+      // Puzzle #1 board:
+      // N F D T N
+      // E T I I F
+      // A I U E B
+      // U W R O S
+      // R H E E T
+
+      // Trace "TIE": (1,1) T -> (1,2) I -> (2,3) E
+      await jumble.traceWord([
+        { row: 1, col: 1 },
+        { row: 1, col: 2 },
+        { row: 2, col: 3 },
+      ]);
+
+      // Trace "NET": (0,0) N -> (1,0) E -> (1,1) T
+      await jumble.traceWord([
+        { row: 0, col: 0 },
+        { row: 1, col: 0 },
+        { row: 1, col: 1 },
+      ]);
+
+      // Trace "FIT": (0,1) F -> (1,2) I -> (0,3) T
+      await jumble.traceWord([
+        { row: 0, col: 1 },
+        { row: 1, col: 2 },
+        { row: 0, col: 3 },
+      ]);
+
+      // Wait briefly for words to be registered
+      await page.waitForTimeout(500);
+
+      // "Finish Early" button should be visible after finding words
+      const finishButton = page.getByRole('button', { name: /finish early/i });
+      await expect(finishButton).toBeVisible();
+
+      // Click Finish Early
+      await jumble.clickFinish();
+
+      // Game should be finished
+      const finished = await jumble.isFinished();
+      expect(finished).toBe(true);
+    });
+
+    test('shows results modal after completion', async ({ page }) => {
+      await page.goto('/?puzzle=1&debug=true');
+      const jumble = new JumblePage(page);
+      await jumble.waitForBoard();
+
+      // Trace "TIE": (1,1) T -> (1,2) I -> (2,3) E
+      await jumble.traceWord([
+        { row: 1, col: 1 },
+        { row: 1, col: 2 },
+        { row: 2, col: 3 },
+      ]);
+
+      // Click Finish Early
+      await jumble.clickFinish();
+
+      // Results modal should auto-open
+      await page.waitForTimeout(500);
+      expect(await jumble.resultsModal.isOpen()).toBe(true);
+
+      // Modal should show game name
+      await expect(page.getByRole('dialog').getByText(/jumble/i)).toBeVisible();
+
+      // Share button should be present
+      await expect(page.getByRole('dialog').getByRole('button', { name: /share/i })).toBeVisible();
+    });
+
+    test('saves completion to localStorage', async ({ page }) => {
+      await page.goto('/?puzzle=1&debug=true');
+      const jumble = new JumblePage(page);
+      await jumble.waitForBoard();
+
+      // Trace "NET": (0,0) N -> (1,0) E -> (1,1) T
+      await jumble.traceWord([
+        { row: 0, col: 0 },
+        { row: 1, col: 0 },
+        { row: 1, col: 1 },
+      ]);
+
+      // Click Finish Early
+      await jumble.clickFinish();
+      await page.waitForTimeout(500);
+
+      // Check localStorage has completion data
+      const hasStorage = await page.evaluate(() => {
+        const keys = Object.keys(localStorage);
+        return keys.some(k => k.startsWith('jumble-1-'));
+      });
+      expect(hasStorage).toBe(true);
+    });
+  });
 });

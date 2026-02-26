@@ -125,4 +125,13 @@ export class JumblePage extends BaseGamePage {
     const text = await this.foundWordsList.textContent();
     return text?.split(/[\s,]+/).filter(w => w.length > 0) ?? [];
   }
+
+  /**
+   * Click the Finish Early button to end the game.
+   */
+  async clickFinish() {
+    const finishButton = this.page.getByRole('button', { name: /finish early/i });
+    await finishButton.click();
+    await this.page.waitForTimeout(500);
+  }
 }

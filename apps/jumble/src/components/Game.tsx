@@ -138,6 +138,7 @@ export default function Game() {
     startGame,
     resumeGame,
     resetGame,
+    endGame,
     isWordAlreadyFound,
     regeneratePuzzle,
     hasInProgress,
@@ -349,6 +350,18 @@ export default function Game() {
       <div className="mb-4 w-full">
         <FoundWordsList foundWords={foundWords} />
       </div>
+
+      {/* Finish Early button - only in debug mode for testing */}
+      {isDebug && status === 'playing' && foundWords.length > 0 && (
+        <div className="w-full max-w-xs mx-auto">
+          <button
+            onClick={endGame}
+            className="w-full py-3 px-6 rounded-lg bg-[var(--tile-bg)] text-[var(--foreground)] font-semibold hover:bg-[var(--tile-bg-selected)] transition-colors"
+          >
+            Finish Early
+          </button>
+        </div>
+      )}
 
       {/* See Results and Play Again buttons - show when game is finished */}
       {isFinished && (
