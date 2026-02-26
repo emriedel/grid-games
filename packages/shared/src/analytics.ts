@@ -29,7 +29,7 @@ export function initAnalytics(): void {
     track_pageview: true,
     persistence: 'localStorage',
     // Proxy through our domain to avoid ad blockers
-    api_host: '/mp',
+    api_host: '/a',
   });
 
   isInitialized = true;

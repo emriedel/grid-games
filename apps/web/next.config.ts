@@ -12,21 +12,21 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
-      // Mixpanel proxy to avoid ad blockers
+      // Analytics proxy to avoid ad blockers
       {
-        source: '/mp/lib.min.js',
+        source: '/a/lib.min.js',
         destination: 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js',
       },
       {
-        source: '/mp/lib.js',
+        source: '/a/lib.js',
         destination: 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.js',
       },
       {
-        source: '/mp/decide',
+        source: '/a/decide',
         destination: 'https://decide.mixpanel.com/decide',
       },
       {
-        source: '/mp/:path*',
+        source: '/a/:path*',
         destination: 'https://api.mixpanel.com/:path*',
       },
       {
