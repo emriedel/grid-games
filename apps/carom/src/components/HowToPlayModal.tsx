@@ -32,12 +32,12 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
     <Modal isOpen={isOpen} onClose={onClose} title="How to Play Carom">
       <div className="space-y-5 text-[var(--foreground)]">
         {/* Goal Section */}
-        <section className="bg-[var(--accent)]/10 rounded-lg p-4 border border-[var(--accent)]/30">
+        <section>
           <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
             <span>Goal</span>
           </h3>
           <p className="text-[var(--muted)]">
-            Guide the <TargetPieceIcon /> <span className="text-[var(--accent)] font-semibold">amber target</span> to
+            Guide the <TargetPieceIcon /> <span className="text-[var(--accent)] font-semibold"> target</span> to
             the <GoalIcon /> <span className="text-[var(--accent)]">goal</span> in as few moves as possible.
           </p>
         </section>

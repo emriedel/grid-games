@@ -67,10 +67,10 @@ function ExampleGrid() {
             y1={line.y1}
             x2={line.x2}
             y2={line.y2}
-            stroke="var(--accent)"
+            stroke="#fcd34d"
             strokeWidth={3}
             strokeLinecap="round"
-            opacity={0.6}
+            opacity={0.85}
           />
         ))}
       </svg>
@@ -124,15 +124,6 @@ export default function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps)
           </div>
         </section>
 
-        <section>
-          <h3 className="font-bold text-[var(--accent)] mb-1">Stars</h3>
-          <p className="text-[var(--muted)]">
-            Earn up to 3 stars based on your score. Thresholds vary slightly by puzzle.
-          </p>
-          <p className="text-[var(--muted)] mt-2 text-xs italic">
-            Tap the score during gameplay to see this puzzle&apos;s thresholds.
-          </p>
-        </section>
       </div>
     </Modal>
   );

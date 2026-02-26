@@ -22,7 +22,7 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
           <h3 className="font-semibold text-[var(--foreground)] mb-2">Rules</h3>
           <ul className="text-[var(--muted)] space-y-1 list-disc list-inside">
             <li>Drag letters onto the board, tap to return them</li>
-            <li>First word must cover the center star</li>
+            <li>First word must cover the center star <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-amber-500/80 text-[8px] font-bold text-white align-middle">★</span></li>
             <li>New words must connect to existing ones</li>
           </ul>
         </section>

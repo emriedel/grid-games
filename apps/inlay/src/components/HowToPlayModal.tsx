@@ -1,6 +1,6 @@
 'use client';
 
-import { Modal, Button } from '@grid-games/ui';
+import { Modal } from '@grid-games/ui';
 
 interface HowToPlayModalProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface HowToPlayModalProps {
 
 export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="How to Play">
+    <Modal isOpen={isOpen} onClose={onClose} title="How to play Inlay">
       <div className="space-y-4 text-[var(--foreground)]">
         <p className="text-[var(--muted)]">
           Fill the shape completely using the given pentomino pieces.
@@ -24,12 +24,6 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
             <li><strong>Tap a placed piece</strong> to remove it</li>
           </ul>
         </section>
-
-        <div className="pt-2">
-          <Button onClick={onClose} variant="primary" fullWidth>
-            Got it!
-          </Button>
-        </div>
       </div>
     </Modal>
   );

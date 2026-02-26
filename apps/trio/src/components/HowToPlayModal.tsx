@@ -12,7 +12,7 @@ interface HowToPlayModalProps {
 // Example card component for the modal
 function ExampleCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`w-16 h-16 bg-[#f5f0e6] rounded-lg flex items-center justify-center p-2 ${className}`}>
+    <div className={`w-16 h-16 rounded-lg flex items-center justify-center p-2 ${className}`}>
       {children}
     </div>
   );
@@ -30,15 +30,15 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
         <div className="space-y-2">
           <h3 className="font-semibold text-[var(--accent)]">The Rule</h3>
           <p className="text-sm">
-            Each card has 4 attributes: <strong>shape</strong>, <strong>color</strong>, <strong>pattern</strong>, and <strong>count</strong>.
+            Each group of shapes has 4 attributes: <strong>shape</strong>, <strong>color</strong>, <strong>pattern</strong>, and <strong>number</strong>.
           </p>
           <p className="text-sm">
-            In a valid Trio, each attribute must be either <strong>all the same</strong> or <strong>all different</strong> across the 3 cards.
+            In a valid Trio, each attribute must be either <strong>all the same</strong> or <strong>all different</strong> across the 3 groups of shapes.
           </p>
         </div>
 
         {/* Valid Trio Example */}
-        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-3">
+        <div className="rounded-lg p-3">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-green-400 text-lg">✓</span>
             <span className="text-sm font-medium text-green-400">Valid Trio</span>
@@ -57,7 +57,7 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
         </div>
 
         {/* Invalid Trio Example */}
-        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3">
+        <div className="rounded-lg p-3">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-red-400 text-lg">✗</span>
             <span className="text-sm font-medium text-red-400">Not a Trio</span>
@@ -72,9 +72,6 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
             <ExampleCard>
               <CardShape shape="circle" color="blue" pattern="striped" count={3} size="sm" />
             </ExampleCard>
-          </div>
-          <div className="text-xs text-[var(--muted)] space-y-0.5">
-            <p>Color: <span className="text-red-400">2 same, 1 different</span></p>
           </div>
         </div>
       </div>
