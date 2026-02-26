@@ -78,4 +78,82 @@ test.describe('Dabble Game', () => {
       await expect(dabble.gameBoard).toBeVisible();
     });
   });
+
+  test.describe('Puzzle Completion', () => {
+    test.beforeEach(async ({ context }) => {
+      await context.clearCookies();
+    });
+
+    test('can submit a word and finish puzzle #1', async ({ page }) => {
+      await page.goto('/?puzzle=1');
+      const dabble = new DabblePage(page);
+      await dabble.waitForBoard();
+
+      // Puzzle #1 letters include A, N, D - we can form "AND"
+      // Place "AND" horizontally covering the center star (row 4, starting at col 3)
+      // Center star is at (4, 4) in a 9x9 grid
+      await dabble.placeWord('AND', 4, 3, 'horizontal');
+
+      // Submit the word
+      await dabble.submitWord();
+      await page.waitForTimeout(500);
+
+      // Score should have increased (AND = 1+1+2 = 4 points minimum)
+      const score = await dabble.getScore();
+      expect(score).toBeGreaterThanOrEqual(4);
+
+      // Click Finish to complete
+      await dabble.clickFinish();
+
+      // Verify game is finished (See Results button should be visible)
+      const finished = await dabble.isFinished();
+      expect(finished).toBe(true);
+    });
+
+    test('shows results modal after completion', async ({ page }) => {
+      await page.goto('/?puzzle=1');
+      const dabble = new DabblePage(page);
+      await dabble.waitForBoard();
+
+      // Place and submit a word
+      await dabble.placeWord('AND', 4, 3, 'horizontal');
+      await dabble.submitWord();
+      await page.waitForTimeout(300);
+
+      // Click Finish
+      await dabble.clickFinish();
+
+      // Results modal should auto-open or we need to click See Results
+      await dabble.resultsModal.waitForOpen();
+
+      // Verify modal is open
+      expect(await dabble.resultsModal.isOpen()).toBe(true);
+
+      // Modal should show game name and share button
+      await expect(page.getByRole('dialog').getByText(/dabble/i)).toBeVisible();
+      await expect(page.getByRole('dialog').getByRole('button', { name: /share/i })).toBeVisible();
+    });
+
+    test('saves completion to localStorage', async ({ page }) => {
+      await page.goto('/?puzzle=1');
+      const dabble = new DabblePage(page);
+      await dabble.waitForBoard();
+
+      // Place and submit a word
+      await dabble.placeWord('AND', 4, 3, 'horizontal');
+      await dabble.submitWord();
+      await page.waitForTimeout(300);
+
+      // Click Finish
+      await dabble.clickFinish();
+      await page.waitForTimeout(500);
+
+      // Check localStorage has completion data
+      const hasStorage = await page.evaluate(() => {
+        const keys = Object.keys(localStorage);
+        return keys.some(k => k.startsWith('dabble-1-'));
+      });
+      expect(hasStorage).toBe(true);
+    });
+  });
 });

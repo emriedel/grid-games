@@ -61,6 +61,8 @@ function DroppableCell({ cell, placedTile, isSelected, isDragging, onCellClick }
   return (
     <div
       ref={setRefs}
+      data-row={cell.row}
+      data-col={cell.col}
       {...(canDrag ? { ...listeners, ...attributes } : {})}
       className={canDrag ? 'touch-none' : ''}
     >

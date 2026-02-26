@@ -44,23 +44,22 @@ export class DabblePage extends BaseGamePage {
   }
 
   /**
-   * Drag a tile from rack to a board cell.
+   * Place a tile from rack to a board cell using click-to-select, click-to-place.
    * @param rackIndex Index of tile in rack
    * @param row Board row
    * @param col Board column
    */
   async placeTile(rackIndex: number, row: number, col: number) {
+    // Click rack tile to select it
     const tile = this.rackTiles.nth(rackIndex);
-    const cell = this.page.locator(`[data-row="${row}"][data-col="${col}"]`);
+    await tile.click();
+    await this.page.waitForTimeout(100);
 
-    if (await cell.isVisible()) {
-      await tile.dragTo(cell);
-    } else {
-      // Fallback: just try to drag to board center area
-      const board = this.gameBoard;
-      await tile.dragTo(board);
-    }
-    await this.page.waitForTimeout(200);
+    // Click board cell to place the tile
+    const cell = this.page.locator(`[data-row="${row}"][data-col="${col}"]`);
+    await cell.waitFor({ state: 'visible', timeout: 2000 });
+    await cell.click();
+    await this.page.waitForTimeout(100);
   }
 
   /**
@@ -94,5 +93,54 @@ export class DabblePage extends BaseGamePage {
   async getSubmittedWords(): Promise<string[]> {
     const text = await this.wordList.textContent();
     return text?.split(/[\s,]+/).filter(w => w.length > 0) ?? [];
+  }
+
+  /**
+   * Find rack index for a specific letter.
+   * Returns -1 if not found.
+   */
+  async findLetterIndex(letter: string, excludeIndices: number[] = []): Promise<number> {
+    const letters = await this.getRackLetters();
+    for (let i = 0; i < letters.length; i++) {
+      if (letters[i] === letter.toUpperCase() && !excludeIndices.includes(i)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Place a word on the board starting at a position.
+   * @param word The word to place
+   * @param startRow Starting row
+   * @param startCol Starting column
+   * @param direction 'horizontal' or 'vertical'
+   */
+  async placeWord(word: string, startRow: number, startCol: number, direction: 'horizontal' | 'vertical' = 'horizontal') {
+    const usedIndices: number[] = [];
+
+    for (let i = 0; i < word.length; i++) {
+      const letter = word[i].toUpperCase();
+      const rackIndex = await this.findLetterIndex(letter, usedIndices);
+
+      if (rackIndex === -1) {
+        throw new Error(`Letter ${letter} not found in rack`);
+      }
+
+      const row = direction === 'horizontal' ? startRow : startRow + i;
+      const col = direction === 'horizontal' ? startCol + i : startCol;
+
+      await this.placeTile(rackIndex, row, col);
+      usedIndices.push(rackIndex);
+    }
+  }
+
+  /**
+   * Click the Finish button to complete the game.
+   */
+  async clickFinish() {
+    const finishButton = this.page.getByRole('button', { name: /finish/i });
+    await finishButton.click();
+    await this.page.waitForTimeout(500);
   }
 }

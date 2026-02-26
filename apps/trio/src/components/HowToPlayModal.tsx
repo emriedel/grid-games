@@ -54,12 +54,6 @@ export function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps) {
               <CardShape shape="square" color="gold" pattern="striped" count={3} size="sm" />
             </ExampleCard>
           </div>
-          <div className="text-xs text-[var(--muted)] space-y-0.5">
-            <p>Shape: circle, triangle, square — <span className="text-green-400">all different</span></p>
-            <p>Color: red, blue, gold — <span className="text-green-400">all different</span></p>
-            <p>Pattern: solid, outline, striped — <span className="text-green-400">all different</span></p>
-            <p>Count: 1, 2, 3 — <span className="text-green-400">all different</span></p>
-          </div>
         </div>
 
         {/* Invalid Trio Example */}

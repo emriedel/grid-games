@@ -34,6 +34,9 @@ export class BaseGamePage {
   }
 
   async isFinished(): Promise<boolean> {
-    return await this.seeResultsButton.isVisible();
+    // Game is finished if either "See Results" button is visible OR results modal is open
+    const buttonVisible = await this.seeResultsButton.isVisible();
+    const modalOpen = await this.resultsModal.isOpen();
+    return buttonVisible || modalOpen;
   }
 }
