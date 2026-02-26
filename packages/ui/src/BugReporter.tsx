@@ -241,7 +241,7 @@ function BugReporterModal({
           <div className="text-4xl mb-4">&#10003;</div>
           <h3 className="text-lg font-semibold mb-2">Report Submitted</h3>
           <p className="text-[var(--muted,#a1a1aa)] text-sm mb-4">
-            Thanks for helping improve Nerdcube Games!
+            Thanks for helping improve Nerdcube Daily!
           </p>
           <Button onClick={onClose} fullWidth>
             Close

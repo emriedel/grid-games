@@ -15,8 +15,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jumble | Nerdcube Games",
+  title: "Jumble | Nerdcube Daily",
   description: "Find words on a Boggle-style letter grid. New puzzle every day!",
+  metadataBase: new URL("https://nerdcube.games"),
+  openGraph: {
+    title: "Jumble | Nerdcube Daily",
+    description: "Find words on a Boggle-style letter grid. New puzzle every day!",
+    url: "https://nerdcube.games/jumble",
+    siteName: "Nerdcube Daily",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jumble | Nerdcube Daily",
+    description: "Find words on a Boggle-style letter grid. New puzzle every day!",
+  },
   icons: {
     icon: "https://nerdcube.games/icons/jumble.png",
     apple: "https://nerdcube.games/icons/jumble.png",

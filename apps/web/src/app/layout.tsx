@@ -4,8 +4,22 @@ import { Providers } from './Providers';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Nerdcube Games',
-  description: 'A collection of daily word puzzle games. Challenge yourself with a new puzzle every day.',
+  title: 'Nerdcube Daily – Free Daily Word & Puzzle Games',
+  description: 'Challenge yourself with free daily word and puzzle games. New puzzles every day including Dabble, Jumble, Trio, and more.',
+  keywords: ['daily games', 'word games', 'puzzle games', 'free online games', 'daily puzzles'],
+  metadataBase: new URL('https://nerdcube.games'),
+  openGraph: {
+    title: 'Nerdcube Daily – Free Daily Word & Puzzle Games',
+    description: 'Challenge yourself with free daily word and puzzle games. New puzzles every day.',
+    url: 'https://nerdcube.games',
+    siteName: 'Nerdcube Daily',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nerdcube Daily – Free Daily Word & Puzzle Games',
+    description: 'Challenge yourself with free daily word and puzzle games. New puzzles every day.',
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },

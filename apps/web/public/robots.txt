@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /debug
+Disallow: /admin
+
+Sitemap: https://nerdcube.games/sitemap.xml

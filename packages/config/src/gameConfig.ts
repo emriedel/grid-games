@@ -1,7 +1,7 @@
 import { GameTheme } from './theme';
 
 /**
- * Configuration interface for Nerdcube Games
+ * Configuration interface for Nerdcube Daily
  * Each game defines this to integrate with shared UI components
  */
 export interface GameConfig {

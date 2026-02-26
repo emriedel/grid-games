@@ -39,7 +39,7 @@ function formatFeedbackEmail(data: FeedbackPayload): string {
     <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #374151;">
       <div style="border-bottom: 3px solid #f59e0b; padding-bottom: 16px; margin-bottom: 24px;">
         <h2 style="color: #111827; margin: 0; font-size: 20px;">New Feedback</h2>
-        <p style="color: #6b7280; margin: 4px 0 0 0; font-size: 14px;">from Nerdcube Games</p>
+        <p style="color: #6b7280; margin: 4px 0 0 0; font-size: 14px;">from Nerdcube Daily</p>
       </div>
 
       <table style="width: 100%; border-collapse: collapse;">
@@ -63,7 +63,7 @@ function formatBugReportEmail(data: FeedbackPayload, hasScreenshot: boolean): st
     <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #374151;">
       <div style="border-bottom: 3px solid #ef4444; padding-bottom: 16px; margin-bottom: 24px;">
         <h2 style="color: #111827; margin: 0; font-size: 20px;">Bug Report</h2>
-        <p style="color: #6b7280; margin: 4px 0 0 0; font-size: 14px;">from Nerdcube Games</p>
+        <p style="color: #6b7280; margin: 4px 0 0 0; font-size: 14px;">from Nerdcube Daily</p>
       </div>
 
       <div style="margin-bottom: 24px;">
@@ -177,7 +177,7 @@ export async function POST(request: Request) {
       : formatFeedbackEmail(data);
 
     const result = await resend.emails.send({
-      from: 'Nerdcube Games <onboarding@resend.dev>',
+      from: 'Nerdcube Daily <onboarding@resend.dev>',
       to: feedbackEmail,
       replyTo: data.email || undefined,
       subject,

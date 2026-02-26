@@ -15,9 +15,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dabble | Nerdcube Games",
+  title: "Dabble | Nerdcube Daily",
   description: "A daily Scrabble-style word puzzle. Score as high as you can with your letters!",
   keywords: ["word game", "puzzle", "scrabble", "daily game", "lexicon"],
+  metadataBase: new URL("https://nerdcube.games"),
+  openGraph: {
+    title: "Dabble | Nerdcube Daily",
+    description: "A daily Scrabble-style word puzzle. Score as high as you can with your letters!",
+    url: "https://nerdcube.games/dabble",
+    siteName: "Nerdcube Daily",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dabble | Nerdcube Daily",
+    description: "A daily Scrabble-style word puzzle. Score as high as you can with your letters!",
+  },
   icons: {
     icon: "https://nerdcube.games/icons/dabble.png",
     apple: "https://nerdcube.games/icons/dabble.png",

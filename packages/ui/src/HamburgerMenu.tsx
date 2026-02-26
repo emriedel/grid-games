@@ -113,7 +113,7 @@ export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: 
                 className="w-7 h-7"
               />
               <span className="text-lg font-bold text-[var(--foreground,#ededed)]">
-                Nerdcube Games
+                Nerdcube Daily
               </span>
             </div>
             <button

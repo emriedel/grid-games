@@ -15,9 +15,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Trio | Nerdcube Games",
+  title: "Trio | Nerdcube Daily",
   description: "A daily Set-style puzzle. Find all five trios to clear the board!",
   keywords: ["set game", "puzzle", "trio", "daily game", "card game", "pattern matching"],
+  metadataBase: new URL("https://nerdcube.games"),
+  openGraph: {
+    title: "Trio | Nerdcube Daily",
+    description: "A daily Set-style puzzle. Find all five trios to clear the board!",
+    url: "https://nerdcube.games/trio",
+    siteName: "Nerdcube Daily",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Trio | Nerdcube Daily",
+    description: "A daily Set-style puzzle. Find all five trios to clear the board!",
+  },
   icons: {
     icon: "https://nerdcube.games/icons/trio.png",
     apple: "https://nerdcube.games/icons/trio.png",

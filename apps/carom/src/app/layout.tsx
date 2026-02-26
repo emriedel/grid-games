@@ -15,9 +15,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Carom | Nerdcube Games",
+  title: "Carom | Nerdcube Daily",
   description: "A daily piece-sliding puzzle game. Navigate pieces through walls to reach the goal.",
   keywords: ["puzzle", "daily game", "sliding puzzle"],
+  metadataBase: new URL("https://nerdcube.games"),
+  openGraph: {
+    title: "Carom | Nerdcube Daily",
+    description: "A daily piece-sliding puzzle game. Navigate pieces through walls to reach the goal.",
+    url: "https://nerdcube.games/carom",
+    siteName: "Nerdcube Daily",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Carom | Nerdcube Daily",
+    description: "A daily piece-sliding puzzle game. Navigate pieces through walls to reach the goal.",
+  },
   icons: {
     icon: "https://nerdcube.games/icons/carom.png",
     apple: "https://nerdcube.games/icons/carom.png",

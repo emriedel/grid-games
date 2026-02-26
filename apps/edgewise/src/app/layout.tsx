@@ -15,8 +15,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Edgewise | Nerdcube Games",
+  title: "Edgewise | Nerdcube Daily",
   description: "Rotate tiles to match word pairs with categories in this daily puzzle game.",
+  metadataBase: new URL("https://nerdcube.games"),
+  openGraph: {
+    title: "Edgewise | Nerdcube Daily",
+    description: "Rotate tiles to match word pairs with categories in this daily puzzle game.",
+    url: "https://nerdcube.games/edgewise",
+    siteName: "Nerdcube Daily",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Edgewise | Nerdcube Daily",
+    description: "Rotate tiles to match word pairs with categories in this daily puzzle game.",
+  },
   icons: {
     icon: "https://nerdcube.games/icons/edgewise.png",
     apple: "https://nerdcube.games/icons/edgewise.png",

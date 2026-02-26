@@ -15,9 +15,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Inlay | Nerdcube Games",
+  title: "Inlay | Nerdcube Daily",
   description: "A daily pentomino puzzle. Fill the target shape using the given pieces!",
   keywords: ["pentomino", "puzzle", "inlay", "daily game", "shape puzzle", "tile puzzle"],
+  metadataBase: new URL("https://nerdcube.games"),
+  openGraph: {
+    title: "Inlay | Nerdcube Daily",
+    description: "A daily pentomino puzzle. Fill the target shape using the given pieces!",
+    url: "https://nerdcube.games/inlay",
+    siteName: "Nerdcube Daily",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Inlay | Nerdcube Daily",
+    description: "A daily pentomino puzzle. Fill the target shape using the given pieces!",
+  },
   icons: {
     icon: "https://nerdcube.games/icons/inlay.png",
     apple: "https://nerdcube.games/icons/inlay.png",

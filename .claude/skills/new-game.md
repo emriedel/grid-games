@@ -1,6 +1,6 @@
-# Adding a New Game to Nerdcube Games
+# Adding a New Game to Nerdcube Daily
 
-Use this skill when creating a new game for the Nerdcube Games monorepo.
+Use this skill when creating a new game for the Nerdcube Daily monorepo.
 
 ---
 
@@ -37,7 +37,7 @@ import "./globals.css";
 // ... fonts ...
 
 export const metadata: Metadata = {
-  title: "New Game | Nerdcube Games",
+  title: "New Game | Nerdcube Daily",
   description: "Your game description here.",
   icons: {
     icon: "https://nerdcube.games/icons/new-game.png",

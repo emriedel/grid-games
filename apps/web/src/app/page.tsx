@@ -31,12 +31,12 @@ export default function Home() {
 
           {/* Title */}
           <h1 className="text-4xl font-bold tracking-tight">
-            Nerdcube Games
+            Nerdcube Daily
           </h1>
 
           {/* Styled subtitle */}
           <p className="text-[var(--muted)] text-sm italic mt-1">
-            Daily Games by Eric Riedel
+            Free daily word & puzzle games
           </p>
         </header>
 

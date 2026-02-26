@@ -1,5 +1,5 @@
 /**
- * Theme contract for all Nerdcube Games
+ * Theme contract for all Nerdcube Daily
  * Each game defines its theme using this interface
  */
 export interface GameTheme {

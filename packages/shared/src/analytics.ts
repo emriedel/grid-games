@@ -1,5 +1,5 @@
 /**
- * Shared Mixpanel analytics utilities for Nerdcube Games
+ * Shared Mixpanel analytics utilities for Nerdcube Daily
  *
  * Events tracked:
  * - game_start: When a game starts (new or resumed)

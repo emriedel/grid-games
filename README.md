@@ -1,4 +1,4 @@
-# Nerdcube Games
+# Nerdcube Daily
 
 A collection of daily puzzle games. New puzzles every day at midnight. Share your results with friends. No account required.
 

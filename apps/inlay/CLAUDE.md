@@ -1,6 +1,6 @@
 # Inlay - Daily Pentomino Puzzle Game
 
-Part of **Nerdcube Games** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
+Part of **Nerdcube Daily** monorepo. Uses shared packages: `@grid-games/ui`, `@grid-games/config`, `@grid-games/shared`.
 
 ## Project Overview
 

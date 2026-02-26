@@ -1,8 +1,8 @@
-# Nerdcube Games - Development Guidelines
+# Nerdcube Daily - Development Guidelines
 
 ## Project Overview
 
-**Nerdcube Games** is a collection of daily puzzle games (similar to NYT Games). Turborepo monorepo with shared packages for UI, config, and utilities.
+**Nerdcube Daily** is a collection of daily puzzle games (similar to NYT Games). Turborepo monorepo with shared packages for UI, config, and utilities.
 
 **Games:** Dabble (red), Jumble (blue), Trio (teal), Inlay (green) | **Domain:** nerdcube.games
 
