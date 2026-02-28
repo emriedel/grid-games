@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nerdcube Daily - Social Media Promo Cards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #1a1a1a;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      align-items: center;
+    }
+
+    h1 {
+      color: #ededed;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .instructions {
+      color: #a1a1aa;
+      font-size: 14px;
+      max-width: 600px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      color: #ededed;
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: center;
+    }
+
+    /* Individual Game Card - 1080x1080 */
+    .game-card {
+      width: 1080px;
+      height: 1080px;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .game-card .header {
+      height: 120px;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .game-card .icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .game-card .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .game-card .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .game-card .game-title {
+      font-size: 42px;
+      font-weight: 800;
+      color: #ededed;
+      letter-spacing: -0.5px;
+    }
+
+    .game-card .brand {
+      font-size: 20px;
+      color: #a1a1aa;
+      font-weight: 400;
+    }
+
+    .game-card .main {
+      flex: 1;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-card .screenshot-container {
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .game-card .screenshot-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .game-card .screenshot-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #18181b;
+      border: 3px dashed #3f3f46;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: #71717a;
+      font-size: 18px;
+    }
+
+    .game-card .screenshot-placeholder .placeholder-icon {
+      font-size: 64px;
+      opacity: 0.5;
+    }
+
+    .game-card .footer {
+      height: 140px;
+      padding: 20px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .game-card .tagline {
+      font-size: 28px;
+      color: #ededed;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .game-card .url {
+      font-size: 20px;
+      color: #a1a1aa;
+      font-weight: 400;
+    }
+
+    /* Accent color borders for screenshot containers */
+    .game-card.dabble .screenshot-container { border: 3px solid #c41e3a; }
+    .game-card.jumble .screenshot-container { border: 3px solid #3D5A9F; }
+    .game-card.trio .screenshot-container { border: 3px solid #06b6d4; }
+    .game-card.inlay .screenshot-container { border: 3px solid #0da678; }
+    .game-card.carom .screenshot-container { border: 3px solid #f59e0b; }
+
+    /* Accent color for game titles */
+    .game-card.dabble .game-title { color: #c41e3a; }
+    .game-card.jumble .game-title { color: #6b8dd6; }
+    .game-card.trio .game-title { color: #06b6d4; }
+    .game-card.inlay .game-title { color: #34d399; }
+    .game-card.carom .game-title { color: #f59e0b; }
+
+    /* Multi-game showcase - 1200x627 */
+    .showcase {
+      width: 1200px;
+      height: 627px;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .showcase .top {
+      padding: 50px 40px 30px;
+      text-align: center;
+    }
+
+    .showcase .main-title {
+      font-size: 56px;
+      font-weight: 800;
+      color: #ededed;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .showcase .subtitle {
+      font-size: 24px;
+      color: #a1a1aa;
+      font-weight: 400;
+    }
+
+    .showcase .games-row {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 50px;
+      padding: 20px 60px;
+    }
+
+    .showcase .game-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .showcase .game-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 3px solid;
+      transition: transform 0.2s;
+    }
+
+    .showcase .game-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .showcase .game-item:nth-child(1) .game-icon { border-color: #c41e3a; }
+    .showcase .game-item:nth-child(2) .game-icon { border-color: #3D5A9F; }
+    .showcase .game-item:nth-child(3) .game-icon { border-color: #06b6d4; }
+    .showcase .game-item:nth-child(4) .game-icon { border-color: #0da678; }
+    .showcase .game-item:nth-child(5) .game-icon { border-color: #f59e0b; }
+
+    .showcase .game-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ededed;
+    }
+
+    .showcase .bottom {
+      padding: 30px 40px 50px;
+      text-align: center;
+    }
+
+    .showcase .url {
+      font-size: 28px;
+      color: #ededed;
+      font-weight: 600;
+    }
+
+    /* Scale control */
+    .scale-control {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #27272a;
+      padding: 12px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #ededed;
+      font-size: 14px;
+      z-index: 100;
+    }
+
+    .scale-control button {
+      background: #3f3f46;
+      border: none;
+      color: #ededed;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .scale-control button:hover {
+      background: #52525b;
+    }
+
+    .scale-control button.active {
+      background: #6366f1;
+    }
+
+    /* Scaled versions for preview */
+    .preview-container {
+      transform-origin: top center;
+    }
+
+    .preview-container.scale-50 {
+      transform: scale(0.5);
+      margin-bottom: -540px;
+    }
+
+    .preview-container.scale-25 {
+      transform: scale(0.25);
+      margin-bottom: -810px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scale-control">
+    <span>Scale:</span>
+    <button onclick="setScale('100')" id="btn-100">100%</button>
+    <button onclick="setScale('50')" id="btn-50" class="active">50%</button>
+    <button onclick="setScale('25')" id="btn-25">25%</button>
+  </div>
+
+  <h1>Nerdcube Daily - Social Media Promo Cards</h1>
+  <p class="instructions">
+    These are actual-size promotional images. Use your browser's screenshot tool or right-click > "Take Screenshot"
+    to capture each card at full resolution. Switch to 100% scale for final exports.
+  </p>
+
+  <!-- Multi-Game Showcase -->
+  <h2 class="section-title">Multi-Game Showcase (1200 x 627)</h2>
+  <div class="preview-container scale-50" id="showcase-container">
+    <div class="showcase">
+      <div class="top">
+        <div class="main-title">NERDCUBE DAILY</div>
+        <div class="subtitle">Daily puzzle games for your brain</div>
+      </div>
+      <div class="games-row">
+        <div class="game-item">
+          <div class="game-icon">
+            <img src="../apps/web/public/icons/dabble.png" alt="Dabble">
+          </div>
+          <div class="game-name">Dabble</div>
+        </div>
+        <div class="game-item">
+          <div class="game-icon">
+            <img src="../apps/web/public/icons/jumble.png" alt="Jumble">
+          </div>
+          <div class="game-name">Jumble</div>
+        </div>
+        <div class="game-item">
+          <div class="game-icon">
+            <img src="../apps/web/public/icons/trio.png" alt="Trio">
+          </div>
+          <div class="game-name">Trio</div>
+        </div>
+        <div class="game-item">
+          <div class="game-icon">
+            <img src="../apps/web/public/icons/inlay.png" alt="Inlay">
+          </div>
+          <div class="game-name">Inlay</div>
+        </div>
+        <div class="game-item">
+          <div class="game-icon">
+            <img src="../apps/web/public/icons/carom.png" alt="Carom">
+          </div>
+          <div class="game-name">Carom</div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="url">nerdcube.games</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Individual Game Cards -->
+  <h2 class="section-title">Individual Game Cards (1080 x 1080)</h2>
+
+  <div class="preview-container scale-50" id="cards-container">
+    <div class="cards-row">
+
+      <!-- Dabble -->
+      <div class="game-card dabble" id="dabble-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/dabble.png" alt="Dabble">
+          </div>
+          <div class="title-group">
+            <div class="game-title">DABBLE</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <!-- Replace this placeholder with: <img src="path/to/dabble-screenshot.png" alt="Dabble gameplay"> -->
+            <div class="screenshot-placeholder">
+              <div class="placeholder-icon">🎯</div>
+              <div>Replace with Dabble screenshot</div>
+              <div style="font-size: 14px; opacity: 0.7;">Recommended: mid-game with words placed</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Score big with your daily word puzzle</div>
+          <div class="url">nerdcube.games/dabble</div>
+        </div>
+      </div>
+
+      <!-- Jumble -->
+      <div class="game-card jumble" id="jumble-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/jumble.png" alt="Jumble">
+          </div>
+          <div class="title-group">
+            <div class="game-title">JUMBLE</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">
+              <div class="placeholder-icon">🔤</div>
+              <div>Replace with Jumble screenshot</div>
+              <div style="font-size: 14px; opacity: 0.7;">Recommended: board with word path traced</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Find words. Beat the clock.</div>
+          <div class="url">nerdcube.games/jumble</div>
+        </div>
+      </div>
+
+      <!-- Trio -->
+      <div class="game-card trio" id="trio-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/trio.png" alt="Trio">
+          </div>
+          <div class="title-group">
+            <div class="game-title">TRIO</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">
+              <div class="placeholder-icon">🔷</div>
+              <div>Replace with Trio screenshot</div>
+              <div style="font-size: 14px; opacity: 0.7;">Recommended: cards with selection visible</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Find the trios. Clear the board.</div>
+          <div class="url">nerdcube.games/trio</div>
+        </div>
+      </div>
+
+      <!-- Inlay -->
+      <div class="game-card inlay" id="inlay-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/inlay.png" alt="Inlay">
+          </div>
+          <div class="title-group">
+            <div class="game-title">INLAY</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">
+              <div class="placeholder-icon">🧩</div>
+              <div>Replace with Inlay screenshot</div>
+              <div style="font-size: 14px; opacity: 0.7;">Recommended: partially solved with colorful pieces</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Fit the pieces. Fill the shape.</div>
+          <div class="url">nerdcube.games/inlay</div>
+        </div>
+      </div>
+
+      <!-- Carom -->
+      <div class="game-card carom" id="carom-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/carom.png" alt="Carom">
+          </div>
+          <div class="title-group">
+            <div class="game-title">CAROM</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">
+              <div class="placeholder-icon">⭐</div>
+              <div>Replace with Carom screenshot</div>
+              <div style="font-size: 14px; opacity: 0.7;">Recommended: board with pieces and goal visible</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Slide. Bounce. Reach the goal.</div>
+          <div class="url">nerdcube.games/carom</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function setScale(scale) {
+      const containers = document.querySelectorAll('.preview-container');
+      containers.forEach(container => {
+        container.classList.remove('scale-50', 'scale-25');
+        if (scale === '50') container.classList.add('scale-50');
+        if (scale === '25') container.classList.add('scale-25');
+      });
+
+      document.querySelectorAll('.scale-control button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-' + scale).classList.add('active');
+    }
+
+    // Initialize at 50% scale
+    setScale('50');
+  </script>
+</body>
+</html>

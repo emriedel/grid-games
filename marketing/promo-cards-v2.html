@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nerdcube Daily - Promo Cards v2 (Polished)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f0f0f;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+      align-items: center;
+    }
+
+    h1 {
+      color: #ededed;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .instructions {
+      color: #a1a1aa;
+      font-size: 14px;
+      max-width: 700px;
+      text-align: center;
+      line-height: 1.7;
+      background: #18181b;
+      padding: 20px 30px;
+      border-radius: 12px;
+      border: 1px solid #27272a;
+    }
+
+    .section-title {
+      color: #fafafa;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .dimension-badge {
+      display: inline-block;
+      background: #27272a;
+      color: #a1a1aa;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-left: 12px;
+    }
+
+    /* Individual Game Card - 1080x1080 with gradient bg */
+    .game-card {
+      width: 1080px;
+      height: 1080px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    /* Gradient backgrounds per game */
+    .game-card.dabble {
+      background: linear-gradient(145deg, #1a0a0d 0%, #0a0a0a 50%, #0d0608 100%);
+    }
+    .game-card.jumble {
+      background: linear-gradient(145deg, #0a0d1a 0%, #0a0a0a 50%, #080a12 100%);
+    }
+    .game-card.trio {
+      background: linear-gradient(145deg, #0a1518 0%, #0a0a0a 50%, #080d0f 100%);
+    }
+    .game-card.inlay {
+      background: linear-gradient(145deg, #0a140f 0%, #0a0a0a 50%, #080d0a 100%);
+    }
+    .game-card.carom {
+      background: linear-gradient(145deg, #14100a 0%, #0a0a0a 50%, #0f0c08 100%);
+    }
+
+    /* Subtle accent glow in corner */
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .game-card.dabble::before { background: radial-gradient(circle, #c41e3a 0%, transparent 70%); }
+    .game-card.jumble::before { background: radial-gradient(circle, #3D5A9F 0%, transparent 70%); }
+    .game-card.trio::before { background: radial-gradient(circle, #06b6d4 0%, transparent 70%); }
+    .game-card.inlay::before { background: radial-gradient(circle, #0da678 0%, transparent 70%); }
+    .game-card.carom::before { background: radial-gradient(circle, #f59e0b 0%, transparent 70%); }
+
+    .game-card .header {
+      height: 180px;
+      padding: 55px 70px 30px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-card .icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .game-card .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .game-card .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .game-card .game-title {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .game-card.dabble .game-title { color: #ef4444; }
+    .game-card.jumble .game-title { color: #60a5fa; }
+    .game-card.trio .game-title { color: #22d3ee; }
+    .game-card.inlay .game-title { color: #34d399; }
+    .game-card.carom .game-title { color: #fbbf24; }
+
+    .game-card .brand {
+      font-size: 18px;
+      color: #71717a;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .game-card .main {
+      height: 720px;
+      padding: 10px 70px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .game-card .screenshot-container {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .game-card .screenshot-container img {
+      display: block;
+      max-width: 100%;
+      max-height: 680px;
+      width: auto;
+      height: auto;
+    }
+
+    /* Subtle shadow only, no border */
+    .game-card .screenshot-container {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .game-card .screenshot-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #18181b 0%, #0f0f0f 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: #52525b;
+      font-size: 18px;
+    }
+
+    .game-card .screenshot-placeholder .placeholder-icon {
+      font-size: 72px;
+      opacity: 0.4;
+    }
+
+    .game-card .footer {
+      height: 180px;
+      padding: 24px 70px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-card .tagline {
+      font-size: 30px;
+      color: #fafafa;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: -0.3px;
+    }
+
+    .game-card .url {
+      font-size: 22px;
+      color: #71717a;
+      font-weight: 500;
+    }
+
+    /* Multi-game showcase - 1080x1080 (square for carousel) */
+    .showcase {
+      width: 1080px;
+      height: 1080px;
+      background: linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .showcase::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(ellipse 500px 400px at 10% 20%, rgba(196, 30, 58, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 500px 400px at 90% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .showcase .top {
+      padding: 140px 60px 30px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .showcase .main-title {
+      font-size: 64px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fafafa 0%, #d4d4d8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+    }
+
+    .showcase .subtitle {
+      font-size: 26px;
+      color: #71717a;
+      font-weight: 500;
+    }
+
+    .showcase .games-grid {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 30px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .showcase .games-row-top,
+    .showcase .games-row-bottom {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+    }
+
+    .showcase .game-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .showcase .game-icon {
+      width: 145px;
+      height: 145px;
+      border-radius: 32px;
+      overflow: hidden;
+      border: 3px solid;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .showcase .game-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Remove default borders - icons already have colored backgrounds */
+    .showcase .game-icon {
+      border: none !important;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .showcase .game-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #e4e4e7;
+    }
+
+    .showcase .bottom {
+      padding: 30px 60px 140px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .showcase .daily-badge {
+      font-size: 20px;
+      color: #a1a1aa;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .showcase .url {
+      font-size: 32px;
+      color: #fafafa;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    /* Instagram Story - 1080x1920 */
+    .story {
+      width: 1080px;
+      height: 1920px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .story.dabble { background: linear-gradient(180deg, #1a0a0d 0%, #0a0a0a 30%, #0a0a0a 70%, #0d0608 100%); }
+    .story.jumble { background: linear-gradient(180deg, #0a0d1a 0%, #0a0a0a 30%, #0a0a0a 70%, #080a12 100%); }
+    .story.trio { background: linear-gradient(180deg, #0a1518 0%, #0a0a0a 30%, #0a0a0a 70%, #080d0f 100%); }
+    .story.inlay { background: linear-gradient(180deg, #0a140f 0%, #0a0a0a 30%, #0a0a0a 70%, #080d0a 100%); }
+    .story.carom { background: linear-gradient(180deg, #14100a 0%, #0a0a0a 30%, #0a0a0a 70%, #0f0c08 100%); }
+
+    .story::before {
+      content: '';
+      position: absolute;
+      top: -150px;
+      right: -150px;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    .story.dabble::before { background: radial-gradient(circle, #c41e3a 0%, transparent 70%); }
+    .story.jumble::before { background: radial-gradient(circle, #3D5A9F 0%, transparent 70%); }
+    .story.trio::before { background: radial-gradient(circle, #06b6d4 0%, transparent 70%); }
+    .story.inlay::before { background: radial-gradient(circle, #0da678 0%, transparent 70%); }
+    .story.carom::before { background: radial-gradient(circle, #f59e0b 0%, transparent 70%); }
+
+    .story .header {
+      padding: 280px 70px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .story .icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+
+    .story .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .story .title-group {
+      text-align: center;
+    }
+
+    .story .game-title {
+      font-size: 72px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      margin-bottom: 8px;
+    }
+
+    .story.dabble .game-title { color: #ef4444; }
+    .story.jumble .game-title { color: #60a5fa; }
+    .story.trio .game-title { color: #22d3ee; }
+    .story.inlay .game-title { color: #34d399; }
+    .story.carom .game-title { color: #fbbf24; }
+
+    .story .brand {
+      font-size: 24px;
+      color: #71717a;
+      font-weight: 500;
+    }
+
+    .story .main {
+      flex: 1;
+      padding: 30px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .story .screenshot-container {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.4);
+    }
+
+    .story .screenshot-container img {
+      display: block;
+      max-width: 960px;
+      max-height: 960px;
+      width: auto;
+      height: auto;
+    }
+
+    .story.carom .screenshot-container img {
+      max-width: 820px;
+      max-height: 820px;
+    }
+
+    .story .footer {
+      padding: 40px 70px 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .story .tagline {
+      font-size: 36px;
+      color: #fafafa;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+    }
+
+    .story .url {
+      font-size: 28px;
+      color: #71717a;
+      font-weight: 500;
+    }
+
+    .story .swipe-hint {
+      font-size: 20px;
+      color: #52525b;
+      font-weight: 500;
+      margin-top: 20px;
+    }
+
+    /* Showcase Story */
+    .story.showcase-story {
+      background: linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+    }
+
+    .story.showcase-story::before {
+      background:
+        radial-gradient(ellipse 400px 400px at 20% 10%, rgba(196, 30, 58, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 400px 400px at 80% 90%, rgba(245, 158, 11, 0.08) 0%, transparent 60%);
+      width: 100%;
+      height: 100%;
+      top: 0;
+      right: 0;
+      border-radius: 0;
+    }
+
+    .story.showcase-story .header {
+      padding: 450px 70px 30px;
+    }
+
+    .story.showcase-story .main-title {
+      font-size: 72px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fafafa 0%, #d4d4d8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -2px;
+      text-align: center;
+    }
+
+    .story.showcase-story .subtitle {
+      font-size: 28px;
+      color: #71717a;
+      font-weight: 500;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .story.showcase-story .games-grid {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 50px;
+      padding: 40px 80px;
+    }
+
+    .story.showcase-story .games-row {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+    }
+
+    .story.showcase-story .game-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .story.showcase-story .game-icon {
+      width: 170px;
+      height: 170px;
+      border-radius: 36px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .story.showcase-story .game-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .story.showcase-story .game-name {
+      font-size: 22px;
+      font-weight: 600;
+      color: #e4e4e7;
+    }
+
+    .story.showcase-story .footer {
+      padding: 30px 70px 450px;
+    }
+
+    .story.showcase-story .daily-badge {
+      font-size: 24px;
+      color: #a1a1aa;
+      font-weight: 500;
+    }
+
+    .story.showcase-story .url {
+      font-size: 36px;
+      color: #fafafa;
+      font-weight: 700;
+      margin-top: 12px;
+    }
+
+    /* Scale controls */
+    .controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #18181b;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid #27272a;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .controls label {
+      color: #a1a1aa;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .controls .btn-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .controls button {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      color: #e4e4e7;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .controls button:hover {
+      background: #3f3f46;
+      border-color: #52525b;
+    }
+
+    .controls button.active {
+      background: #4f46e5;
+      border-color: #6366f1;
+      color: #fff;
+    }
+
+    .preview-container {
+      transform-origin: top center;
+      transition: transform 0.2s ease;
+    }
+
+    .preview-container.scale-50 {
+      transform: scale(0.5);
+      margin-bottom: -540px;
+    }
+
+    .preview-container.scale-33 {
+      transform: scale(0.33);
+      margin-bottom: -723px;
+    }
+
+    /* Story cards need different margin due to height */
+    .preview-container.scale-33:has(.story) {
+      margin-bottom: -1286px;
+    }
+
+    .preview-container.scale-50:has(.story) {
+      margin-bottom: -960px;
+    }
+
+    .card-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .card-label {
+      color: #71717a;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <label>Preview Scale</label>
+    <div class="btn-row">
+      <button onclick="setScale('100')" id="btn-100">100%</button>
+      <button onclick="setScale('50')" id="btn-50" class="active">50%</button>
+      <button onclick="setScale('33')" id="btn-33">33%</button>
+    </div>
+  </div>
+
+  <h1>Nerdcube Daily - Social Media Cards (v2)</h1>
+  <div class="instructions">
+    <strong>How to export:</strong> Set scale to 100%, then use your browser's screenshot tool
+    (Firefox: right-click element > "Take Screenshot", Chrome: DevTools > Ctrl+Shift+P > "Capture node screenshot").
+  </div>
+
+  <!-- Multi-Game Showcase (Square) -->
+  <div class="card-wrapper">
+    <h2 class="section-title">Multi-Game Showcase <span class="dimension-badge">1080 x 1080</span></h2>
+    <div class="preview-container scale-50" id="showcase-container">
+      <div class="showcase" id="showcase">
+        <div class="top">
+          <div class="main-title">NERDCUBE DAILY</div>
+          <div class="subtitle">Five puzzle games, new challenges every day</div>
+        </div>
+        <div class="games-grid">
+          <div class="games-row-top">
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/dabble.png" alt="Dabble">
+              </div>
+              <div class="game-name">Dabble</div>
+            </div>
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/jumble.png" alt="Jumble">
+              </div>
+              <div class="game-name">Jumble</div>
+            </div>
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/trio.png" alt="Trio">
+              </div>
+              <div class="game-name">Trio</div>
+            </div>
+          </div>
+          <div class="games-row-bottom">
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/inlay.png" alt="Inlay">
+              </div>
+              <div class="game-name">Inlay</div>
+            </div>
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/carom.png" alt="Carom">
+              </div>
+              <div class="game-name">Carom</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="daily-badge">Free to play</div>
+          <div class="url">nerdcube.games</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Individual Cards -->
+  <div class="card-wrapper">
+    <h2 class="section-title">Dabble <span class="dimension-badge">1080 x 1080</span></h2>
+    <div class="preview-container scale-50">
+      <div class="game-card dabble" id="dabble-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/dabble.png" alt="Dabble">
+          </div>
+          <div class="title-group">
+            <div class="game-title">DABBLE</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="dabble.png" alt="Dabble gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Build crossing words for the highest score</div>
+          <div class="url">nerdcube.games/dabble</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h2 class="section-title">Jumble <span class="dimension-badge">1080 x 1080</span></h2>
+    <div class="preview-container scale-50">
+      <div class="game-card jumble" id="jumble-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/jumble.png" alt="Jumble">
+          </div>
+          <div class="title-group">
+            <div class="game-title">JUMBLE</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="jumble.png" alt="Jumble gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Find hidden words before time runs out</div>
+          <div class="url">nerdcube.games/jumble</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h2 class="section-title">Trio <span class="dimension-badge">1080 x 1080</span></h2>
+    <div class="preview-container scale-50">
+      <div class="game-card trio" id="trio-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/trio.png" alt="Trio">
+          </div>
+          <div class="title-group">
+            <div class="game-title">TRIO</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="trio.png" alt="Trio gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Match cards by shape, color, and pattern</div>
+          <div class="url">nerdcube.games/trio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h2 class="section-title">Inlay <span class="dimension-badge">1080 x 1080</span></h2>
+    <div class="preview-container scale-50">
+      <div class="game-card inlay" id="inlay-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/inlay.png" alt="Inlay">
+          </div>
+          <div class="title-group">
+            <div class="game-title">INLAY</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="inlay.png" alt="Inlay gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Fill the shape with pentomino pieces</div>
+          <div class="url">nerdcube.games/inlay</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h2 class="section-title">Carom <span class="dimension-badge">1080 x 1080</span></h2>
+    <div class="preview-container scale-50">
+      <div class="game-card carom" id="carom-card">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/carom.png" alt="Carom">
+          </div>
+          <div class="title-group">
+            <div class="game-title">CAROM</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="carom.png" alt="Carom gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Slide pieces through a maze to reach the star</div>
+          <div class="url">nerdcube.games/carom</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram Stories -->
+  <h2 class="section-title" style="margin-top: 40px;">Instagram Stories <span class="dimension-badge">1080 x 1920</span></h2>
+
+  <div class="card-wrapper">
+    <h3 class="section-title" style="font-size: 16px; color: #71717a;">Showcase Story</h3>
+    <div class="preview-container scale-33">
+      <div class="story showcase-story">
+        <div class="header">
+          <div class="main-title">NERDCUBE DAILY</div>
+          <div class="subtitle">Five puzzle games, new challenges every day</div>
+        </div>
+        <div class="games-grid">
+          <div class="games-row">
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/dabble.png" alt="Dabble">
+              </div>
+              <div class="game-name">Dabble</div>
+            </div>
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/jumble.png" alt="Jumble">
+              </div>
+              <div class="game-name">Jumble</div>
+            </div>
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/trio.png" alt="Trio">
+              </div>
+              <div class="game-name">Trio</div>
+            </div>
+          </div>
+          <div class="games-row">
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/inlay.png" alt="Inlay">
+              </div>
+              <div class="game-name">Inlay</div>
+            </div>
+            <div class="game-item">
+              <div class="game-icon">
+                <img src="../apps/web/public/icons/carom.png" alt="Carom">
+              </div>
+              <div class="game-name">Carom</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="daily-badge">Free to play</div>
+          <div class="url">nerdcube.games</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h3 class="section-title" style="font-size: 16px; color: #71717a;">Dabble Story</h3>
+    <div class="preview-container scale-33">
+      <div class="story dabble">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/dabble.png" alt="Dabble">
+          </div>
+          <div class="title-group">
+            <div class="game-title">DABBLE</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="dabble.png" alt="Dabble gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Build crossing words for the highest score</div>
+          <div class="url">nerdcube.games/dabble</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h3 class="section-title" style="font-size: 16px; color: #71717a;">Jumble Story</h3>
+    <div class="preview-container scale-33">
+      <div class="story jumble">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/jumble.png" alt="Jumble">
+          </div>
+          <div class="title-group">
+            <div class="game-title">JUMBLE</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="jumble.png" alt="Jumble gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Find hidden words before time runs out</div>
+          <div class="url">nerdcube.games/jumble</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h3 class="section-title" style="font-size: 16px; color: #71717a;">Trio Story</h3>
+    <div class="preview-container scale-33">
+      <div class="story trio">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/trio.png" alt="Trio">
+          </div>
+          <div class="title-group">
+            <div class="game-title">TRIO</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="trio.png" alt="Trio gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Match cards by shape, color, and pattern</div>
+          <div class="url">nerdcube.games/trio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h3 class="section-title" style="font-size: 16px; color: #71717a;">Inlay Story</h3>
+    <div class="preview-container scale-33">
+      <div class="story inlay">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/inlay.png" alt="Inlay">
+          </div>
+          <div class="title-group">
+            <div class="game-title">INLAY</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="inlay.png" alt="Inlay gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Fill the shape with pentomino pieces</div>
+          <div class="url">nerdcube.games/inlay</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <h3 class="section-title" style="font-size: 16px; color: #71717a;">Carom Story</h3>
+    <div class="preview-container scale-33">
+      <div class="story carom">
+        <div class="header">
+          <div class="icon">
+            <img src="../apps/web/public/icons/carom.png" alt="Carom">
+          </div>
+          <div class="title-group">
+            <div class="game-title">CAROM</div>
+            <div class="brand">Nerdcube Daily</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="screenshot-container">
+            <img src="carom.png" alt="Carom gameplay">
+          </div>
+        </div>
+        <div class="footer">
+          <div class="tagline">Slide pieces through a maze to reach the star</div>
+          <div class="url">nerdcube.games/carom</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setScale(scale) {
+      const containers = document.querySelectorAll('.preview-container');
+      containers.forEach(container => {
+        container.classList.remove('scale-50', 'scale-33');
+        if (scale === '50') container.classList.add('scale-50');
+        if (scale === '33') container.classList.add('scale-33');
+      });
+
+      document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-' + scale).classList.add('active');
+    }
+  </script>
+</body>
+</html>
