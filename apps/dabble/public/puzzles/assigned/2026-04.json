@@ -1,0 +1,538 @@
+{
+  "gameId": "dabble",
+  "baseDate": "2026-04-01",
+  "puzzles": {
+    "60": {
+      "id": "4533aa21812364d1",
+      "archetype": "open",
+      "letters": [
+        "A",
+        "E",
+        "O",
+        "U",
+        "C",
+        "F",
+        "M",
+        "P",
+        "R",
+        "S",
+        "S",
+        "T",
+        "T",
+        "X"
+      ],
+      "board": {
+        "size": 9,
+        "cells": [
+          [
+            {
+              "row": 0,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "bonus": "TW",
+              "isPlayable": true
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 0,
+              "col": 4,
+              "bonus": "TL",
+              "isPlayable": true
+            },
+            {
+              "row": 0,
+              "col": 5,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 0,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 0,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 0,
+              "col": 8,
+              "bonus": null,
+              "isPlayable": false
+            }
+          ],
+          [
+            {
+              "row": 1,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 1,
+              "col": 4,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 1,
+              "col": 5,
+              "bonus": "DL",
+              "isPlayable": true
+            },
+            {
+              "row": 1,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 1,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 1,
+              "col": 8,
+              "bonus": null,
+              "isPlayable": false
+            }
+          ],
+          [
+            {
+              "row": 2,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 4,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 5,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 2,
+              "col": 8,
+              "bonus": null,
+              "isPlayable": true
+            }
+          ],
+          [
+            {
+              "row": 3,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 4,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 5,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 3,
+              "col": 8,
+              "bonus": null,
+              "isPlayable": true
+            }
+          ],
+          [
+            {
+              "row": 4,
+              "col": 0,
+              "bonus": "TW",
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 4,
+              "bonus": "START",
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 5,
+              "bonus": "DL",
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 4,
+              "col": 8,
+              "bonus": "DW",
+              "isPlayable": true
+            }
+          ],
+          [
+            {
+              "row": 5,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "bonus": "DL",
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 4,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 5,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 5,
+              "col": 8,
+              "bonus": null,
+              "isPlayable": true
+            }
+          ],
+          [
+            {
+              "row": 6,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 2,
+              "bonus": "DW",
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 4,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 5,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 6,
+              "col": 8,
+              "bonus": "TL",
+              "isPlayable": true
+            }
+          ],
+          [
+            {
+              "row": 7,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 7,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 7,
+              "col": 2,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 7,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 7,
+              "col": 4,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 7,
+              "col": 5,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 7,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 7,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 7,
+              "col": 8,
+              "bonus": null,
+              "isPlayable": false
+            }
+          ],
+          [
+            {
+              "row": 8,
+              "col": 0,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 8,
+              "col": 1,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 8,
+              "col": 2,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 8,
+              "col": 3,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 8,
+              "col": 4,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 8,
+              "col": 5,
+              "bonus": "TL",
+              "isPlayable": true
+            },
+            {
+              "row": 8,
+              "col": 6,
+              "bonus": null,
+              "isPlayable": true
+            },
+            {
+              "row": 8,
+              "col": 7,
+              "bonus": null,
+              "isPlayable": false
+            },
+            {
+              "row": 8,
+              "col": 8,
+              "bonus": null,
+              "isPlayable": false
+            }
+          ]
+        ]
+      },
+      "thresholds": {
+        "heuristicMax": 145
+      }
+    }
+  }
+}

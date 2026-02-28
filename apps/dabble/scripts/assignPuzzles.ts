@@ -66,6 +66,29 @@ function getDateForPuzzleNumber(puzzleNumber: number): string {
 }
 
 /**
+ * Get puzzle number from a date string (YYYY-MM-DD).
+ */
+function getPuzzleNumberForDate(dateStr: string): number {
+  const baseDate = new Date(BASE_DATE + 'T00:00:00');
+  const puzzleDate = new Date(dateStr + 'T00:00:00');
+  const diffTime = puzzleDate.getTime() - baseDate.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays + 1;
+}
+
+/**
+ * Parse a puzzle key (either number string "1" or date string "2026-02-01") to puzzle number.
+ */
+function parsePuzzleKey(key: string): number {
+  // If key contains a hyphen, it's a date format
+  if (key.includes('-')) {
+    return getPuzzleNumberForDate(key);
+  }
+  // Otherwise it's a puzzle number
+  return parseInt(key, 10);
+}
+
+/**
  * Load a monthly assigned file, or return null if it doesn't exist.
  */
 function loadMonthlyFile(assignedDir: string, month: string): MonthlyAssignedFile | null {
@@ -140,8 +163,8 @@ async function main() {
       const monthlyFile = loadMonthlyFile(assignedDir, month);
       if (monthlyFile) {
         monthlyFiles.set(month, monthlyFile);
-        for (const numStr of Object.keys(monthlyFile.puzzles)) {
-          assignedNumbers.add(parseInt(numStr, 10));
+        for (const key of Object.keys(monthlyFile.puzzles)) {
+          assignedNumbers.add(parsePuzzleKey(key));
         }
       }
     }

@@ -407,12 +407,12 @@ function hasAdjacentBonus(r: number, c: number, bonuses: BonusType[][], size: nu
   return false;
 }
 
-// Minimum distance between DW and TW when in the same row or column
+// Minimum distance between word multipliers (DW/TW) in the same row or column
 // Prevents a single word from hitting both bonuses for extremely high scores
-const MIN_DW_TW_SAME_LINE_DISTANCE = 5;
+const MIN_WORD_MULTIPLIER_SAME_LINE_DISTANCE = 5;
 
-// Check if a position is too close to a TW bonus in the same row or column
-function isTooCloseToTW(
+// Check if a position is too close to an existing word multiplier (DW or TW) in same row/column
+function isTooCloseToWordMultiplier(
   r: number,
   c: number,
   bonuses: BonusType[][],
@@ -420,11 +420,12 @@ function isTooCloseToTW(
 ): boolean {
   for (let br = 0; br < size; br++) {
     for (let bc = 0; bc < size; bc++) {
-      if (bonuses[br][bc] === 'TW') {
+      const existing = bonuses[br][bc];
+      if (existing === 'TW' || existing === 'DW') {
         // Same row - check column distance
-        if (r === br && Math.abs(c - bc) < MIN_DW_TW_SAME_LINE_DISTANCE) return true;
+        if (r === br && Math.abs(c - bc) < MIN_WORD_MULTIPLIER_SAME_LINE_DISTANCE) return true;
         // Same column - check row distance
-        if (c === bc && Math.abs(r - br) < MIN_DW_TW_SAME_LINE_DISTANCE) return true;
+        if (c === bc && Math.abs(r - br) < MIN_WORD_MULTIPLIER_SAME_LINE_DISTANCE) return true;
       }
     }
   }
@@ -460,8 +461,8 @@ function placeBonuses(rng: () => number, playable: boolean[][], size: number): B
           if (bonuses[r][c] !== null) continue;
           if (distFromCenterFn(r, c) < config.minDistFromCenter) continue;
           if (!config.allowAdjacent && hasAdjacentBonus(r, c, bonuses, size)) continue;
-          // DW must not be too close to TW in same row/column (prevents single word hitting both)
-          if (bonusType === 'DW' && isTooCloseToTW(r, c, bonuses, size)) continue;
+          // Word multipliers (DW/TW) must not be too close to each other in same row/column
+          if ((bonusType === 'DW' || bonusType === 'TW') && isTooCloseToWordMultiplier(r, c, bonuses, size)) continue;
           validPositions.push([r, c]);
         }
       }

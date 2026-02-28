@@ -205,7 +205,7 @@ export function Game() {
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [isDraggingBoardTile, setIsDraggingBoardTile] = useState(false);
   const [scorePopup, setScorePopup] = useState<{ score: number; key: number } | null>(null);
-  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed'>('fresh');
+  const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed' | 'unavailable'>('fresh');
   const [showThresholdsModal, setShowThresholdsModal] = useState(false);
   const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
   const [pendingResultsModal, setPendingResultsModal] = useState(false);
@@ -231,7 +231,7 @@ export function Game() {
     async function init() {
       await loadDictionary();
 
-      let dailyPuzzle: DailyPuzzle;
+      let dailyPuzzle: DailyPuzzle | null = null;
 
       // Pool mode: load from pool by ID (debug only)
       if (isPoolMode && poolIdParam) {
@@ -250,6 +250,13 @@ export function Game() {
           ? getDateForPuzzleNumber(PUZZLE_BASE_DATE, activePuzzleNumber)
           : undefined; // undefined = today
         dailyPuzzle = await fetchDailyPuzzle(puzzleDateString);
+      }
+
+      // Handle no puzzle available (like Carom)
+      if (!dailyPuzzle) {
+        setLandingMode('unavailable');
+        setIsLoading(false);
+        return;
       }
 
       setPuzzle(dailyPuzzle);
