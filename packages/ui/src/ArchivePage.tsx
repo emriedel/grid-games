@@ -34,6 +34,8 @@ export interface ArchivePageProps {
   isPerfectCompletion?: (puzzleNumber: number) => boolean;
   /** For 'checkmark' mode: did the user cheat? Shows skull instead of checkmark */
   isCheating?: (puzzleNumber: number) => boolean;
+  /** Optional suffix to display after the status icon (e.g., hint emojis) */
+  getStatusSuffix?: (puzzleNumber: number) => string;
   /** Available months with puzzles, newest first (e.g., ["2026-03", "2026-02"]) */
   availableMonths?: string[];
   /** Puzzle entries by month (alternative to baseDate calculation) */
@@ -49,6 +51,7 @@ interface ArchiveEntry {
   score: number | null;
   isPerfect: boolean;
   isCheating: boolean;
+  statusSuffix: string;
 }
 
 /**
@@ -70,6 +73,7 @@ export function ArchivePage({
   statusDisplay = 'stars',
   isPerfectCompletion,
   isCheating,
+  getStatusSuffix,
   availableMonths,
   getPuzzlesForMonth,
 }: ArchivePageProps) {
@@ -112,6 +116,7 @@ export function ArchivePage({
           score: isCompleted && getPuzzleScore ? getPuzzleScore(num) : null,
           isPerfect: isCompleted && isPerfectCompletion ? isPerfectCompletion(num) : false,
           isCheating: isCompleted && isCheating ? isCheating(num) : false,
+          statusSuffix: isCompleted && getStatusSuffix ? getStatusSuffix(num) : '',
         });
       }
     } else {
@@ -140,12 +145,13 @@ export function ArchivePage({
           score: isCompleted && getPuzzleScore ? getPuzzleScore(num) : null,
           isPerfect: isCompleted && isPerfectCompletion ? isPerfectCompletion(num) : false,
           isCheating: isCompleted && isCheating ? isCheating(num) : false,
+          statusSuffix: isCompleted && getStatusSuffix ? getStatusSuffix(num) : '',
         });
       }
     }
 
     return entries;
-  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getPuzzleScore, isPerfectCompletion, isCheating, useMonthlyPagination, currentMonth, getPuzzlesForMonth]);
+  }, [baseDate, todayPuzzleNumber, isPuzzleCompleted, isPuzzleInProgress, getPuzzleStars, getPuzzleScore, isPerfectCompletion, isCheating, getStatusSuffix, useMonthlyPagination, currentMonth, getPuzzlesForMonth]);
 
   return (
     <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
@@ -235,13 +241,18 @@ export function ArchivePage({
                         )}
                         {statusDisplay === 'checkmark' ? (
                           // Checkmark/Trophy/Skull mode
-                          entry.isCheating ? (
-                            <span className="text-xl" title="Impossible!">💀</span>
-                          ) : entry.isPerfect ? (
-                            <span className="text-xl" title="Perfect!">🏆</span>
-                          ) : (
-                            <Check size={18} className="text-[var(--success,#22c55e)]" />
-                          )
+                          <>
+                            {entry.statusSuffix && (
+                              <span className="mr-1">{entry.statusSuffix}</span>
+                            )}
+                            {entry.isCheating ? (
+                              <span className="text-xl" title="Impossible!">💀</span>
+                            ) : entry.isPerfect ? (
+                              <span className="text-xl" title="Perfect!">🏆</span>
+                            ) : (
+                              <Check size={18} className="text-[var(--success,#22c55e)]" />
+                            )}
+                          </>
                         ) : (
                           // Stars mode (default)
                           <span className="text-[var(--accent)]">

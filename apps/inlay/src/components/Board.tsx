@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback, useRef, useEffect, forwardRef } from 'r
 import type { Board as BoardType, Position, PentominoId, Rotation, DragData, PlacedPiece } from '@/types';
 import { Cell } from './Cell';
 import { findAnchorForClickedCell, findNearestValidPlacement, getPieceCells } from '@/lib/gameLogic';
+import { PENTOMINOES } from '@/constants/pentominoes';
 
 interface BoardProps {
   board: BoardType;
@@ -12,6 +13,7 @@ interface BoardProps {
   activeDrag: DragData | null;
   dragOverCell: Position | null;
   placedPieces: PlacedPiece[];
+  hintPieces?: PlacedPiece[];
   isComplete?: boolean;
   disabled?: boolean;
   onCellClick: (position: Position) => void;
@@ -27,6 +29,7 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
   activeDrag,
   dragOverCell,
   placedPieces,
+  hintPieces = [],
   isComplete,
   disabled,
   onCellClick,
@@ -129,6 +132,19 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
     return map;
   }, [placedPieces]);
 
+  // Build a map of "row,col" -> { pentominoId, color } for hint cells
+  const hintCellMap = useMemo(() => {
+    const map = new Map<string, { pentominoId: PentominoId; color: string }>();
+    for (const hint of hintPieces) {
+      const cells = getPieceCells(hint.pentominoId, hint.position, hint.rotation);
+      const color = PENTOMINOES[hint.pentominoId].color;
+      for (const cell of cells) {
+        map.set(`${cell.row},${cell.col}`, { pentominoId: hint.pentominoId, color });
+      }
+    }
+    return map;
+  }, [hintPieces]);
+
   // Get the pentominoId currently being dragged from board (to hide its cells)
   const draggingFromBoardPieceId = activeDrag?.type === 'board-piece' ? activeDrag.pentominoId : null;
 
@@ -184,41 +200,69 @@ export const Board = forwardRef<HTMLDivElement, BoardProps>(function Board({
       className={`w-full bg-[var(--board-bg)] p-1 sm:p-1.5 rounded-lg overflow-hidden ${isComplete ? 'animate-completion-glow' : ''}`}
       onMouseLeave={handleBoardLeave}
     >
-      <div ref={gridRef} style={gridStyle}>
-        {board.cells.map((row, rowIndex) =>
-          row.map((cell, colIndex) => {
-            const key = `${rowIndex},${colIndex}`;
-            const isDragPreview = dragPreviewCells.has(key);
+      <div className="relative">
+        <div ref={gridRef} style={gridStyle}>
+          {board.cells.map((row, rowIndex) =>
+            row.map((cell, colIndex) => {
+              const key = `${rowIndex},${colIndex}`;
+              const isDragPreview = dragPreviewCells.has(key);
 
-            // Check if this specific cell should show hover highlight
-            const isHoverHighlight = isHoverEligible &&
-              hoverPosition?.row === rowIndex &&
-              hoverPosition?.col === colIndex;
+              // Check if this specific cell should show hover highlight
+              const isHoverHighlight = isHoverEligible &&
+                hoverPosition?.row === rowIndex &&
+                hoverPosition?.col === colIndex;
 
-            // Hide cells of piece being dragged from board
-            const isBeingDragged = draggingFromBoardPieceId !== null &&
-              cell.state === 'filled' &&
-              cell.pentominoId === draggingFromBoardPieceId;
+              // Hide cells of piece being dragged from board
+              const isBeingDragged = draggingFromBoardPieceId !== null &&
+                cell.state === 'filled' &&
+                cell.pentominoId === draggingFromBoardPieceId;
 
-            // Get rotation for this cell's piece (for drag data)
-            const pieceRotation = cell.pentominoId ? pieceRotationMap.get(cell.pentominoId) ?? 0 : 0;
+              // Get rotation for this cell's piece (for drag data)
+              const pieceRotation = cell.pentominoId ? pieceRotationMap.get(cell.pentominoId) ?? 0 : 0;
 
-            return (
-              <Cell
-                key={key}
-                cell={isBeingDragged ? { state: 'playable' } : cell}
-                row={rowIndex}
-                col={colIndex}
-                isDragPreview={isDragPreview}
-                isHoverHighlight={isHoverHighlight}
-                previewPentominoId={isDragPreview ? activeDrag?.pentominoId : undefined}
-                pieceRotation={pieceRotation}
-                pieceAnchorPosition={cell.pentominoId ? pieceAnchorMap.get(cell.pentominoId) : undefined}
-                onClick={() => handleCellClick(rowIndex, colIndex)}
-                onMouseEnter={() => handleCellHover(rowIndex, colIndex)}
-              />
-            );
-          })
+              return (
+                <Cell
+                  key={key}
+                  cell={isBeingDragged ? { state: 'playable' } : cell}
+                  row={rowIndex}
+                  col={colIndex}
+                  isDragPreview={isDragPreview}
+                  isHoverHighlight={isHoverHighlight}
+                  previewPentominoId={isDragPreview ? activeDrag?.pentominoId : undefined}
+                  pieceRotation={pieceRotation}
+                  pieceAnchorPosition={cell.pentominoId ? pieceAnchorMap.get(cell.pentominoId) : undefined}
+                  onClick={() => handleCellClick(rowIndex, colIndex)}
+                  onMouseEnter={() => handleCellHover(rowIndex, colIndex)}
+                />
+              );
+            })
+          )}
+        </div>
+        {/* Hint outlines overlay */}
+        {hintPieces.length > 0 && (
+          <div className="absolute inset-0 pointer-events-none" style={gridStyle}>
+            {board.cells.map((row, rowIndex) =>
+              row.map((_, colIndex) => {
+                const key = `${rowIndex},${colIndex}`;
+                const hintInfo = hintCellMap.get(key);
+
+                if (!hintInfo) {
+                  return <div key={key} className="aspect-square" />;
+                }
+
+                return (
+                  <div
+                    key={key}
+                    className="aspect-square rounded-sm animate-hint-pulse"
+                    style={{
+                      backgroundColor: `color-mix(in srgb, ${hintInfo.color} 20%, transparent)`,
+                      border: `2px dashed ${hintInfo.color}`,
+                    }}
+                  />
+                );
+              })
+            )}
+          </div>
         )}
       </div>
     </div>

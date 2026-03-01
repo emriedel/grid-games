@@ -160,6 +160,7 @@ export function Game() {
     removePieceFromBoard,
     clearAll,
     restoreState,
+    revealHint,
   } = useGameState();
 
   // Set up drag sensors
@@ -232,16 +233,24 @@ export function Game() {
           if (isArchiveMode) {
             // For archive, go straight to board view
             setExitedLanding(true);
-            restoreState({ placedPieces: savedState.data.placedPieces });
+            restoreState({
+              placedPieces: savedState.data.placedPieces,
+              revealedHints: savedState.data.revealedHints ?? [],
+            });
           } else {
             setLandingMode('completed');
           }
         } else if (savedState?.status === 'in-progress') {
-          // Only show in-progress if there are actually pieces placed
-          if (savedState.data.placedPieces.length > 0) {
+          // Show in-progress if pieces placed or hints revealed
+          const hasProgress = savedState.data.placedPieces.length > 0 ||
+            (savedState.data.revealedHints?.length ?? 0) > 0;
+          if (hasProgress) {
             if (isArchiveMode) {
               // For archive, restore state and start playing
-              restoreState({ placedPieces: savedState.data.placedPieces });
+              restoreState({
+                placedPieces: savedState.data.placedPieces,
+                revealedHints: savedState.data.revealedHints ?? [],
+              });
               startGame();
             } else {
               setLandingMode('in-progress');
@@ -262,14 +271,14 @@ export function Game() {
     init();
   }, [debugMode, targetPuzzleNumber, isArchiveMode, poolIdParam, loadPuzzle, restoreState, startGame]);
 
-  // Save state during gameplay - only if pieces have been placed
+  // Save state during gameplay - save if pieces placed or hints revealed
   useEffect(() => {
     if (state.phase === 'playing' && !debugMode && state.puzzle) {
-      if (state.placedPieces.length > 0) {
+      if (state.placedPieces.length > 0 || state.revealedHints.length > 0) {
         // Use state.puzzle.id to ensure we always have the correct puzzle ID
         saveInProgressState(puzzleNumber, state, state.puzzle.id);
       } else {
-        // Clear in-progress state when no pieces are placed (e.g., after Clear All)
+        // Clear in-progress state when no pieces placed and no hints revealed
         clearPuzzleState(puzzleNumber, state.puzzle.id);
       }
     }
@@ -330,7 +339,10 @@ export function Game() {
     });
     const savedState = getSavedState(puzzleNumber, puzzleId);
     if (savedState?.data.placedPieces) {
-      restoreState({ placedPieces: savedState.data.placedPieces });
+      restoreState({
+        placedPieces: savedState.data.placedPieces,
+        revealedHints: savedState.data.revealedHints ?? [],
+      });
     }
     startGame();
   }, [puzzleNumber, puzzleId, restoreState, startGame, isArchiveMode]);
@@ -338,7 +350,10 @@ export function Game() {
   const handleSeeResults = useCallback(() => {
     const savedState = getSavedState(puzzleNumber, puzzleId);
     if (savedState?.data.placedPieces) {
-      restoreState({ placedPieces: savedState.data.placedPieces });
+      restoreState({
+        placedPieces: savedState.data.placedPieces,
+        revealedHints: savedState.data.revealedHints ?? [],
+      });
     }
     setExitedLanding(true);
   }, [puzzleNumber, puzzleId, restoreState]);
@@ -417,6 +432,22 @@ export function Game() {
     }
     return map;
   }, [state.placedPieces, bankRotations]);
+
+  // Calculate hint pieces from solution + revealedHints
+  const hintPieces = useMemo(() => {
+    if (!state.puzzle?.solution) return [];
+    const hintedSet = new Set(state.revealedHints);
+    return state.puzzle.solution.filter((p) => hintedSet.has(p.pentominoId));
+  }, [state.puzzle?.solution, state.revealedHints]);
+
+  // Calculate max hints allowed (half of pieces, rounded down)
+  const maxHints = useMemo(() => {
+    if (!state.puzzle) return 0;
+    return Math.floor(state.puzzle.pentominoIds.length / 2);
+  }, [state.puzzle]);
+
+  // Check if more hints can be revealed
+  const canRevealHint = state.revealedHints.length < maxHints && !isFinished;
 
   // Calculate if current drag position is valid
   // Uses sticky tolerance to match the actual drop behavior
@@ -576,8 +607,10 @@ export function Game() {
     setDragOriginalPlacement(null);
   }, [dragOriginalPlacement, selectPiece, tryPlacePiece]);
 
-  // Build share text
-  const shareText = `Inlay #${puzzleNumber} ✅
+  // Build share text with hint emojis
+  const hintsUsed = state.revealedHints.length;
+  const hintEmojis = hintsUsed > 0 ? ' ' + '💡'.repeat(hintsUsed) : '';
+  const shareText = `Inlay #${puzzleNumber} ✅${hintEmojis}
 
 https://nerdcube.games/inlay`;
 
@@ -652,6 +685,7 @@ https://nerdcube.games/inlay`;
             activeDrag={activeDrag}
             dragOverCell={dragOverCell}
             placedPieces={state.placedPieces}
+            hintPieces={hintPieces}
             isComplete={showCompletionAnimation}
             disabled={isFinished}
             onCellClick={handleCellClick}
@@ -676,6 +710,14 @@ https://nerdcube.games/inlay`;
 
           {/* Action buttons */}
           <div className="flex gap-2">
+            {!isFinished && canRevealHint && (
+              <Button
+                variant="secondary"
+                onClick={revealHint}
+              >
+                Hint
+              </Button>
+            )}
             {!isFinished && state.placedPieces.length > 0 && (
               <Button variant="secondary" onClick={clearAll}>
                 Clear All
@@ -702,7 +744,10 @@ https://nerdcube.games/inlay`;
           gameId="inlay"
           gameName="Inlay"
           puzzleNumber={puzzleNumber}
-          primaryStat={{ value: '✅', label: '' }}
+          primaryStat={{
+            value: '✅',
+            label: '💡'.repeat(hintsUsed),
+          }}
           shareConfig={{ text: shareText }}
           messageType="success"
         />

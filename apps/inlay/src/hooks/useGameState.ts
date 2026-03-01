@@ -30,6 +30,7 @@ const INITIAL_STATE: GameState = {
   selectedPieceId: null,
   selectedRotation: 0,
   won: false,
+  revealedHints: [],
 };
 
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -43,6 +44,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         puzzle,
         board,
         availablePieces: [...puzzle.pentominoIds],
+        revealedHints: [],
       };
     }
 
@@ -189,6 +191,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
       const newBoard = clearBoard(state.board);
 
+      // Note: revealedHints is NOT cleared - hints persist through Clear All
       return {
         ...state,
         board: newBoard,
@@ -223,6 +226,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       // Check for completed state
       const won = isPuzzleComplete(newBoard);
 
+      // Restore revealed hints if present
+      const revealedHints = savedState.revealedHints ?? [];
+
       return {
         ...state,
         board: newBoard,
@@ -230,6 +236,28 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         availablePieces,
         phase: won ? 'finished' : 'playing',
         won,
+        revealedHints,
+      };
+    }
+
+    case 'REVEAL_HINT': {
+      if (!state.puzzle?.solution) return state;
+
+      // Calculate max hints allowed (half of pieces, rounded down)
+      const maxHints = Math.floor(state.puzzle.pentominoIds.length / 2);
+      if (state.revealedHints.length >= maxHints) return state;
+
+      // Find next piece from solution that hasn't been hinted yet
+      const hintedSet = new Set(state.revealedHints);
+      const nextHintPiece = state.puzzle.solution.find(
+        (p) => !hintedSet.has(p.pentominoId)
+      );
+
+      if (!nextHintPiece) return state;
+
+      return {
+        ...state,
+        revealedHints: [...state.revealedHints, nextHintPiece.pentominoId],
       };
     }
 
@@ -286,6 +314,10 @@ export function useGameState() {
     dispatch({ type: 'RESTORE_STATE', state: savedState });
   }, []);
 
+  const revealHint = useCallback(() => {
+    dispatch({ type: 'REVEAL_HINT' });
+  }, []);
+
   return {
     state,
     loadPuzzle,
@@ -298,5 +330,6 @@ export function useGameState() {
     rotatePlacedPiece,
     clearAll,
     restoreState,
+    revealHint,
   };
 }

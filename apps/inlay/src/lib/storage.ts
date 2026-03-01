@@ -5,7 +5,7 @@
  */
 
 import { createArchiveStorage, type BasePuzzleState } from '@grid-games/shared';
-import type { PlacedPiece, Rotation, GameState } from '@/types';
+import type { PlacedPiece, Rotation, GameState, PentominoId } from '@/types';
 
 export interface InlayPuzzleState extends BasePuzzleState {
   puzzleNumber: number;
@@ -14,6 +14,7 @@ export interface InlayPuzzleState extends BasePuzzleState {
   data: {
     placedPieces: PlacedPiece[];
     pieceRotations: Record<string, Rotation>;
+    revealedHints?: PentominoId[];
   };
 }
 
@@ -59,6 +60,7 @@ export function saveInProgressState(
     data: {
       placedPieces: state.placedPieces,
       pieceRotations,
+      revealedHints: state.revealedHints,
     },
   }, puzzleId);
 }
@@ -86,6 +88,7 @@ export function saveCompletedState(
     data: {
       placedPieces: state.placedPieces,
       pieceRotations,
+      revealedHints: state.revealedHints,
     },
   }, puzzleId);
 }

@@ -87,6 +87,8 @@ export interface GameState {
   selectedRotation: Rotation;
   /** Whether the puzzle has been completed */
   won: boolean;
+  /** Pieces that have been revealed as hints (shows outline on board) */
+  revealedHints: PentominoId[];
 }
 
 /** Game actions */
@@ -101,7 +103,8 @@ export type GameAction =
   | { type: 'ROTATE_PLACED_PIECE'; pentominoId: PentominoId }
   | { type: 'CLEAR_ALL' }
   | { type: 'FINISH_GAME' }
-  | { type: 'RESTORE_STATE'; state: Partial<GameState> };
+  | { type: 'RESTORE_STATE'; state: Partial<GameState> }
+  | { type: 'REVEAL_HINT' };
 
 /** Puzzle state for storage */
 export interface InlayPuzzleState {

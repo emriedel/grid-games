@@ -9,6 +9,7 @@ import {
   isPuzzleInProgress,
   getTodayPuzzleNumber,
   getSavedPuzzleId,
+  getSavedState,
 } from '@/lib/storage';
 import { PUZZLE_BASE_DATE_STRING } from '@/config';
 import { loadPuzzleIdsForRange } from '@/lib/puzzleLoader';
@@ -94,6 +95,13 @@ export function ArchivePageContent() {
     return puzzleIdMatches && isPuzzleInProgress(puzzleNumber, currentPuzzleId);
   }, [puzzleIds]);
 
+  const getStatusSuffix = useCallback((puzzleNumber: number): string => {
+    const currentPuzzleId = puzzleIds.get(puzzleNumber);
+    const savedState = getSavedState(puzzleNumber, currentPuzzleId);
+    const hintsUsed = savedState?.data?.revealedHints?.length ?? 0;
+    return '💡'.repeat(hintsUsed);
+  }, [puzzleIds]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--background,#0a0a0a)] flex flex-col items-center">
@@ -121,6 +129,7 @@ export function ArchivePageContent() {
       todayPuzzleNumber={todayPuzzleNumber}
       isPuzzleCompleted={checkPuzzleCompleted}
       isPuzzleInProgress={checkPuzzleInProgress}
+      getStatusSuffix={getStatusSuffix}
       onSelectPuzzle={handleSelectPuzzle}
       backHref="/inlay"
       statusDisplay="checkmark"
