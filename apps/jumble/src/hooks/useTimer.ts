@@ -17,11 +17,17 @@ export function useTimer(initialDuration: number, onComplete?: () => void): UseT
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const onCompleteRef = useRef(onComplete);
   const wasRunningBeforeHidden = useRef(false);
+  const timeRemainingRef = useRef(timeRemaining);
 
   // Keep onComplete ref updated
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
+
+  // Keep timeRemaining ref in sync with state
+  useEffect(() => {
+    timeRemainingRef.current = timeRemaining;
+  }, [timeRemaining]);
 
   // Timer effect
   useEffect(() => {
@@ -73,10 +79,10 @@ export function useTimer(initialDuration: number, onComplete?: () => void): UseT
   }, [isRunning, timeRemaining]);
 
   const start = useCallback(() => {
-    if (timeRemaining > 0) {
+    if (timeRemainingRef.current > 0) {
       setIsRunning(true);
     }
-  }, [timeRemaining]);
+  }, []);
 
   const pause = useCallback(() => {
     setIsRunning(false);
@@ -86,7 +92,9 @@ export function useTimer(initialDuration: number, onComplete?: () => void): UseT
   const reset = useCallback((newDuration?: number) => {
     setIsRunning(false);
     wasRunningBeforeHidden.current = false;
-    setTimeRemaining(newDuration ?? initialDuration);
+    const newTime = newDuration ?? initialDuration;
+    setTimeRemaining(newTime);
+    timeRemainingRef.current = newTime; // Update ref synchronously for immediate start() calls
   }, [initialDuration]);
 
   // Set time directly (for restoring from saved state)
