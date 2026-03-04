@@ -46,15 +46,40 @@ export function Board({
 
   // Handle swipe gestures
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const autoSelectedRef = useRef<string | null>(null);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (disabled || !selectedPieceId) return;
+    if (disabled) return;
+    autoSelectedRef.current = null;
+
     const touch = e.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-  }, [disabled, selectedPieceId]);
+
+    // If no piece selected, check if touch is on a piece and auto-select it
+    if (!selectedPieceId) {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (rect && cellSize > 0) {
+        const gridX = Math.floor((touch.clientX - rect.left) / cellSize);
+        const gridY = Math.floor((touch.clientY - rect.top) / cellSize);
+
+        // Find piece at this position (target or blocker)
+        const pieceAtPosition = pieces.find(
+          p => p.position.x === gridX && p.position.y === gridY
+        );
+
+        if (pieceAtPosition) {
+          autoSelectedRef.current = pieceAtPosition.id;
+          onPieceSelect(pieceAtPosition.id);
+        }
+      }
+    }
+  }, [disabled, cellSize, pieces, selectedPieceId, onPieceSelect]);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    if (disabled || !selectedPieceId || !touchStartRef.current) return;
+    const effectivePieceId = selectedPieceId || autoSelectedRef.current;
+    autoSelectedRef.current = null;
+
+    if (disabled || !effectivePieceId || !touchStartRef.current) return;
 
     const touch = e.changedTouches[0];
     const dx = touch.clientX - touchStartRef.current.x;
