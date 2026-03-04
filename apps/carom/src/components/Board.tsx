@@ -50,25 +50,27 @@ export function Board({
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (disabled) return;
+    e.preventDefault(); // Prevent text selection and other browser behaviors
     autoSelectedRef.current = null;
 
     const touch = e.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
 
-    // If no piece selected, check if touch is on a piece and auto-select it
-    if (!selectedPieceId) {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (rect && cellSize > 0) {
-        const gridX = Math.floor((touch.clientX - rect.left) / cellSize);
-        const gridY = Math.floor((touch.clientY - rect.top) / cellSize);
+    // Check if touch is on a piece - always use that piece for the swipe
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (rect && cellSize > 0) {
+      const gridX = Math.floor((touch.clientX - rect.left) / cellSize);
+      const gridY = Math.floor((touch.clientY - rect.top) / cellSize);
 
-        // Find piece at this position (target or blocker)
-        const pieceAtPosition = pieces.find(
-          p => p.position.col === gridX && p.position.row === gridY
-        );
+      // Find piece at this position (target or blocker)
+      const pieceAtPosition = pieces.find(
+        p => p.position.col === gridX && p.position.row === gridY
+      );
 
-        if (pieceAtPosition) {
-          autoSelectedRef.current = pieceAtPosition.id;
+      if (pieceAtPosition) {
+        autoSelectedRef.current = pieceAtPosition.id;
+        // Select this piece (even if different from current selection)
+        if (pieceAtPosition.id !== selectedPieceId) {
           onPieceSelect(pieceAtPosition.id);
         }
       }
@@ -76,7 +78,8 @@ export function Board({
   }, [disabled, cellSize, pieces, selectedPieceId, onPieceSelect]);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    const effectivePieceId = selectedPieceId || autoSelectedRef.current;
+    // Prefer the piece that was touched, fall back to selected piece
+    const effectivePieceId = autoSelectedRef.current || selectedPieceId;
     autoSelectedRef.current = null;
 
     if (disabled || !effectivePieceId || !touchStartRef.current) return;
@@ -152,8 +155,8 @@ export function Board({
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-[3px] border-[var(--wall-color)]"
-      style={{ touchAction: 'none' }}
+      className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-[3px] border-[var(--wall-color)] select-none"
+      style={{ touchAction: 'none', WebkitTouchCallout: 'none' }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={handleBoardClick}
