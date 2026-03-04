@@ -64,7 +64,7 @@ export function Board({
 
         // Find piece at this position (target or blocker)
         const pieceAtPosition = pieces.find(
-          p => p.position.x === gridX && p.position.y === gridY
+          p => p.position.col === gridX && p.position.row === gridY
         );
 
         if (pieceAtPosition) {
