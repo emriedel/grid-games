@@ -48,63 +48,77 @@ export function Board({
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const autoSelectedRef = useRef<string | null>(null);
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (disabled) return;
-    e.preventDefault(); // Prevent text selection and other browser behaviors
-    autoSelectedRef.current = null;
+  // Attach touch listeners imperatively with { passive: false } to allow preventDefault
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-    const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    const onTouchStart = (e: TouchEvent) => {
+      if (disabled) return;
+      e.preventDefault(); // Prevent text selection and other browser behaviors
+      autoSelectedRef.current = null;
 
-    // Check if touch is on a piece - always use that piece for the swipe
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (rect && cellSize > 0) {
-      const gridX = Math.floor((touch.clientX - rect.left) / cellSize);
-      const gridY = Math.floor((touch.clientY - rect.top) / cellSize);
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
 
-      // Find piece at this position (target or blocker)
-      const pieceAtPosition = pieces.find(
-        p => p.position.col === gridX && p.position.row === gridY
-      );
+      // Check if touch is on a piece - always use that piece for the swipe
+      const rect = container.getBoundingClientRect();
+      if (cellSize > 0) {
+        const gridX = Math.floor((touch.clientX - rect.left) / cellSize);
+        const gridY = Math.floor((touch.clientY - rect.top) / cellSize);
 
-      if (pieceAtPosition) {
-        autoSelectedRef.current = pieceAtPosition.id;
-        // Select this piece (even if different from current selection)
-        if (pieceAtPosition.id !== selectedPieceId) {
-          onPieceSelect(pieceAtPosition.id);
+        // Find piece at this position (target or blocker)
+        const pieceAtPosition = pieces.find(
+          p => p.position.col === gridX && p.position.row === gridY
+        );
+
+        if (pieceAtPosition) {
+          autoSelectedRef.current = pieceAtPosition.id;
+          // Select this piece (even if different from current selection)
+          if (pieceAtPosition.id !== selectedPieceId) {
+            onPieceSelect(pieceAtPosition.id);
+          }
         }
       }
-    }
-  }, [disabled, cellSize, pieces, selectedPieceId, onPieceSelect]);
+    };
 
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    // Prefer the piece that was touched, fall back to selected piece
-    const effectivePieceId = autoSelectedRef.current || selectedPieceId;
-    autoSelectedRef.current = null;
+    const onTouchEnd = (e: TouchEvent) => {
+      // Prefer the piece that was touched, fall back to selected piece
+      const effectivePieceId = autoSelectedRef.current || selectedPieceId;
+      autoSelectedRef.current = null;
 
-    if (disabled || !effectivePieceId || !touchStartRef.current) return;
+      if (disabled || !effectivePieceId || !touchStartRef.current) return;
 
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - touchStartRef.current.x;
-    const dy = touch.clientY - touchStartRef.current.y;
-    touchStartRef.current = null;
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - touchStartRef.current.x;
+      const dy = touch.clientY - touchStartRef.current.y;
+      touchStartRef.current = null;
 
-    const minSwipeDistance = 30;
-    const absDx = Math.abs(dx);
-    const absDy = Math.abs(dy);
+      const minSwipeDistance = 30;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
 
-    if (absDx < minSwipeDistance && absDy < minSwipeDistance) {
-      return; // Not a swipe
-    }
+      if (absDx < minSwipeDistance && absDy < minSwipeDistance) {
+        return; // Not a swipe
+      }
 
-    if (absDx > absDy) {
-      // Horizontal swipe
-      onMove(dx > 0 ? 'right' : 'left');
-    } else {
-      // Vertical swipe
-      onMove(dy > 0 ? 'down' : 'up');
-    }
-  }, [disabled, selectedPieceId, onMove]);
+      if (absDx > absDy) {
+        // Horizontal swipe
+        onMove(dx > 0 ? 'right' : 'left');
+      } else {
+        // Vertical swipe
+        onMove(dy > 0 ? 'down' : 'up');
+      }
+    };
+
+    container.addEventListener('touchstart', onTouchStart, { passive: false });
+    container.addEventListener('touchend', onTouchEnd, { passive: false });
+
+    return () => {
+      container.removeEventListener('touchstart', onTouchStart);
+      container.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [disabled, cellSize, pieces, selectedPieceId, onPieceSelect, onMove]);
 
   // Handle keyboard input
   useEffect(() => {
@@ -157,8 +171,6 @@ export function Board({
       ref={containerRef}
       className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-[3px] border-[var(--wall-color)] select-none"
       style={{ touchAction: 'none', WebkitTouchCallout: 'none' }}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
       onClick={handleBoardClick}
     >
       {/* Grid cells */}
