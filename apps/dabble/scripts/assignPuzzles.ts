@@ -211,7 +211,11 @@ async function main() {
     }
 
     const monthlyFile = monthlyFiles.get(month)!;
-    monthlyFile.puzzles[String(num)] = puzzle;
+    const dateKey = getDateForPuzzleNumber(num);
+    monthlyFile.puzzles[dateKey] = {
+      ...puzzle,
+      puzzleNumber: num,
+    };
     monthsModified.add(month);
 
     assignedIds.add(puzzle.id);

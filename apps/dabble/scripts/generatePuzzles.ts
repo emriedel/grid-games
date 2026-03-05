@@ -36,6 +36,8 @@ export interface PoolPuzzle {
     }[][];
   };
   thresholds: StarThresholds;
+  /** Sequential puzzle number (1-indexed). Added when assigned to a date. */
+  puzzleNumber?: number;
 }
 
 interface PoolFile {

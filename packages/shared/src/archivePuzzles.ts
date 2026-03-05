@@ -308,12 +308,14 @@ export async function loadPuzzleByDate<TPuzzle extends PuzzleWithId = PuzzleWith
  * @param month - Month key in 'YYYY-MM' format
  * @param gameId - Game identifier
  * @param basePath - Optional base path for fetch
+ * @param launchDateString - Optional launch date for legacy number-keyed format support
  * @returns Array of puzzle list entries
  */
 export async function listPuzzlesForMonth(
   month: string,
   gameId: string,
-  basePath: string = ''
+  basePath: string = '',
+  launchDateString?: string
 ): Promise<PuzzleListEntry[]> {
   const puzzles = await loadMonthlyFile(month, gameId, basePath);
 
@@ -334,10 +336,14 @@ export async function listPuzzlesForMonth(
         puzzleNumber: puzzle.puzzleNumber,
         id: puzzle.id,
       });
-    } else if (/^\d+$/.test(key)) {
-      // Legacy number-keyed format - calculate date from puzzle number
-      // This requires knowing the launch date, so we skip for now
-      // Legacy format will need launchDate to compute date
+    } else if (/^\d+$/.test(key) && puzzle.puzzleNumber !== undefined && launchDateString) {
+      // Legacy number-keyed format - compute date from puzzleNumber
+      const dateFromNumber = getDateKeyForPuzzleNumber(puzzle.puzzleNumber, launchDateString);
+      entries.push({
+        date: dateFromNumber,
+        puzzleNumber: puzzle.puzzleNumber,
+        id: puzzle.id,
+      });
     }
   }
 

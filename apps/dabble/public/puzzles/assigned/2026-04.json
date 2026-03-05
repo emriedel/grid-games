@@ -2,7 +2,7 @@
   "gameId": "dabble",
   "baseDate": "2026-04-01",
   "puzzles": {
-    "60": {
+    "2026-04-01": {
       "id": "4533aa21812364d1",
       "archetype": "open",
       "letters": [
@@ -532,7 +532,8 @@
       },
       "thresholds": {
         "heuristicMax": 145
-      }
+      },
+      "puzzleNumber": 60
     }
   }
 }
