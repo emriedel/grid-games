@@ -56,10 +56,11 @@ export function Board({
     const onTouchStart = (e: TouchEvent) => {
       if (disabled) return;
 
-      // Don't intercept touches on interactive elements (arrow buttons, piece buttons)
+      // Don't intercept touches on directional arrow buttons — let the browser
+      // synthesize a click event so their React onClick handlers fire.
       const target = e.target as HTMLElement;
-      if (target.closest('button')) {
-        return; // Let the browser handle the tap naturally
+      if (target.closest('button[aria-label^="Move "]')) {
+        return;
       }
 
       e.preventDefault(); // Prevent text selection and other browser behaviors
