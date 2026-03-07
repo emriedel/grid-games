@@ -55,6 +55,13 @@ export function Board({
 
     const onTouchStart = (e: TouchEvent) => {
       if (disabled) return;
+
+      // Don't intercept touches on interactive elements (arrow buttons, piece buttons)
+      const target = e.target as HTMLElement;
+      if (target.closest('button')) {
+        return; // Let the browser handle the tap naturally
+      }
+
       e.preventDefault(); // Prevent text selection and other browser behaviors
       autoSelectedRef.current = null;
 
