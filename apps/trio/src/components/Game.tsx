@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, useBugReporter, useToast } from '@grid-games/ui';
-import { buildShareText, isValidPuzzleNumber, trackGameStart, trackGameComplete } from '@grid-games/shared';
+import { buildShareText, isValidPuzzleNumber, getDateForPuzzleNumber, parseDateString, trackGameStart, trackGameComplete } from '@grid-games/shared';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Tableau } from './Tableau';
 import { HowToPlayModal } from './HowToPlayModal';
@@ -577,12 +577,8 @@ export function Game() {
 
   // Landing screen
   if (showLanding) {
-    const puzzleDate = new Date(PUZZLE_BASE_DATE.getTime() + (activePuzzleNumber - 1) * 24 * 60 * 60 * 1000);
-    const dateStr = puzzleDate.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    const dateStr = parseDateString(getDateForPuzzleNumber(PUZZLE_BASE_DATE, activePuzzleNumber))
+      .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
     return (
       <>

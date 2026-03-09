@@ -1,5 +1,6 @@
 import { BOARD_SIZE, BOGGLE_DICE } from '@/constants/gameConfig';
 import { Board } from '@/types';
+import { getPuzzleNumber as sharedGetPuzzleNumber } from '@grid-games/shared';
 import { findAllValidWords } from './wordValidator';
 
 // Seeded random number generator (Mulberry32)
@@ -22,11 +23,8 @@ function dateToSeed(date: Date): number {
 
 // Get puzzle number (days since epoch date)
 export function getPuzzleNumber(date: Date = new Date()): number {
-  // IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
   const epoch = new Date('2024-01-01T00:00:00');
-  const diffTime = date.getTime() - epoch.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays + 1;
+  return sharedGetPuzzleNumber(epoch, date);
 }
 
 // Fisher-Yates shuffle with seeded random

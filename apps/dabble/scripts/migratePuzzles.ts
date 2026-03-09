@@ -40,7 +40,9 @@ const BASE_DATE = '2026-02-01';
  */
 function getDateForPuzzleNumber(puzzleNumber: number): string {
   const baseDate = new Date(BASE_DATE + 'T00:00:00');
-  const puzzleDate = new Date(baseDate.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  // Use Date.UTC to avoid DST issues
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const puzzleDate = new Date(baseTime + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
   return puzzleDate.toISOString().split('T')[0];
 }
 
@@ -50,8 +52,10 @@ function getDateForPuzzleNumber(puzzleNumber: number): string {
 function getPuzzleNumberForDate(dateStr: string): number {
   const baseDate = new Date(BASE_DATE + 'T00:00:00');
   const puzzleDate = new Date(dateStr + 'T00:00:00');
-  const diffTime = puzzleDate.getTime() - baseDate.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  // Use Date.UTC to avoid DST issues
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const targetTime = Date.UTC(puzzleDate.getFullYear(), puzzleDate.getMonth(), puzzleDate.getDate());
+  const diffDays = Math.floor((targetTime - baseTime) / (1000 * 60 * 60 * 24));
   return diffDays + 1;
 }
 

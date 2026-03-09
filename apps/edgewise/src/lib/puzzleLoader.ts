@@ -4,6 +4,8 @@ import {
   getTodayDateString,
   getMonthForPuzzleNumber,
   getDateForPuzzleNumber as sharedGetDateForPuzzleNumber,
+  getPuzzleNumber as sharedGetPuzzleNumber,
+  parseDateString,
   loadMonthlyFile,
   getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
 } from '@grid-games/shared';
@@ -39,18 +41,14 @@ const legacyPuzzles: Puzzle[] = puzzlesData.puzzles.map(p => ({
  * Get puzzle number for a date
  */
 export function getPuzzleNumberForDate(dateStr: string): number {
-  const targetDate = new Date(dateStr + 'T00:00:00');
-  const diffTime = targetDate.getTime() - PUZZLE_BASE_DATE.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays + 1;
+  return sharedGetPuzzleNumber(PUZZLE_BASE_DATE, parseDateString(dateStr));
 }
 
 /**
  * Get date string for a puzzle number
  */
 export function getDateForPuzzleNumber(puzzleNumber: number): string {
-  const puzzleDate = new Date(PUZZLE_BASE_DATE.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
-  return puzzleDate.toISOString().split('T')[0];
+  return sharedGetDateForPuzzleNumber(PUZZLE_BASE_DATE, puzzleNumber);
 }
 
 /**
@@ -193,10 +191,7 @@ export function initializeGameState(puzzle: Puzzle, dateStr: string): SquareStat
  * Get the puzzle number based on date
  */
 export function getPuzzleNumber(baseDate: Date, currentDate?: Date): number {
-  const current = currentDate || new Date();
-  const diffTime = current.getTime() - baseDate.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays + 1;
+  return sharedGetPuzzleNumber(baseDate, currentDate);
 }
 
 /**

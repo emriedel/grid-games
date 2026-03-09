@@ -64,32 +64,39 @@ interface MonthlyAssignedFile {
 
 function getMonthForPuzzleNumber(puzzleNumber: number): string {
   const baseDate = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
-  const puzzleDate = new Date(baseDate.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
-  const year = puzzleDate.getFullYear();
-  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
+  // Use Date.UTC to avoid DST issues
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const puzzleDate = new Date(baseTime + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  const year = puzzleDate.getUTCFullYear();
+  const month = String(puzzleDate.getUTCMonth() + 1).padStart(2, '0');
   return `${year}-${month}`;
 }
 
 function getDateForPuzzleNumber(puzzleNumber: number): string {
   const baseDate = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
-  const puzzleDate = new Date(baseDate.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  // Use Date.UTC to avoid DST issues
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const puzzleDate = new Date(baseTime + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
   return puzzleDate.toISOString().split('T')[0];
 }
 
 function getPuzzleNumberForDate(dateString: string): number {
   const baseDate = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
   const targetDate = new Date(dateString + 'T00:00:00');
-  const diffTime = targetDate.getTime() - baseDate.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  // Use Date.UTC to avoid DST issues
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const targetTime = Date.UTC(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+  const diffDays = Math.floor((targetTime - baseTime) / (1000 * 60 * 60 * 24));
   return diffDays + 1;
 }
 
 function getTodayPuzzleNumber(): number {
   const baseDate = new Date(PUZZLE_BASE_DATE_STRING + 'T00:00:00');
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const diffTime = today.getTime() - baseDate.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  // Use Date.UTC to avoid DST issues
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const todayTime = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  const diffDays = Math.floor((todayTime - baseTime) / (1000 * 60 * 60 * 24));
   return diffDays + 1;
 }
 

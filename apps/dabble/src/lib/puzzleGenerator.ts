@@ -1,6 +1,8 @@
 import {
   getMonthForPuzzleNumber,
   getDateForPuzzleNumber,
+  getPuzzleNumber,
+  parseDateString,
   loadMonthlyFile,
   getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
   type PuzzleWithId,
@@ -40,14 +42,6 @@ interface AssignedPuzzle extends PuzzleWithId {
   };
 }
 
-// Get puzzle number for a date
-function getPuzzleNumberForDate(dateString: string): number {
-  const date = new Date(dateString + 'T00:00:00');
-  const diffTime = date.getTime() - PUZZLE_BASE_DATE.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays + 1;
-}
-
 // Helper to load monthly file using shared utility
 async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedPuzzle> | null> {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -81,7 +75,7 @@ function convertAssignedPuzzle(puzzle: AssignedPuzzle, dateString: string): Dail
  */
 export async function fetchDailyPuzzle(dateString?: string): Promise<DailyPuzzle | null> {
   const date = dateString || getTodayDateString();
-  const puzzleNumber = getPuzzleNumberForDate(date);
+  const puzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE, parseDateString(date));
   const month = getMonthForPuzzleNumber(puzzleNumber, PUZZLE_BASE_DATE_STRING);
 
   // Fetch only the relevant monthly file
@@ -194,7 +188,7 @@ export async function getPuzzleIdsForRange(startNum: number, endNum: number): Pr
  * Get future assigned puzzles (puzzle numbers greater than today's)
  */
 export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number; puzzle: AssignedPuzzle }[]> {
-  const todayPuzzleNumber = getPuzzleNumberForDate(getTodayDateString());
+  const todayPuzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE, parseDateString(getTodayDateString()));
   const results: { puzzleNumber: number; puzzle: AssignedPuzzle }[] = [];
 
   // Check current and next few months

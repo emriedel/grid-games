@@ -77,25 +77,8 @@ export function ArchivePage({
   availableMonths,
   getPuzzlesForMonth,
 }: ArchivePageProps) {
-  // State for monthly pagination
-  // Default to previous month if current month has no archive puzzles yet
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(() => {
-    // If no monthly pagination, default to 0
-    if (!availableMonths || availableMonths.length === 0 || !getPuzzlesForMonth) {
-      return 0;
-    }
-
-    // Check if the first month (current/newest) has any archive puzzles
-    const firstMonthPuzzles = getPuzzlesForMonth(availableMonths[0]);
-    const hasArchivePuzzles = firstMonthPuzzles.some(p => p.puzzleNumber < todayPuzzleNumber);
-
-    // If no archive puzzles and there's a previous month, default to it
-    if (!hasArchivePuzzles && availableMonths.length > 1) {
-      return 1;
-    }
-
-    return 0;
-  });
+  // State for monthly pagination (default to newest month)
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
 
   // If availableMonths is provided, use monthly pagination
   const useMonthlyPagination = availableMonths && availableMonths.length > 0;

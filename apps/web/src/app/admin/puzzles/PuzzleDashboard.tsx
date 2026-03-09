@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { GAMES, type GameInfo } from '@grid-games/config';
 import { Button } from '@grid-games/ui';
+import { getPuzzleNumber } from '@grid-games/shared';
 
 interface PoolData {
   puzzles: unknown[];
@@ -29,12 +30,7 @@ function isLocalhost(): boolean {
 }
 
 function getTodayPuzzleNumber(launchDate: string): number {
-  const launch = new Date(launchDate + 'T00:00:00');
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const diffTime = today.getTime() - launch.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays + 1;
+  return getPuzzleNumber(new Date(launchDate + 'T00:00:00'));
 }
 
 function getMonthKey(date: Date): string {

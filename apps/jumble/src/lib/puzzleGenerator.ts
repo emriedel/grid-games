@@ -8,6 +8,8 @@
 import {
   getMonthForPuzzleNumber,
   getDateForPuzzleNumber,
+  getPuzzleNumber,
+  parseDateString,
   loadMonthlyFile,
   getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
   type PuzzleWithId,
@@ -63,27 +65,6 @@ export function getTodayDateString(): string {
 }
 
 /**
- * Get puzzle number for a date
- */
-export function getPuzzleNumberForDate(dateString: string): number {
-  const date = new Date(dateString + 'T00:00:00');
-  const diffTime = date.getTime() - PUZZLE_BASE_DATE.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays + 1;
-}
-
-/**
- * Get date string for a puzzle number
- */
-export function getDateStringForPuzzle(puzzleNumber: number): string {
-  const puzzleDate = new Date(PUZZLE_BASE_DATE.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
-  const year = puzzleDate.getFullYear();
-  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
-  const day = String(puzzleDate.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-/**
  * Helper to load monthly file using shared utility
  */
 async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedPuzzle> | null> {
@@ -104,7 +85,7 @@ async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedP
  */
 export async function getDailyPuzzle(dateString?: string): Promise<DailyPuzzle> {
   const date = dateString || getTodayDateString();
-  const puzzleNumber = getPuzzleNumberForDate(date);
+  const puzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE, parseDateString(date));
   const month = getMonthForPuzzleNumber(puzzleNumber, PUZZLE_BASE_DATE_STRING);
 
   // Fetch the monthly file
@@ -163,7 +144,7 @@ export async function getDailyPuzzle(dateString?: string): Promise<DailyPuzzle> 
  * Get puzzle by puzzle number
  */
 export async function getPuzzleByNumber(puzzleNumber: number): Promise<DailyPuzzle> {
-  const dateString = getDateStringForPuzzle(puzzleNumber);
+  const dateString = getDateForPuzzleNumber(PUZZLE_BASE_DATE, puzzleNumber);
   return getDailyPuzzle(dateString);
 }
 
@@ -246,7 +227,7 @@ export async function getPoolPuzzles(): Promise<AssignedPuzzle[]> {
  * Get future assigned puzzles (puzzle numbers greater than today's)
  */
 export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number; puzzle: AssignedPuzzle }[]> {
-  const todayPuzzleNumber = getPuzzleNumberForDate(getTodayDateString());
+  const todayPuzzleNumber = getPuzzleNumber(PUZZLE_BASE_DATE, parseDateString(getTodayDateString()));
   const results: { puzzleNumber: number; puzzle: AssignedPuzzle }[] = [];
 
   // Check current and next few months
