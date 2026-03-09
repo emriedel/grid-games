@@ -46,8 +46,9 @@ export function formatDisplayDate(date: Date | string): string {
  * Useful for sequential daily puzzles
  */
 export function getPuzzleNumber(baseDate: Date, currentDate: Date = new Date()): number {
-  const baseTime = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate()).getTime();
-  const currentTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime();
+  // Use Date.UTC to avoid DST issues — local date components ensure midnight rollover stays local
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const currentTime = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
   const dayMs = 24 * 60 * 60 * 1000;
   return Math.floor((currentTime - baseTime) / dayMs) + 1;
 }
@@ -78,10 +79,15 @@ export function isToday(date: Date | string): boolean {
  * @returns YYYY-MM-DD date string
  */
 export function getDateForPuzzleNumber(baseDate: Date, puzzleNumber: number): string {
-  const baseTime = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate()).getTime();
+  // Use Date.UTC to avoid DST issues when computing date from puzzle number
+  const baseTime = Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
   const dayMs = 24 * 60 * 60 * 1000;
   const targetTime = baseTime + (puzzleNumber - 1) * dayMs;
-  return formatDateString(new Date(targetTime));
+  const d = new Date(targetTime);
+  const year = d.getUTCFullYear();
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 /**

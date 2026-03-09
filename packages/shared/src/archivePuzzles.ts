@@ -85,10 +85,12 @@ export function getMonthForPuzzleNumber(
   puzzleNumber: number,
   launchDateString: string
 ): string {
-  const baseDate = new Date(launchDateString + 'T00:00:00');
-  const puzzleDate = new Date(baseDate.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
-  const year = puzzleDate.getFullYear();
-  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
+  // Use Date.UTC to avoid DST issues in date arithmetic
+  const [y, m, d] = launchDateString.split('-').map(Number);
+  const baseTime = Date.UTC(y, m - 1, d);
+  const puzzleDate = new Date(baseTime + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  const year = puzzleDate.getUTCFullYear();
+  const month = String(puzzleDate.getUTCMonth() + 1).padStart(2, '0');
   return `${year}-${month}`;
 }
 
@@ -147,11 +149,13 @@ function getDateKeyForPuzzleNumber(
   puzzleNumber: number,
   launchDateString: string
 ): string {
-  const baseDate = new Date(launchDateString + 'T00:00:00');
-  const puzzleDate = new Date(baseDate.getTime() + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
-  const year = puzzleDate.getFullYear();
-  const month = String(puzzleDate.getMonth() + 1).padStart(2, '0');
-  const day = String(puzzleDate.getDate()).padStart(2, '0');
+  // Use Date.UTC to avoid DST issues in date arithmetic
+  const [y, m, d] = launchDateString.split('-').map(Number);
+  const baseTime = Date.UTC(y, m - 1, d);
+  const puzzleDate = new Date(baseTime + (puzzleNumber - 1) * 24 * 60 * 60 * 1000);
+  const year = puzzleDate.getUTCFullYear();
+  const month = String(puzzleDate.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(puzzleDate.getUTCDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
