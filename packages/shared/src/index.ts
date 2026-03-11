@@ -5,3 +5,5 @@ export * from './archiveStorage';
 export * from './archivePuzzles';
 export * from './gameCompletion';
 export * from './analytics';
+export * from './topScores';
+export * from './useTopScores';

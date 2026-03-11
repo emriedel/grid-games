@@ -14,7 +14,11 @@
     "clean": "rm -rf dist .turbo node_modules"
   },
   "devDependencies": {
+    "@types/react": "^19",
     "typescript": "^5"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19"
   },
   "dependencies": {
     "mixpanel-browser": "^2.75.0"

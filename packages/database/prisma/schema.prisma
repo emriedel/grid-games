@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Score {
+  id           String   @id @default(uuid())
+  gameId       String   @map("game_id")
+  puzzleId     String   @map("puzzle_id")
+  puzzleNumber Int      @map("puzzle_number")
+  score        Int
+  submittedAt  DateTime @default(now()) @map("submitted_at")
+
+  @@index([gameId, puzzleId])
+  @@index([gameId, puzzleId, score(sort: Desc)])
+  @@map("scores")
+}

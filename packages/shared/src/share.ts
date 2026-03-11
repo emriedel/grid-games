@@ -10,8 +10,8 @@ export interface ShareInput {
   gameName: string;
   /** Puzzle identifier (number or date string) */
   puzzleId: string | number;
-  /** Primary score or result */
-  score: number;
+  /** Primary score or result (can include suffix like medal emoji) */
+  score: number | string;
   /** Optional max possible score (for percentage display) */
   maxScore?: number;
   /** Game-specific emoji grid or bar representation */
@@ -36,7 +36,7 @@ export function buildShareText(input: ShareInput): string {
   lines.push(`${input.gameName} ${puzzleLabel}`);
 
   // Score line
-  if (input.maxScore) {
+  if (input.maxScore && typeof input.score === 'number') {
     const percentage = Math.round((input.score / input.maxScore) * 100);
     lines.push(`Score: ${input.score}/${input.maxScore} (${percentage}%)`);
   } else {

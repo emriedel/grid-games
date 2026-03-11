@@ -12,7 +12,7 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core';
 import { LandingScreen, NavBar, GameContainer, Button, ResultsModal, Modal, useBugReporter, useToast } from '@grid-games/ui';
-import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber, isValidPuzzleNumber, trackGameStart, trackGameComplete } from '@grid-games/shared';
+import { buildShareText, formatDisplayDate, getDateForPuzzleNumber, getPuzzleNumber, isValidPuzzleNumber, trackGameStart, trackGameComplete, useTopScores, submitScore as submitTopScore, type TopScore } from '@grid-games/shared';
 import { GameBoard } from './GameBoard';
 import { LetterRack } from './LetterRack';
 import { WordList } from './WordList';
@@ -70,6 +70,8 @@ interface DabbleResultsModalProps {
   lettersUsed: number;
   thresholds?: StarThresholds;
   isArchive?: boolean;
+  isTopScore?: boolean;
+  topScoreRank?: number | null;
 }
 
 function DabbleResultsModal({
@@ -80,13 +82,19 @@ function DabbleResultsModal({
   lettersUsed,
   thresholds,
   isArchive,
+  isTopScore,
+  topScoreRank,
 }: DabbleResultsModalProps) {
   const letterBonus = getLetterUsageBonus(lettersUsed);
   const finalScore = totalScore + letterBonus;
   const stars = calculateStars(finalScore, thresholds);
 
-  const starsDisplay = thresholds ? ` ${formatStars(stars)}` : '';
   const emojiGrid = thresholds ? formatStars(stars) : '';
+  const rankEmojis = ['🥇', '🥈', '🥉'];
+
+  // Add medal to share text if user has a top score
+  const medalEmoji = isTopScore && topScoreRank && topScoreRank <= 3 ? rankEmojis[topScoreRank - 1] : '';
+  const scoreText = medalEmoji ? `${finalScore} ${medalEmoji}` : String(finalScore);
 
   const shareUrl = isArchive && puzzleNumber
     ? `https://nerdcube.games/dabble?puzzle=${puzzleNumber}`
@@ -96,7 +104,7 @@ function DabbleResultsModal({
     gameId: 'dabble',
     gameName: 'Dabble',
     puzzleId: puzzleNumber ? `#${puzzleNumber}` : '',
-    score: finalScore,
+    score: scoreText,
     emojiGrid,
     shareUrl,
   });
@@ -115,10 +123,17 @@ function DabbleResultsModal({
       shareConfig={{ text: shareText }}
       messageType={messageType}
     >
-      {/* Stars display */}
+      {/* Stars display - shown first */}
       {thresholds && (
         <div className="text-center mb-4">
           <span className="text-3xl text-[var(--foreground)]">{formatStars(stars)}</span>
+        </div>
+      )}
+      {/* Top Score badge - shown below stars */}
+      {isTopScore && topScoreRank && topScoreRank <= 3 && (
+        <div className="text-center mb-4">
+          <span className="text-2xl">{rankEmojis[topScoreRank - 1]}</span>
+          <span className="ml-2 text-lg font-bold text-[var(--accent)]">Top Score!</span>
         </div>
       )}
     </ResultsModal>
@@ -130,15 +145,19 @@ interface ScoreThresholdsModalProps {
   isOpen: boolean;
   onClose: () => void;
   thresholds?: StarThresholds;
+  topScores: TopScore[];
+  isLoadingTopScores: boolean;
 }
 
-function ScoreThresholdsModal({ isOpen, onClose, thresholds }: ScoreThresholdsModalProps) {
+function ScoreThresholdsModal({ isOpen, onClose, thresholds, topScores, isLoadingTopScores }: ScoreThresholdsModalProps) {
   const thresholdValues = getStarThresholdValues(thresholds);
+  const rankEmojis = ['🥇', '🥈', '🥉'];
+  const hasTopScores = !isLoadingTopScores && topScores.length > 0;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Star Thresholds">
+    <Modal isOpen={isOpen} onClose={onClose} title="Scoring Info">
       {thresholdValues && (
-        <div className="flex justify-center gap-8">
+        <div className={`flex justify-center gap-8 ${hasTopScores ? 'mb-6' : ''}`}>
           <div className="text-center">
             <div className="text-2xl">★</div>
             <div className="text-lg text-[var(--accent)]">{thresholdValues.star1}+</div>
@@ -150,6 +169,20 @@ function ScoreThresholdsModal({ isOpen, onClose, thresholds }: ScoreThresholdsMo
           <div className="text-center">
             <div className="text-2xl">★★★</div>
             <div className="text-lg text-[var(--accent)]">{thresholdValues.star3}+</div>
+          </div>
+        </div>
+      )}
+      {/* Top Scores section - only show when there are scores */}
+      {hasTopScores && (
+        <div className="border-t border-[var(--border)] pt-4 mt-4">
+          <h3 className="text-sm text-[var(--muted)] text-center mb-3">Top Scores</h3>
+          <div className="flex justify-center gap-6">
+            {topScores.map((ts, i) => (
+              <div key={i} className="flex items-center gap-1.5">
+                <span className="text-2xl">{rankEmojis[i]}</span>
+                <span className="text-xl font-bold">{ts.score}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -209,6 +242,22 @@ export function Game() {
   const [showThresholdsModal, setShowThresholdsModal] = useState(false);
   const [activePuzzleId, setActivePuzzleId] = useState<string | undefined>(undefined);
   const [pendingResultsModal, setPendingResultsModal] = useState(false);
+  const [isTopScore, setIsTopScore] = useState(false);
+  const [topScoreRank, setTopScoreRank] = useState<number | null>(null);
+
+  // Fetch top scores for the current puzzle
+  const { topScores, isLoading: isLoadingTopScores, refetch: refetchTopScores } = useTopScores('dabble', activePuzzleId);
+
+  // Compute current rank based on latest top scores
+  // This re-checks rank when user returns to view results (medal only shows if still top 3)
+  const userFinalScore = totalScore + getLetterUsageBonus(lockedRackIndices.size);
+  const currentTopScoreRank = topScores.length > 0
+    ? (() => {
+        const rankIndex = topScores.findIndex(ts => ts.score === userFinalScore);
+        return rankIndex !== -1 ? rankIndex + 1 : null;
+      })()
+    : topScoreRank; // Fall back to submission-time rank if topScores not loaded yet
+  const isCurrentlyTopScore = currentTopScoreRank !== null && currentTopScoreRank <= 3;
 
   // Ref to track mounted state for timeout cleanup
   const resultsModalTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -507,10 +556,28 @@ export function Game() {
         },
       }, activePuzzleId);
 
+      // Submit score to leaderboard (silent fail - don't interrupt game completion)
+      if (!debugMode && activePuzzleId) {
+        submitTopScore(
+          'dabble',
+          activePuzzleId,
+          activePuzzleNumber,
+          finalScoreWithBonus
+        )
+          .then((scoreResult) => {
+            setIsTopScore(scoreResult.isTopScore);
+            setTopScoreRank(scoreResult.rank);
+            refetchTopScores();
+          })
+          .catch((error) => {
+            console.warn('Failed to submit score:', error);
+          });
+      }
+
       // Trigger delayed results modal via state (proper cleanup in useEffect)
       setPendingResultsModal(true);
     }
-  }, [board, placedTiles, submittedWords, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber, activePuzzleId, toast]);
+  }, [board, placedTiles, submittedWords, lockedRackIndices, usedRackIndices, turnCount, puzzle, totalScore, activePuzzleNumber, activePuzzleId, debugMode, refetchTopScores, toast]);
 
   // Clear current placement
   const handleClear = useCallback(() => {
@@ -558,7 +625,25 @@ export function Game() {
         thresholds: puzzle?.thresholds,
       },
     }, activePuzzleId);
-  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId, isArchiveMode, toast]);
+
+    // Submit score to leaderboard (silent fail - don't interrupt game completion)
+    if (!debugMode && activePuzzleId) {
+      submitTopScore(
+        'dabble',
+        activePuzzleId,
+        activePuzzleNumber,
+        finalScoreWithBonus
+      )
+        .then((scoreResult) => {
+          setIsTopScore(scoreResult.isTopScore);
+          setTopScoreRank(scoreResult.rank);
+          refetchTopScores();
+        })
+        .catch((error) => {
+          console.warn('Failed to submit score:', error);
+        });
+    }
+  }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId, isArchiveMode, debugMode, refetchTopScores, toast]);
 
   // Replay the same puzzle (clear state and start fresh)
   const handleReplay = useCallback(() => {
@@ -728,6 +813,8 @@ export function Game() {
             lettersUsed={lockedRackIndices.size}
             thresholds={puzzle.thresholds}
             isArchive={isArchiveMode}
+            isTopScore={isCurrentlyTopScore}
+            topScoreRank={currentTopScoreRank}
           />
         )}
       </>
@@ -901,6 +988,8 @@ export function Game() {
         lettersUsed={lockedRackIndices.size}
         thresholds={puzzle.thresholds}
         isArchive={isArchiveMode}
+        isTopScore={isCurrentlyTopScore}
+        topScoreRank={currentTopScoreRank}
       />
       <HowToPlayModal
         isOpen={showRulesModal}
@@ -910,6 +999,8 @@ export function Game() {
         isOpen={showThresholdsModal}
         onClose={() => setShowThresholdsModal(false)}
         thresholds={puzzle.thresholds}
+        topScores={topScores}
+        isLoadingTopScores={isLoadingTopScores}
       />
 
       {/* Drag Overlay */}

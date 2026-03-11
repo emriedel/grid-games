@@ -140,6 +140,51 @@ const isFinished = status === 'finished' || (exitedLanding && hasCompleted);
 import { buildShareText, shareOrCopy, generateEmojiBar } from '@grid-games/shared';
 ```
 
+### Top Scores (Database)
+
+Games can display top 3 scores for each puzzle using PostgreSQL + Prisma.
+
+**Local Setup (requires Docker):**
+```bash
+docker compose up -d                    # Start PostgreSQL on port 5433
+cd packages/database && npx prisma db push   # Create tables
+```
+
+Create `.env` files (see `packages/database/README.md` for details):
+- `packages/database/.env` - DATABASE_URL for Prisma
+- `apps/web/.env.local` - DATABASE_URL for API routes
+
+**Client Usage:**
+```tsx
+import { useTopScores } from '@grid-games/shared';
+
+// In your game component
+const { submitScore, topScores, userRank, isLoading } = useTopScores({
+  gameId: 'dabble',
+  puzzleId: puzzle.id,
+  puzzleNumber: puzzle.puzzleNumber,
+});
+
+// Submit when game ends
+await submitScore(finalScore);
+
+// Display rank in results
+if (userRank) {
+  console.log(`You ranked #${userRank}!`);
+}
+```
+
+**API Endpoints** (hosted by web app):
+- `GET /api/scores?gameId=X&puzzleId=Y` - Get top scores
+- `POST /api/scores` - Submit a score
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `packages/database/` | Prisma schema and score functions |
+| `apps/web/src/app/api/scores/route.ts` | API endpoints |
+| `packages/shared/src/useTopScores.ts` | React hook |
+
 ### Dictionary (Word Games)
 
 Word games use the shared `@grid-games/dictionary` package for word validation:
@@ -465,6 +510,11 @@ npm run dev                                  # All apps
 npx turbo dev --filter=@grid-games/dabble    # Single app
 npm run build                                # Build all
 npm install <pkg> -w @grid-games/dabble      # Add dep to specific app
+
+# Database (for top scores feature)
+docker compose up -d                         # Start PostgreSQL
+docker compose down                          # Stop PostgreSQL
+cd packages/database && npx prisma studio    # View/edit database
 ```
 
 ---
@@ -479,6 +529,7 @@ npm install <pkg> -w @grid-games/dabble      # Add dep to specific app
 | `packages/shared/src/archiveStorage.ts` | Archive storage factory (`createArchiveStorage`) |
 | `packages/shared/src/archivePuzzles.ts` | Monthly file loading utilities |
 | `packages/dictionary/src/` | Shared word dictionary (Trie + validation) |
+| `packages/database/` | PostgreSQL + Prisma for top scores |
 | `apps/[game]/src/app/globals.css` | Per-game theme variables |
 | `apps/[game]/src/components/Game.tsx` | Main game component |
 | `apps/[game]/public/dict/words.txt` | Dictionary word list (Collins 2019) |
