@@ -35,39 +35,48 @@ export async function submitScore(
   }
 
   return await prisma.$transaction(async (tx) => {
-    // Insert the new score
-    await tx.score.create({
-      data: {
-        gameId,
-        puzzleId,
-        puzzleNumber,
-        score,
-      },
+    // Check if this exact score already exists for this puzzle
+    // This prevents duplicate entries when multiple players get the same score
+    const existingScore = await tx.score.findFirst({
+      where: { gameId, puzzleId, score },
     });
 
-    // Find the score at the cutoff position (e.g., 8th place)
-    const cutoffRecord = await tx.score.findFirst({
-      where: { gameId, puzzleId },
-      orderBy: { score: 'desc' },
-      skip: MAX_SCORES_PER_PUZZLE - 1, // 0-indexed, so skip 7 to get 8th
-      select: { score: true, id: true },
-    });
-
-    // Delete any scores below the cutoff to bound storage
-    if (cutoffRecord) {
-      await tx.score.deleteMany({
-        where: {
+    // Only insert if this score value doesn't exist yet
+    if (!existingScore) {
+      await tx.score.create({
+        data: {
           gameId,
           puzzleId,
-          score: { lt: cutoffRecord.score },
+          puzzleNumber,
+          score,
         },
       });
+
+      // Find the score at the cutoff position (e.g., 8th place)
+      const cutoffRecord = await tx.score.findFirst({
+        where: { gameId, puzzleId },
+        orderBy: { score: 'desc' },
+        skip: MAX_SCORES_PER_PUZZLE - 1, // 0-indexed, so skip 7 to get 8th
+        select: { score: true, id: true },
+      });
+
+      // Delete any scores below the cutoff to bound storage
+      if (cutoffRecord) {
+        await tx.score.deleteMany({
+          where: {
+            gameId,
+            puzzleId,
+            score: { lt: cutoffRecord.score },
+          },
+        });
+      }
     }
 
-    // Get top 3 scores for this puzzle (highest first)
+    // Get top 3 unique scores for this puzzle (highest first)
     const topScoreRecords = await tx.score.findMany({
       where: { gameId, puzzleId },
       orderBy: { score: 'desc' },
+      distinct: ['score'],
       take: 3,
       select: { score: true },
     });
@@ -95,9 +104,11 @@ export async function getTopScores(
   puzzleId: string,
   limit: number = 3
 ): Promise<TopScore[]> {
+  // Use distinct to dedupe in case duplicate score values exist
   const topScoreRecords = await prisma.score.findMany({
     where: { gameId, puzzleId },
     orderBy: { score: 'desc' },
+    distinct: ['score'],
     take: limit,
     select: { score: true },
   });

@@ -22,6 +22,8 @@ export interface DabblePuzzleState extends BasePuzzleState {
     turnCount?: number;
     // Star thresholds (stored on completion for archive display)
     thresholds?: StarThresholds;
+    // Leaderboard submission tracking (true if score was submitted to server)
+    scoreSubmitted?: boolean;
   };
 }
 

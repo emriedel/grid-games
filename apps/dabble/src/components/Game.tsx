@@ -261,6 +261,8 @@ export function Game() {
 
   // Ref to track mounted state for timeout cleanup
   const resultsModalTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // Ref to prevent duplicate backfill submissions in React Strict Mode
+  const backfillAttemptedRef = useRef(false);
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -333,6 +335,27 @@ export function Game() {
             setSubmittedWords(puzzleState.data.submittedWords);
             setLockedRackIndices(new Set(puzzleState.data.lockedRackIndices));
             setTotalScore(puzzleState.data.totalScore);
+          }
+
+          // Backfill: Submit score to server if not already done (silent)
+          // Use ref to prevent duplicate submissions in React Strict Mode
+          if (!puzzleState.data.scoreSubmitted && dailyPuzzle.puzzleId && !backfillAttemptedRef.current) {
+            backfillAttemptedRef.current = true;
+            const lettersUsed = puzzleState.data.lockedRackIndices?.length ?? 0;
+            const letterBonus = getLetterUsageBonus(lettersUsed);
+            const finalScore = puzzleState.data.totalScore + letterBonus;
+
+            submitTopScore('dabble', dailyPuzzle.puzzleId, activePuzzleNumber, finalScore)
+              .then(() => {
+                // Mark as submitted to prevent duplicate submissions
+                savePuzzleState(activePuzzleNumber, {
+                  ...puzzleState,
+                  data: { ...puzzleState.data, scoreSubmitted: true },
+                }, dailyPuzzle.puzzleId);
+              })
+              .catch((error) => {
+                console.warn('Failed to backfill score:', error);
+              });
           }
         } else if (puzzleState?.status === 'in-progress') {
           // Puzzle is in-progress
@@ -543,6 +566,7 @@ export function Game() {
       });
 
       // Save completion state with full board and thresholds (immediately, before delay)
+      // Note: scoreSubmitted is set to true because we submit below
       savePuzzleState(activePuzzleNumber, {
         puzzleNumber: activePuzzleNumber,
         status: 'completed',
@@ -553,6 +577,7 @@ export function Game() {
           lockedRackIndices: Array.from(newLockedIndices),
           totalScore: finalScore,
           thresholds: puzzle?.thresholds,
+          scoreSubmitted: true,
         },
       }, activePuzzleId);
 
@@ -613,6 +638,7 @@ export function Game() {
     });
 
     // Save completion state with full board and thresholds
+    // Note: scoreSubmitted is set to true because we submit below
     savePuzzleState(activePuzzleNumber, {
       puzzleNumber: activePuzzleNumber,
       status: 'completed',
@@ -623,6 +649,7 @@ export function Game() {
         lockedRackIndices: Array.from(lockedRackIndices),
         totalScore,
         thresholds: puzzle?.thresholds,
+        scoreSubmitted: true,
       },
     }, activePuzzleId);
 
