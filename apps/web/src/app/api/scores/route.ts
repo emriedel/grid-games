@@ -43,10 +43,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate score is positive
-    if (data.score < 0) {
+    // Validate score is within allowed range (matches database constraint)
+    const MAX_ALLOWED_SCORE = 999;
+    if (data.score < 0 || data.score > MAX_ALLOWED_SCORE) {
       return NextResponse.json(
-        { error: 'score must be non-negative' },
+        { error: `score must be between 0 and ${MAX_ALLOWED_SCORE}` },
         { status: 400, headers: corsHeaders }
       );
     }

@@ -15,7 +15,6 @@ model Score {
   score        Int
   submittedAt  DateTime @default(now()) @map("submitted_at")
 
-  @@index([gameId, puzzleId])
   @@index([gameId, puzzleId, score(sort: Desc)])
   @@map("scores")
 }

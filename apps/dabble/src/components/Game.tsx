@@ -352,6 +352,8 @@ export function Game() {
                   ...puzzleState,
                   data: { ...puzzleState.data, scoreSubmitted: true },
                 }, dailyPuzzle.puzzleId);
+                // Refresh top scores after backfill
+                refetchTopScores();
               })
               .catch((error) => {
                 console.warn('Failed to backfill score:', error);
