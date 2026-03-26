@@ -8,10 +8,14 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "postinstall": "prisma generate && prisma migrate deploy",
     "db:generate": "prisma generate",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:status": "prisma migrate status",
     "db:push": "prisma db push",
-    "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist .turbo node_modules"
   },

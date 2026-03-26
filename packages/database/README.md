@@ -36,8 +36,7 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5433/grid_games"
 
 ```bash
 cd packages/database
-npx prisma db push      # Create tables from schema
-npx prisma generate     # Generate Prisma client
+npm run db:migrate:dev    # Apply migrations and generate client
 ```
 
 ### 4. Start Dev Servers
@@ -50,14 +49,63 @@ npx turbo dev --filter=@grid-games/web
 npx turbo dev --filter=@grid-games/dabble
 ```
 
+## Schema Changes (Migration Workflow)
+
+This project uses **Prisma Migrate** for schema changes. Migrations are version-controlled
+and automatically applied during deployment.
+
+### Making Schema Changes
+
+1. **Edit the schema:**
+   ```bash
+   # Edit prisma/schema.prisma with your changes
+   ```
+
+2. **Create a migration:**
+   ```bash
+   cd packages/database
+   npm run db:migrate:dev
+   # Enter a name like "add_user_table" when prompted
+   ```
+   This creates a migration file in `prisma/migrations/` and applies it locally.
+
+3. **Commit and push:**
+   ```bash
+   git add prisma/migrations
+   git commit -m "Add user table migration"
+   git push
+   ```
+
+4. **Production:** Migrations are automatically applied during Vercel builds via `postinstall`.
+
+### Commands
+
+| Command | Purpose |
+|---------|---------|
+| `npm run db:migrate:dev` | Create and apply migrations (local dev) |
+| `npm run db:migrate:deploy` | Apply pending migrations (production) |
+| `npm run db:migrate:status` | Check migration status |
+| `npm run db:generate` | Regenerate Prisma client |
+| `npm run db:studio` | View/edit database in browser |
+| `npm run db:reset` | Reset database and reapply all migrations |
+
+### Production Notes
+
+- **Vercel builds** automatically run `prisma generate && prisma migrate deploy`
+- Migrations use the **direct connection** (not pooled) for DDL operations
+- The pooled connection is used for runtime queries
+
 ## Useful Commands
 
 ```bash
 # View/edit database in browser
 npx prisma studio
 
-# Reset database (delete all data)
-npx prisma db push --force-reset
+# Check migration status
+npm run db:migrate:status
+
+# Reset local database (deletes all data)
+npm run db:reset
 
 # Stop PostgreSQL
 docker compose down
