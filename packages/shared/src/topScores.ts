@@ -16,7 +16,7 @@ export interface SubmitScoreResult {
   topScores: TopScore[];
 }
 
-// API base URL - production by default, can be overridden for local dev
+// API base URL - uses current origin to avoid CORS issues
 const getApiBaseUrl = (): string => {
   // Check for explicit override
   if (typeof window !== 'undefined') {
@@ -31,13 +31,14 @@ const getApiBaseUrl = (): string => {
     if (port >= 3001 && port <= 3010) {
       return 'http://localhost:3000';
     }
-    // If on port 3000 (web app), use relative URL
-    if (port === 3000) {
-      return '';
-    }
   }
 
-  // Production: use the production domain
+  // Production & default: use current origin (avoids www vs non-www CORS issues)
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+
+  // SSR fallback
   return 'https://nerdcube.games';
 };
 
