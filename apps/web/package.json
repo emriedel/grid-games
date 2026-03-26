@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
-    "build": "prisma migrate deploy --schema=../../packages/database/prisma/schema.prisma && next build",
+    "build": "prisma generate --schema=../../packages/database/prisma/schema.prisma && next build",
+    "build:prod": "prisma generate --schema=../../packages/database/prisma/schema.prisma && prisma migrate deploy --schema=../../packages/database/prisma/schema.prisma && next build",
     "start": "next start --port 3000",
     "lint": "eslint",
     "type-check": "tsc --noEmit",
