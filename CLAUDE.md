@@ -156,22 +156,21 @@ Create `.env` files (see `packages/database/README.md` for details):
 
 **Client Usage:**
 ```tsx
-import { useTopScores } from '@grid-games/shared';
+import { useTopScores, submitScore } from '@grid-games/shared';
 
-// In your game component
-const { submitScore, topScores, userRank, isLoading } = useTopScores({
-  gameId: 'dabble',
-  puzzleId: puzzle.id,
-  puzzleNumber: puzzle.puzzleNumber,
-});
+// Hook for fetching top scores (read-only)
+const { topScores, isLoading, error, refetch } = useTopScores('dabble', puzzle.id);
 
-// Submit when game ends
-await submitScore(finalScore);
+// Submit score when game ends (separate function)
+const result = await submitScore('dabble', puzzle.id, puzzle.puzzleNumber, finalScore);
 
-// Display rank in results
-if (userRank) {
-  console.log(`You ranked #${userRank}!`);
+// Check if user made the leaderboard
+if (result.isTopScore) {
+  console.log(`You ranked #${result.rank}!`);
 }
+
+// Refresh leaderboard after submission
+refetch();
 ```
 
 **API Endpoints** (hosted by web app):

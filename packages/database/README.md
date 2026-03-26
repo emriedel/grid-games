@@ -76,7 +76,7 @@ and automatically applied during deployment.
    git push
    ```
 
-4. **Production:** Migrations are automatically applied during Vercel builds via `postinstall`.
+4. **Production:** Migrations are automatically applied during Vercel builds via `build:prod` in `apps/web`.
 
 ### Commands
 
@@ -91,9 +91,22 @@ and automatically applied during deployment.
 
 ### Production Notes
 
-- **Vercel builds** automatically run `prisma generate && prisma migrate deploy`
+- **Vercel builds** run `build:prod` which executes `prisma generate && prisma migrate deploy && next build`
+- Since this is a monorepo, the `--schema=../../packages/database/prisma/schema.prisma` path is required
 - Migrations use the **direct connection** (not pooled) for DDL operations
 - The pooled connection is used for runtime queries
+
+### Monorepo Note
+
+When running Prisma commands from outside `packages/database/`, specify the schema path:
+
+```bash
+# From apps/web
+prisma generate --schema=../../packages/database/prisma/schema.prisma
+
+# Or cd into the database package first
+cd packages/database && npx prisma migrate dev
+```
 
 ## Useful Commands
 
