@@ -287,7 +287,22 @@ export function validatePlacement(
     return { valid: false, words: [], totalScore: 0, error: 'Tiles must be contiguous' };
   }
 
-  // Check placement is connected
+  // Find all formed words
+  const formedWords = findFormedWords(board, placedTiles);
+
+  if (formedWords.length === 0) {
+    return { valid: false, words: [], totalScore: 0, error: 'No valid words formed' };
+  }
+
+  // Validate each word against dictionary FIRST (before connectivity check)
+  // This lets players test word validity while placing tiles anywhere
+  for (const formed of formedWords) {
+    if (!isValidWord(formed.word)) {
+      return { valid: false, words: [], totalScore: 0, error: `"${formed.word}" is not a valid word` };
+    }
+  }
+
+  // Check placement is connected (after words are validated)
   if (!isConnected(board, placedTiles, isFirstWord)) {
     return {
       valid: false,
@@ -297,23 +312,12 @@ export function validatePlacement(
     };
   }
 
-  // Find all formed words
-  const formedWords = findFormedWords(board, placedTiles);
-
-  if (formedWords.length === 0) {
-    return { valid: false, words: [], totalScore: 0, error: 'No valid words formed' };
-  }
-
-  // Validate each word against dictionary
+  // Calculate scores for validated words
   const newTilePositions = new Set(placedTiles.map((t) => `${t.row},${t.col}`));
   const words: Word[] = [];
   let totalScore = 0;
 
   for (const formed of formedWords) {
-    if (!isValidWord(formed.word)) {
-      return { valid: false, words: [], totalScore: 0, error: `"${formed.word}" is not a valid word` };
-    }
-
     const score = calculateWordScore(
       board,
       formed.tiles,
