@@ -91,11 +91,13 @@ export function Board({
     };
 
     const onTouchEnd = (e: TouchEvent) => {
+      // Capture whether touch started on a piece before resetting
+      const touchedPieceId = autoSelectedRef.current;
       // Prefer the piece that was touched, fall back to selected piece
-      const effectivePieceId = autoSelectedRef.current || selectedPieceId;
+      const effectivePieceId = touchedPieceId || selectedPieceId;
       autoSelectedRef.current = null;
 
-      if (disabled || !effectivePieceId || !touchStartRef.current) return;
+      if (disabled || !touchStartRef.current) return;
 
       const touch = e.changedTouches[0];
       const dx = touch.clientX - touchStartRef.current.x;
@@ -107,8 +109,15 @@ export function Board({
       const absDy = Math.abs(dy);
 
       if (absDx < minSwipeDistance && absDy < minSwipeDistance) {
-        return; // Not a swipe
+        // Not a swipe - if no piece was touched, deselect any selected piece
+        if (!touchedPieceId && selectedPieceId) {
+          onDeselect();
+        }
+        return;
       }
+
+      // Only process swipe if there's a piece to move
+      if (!effectivePieceId) return;
 
       if (absDx > absDy) {
         // Horizontal swipe
