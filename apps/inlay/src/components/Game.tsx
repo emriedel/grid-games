@@ -20,6 +20,7 @@ import {
   GameContainer,
   ResultsModal,
   Button,
+  useBugReporter,
 } from '@grid-games/ui';
 import { useGameState } from '@/hooks/useGameState';
 import { Board } from './Board';
@@ -115,6 +116,8 @@ export function Game() {
   const debugMode = searchParams.get('debug') === 'true';
   const puzzleParam = searchParams.get('puzzle');
   const poolIdParam = searchParams.get('poolId');
+
+  const bugReporter = useBugReporter();
 
   // Loading and UI state
   const [isLoading, setIsLoading] = useState(true);
@@ -642,6 +645,7 @@ https://nerdcube.games/inlay`;
           onSeeResults={handleSeeResults}
           onRules={() => setShowHowToPlay(true)}
           archiveHref="/archive"
+          onReportBug={bugReporter.open}
         />
         <HowToPlayModal
           isOpen={showHowToPlay}
@@ -671,6 +675,7 @@ https://nerdcube.games/inlay`;
             title={`Inlay #${puzzleNumber}`}
             gameId="inlay"
             onRulesClick={() => setShowHowToPlay(true)}
+            onReportBug={bugReporter.open}
           />
         }
         maxWidth="full"

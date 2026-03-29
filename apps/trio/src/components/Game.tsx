@@ -112,7 +112,7 @@ export function Game() {
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
 
   const router = useRouter();
-  useBugReporter();
+  const bugReporter = useBugReporter();
   const toast = useToast();
 
   // Game state
@@ -594,6 +594,7 @@ export function Game() {
           onSeeResults={handleSeeResults}
           onRules={() => setShowRulesModal(true)}
           archiveHref="/archive"
+          onReportBug={bugReporter.open}
         />
         <HowToPlayModal
           isOpen={showRulesModal}
@@ -619,6 +620,7 @@ export function Game() {
           title="Trio"
           gameId="trio"
           onRulesClick={() => setShowRulesModal(true)}
+          onReportBug={bugReporter.open}
           rightContent={
             <div className="flex items-center gap-3 pr-2">
               {/* Round progress indicator - always visible */}

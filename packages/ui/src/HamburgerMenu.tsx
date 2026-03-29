@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronDown, ChevronRight, Mail, Bug, LayoutGrid } from 'lucide-react';
 import { GAMES, getIconUrl } from '@grid-games/config';
 import { CompletionBadge } from './CompletionBadge';
@@ -58,11 +58,35 @@ export function HamburgerMenu({ currentGameId, completionStatus, onReportBug }: 
     };
   }, [isOpen, handleClose]);
 
+  // Track if images have been prefetched to avoid duplicate prefetch links
+  const hasPrefetchedRef = useRef(false);
+
+  // Prefetch all game icons and logo on hamburger button hover
+  const prefetchImages = useCallback(() => {
+    if (hasPrefetchedRef.current) return;
+    hasPrefetchedRef.current = true;
+
+    const urls = [
+      'https://nerdcube.games/icon.png',
+      ...GAMES.map(game => getIconUrl(game.id))
+    ];
+
+    urls.forEach(url => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.as = 'image';
+      link.href = url;
+      document.head.appendChild(link);
+    });
+  }, []);
+
   return (
     <>
       {/* Hamburger button */}
       <button
         onClick={() => setIsOpen(true)}
+        onMouseEnter={prefetchImages}
+        onTouchStart={prefetchImages}
         className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--tile-bg,#1a1a2e)] hover:bg-[var(--tile-bg-selected,#4a4a6e)] transition-colors"
         aria-label="Open menu"
       >
