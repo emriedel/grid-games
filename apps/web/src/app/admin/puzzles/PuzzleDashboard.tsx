@@ -10,8 +10,13 @@ interface PoolData {
   generatedAt?: string;
 }
 
+interface PuzzleEntry {
+  puzzleNumber: number;
+  id: string;
+}
+
 interface MonthlyData {
-  puzzles: Record<string, unknown>;
+  puzzles: Record<string, PuzzleEntry>;
 }
 
 interface GameStatus {
@@ -19,6 +24,7 @@ interface GameStatus {
   poolSize: number;
   generatedAt: string | null;
   highestAssigned: number;
+  lastAssignedDate: string | null;
   runway: number;
   error?: string;
 }
@@ -72,8 +78,12 @@ async function fetchPoolData(gameId: string): Promise<{ poolSize: number; genera
   }
 }
 
-async function fetchHighestAssigned(gameId: string, launchDate: string): Promise<number> {
-  const launch = new Date(launchDate + 'T00:00:00');
+interface HighestAssignedResult {
+  highestNumber: number;
+  lastDate: string | null;
+}
+
+async function fetchHighestAssigned(gameId: string, launchDate: string): Promise<HighestAssignedResult> {
   const today = new Date();
 
   // Check current month + next 6 months
@@ -85,6 +95,7 @@ async function fetchHighestAssigned(gameId: string, launchDate: string): Promise
   }
 
   let highest = 0;
+  let lastDate: string | null = null;
 
   for (const monthKey of monthsToCheck) {
     try {
@@ -92,17 +103,20 @@ async function fetchHighestAssigned(gameId: string, launchDate: string): Promise
       if (!response.ok) continue;
 
       const data: MonthlyData = await response.json();
-      const puzzleNumbers = Object.keys(data.puzzles || {}).map(Number);
-      const maxInMonth = Math.max(0, ...puzzleNumbers);
-      if (maxInMonth > highest) {
-        highest = maxInMonth;
+      // Puzzles are keyed by date string (e.g., "2026-02-01")
+      // Each puzzle has a puzzleNumber field
+      for (const [dateKey, puzzle] of Object.entries(data.puzzles || {})) {
+        if (puzzle.puzzleNumber > highest) {
+          highest = puzzle.puzzleNumber;
+          lastDate = dateKey;
+        }
       }
     } catch {
       // Month file doesn't exist, continue
     }
   }
 
-  return highest;
+  return { highestNumber: highest, lastDate };
 }
 
 async function fetchGameStatus(game: GameInfo): Promise<GameStatus> {
@@ -112,25 +126,28 @@ async function fetchGameStatus(game: GameInfo): Promise<GameStatus> {
       poolSize: 0,
       generatedAt: null,
       highestAssigned: 0,
+      lastAssignedDate: null,
       runway: 0,
       error: 'No archive support',
     };
   }
 
   try {
-    const [poolData, highestAssigned] = await Promise.all([
+    const [poolData, assignedResult] = await Promise.all([
       fetchPoolData(game.id),
       fetchHighestAssigned(game.id, game.launchDate),
     ]);
 
     const todayPuzzleNumber = getTodayPuzzleNumber(game.launchDate);
-    const runway = highestAssigned + poolData.poolSize - todayPuzzleNumber;
+    // Runway = days of assigned puzzles remaining (not including pool)
+    const runway = assignedResult.highestNumber - todayPuzzleNumber;
 
     return {
       game,
       poolSize: poolData.poolSize,
       generatedAt: poolData.generatedAt,
-      highestAssigned,
+      highestAssigned: assignedResult.highestNumber,
+      lastAssignedDate: assignedResult.lastDate,
       runway,
     };
   } catch (error) {
@@ -139,6 +156,7 @@ async function fetchGameStatus(game: GameInfo): Promise<GameStatus> {
       poolSize: 0,
       generatedAt: null,
       highestAssigned: 0,
+      lastAssignedDate: null,
       runway: 0,
       error: error instanceof Error ? error.message : 'Unknown error',
     };
@@ -174,7 +192,14 @@ function GameStatusCard({ status }: { status: GameStatus }) {
           </div>
           <div className="flex justify-between">
             <span className="text-[var(--muted)]">Assigned:</span>
-            <span className="font-medium">1-{status.highestAssigned}</span>
+            <span className="font-medium">
+              #1-{status.highestAssigned}
+              {status.lastAssignedDate && (
+                <span className="text-[var(--muted)] text-xs ml-1">
+                  ({status.lastAssignedDate})
+                </span>
+              )}
+            </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-[var(--muted)]">Runway:</span>
@@ -187,7 +212,7 @@ function GameStatusCard({ status }: { status: GameStatus }) {
           </div>
           {status.generatedAt && (
             <div className="flex justify-between">
-              <span className="text-[var(--muted)]">Generated:</span>
+              <span className="text-[var(--muted)]">Pool Generated:</span>
               <span className="font-medium text-xs">
                 {new Date(status.generatedAt).toLocaleDateString()}
               </span>
