@@ -11,6 +11,9 @@ interface GameBoardProps {
   activeDragId: string | null; // Track which tile is being dragged
   onCellClick: (row: number, col: number) => void;
   disabled?: boolean;
+  showCelebration?: boolean;
+  celebrationPhase?: 'pulse' | 'tiles' | 'hold' | null;
+  lockedTileCount?: number; // Number of locked tiles for dynamic animation timing
 }
 
 // Droppable cell wrapper (also draggable if it has a placed tile)
@@ -20,9 +23,13 @@ interface DroppableCellProps {
   isSelected: boolean;
   isDragging: boolean;
   onCellClick: () => void;
+  showCelebration?: boolean;
+  celebrationPhase?: 'pulse' | 'tiles' | 'hold' | null;
+  lockedTileIndex: number | null; // Index among locked tiles only (for staggered animation)
+  staggerMs: number; // Dynamic stagger timing based on tile count
 }
 
-function DroppableCell({ cell, placedTile, isSelected, isDragging, onCellClick }: DroppableCellProps) {
+function DroppableCell({ cell, placedTile, isSelected, isDragging, onCellClick, showCelebration, celebrationPhase, lockedTileIndex, staggerMs }: DroppableCellProps) {
   const hasPlacedTile = !!placedTile;
   const hasLockedLetter = cell.isLocked && cell.letter;
   const hasLetter = hasPlacedTile || cell.letter;
@@ -58,6 +65,15 @@ function DroppableCell({ cell, placedTile, isSelected, isDragging, onCellClick }
     }
   };
 
+  // Animation style for celebration (locked tiles settle into place one by one)
+  // Only animate tiles when celebration phase is 'tiles'
+  const animationStyle = showCelebration && hasLockedLetter && celebrationPhase === 'tiles' && lockedTileIndex !== null
+    ? {
+        animation: 'tileSettle 0.3s ease-out',
+        animationDelay: `${lockedTileIndex * staggerMs}ms`,
+      }
+    : undefined;
+
   return (
     <div
       ref={setRefs}
@@ -65,6 +81,7 @@ function DroppableCell({ cell, placedTile, isSelected, isDragging, onCellClick }
       data-col={cell.col}
       {...(canDrag ? { ...listeners, ...attributes } : {})}
       className={canDrag ? 'touch-none' : ''}
+      style={animationStyle}
     >
       <Tile
         letter={isDragging ? undefined : (placedTile?.letter || cell.letter)}
@@ -87,11 +104,33 @@ export function GameBoard({
   activeDragId,
   onCellClick,
   disabled = false,
+  showCelebration = false,
+  celebrationPhase = null,
+  lockedTileCount = 0,
 }: GameBoardProps) {
   // Create a map of placed tiles for quick lookup
   const placedMap = new Map(
     placedTiles.map((t) => [`${t.row},${t.col}`, t])
   );
+
+  // Create a map of locked tile indices for staggered animation
+  // Only locked tiles get an index (0, 1, 2, ...) based on grid order
+  const lockedTileIndexMap = new Map<string, number>();
+  let lockedIndex = 0;
+  for (const cell of board.cells.flat()) {
+    if (cell.isLocked && cell.letter) {
+      lockedTileIndexMap.set(`${cell.row},${cell.col}`, lockedIndex++);
+    }
+  }
+
+  // Calculate dynamic stagger - fewer tiles = longer stagger to maintain ~500ms total
+  // Formula: 180 / tileCount, clamped to min 18ms (for many tiles)
+  const staggerMs = lockedTileCount > 0 ? Math.max(18, Math.round(180 / lockedTileCount)) : 18;
+
+  // Board glow animation - single slow pulse at start of celebration
+  const boardGlowStyle = celebrationPhase === 'pulse'
+    ? { animation: 'boardGlowPulse 1.8s ease-in-out forwards' }
+    : undefined;
 
   return (
     <div
@@ -99,6 +138,7 @@ export function GameBoard({
       style={{
         gridTemplateColumns: `repeat(${board.size}, 1fr)`,
         maxWidth: '400px',
+        ...boardGlowStyle,
       }}
     >
       {board.cells.flat().map((cell) => {
@@ -116,6 +156,10 @@ export function GameBoard({
             isSelected={isSelected}
             isDragging={isDragging}
             onCellClick={() => !disabled && onCellClick(cell.row, cell.col)}
+            showCelebration={showCelebration}
+            celebrationPhase={celebrationPhase}
+            lockedTileIndex={lockedTileIndexMap.get(key) ?? null}
+            staggerMs={staggerMs}
           />
         );
       })}

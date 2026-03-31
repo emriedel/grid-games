@@ -244,6 +244,9 @@ export function Game() {
   const [pendingResultsModal, setPendingResultsModal] = useState(false);
   const [isTopScore, setIsTopScore] = useState(false);
   const [topScoreRank, setTopScoreRank] = useState<number | null>(null);
+  const [scoreSubmissionComplete, setScoreSubmissionComplete] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationPhase, setCelebrationPhase] = useState<'pulse' | 'tiles' | 'hold' | null>(null);
 
   // Fetch top scores for the current puzzle
   const { topScores, isLoading: isLoadingTopScores, refetch: refetchTopScores } = useTopScores('dabble', activePuzzleId);
@@ -263,6 +266,8 @@ export function Game() {
   const resultsModalTimerRef = useRef<NodeJS.Timeout | null>(null);
   // Ref to prevent duplicate backfill submissions in React Strict Mode
   const backfillAttemptedRef = useRef(false);
+  // Ref for score submission status (so polling can read latest value)
+  const scoreSubmissionCompleteRef = useRef(false);
 
   // Configure drag-and-drop sensors
   const sensors = useSensors(
@@ -420,22 +425,88 @@ export function Game() {
     }
   }, [debugMode, puzzle]);
 
-  // Handle delayed results modal with proper cleanup
+  // Keep ref in sync with state for closure access
+  useEffect(() => {
+    scoreSubmissionCompleteRef.current = scoreSubmissionComplete;
+  }, [scoreSubmissionComplete]);
+
+  // Handle delayed results modal with celebration animation
+  // Multi-phase: pulse (0-1800ms) -> tiles -> hold -> modal
+  // Dynamic timing based on tile count to keep animation feeling balanced
+  // Wait for both: minimum delay (for animation) AND score submission (for medal)
   useEffect(() => {
     if (pendingResultsModal) {
-      resultsModalTimerRef.current = setTimeout(() => {
-        setShowShareModal(true);
-        setPendingResultsModal(false);
-      }, 750);
+      setShowCelebration(true);
+      setCelebrationPhase('pulse');
+      let cancelled = false;
+
+      // Calculate dynamic timing based on locked tile count
+      const tileCount = lockedRackIndices.size || 1;
+      // Stagger: more tiles = faster stagger, fewer tiles = slower stagger
+      const staggerMs = Math.max(18, Math.round(180 / tileCount));
+      // Hold delay: scale with tile count, cap at 450ms
+      const holdDelayMs = Math.min(450, 300 + tileCount * 10);
+      // Calculate when tiles finish: stagger * (count-1) + animation duration (300ms)
+      const tilesAnimationMs = (tileCount - 1) * staggerMs + 300;
+
+      // Phase 1: Board pulse (0-1800ms) - 1.8s slow glow in/out
+      const pulseEndMs = 1800;
+      // Phase 2: Tiles settle (starts at 1800ms)
+      const tilesEndMs = pulseEndMs + tilesAnimationMs;
+      // Phase 3: Hold, then open modal
+      const modalOpenMs = tilesEndMs + holdDelayMs;
+
+      const tilesTimer = setTimeout(() => {
+        if (!cancelled) setCelebrationPhase('tiles');
+      }, pulseEndMs);
+
+      const holdTimer = setTimeout(() => {
+        if (!cancelled) setCelebrationPhase('hold');
+      }, tilesEndMs);
+
+      // Open modal after hold phase
+      const modalDelay = new Promise<void>(resolve => {
+        resultsModalTimerRef.current = setTimeout(resolve, modalOpenMs);
+      });
+
+      const scoreWait = new Promise<void>(resolve => {
+        if (scoreSubmissionCompleteRef.current) {
+          resolve();
+          return;
+        }
+        // Poll for completion (with 2s timeout)
+        const checkInterval = setInterval(() => {
+          if (scoreSubmissionCompleteRef.current || cancelled) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 50);
+        setTimeout(() => {
+          clearInterval(checkInterval);
+          resolve();
+        }, 2000);
+      });
+
+      Promise.all([modalDelay, scoreWait]).then(() => {
+        if (!cancelled) {
+          setShowCelebration(false);
+          setCelebrationPhase(null);
+          setShowShareModal(true);
+          setPendingResultsModal(false);
+        }
+      });
 
       return () => {
+        cancelled = true;
+        clearTimeout(tilesTimer);
+        clearTimeout(holdTimer);
         if (resultsModalTimerRef.current) {
           clearTimeout(resultsModalTimerRef.current);
           resultsModalTimerRef.current = null;
         }
       };
     }
-  }, [pendingResultsModal]);
+  }, [pendingResultsModal, lockedRackIndices.size]);
 
   // Save in-progress state when playing (only if meaningful progress made)
   useEffect(() => {
@@ -598,7 +669,13 @@ export function Game() {
           })
           .catch((error) => {
             console.warn('Failed to submit score:', error);
+          })
+          .finally(() => {
+            setScoreSubmissionComplete(true);
           });
+      } else {
+        // No score submission (debug mode or no puzzleId), mark complete immediately
+        setScoreSubmissionComplete(true);
       }
 
       // Trigger delayed results modal via state (proper cleanup in useEffect)
@@ -621,7 +698,6 @@ export function Game() {
       return;
     }
     setGameState('finished');
-    setShowShareModal(true);
 
     const letterBonus = getLetterUsageBonus(lockedRackIndices.size);
     const finalScoreWithBonus = totalScore + letterBonus;
@@ -670,8 +746,17 @@ export function Game() {
         })
         .catch((error) => {
           console.warn('Failed to submit score:', error);
+        })
+        .finally(() => {
+          setScoreSubmissionComplete(true);
         });
+    } else {
+      // No score submission (debug mode or no puzzleId), mark complete immediately
+      setScoreSubmissionComplete(true);
     }
+
+    // Trigger delayed results modal via state (proper cleanup in useEffect)
+    setPendingResultsModal(true);
   }, [submittedWords, puzzle, totalScore, lockedRackIndices, board, activePuzzleNumber, activePuzzleId, isArchiveMode, debugMode, refetchTopScores, toast]);
 
   // Replay the same puzzle (clear state and start fresh)
@@ -693,6 +778,9 @@ export function Game() {
     setTurnCount(0);
     setTotalScore(0);
     setShowShareModal(false);
+    setScoreSubmissionComplete(false);
+    setIsTopScore(false);
+    setTopScoreRank(null);
     setGameState('playing');
   }, [puzzle, activePuzzleNumber, activePuzzleId]);
 
@@ -792,6 +880,19 @@ export function Game() {
     setShowShareModal(false);
     setGameState('finished');
   }, []);
+
+  // Debug: Press 'c' to replay celebration animation when finished
+  useEffect(() => {
+    if (!debugMode || gameState !== 'finished') return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'c' && !showShareModal && !pendingResultsModal) {
+        setScoreSubmissionComplete(true); // Skip score wait
+        setPendingResultsModal(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [debugMode, gameState, showShareModal, pendingResultsModal]);
 
   // Get puzzle info for display (use activePuzzleNumber for archive mode)
   const puzzleInfo = isArchiveMode
@@ -916,6 +1017,9 @@ export function Game() {
               activeDragId={activeDragId}
               onCellClick={handleCellClick}
               disabled={gameState === 'finished'}
+              showCelebration={showCelebration}
+              celebrationPhase={celebrationPhase}
+              lockedTileCount={lockedRackIndices.size}
             />
             {scorePopup && (
               <div
@@ -1036,6 +1140,7 @@ export function Game() {
       <DragOverlay dropAnimation={null}>
         {activeDragLetter && <DragOverlayTile letter={activeDragLetter} />}
       </DragOverlay>
+
     </DndContext>
   );
 }

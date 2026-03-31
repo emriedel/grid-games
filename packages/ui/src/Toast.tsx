@@ -46,8 +46,26 @@ export function ToastProvider({
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const show = useCallback((message: string, type: ToastType = 'info') => {
-    const id = Math.random().toString(36).substring(2, 9);
-    setToasts((prev) => [...prev, { id, message, type }]);
+    setToasts((prev) => {
+      // Check for duplicate message+type already showing
+      const existingIndex = prev.findIndex(
+        (t) => t.message === message && t.type === type
+      );
+
+      if (existingIndex !== -1) {
+        // Refresh the existing toast (new ID resets its timer)
+        const existing = prev[existingIndex];
+        const newId = Math.random().toString(36).substring(2, 9);
+        return [
+          ...prev.filter((_, i) => i !== existingIndex),
+          { ...existing, id: newId }
+        ];
+      }
+
+      // No duplicate - add new toast
+      const id = Math.random().toString(36).substring(2, 9);
+      return [...prev, { id, message, type }];
+    });
   }, []);
 
   const dismiss = useCallback((id: string) => {

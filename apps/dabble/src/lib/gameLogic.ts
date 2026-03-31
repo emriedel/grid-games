@@ -247,6 +247,32 @@ export function calculateWordScore(
   return wordScore * wordMultiplier;
 }
 
+// Find all words formed by ANY placement (even non-line placements)
+// This is used to check word validity before the line check
+function findAllPossibleWords(
+  board: GameBoard,
+  placedTiles: PlacedTile[]
+): { word: string; direction: 'horizontal' | 'vertical' }[] {
+  const words: { word: string; direction: 'horizontal' | 'vertical' }[] = [];
+  const seen = new Set<string>();
+
+  // For each placed tile, check both horizontal and vertical words
+  for (const tile of placedTiles) {
+    for (const direction of ['horizontal', 'vertical'] as const) {
+      const wordData = extractWord(board, placedTiles, tile.row, tile.col, direction);
+      if (wordData) {
+        const key = `${wordData.startRow},${wordData.startCol},${direction}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          words.push({ word: wordData.word, direction });
+        }
+      }
+    }
+  }
+
+  return words;
+}
+
 // Validate a placement and return formed words with scores
 export interface PlacementResult {
   valid: boolean;
@@ -275,10 +301,19 @@ export function validatePlacement(
     }
   }
 
-  // Check tiles form a line
+  // Find ALL possible words from placed tiles BEFORE checking line formation
+  // This gives better error messages when words are invalid
+  const allPossibleWords = findAllPossibleWords(board, placedTiles);
+  for (const { word } of allPossibleWords) {
+    if (!isValidWord(word)) {
+      return { valid: false, words: [], totalScore: 0, error: `"${word}" is not a valid word` };
+    }
+  }
+
+  // Check tiles form a line (after word validation for better UX)
   const direction = getTilesDirection(placedTiles);
   if (direction === 'invalid') {
-    return { valid: false, words: [], totalScore: 0, error: 'Tiles must be in a line' };
+    return { valid: false, words: [], totalScore: 0, error: 'Enter one word at a time' };
   }
 
   // Check placement is contiguous
