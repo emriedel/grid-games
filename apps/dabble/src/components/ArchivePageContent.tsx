@@ -6,7 +6,7 @@ import { ArchivePage, Skeleton } from '@grid-games/ui';
 import { getAvailableMonths, listPuzzlesForMonth, getTodayDateString } from '@grid-games/shared';
 import { isPuzzleCompleted, isPuzzleInProgress, getTodayPuzzleNumber, getSavedPuzzleId, findPuzzleState } from '@/lib/storage';
 import { PUZZLE_BASE_DATE_STRING } from '@/config';
-import { getPuzzleIdsForRange } from '@/lib/puzzleGenerator';
+import { getPuzzleIdsForRange } from '@/lib/puzzleLoader';
 import { STAR_THRESHOLDS, getLetterUsageBonus } from '@/constants/gameConfig';
 
 export function ArchivePageContent() {

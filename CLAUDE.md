@@ -4,7 +4,7 @@
 
 **Nerdcube Daily** is a collection of daily puzzle games (similar to NYT Games). Turborepo monorepo with shared packages for UI, config, and utilities.
 
-**Games:** Dabble (red), Jumble (blue), Trio (teal), Inlay (green) | **Domain:** nerdcube.games
+**Games:** Dabble (red), Jumble (blue), Trio (cyan), Carom (amber), Inlay (green) | **Domain:** nerdcube.games
 
 > **Game-specific work?** Each app has its own `CLAUDE.md` with detailed docs. Consider working from `apps/[game]/` directly.
 >
@@ -213,7 +213,7 @@ const rng = seedrandom(new Date().toISOString().split('T')[0]);
 
 ### Pre-Generated Puzzles (Archive-Enabled Games)
 
-Games with archive support (Dabble, Carom, Inlay) use a pool/assigned architecture:
+Games with archive support (all games) use a pool/assigned architecture:
 
 ```
 public/puzzles/
@@ -388,7 +388,7 @@ apps/[game]/
 │   ├── lib/
 │   │   ├── dictionary.ts     # Re-exports from @grid-games/dictionary
 │   │   ├── gameLogic.ts
-│   │   └── puzzleGenerator.ts
+│   │   └── puzzleLoader.ts   # Load puzzles from monthly files
 │   ├── types/, constants/, hooks/
 │   └── config.ts             # GameConfig
 ├── public/dict/words.txt
@@ -471,7 +471,9 @@ Each game has a `/debug` page for browsing unpublished puzzles (localhost only):
 
 ```
 http://localhost:3001/debug    # Dabble puzzle browser
+http://localhost:3002/debug    # Jumble puzzle browser
 http://localhost:3004/debug    # Carom puzzle browser
+http://localhost:3005/debug    # Trio puzzle browser
 http://localhost:3006/debug    # Inlay puzzle browser
 ```
 

@@ -12,8 +12,8 @@ import {
   getSavedPuzzleId,
   getPuzzleState,
 } from '@/lib/storage';
-import { getPuzzleIdsForRange } from '@/lib/puzzleGenerator';
-import { CAROM_LAUNCH_DATE_STRING } from '@/config';
+import { getPuzzleIdsForRange } from '@/lib/puzzleLoader';
+import { CAROM_PUZZLE_BASE_DATE_STRING } from '@/config';
 
 export function ArchivePageContent() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export function ArchivePageContent() {
   // Get available months for pagination
   const availableMonths = useMemo(() => {
     const today = getTodayDateString();
-    return getAvailableMonths(CAROM_LAUNCH_DATE_STRING, today);
+    return getAvailableMonths(CAROM_PUZZLE_BASE_DATE_STRING, today);
   }, []);
 
   // State for monthly puzzle lists
@@ -160,7 +160,7 @@ export function ArchivePageContent() {
     <ArchivePage
       gameName="Carom"
       gameId="carom"
-      baseDate={CAROM_LAUNCH_DATE_STRING}
+      baseDate={CAROM_PUZZLE_BASE_DATE_STRING}
       todayPuzzleNumber={todayPuzzleNumber}
       isPuzzleCompleted={checkPuzzleCompleted}
       isPuzzleInProgress={checkPuzzleInProgress}

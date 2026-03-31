@@ -20,7 +20,7 @@ import { HowToPlayModal } from './HowToPlayModal';
 import { getLetterUsageBonus, STAR_THRESHOLDS } from '@/constants/gameConfig';
 import { DragOverlayTile } from './Tile';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { fetchDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleGenerator';
+import { fetchDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleLoader';
 import { loadDictionary } from '@/lib/dictionary';
 import { validatePlacement, applyPlacement } from '@/lib/gameLogic';
 import {

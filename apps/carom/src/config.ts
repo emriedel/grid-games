@@ -10,10 +10,10 @@ export const caromTheme = {
   tileBorder: '#44403c',
 };
 
-// Launch date for Carom - puzzle #1 starts on this date
+// Base date for puzzle numbering (first puzzle date)
 // IMPORTANT: Use 'T00:00:00' to force local timezone interpretation
-export const CAROM_LAUNCH_DATE_STRING = '2026-02-01';
-export const CAROM_LAUNCH_DATE = new Date(CAROM_LAUNCH_DATE_STRING + 'T00:00:00');
+export const CAROM_PUZZLE_BASE_DATE_STRING = '2026-02-01';
+export const CAROM_PUZZLE_BASE_DATE = new Date(CAROM_PUZZLE_BASE_DATE_STRING + 'T00:00:00');
 
 export const caromConfig = defineGameConfig({
   id: 'carom',
@@ -24,7 +24,7 @@ export const caromConfig = defineGameConfig({
   homeUrl: '/',
   getPuzzleInfo: () => {
     const dateStr = getTodayDateString();
-    const puzzleNumber = getPuzzleNumber(CAROM_LAUNCH_DATE);
+    const puzzleNumber = getPuzzleNumber(CAROM_PUZZLE_BASE_DATE);
     return {
       number: puzzleNumber,
       date: formatDisplayDate(dateStr),

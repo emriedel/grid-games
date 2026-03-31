@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, NavBar, GameContainer } from '@grid-games/ui';
 import { jumbleConfig } from '@/config';
-import { getPoolPuzzles, getFutureAssignedPuzzles, type AssignedPuzzle } from '@/lib/puzzleGenerator';
+import { getPoolPuzzles, getFutureAssignedPuzzles, type AssignedPuzzle } from '@/lib/puzzleLoader';
 import { STAR_THRESHOLDS, formatStars } from '@/constants/gameConfig';
 import type { Board } from '@/types';
 

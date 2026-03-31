@@ -17,7 +17,7 @@ import {
 import {
   BOARD_SIZE,
 } from '@/constants/gameConfig';
-import { CAROM_LAUNCH_DATE, CAROM_LAUNCH_DATE_STRING } from '@/config';
+import { CAROM_PUZZLE_BASE_DATE, CAROM_PUZZLE_BASE_DATE_STRING } from '@/config';
 
 // Assigned puzzle with ID (matches monthly file format)
 interface AssignedPuzzle extends PrecomputedPuzzle, PuzzleWithId {
@@ -49,7 +49,7 @@ async function fetchMonthlyFile(month: string): Promise<Record<string, AssignedP
  * Get a puzzle by its puzzle number from monthly files
  */
 async function getPuzzleByNumber(puzzleNumber: number): Promise<AssignedPuzzle | null> {
-  const month = getMonthForPuzzleNumber(puzzleNumber, CAROM_LAUNCH_DATE_STRING);
+  const month = getMonthForPuzzleNumber(puzzleNumber, CAROM_PUZZLE_BASE_DATE_STRING);
   const puzzles = await fetchMonthlyFile(month);
 
   if (!puzzles) {
@@ -62,7 +62,7 @@ async function getPuzzleByNumber(puzzleNumber: number): Promise<AssignedPuzzle |
   }
 
   // Try date key (new format) - calculate date from puzzle number
-  const dateKey = getDateForPuzzleNumber(CAROM_LAUNCH_DATE, puzzleNumber);
+  const dateKey = getDateForPuzzleNumber(CAROM_PUZZLE_BASE_DATE, puzzleNumber);
   if (puzzles[dateKey]) {
     return puzzles[dateKey];
   }
@@ -112,7 +112,7 @@ function hydratePuzzle(precomputed: PrecomputedPuzzle, date: string, puzzleNumbe
  */
 export async function getDailyPuzzle(dateStr?: string): Promise<Puzzle | null> {
   const date = dateStr || getTodayDateString();
-  const puzzleNumber = getPuzzleNumber(CAROM_LAUNCH_DATE, parseDateString(date));
+  const puzzleNumber = getPuzzleNumber(CAROM_PUZZLE_BASE_DATE, parseDateString(date));
 
   try {
     // Load from monthly assigned files
@@ -217,14 +217,14 @@ export async function getPoolPuzzles(): Promise<PoolPuzzle[]> {
  */
 export async function getPuzzleIdsForRange(startNum: number, endNum: number): Promise<Map<number, string>> {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-  return sharedGetPuzzleIdsForRange(startNum, endNum, CAROM_LAUNCH_DATE_STRING, 'carom', basePath);
+  return sharedGetPuzzleIdsForRange(startNum, endNum, CAROM_PUZZLE_BASE_DATE_STRING, 'carom', basePath);
 }
 
 /**
  * Get future assigned puzzles (puzzle numbers greater than today's)
  */
 export async function getFutureAssignedPuzzles(): Promise<{ puzzleNumber: number; puzzle: PrecomputedPuzzle }[]> {
-  const todayPuzzleNumber = getPuzzleNumber(CAROM_LAUNCH_DATE, new Date());
+  const todayPuzzleNumber = getPuzzleNumber(CAROM_PUZZLE_BASE_DATE, new Date());
   const results: { puzzleNumber: number; puzzle: PrecomputedPuzzle }[] = [];
 
   // Check current and next few months

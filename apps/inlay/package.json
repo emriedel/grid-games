@@ -9,7 +9,7 @@
     "lint": "eslint",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .next .turbo node_modules",
-    "generate-pool": "npx tsx scripts/generatePuzzles.ts",
+    "generate-puzzles": "npx tsx scripts/generatePuzzles.ts",
     "assign-puzzles": "npx tsx scripts/assignPuzzles.ts"
   },
   "dependencies": {

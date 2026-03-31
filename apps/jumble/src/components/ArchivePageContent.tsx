@@ -12,7 +12,7 @@ import {
   getPuzzleStars,
   getPuzzleScore,
 } from '@/lib/storage';
-import { getPuzzleIdsForRange } from '@/lib/puzzleGenerator';
+import { getPuzzleIdsForRange } from '@/lib/puzzleLoader';
 import { PUZZLE_BASE_DATE_STRING } from '@/config';
 
 export function ArchivePageContent() {

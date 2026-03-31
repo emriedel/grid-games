@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .next .turbo node_modules",
     "find-base-configs": "npx tsx scripts/findBaseConfigs.ts",
-    "generate-pool": "npx tsx scripts/generateSequential.ts",
+    "generate-puzzles": "npx tsx scripts/generateSequential.ts",
     "generate-pool-legacy": "npx tsx scripts/generatePool.ts",
     "assign-puzzles": "npx tsx scripts/assignPuzzles.ts"
   },

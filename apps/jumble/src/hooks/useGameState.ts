@@ -19,7 +19,7 @@ import {
   getPuzzleByNumber,
   getPuzzleFromPool,
   type DailyPuzzle,
-} from '@/lib/puzzleGenerator';
+} from '@/lib/puzzleLoader';
 import { TIMER_DURATION, calculateStars, STAR_THRESHOLDS, calculateThresholds } from '@/constants/gameConfig';
 import { useTimer } from './useTimer';
 

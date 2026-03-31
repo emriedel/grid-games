@@ -5,9 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { NavBar, GameContainer, Button } from '@grid-games/ui';
 import { getDateForPuzzleNumber } from '@grid-games/shared';
-import { caromConfig, CAROM_LAUNCH_DATE } from '@/config';
+import { caromConfig, CAROM_PUZZLE_BASE_DATE } from '@/config';
 import { parseReplayParams } from '@/lib/replay';
-import { getDailyPuzzle } from '@/lib/puzzleGenerator';
+import { getDailyPuzzle } from '@/lib/puzzleLoader';
 import { useReplayFromMoves } from '@/hooks/useReplay';
 import { Board } from './Board';
 import { ReplayControls } from './ReplayControls';
@@ -40,7 +40,7 @@ export function ReplayPageContent() {
 
       try {
         // Load puzzle by number
-        const dateStr = getDateForPuzzleNumber(CAROM_LAUNCH_DATE, params.puzzleNumber);
+        const dateStr = getDateForPuzzleNumber(CAROM_PUZZLE_BASE_DATE, params.puzzleNumber);
         const loadedPuzzle = await getDailyPuzzle(dateStr);
 
         if (!loadedPuzzle) {

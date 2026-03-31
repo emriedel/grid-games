@@ -88,7 +88,7 @@ src/
 │   ├── Tile.tsx         # Individual tile components
 │   └── WordList.tsx     # Submitted words display
 ├── lib/
-│   ├── puzzleGenerator.ts  # Daily puzzle generation (seedrandom)
+│   ├── puzzleLoader.ts     # Load puzzles from monthly files
 │   ├── gameLogic.ts        # Word validation, scoring
 │   ├── dictionary.ts       # Trie-based word lookup
 │   └── storage.ts          # LocalStorage state persistence

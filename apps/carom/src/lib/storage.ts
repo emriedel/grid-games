@@ -1,6 +1,6 @@
 import { createArchiveStorage, type BasePuzzleState } from '@grid-games/shared';
 import { Piece, Move } from '@/types';
-import { CAROM_LAUNCH_DATE } from '@/config';
+import { CAROM_PUZZLE_BASE_DATE } from '@/config';
 
 /**
  * Unified puzzle state - works for both daily and archive puzzles
@@ -23,7 +23,7 @@ export interface CaromPuzzleState extends BasePuzzleState {
 // Create the storage instance using the shared factory
 const storage = createArchiveStorage<CaromPuzzleState>({
   gameId: 'carom',
-  launchDate: CAROM_LAUNCH_DATE,
+  launchDate: CAROM_PUZZLE_BASE_DATE,
 });
 
 // Re-export all shared functions

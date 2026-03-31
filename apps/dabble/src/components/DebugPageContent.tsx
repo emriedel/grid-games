@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, NavBar, GameContainer } from '@grid-games/ui';
 import { dabbleConfig } from '@/config';
-import { getPoolPuzzles, getFutureAssignedPuzzles } from '@/lib/puzzleGenerator';
+import { getPoolPuzzles, getFutureAssignedPuzzles } from '@/lib/puzzleLoader';
 import { STAR_THRESHOLDS, BONUS_COLORS } from '@/constants/gameConfig';
 import type { BonusType } from '@/types';
 

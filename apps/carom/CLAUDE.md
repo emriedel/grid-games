@@ -53,7 +53,7 @@ npm run assign-puzzles -w @grid-games/carom -- 100  # Ensure puzzles 1-100 assig
 | `src/lib/replay.ts` | Move encoding/decoding for URLs |
 | `src/lib/gameLogic.ts` | Move simulation, collision detection |
 | `src/lib/solver.ts` | BFS solver for optimal solution |
-| `src/lib/puzzleGenerator.ts` | Loads puzzles from monthly assigned files |
+| `src/lib/puzzleLoader.ts` | Loads puzzles from monthly assigned files |
 | `src/lib/storage.ts` | LocalStorage persistence with achievedOptimal tracking |
 | `src/types/index.ts` | Type definitions |
 | `public/puzzles/pool.json` | Unassigned puzzle pool |
@@ -116,7 +116,7 @@ public/puzzles/
 2. **Assign puzzles** to numbers - this MOVES puzzles from pool to assigned/ files
 3. **Game fetches** puzzle by number from the appropriate monthly file
 
-**Launch date:** February 1, 2026 (defined in `src/config.ts` as `CAROM_LAUNCH_DATE`)
+**Base date:** February 1, 2026 (defined in `src/config.ts` as `CAROM_PUZZLE_BASE_DATE`)
 
 ### Generating More Puzzles
 
