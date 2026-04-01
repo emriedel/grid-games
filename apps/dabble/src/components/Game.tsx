@@ -219,6 +219,21 @@ function ScoreThresholdsModal({ isOpen, onClose, thresholds, topScores, isLoadin
 
 export function Game() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const resetParam = searchParams.get('reset') === 'true';
+
+  // Handle ?reset=true - clear only today's puzzle state and redirect to clean URL
+  useEffect(() => {
+    if (resetParam && typeof window !== 'undefined') {
+      const todayNum = getTodayPuzzleNumber();
+      // Only clear keys for today's puzzle number (preserves archive history)
+      Object.keys(localStorage)
+        .filter(k => k.startsWith(`dabble-${todayNum}-`))
+        .forEach(k => localStorage.removeItem(k));
+      router.replace('/');
+    }
+  }, [resetParam, router]);
+
   const debugMode = searchParams.get('debug') === 'true';
   const puzzleParam = searchParams.get('puzzle');
   const poolIdParam = searchParams.get('poolId');
@@ -232,7 +247,6 @@ export function Game() {
   // Get the puzzle number to use (archive or today)
   const activePuzzleNumber = isArchiveMode ? archivePuzzleNumber : todayPuzzleNumber;
 
-  const router = useRouter();
   const bugReporter = useBugReporter();
   const toast = useToast();
 
