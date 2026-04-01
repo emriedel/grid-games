@@ -29,6 +29,15 @@ export function ArchivePageContent() {
     return monthlyPuzzles.get(month) || [];
   }, [monthlyPuzzles]);
 
+  // Filter out empty months (months with no archive puzzles before today)
+  const filteredAvailableMonths = useMemo(() => {
+    return availableMonths.filter(month => {
+      const puzzles = monthlyPuzzles.get(month) || [];
+      // Only include months that have at least one archive puzzle (before today)
+      return puzzles.some(p => p.puzzleNumber < todayPuzzleNumber);
+    });
+  }, [availableMonths, monthlyPuzzles, todayPuzzleNumber]);
+
   // Load puzzleIds from monthly files and monthly puzzle lists
   useEffect(() => {
     async function loadPuzzleData() {
@@ -168,7 +177,7 @@ export function ArchivePageContent() {
       getPuzzleScore={getPuzzleScoreWrapper}
       onSelectPuzzle={handleSelectPuzzle}
       backHref="/dabble"
-      availableMonths={availableMonths}
+      availableMonths={filteredAvailableMonths}
       getPuzzlesForMonth={getPuzzlesForMonth}
     />
   );

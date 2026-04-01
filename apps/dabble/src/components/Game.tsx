@@ -61,6 +61,32 @@ function formatStars(stars: number, maxStars: number = 3): string {
   return '★'.repeat(stars) + '☆'.repeat(maxStars - stars);
 }
 
+// Validate placed tiles are consistent with current puzzle
+// Detects corrupted state from midnight rollover
+function validatePlacedTiles(
+  placedTiles: PlacedTile[],
+  board: GameBoardType,
+  rackLetters: string[]
+): boolean {
+  for (const tile of placedTiles) {
+    // Bounds check
+    if (tile.row < 0 || tile.row >= board.size ||
+        tile.col < 0 || tile.col >= board.size) {
+      return false;
+    }
+    // Rack index validation - must exist and match letter
+    if (tile.rackIndex !== undefined) {
+      if (tile.rackIndex < 0 || tile.rackIndex >= rackLetters.length) {
+        return false;
+      }
+      if (rackLetters[tile.rackIndex] !== tile.letter) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 // Dabble-specific wrapper for ResultsModal
 interface DabbleResultsModalProps {
   isOpen: boolean;
@@ -381,31 +407,60 @@ export function Game() {
               });
           }
         } else if (puzzleState?.status === 'in-progress') {
-          // Puzzle is in-progress
-          if (isArchiveMode) {
-            // Archive: restore and go directly to playing (skip landing)
-            setBoard(puzzleState.data.board);
-            setPlacedTiles(puzzleState.data.placedTiles ?? []);
-            setUsedRackIndices(new Set(puzzleState.data.usedRackIndices ?? []));
-            setLockedRackIndices(new Set(puzzleState.data.lockedRackIndices));
-            setSubmittedWords(puzzleState.data.submittedWords);
-            setTurnCount(puzzleState.data.turnCount ?? 0);
-            setTotalScore(puzzleState.data.totalScore);
-            setGameState('playing');
+          // Validate saved state matches current puzzle (detects midnight rollover corruption)
+          const placedTilesValid = validatePlacedTiles(
+            puzzleState.data.placedTiles ?? [],
+            dailyPuzzle.board,
+            dailyPuzzle.letters
+          );
+
+          if (!placedTilesValid) {
+            // Corrupted state - clear and start fresh
+            console.warn('[Dabble] Corrupted in-progress state detected, resetting');
+            clearPuzzleState(activePuzzleNumber, dailyPuzzle.puzzleId);
+            setBoard(dailyPuzzle.board);
+            setPlacedTiles([]);
+            setUsedRackIndices(new Set());
+            setLockedRackIndices(new Set());
+            setSubmittedWords([]);
+            setTurnCount(0);
+            setTotalScore(0);
+            if (isArchiveMode) {
+              setGameState('playing');
+            }
           } else {
-            // Today: show landing with 'in-progress' mode
-            setLandingMode('in-progress');
-            setBoard(puzzleState.data.board);
-            setPlacedTiles(puzzleState.data.placedTiles ?? []);
-            setUsedRackIndices(new Set(puzzleState.data.usedRackIndices ?? []));
-            setLockedRackIndices(new Set(puzzleState.data.lockedRackIndices));
-            setSubmittedWords(puzzleState.data.submittedWords);
-            setTurnCount(puzzleState.data.turnCount ?? 0);
-            setTotalScore(puzzleState.data.totalScore);
+            // Valid state - restore as normal
+            if (isArchiveMode) {
+              // Archive: restore and go directly to playing (skip landing)
+              setBoard(puzzleState.data.board);
+              setPlacedTiles(puzzleState.data.placedTiles ?? []);
+              setUsedRackIndices(new Set(puzzleState.data.usedRackIndices ?? []));
+              setLockedRackIndices(new Set(puzzleState.data.lockedRackIndices));
+              setSubmittedWords(puzzleState.data.submittedWords);
+              setTurnCount(puzzleState.data.turnCount ?? 0);
+              setTotalScore(puzzleState.data.totalScore);
+              setGameState('playing');
+            } else {
+              // Today: show landing with 'in-progress' mode
+              setLandingMode('in-progress');
+              setBoard(puzzleState.data.board);
+              setPlacedTiles(puzzleState.data.placedTiles ?? []);
+              setUsedRackIndices(new Set(puzzleState.data.usedRackIndices ?? []));
+              setLockedRackIndices(new Set(puzzleState.data.lockedRackIndices));
+              setSubmittedWords(puzzleState.data.submittedWords);
+              setTurnCount(puzzleState.data.turnCount ?? 0);
+              setTotalScore(puzzleState.data.totalScore);
+            }
           }
         } else {
-          // Fresh puzzle
+          // Fresh puzzle - Reset ALL state to prevent corruption
           setBoard(dailyPuzzle.board);
+          setPlacedTiles([]);
+          setUsedRackIndices(new Set());
+          setLockedRackIndices(new Set());
+          setSubmittedWords([]);
+          setTurnCount(0);
+          setTotalScore(0);
           if (isArchiveMode) {
             // Archive: go directly to playing (skip landing)
             setGameState('playing');

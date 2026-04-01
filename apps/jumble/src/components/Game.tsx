@@ -291,7 +291,7 @@ export default function Game() {
                 onClick={() => setShowThresholds(true)}
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--tile-bg)] hover:bg-[var(--tile-bg-selected)] transition-colors cursor-pointer"
               >
-                <span className="text-2xl font-bold text-[var(--accent)]">{totalScore}</span>
+                <span className="text-2xl font-bold text-[var(--foreground)]">{totalScore}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
