@@ -16,9 +16,9 @@
   --accent-secondary: #1d4ed8;
 
   /* Tile styling */
-  --tile-bg: #1a1a2e;
+  --tile-bg: #252540;
   --tile-bg-selected: #4a5580;
-  --tile-border: #2d2d44;
+  --tile-border: #3a3a5a;
 
   /* Status colors */
   --success: #22c55e;

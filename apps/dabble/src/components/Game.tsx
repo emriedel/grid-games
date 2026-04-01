@@ -282,6 +282,22 @@ export function Game() {
     })
   );
 
+  // Reset drag state when tab becomes visible (fixes stale drag state after tab switch)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        setActiveDragLetter(null);
+        setActiveDragId(null);
+        setIsDraggingBoardTile(false);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   // Initialize game
   useEffect(() => {
     async function init() {
