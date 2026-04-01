@@ -16,6 +16,7 @@ interface BoardProps {
   onDeselect: () => void;
   onMove: (direction: Direction) => void;
   disabled?: boolean;
+  showCelebration?: boolean;
 }
 
 export function Board({
@@ -26,6 +27,7 @@ export function Board({
   onDeselect,
   onMove,
   disabled = false,
+  showCelebration = false,
 }: BoardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(0);
@@ -187,7 +189,11 @@ export function Board({
     <div
       ref={containerRef}
       className="relative w-full aspect-square bg-[var(--background)] rounded-lg overflow-hidden border-[3px] border-[var(--wall-color)] select-none"
-      style={{ touchAction: 'none', WebkitTouchCallout: 'none' }}
+      style={{
+        touchAction: 'none',
+        WebkitTouchCallout: 'none',
+        animation: showCelebration ? 'boardGlowPulse 1.5s ease-in-out' : undefined,
+      }}
       onClick={handleBoardClick}
     >
       {/* Grid cells */}

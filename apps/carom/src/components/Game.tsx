@@ -9,7 +9,7 @@ import { caromConfig, CAROM_PUZZLE_BASE_DATE } from '@/config';
 import { useGameState } from '@/hooks/useGameState';
 import { useReplay } from '@/hooks/useReplay';
 import { getDailyPuzzle, getPuzzleFromPool } from '@/lib/puzzleLoader';
-import { buildReplayUrl } from '@/lib/replay';
+import { buildReplayUrl, buildReplayUrlFromSolutionPath } from '@/lib/replay';
 import {
   getCompletionState,
   getInProgressState,
@@ -36,6 +36,7 @@ interface CaromResultsModalProps {
   puzzleId: string | undefined;
   moveHistory: Move[];
   isArchive: boolean;
+  solutionPath?: { pieceId: string; direction: Direction }[];
 }
 
 function CaromResultsModal({
@@ -48,6 +49,7 @@ function CaromResultsModal({
   puzzleId,
   moveHistory,
   isArchive,
+  solutionPath,
 }: CaromResultsModalProps) {
   const [replayCopied, setReplayCopied] = useState(false);
   const movesText = moveCount === 1 ? 'move' : 'moves';
@@ -111,7 +113,22 @@ function CaromResultsModal({
           <div className="text-4xl mb-2">🏆</div>
           <div className="text-[var(--accent)] font-medium">Perfect Solution!</div>
         </div>
-      ) : null}
+      ) : (
+        // Show perfect solution info when not achieved optimal
+        solutionPath && puzzleId && (
+          <div className="text-center flex items-center justify-center gap-2">
+            <span className="text-sm text-[var(--muted)]">Perfect: {optimalMoves}</span>
+            <a
+              href={buildReplayUrlFromSolutionPath(puzzleNumber, puzzleId, solutionPath)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs px-2 py-0.5 rounded bg-[var(--accent)]/20 text-[var(--accent)] hover:bg-[var(--accent)]/30"
+            >
+              View
+            </a>
+          </div>
+        )
+      )}
     </ResultsModal>
   );
 }
@@ -157,6 +174,7 @@ export function Game() {
   const [landingMode, setLandingMode] = useState<'fresh' | 'in-progress' | 'completed' | 'unavailable'>('fresh');
   const [wasPlayingThisSession, setWasPlayingThisSession] = useState(false);
   const [achievedOptimal, setAchievedOptimal] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // Track completion analytics once per game session
   const hasTrackedCompletionRef = useRef(false);
@@ -373,10 +391,13 @@ export function Game() {
           achievedOptimal: isOptimal,
         },
       }, activePuzzleId);
-      // Small delay before showing results
+
+      // Start celebration animation, then show results after animation completes
+      setShowCelebration(true);
       const timer = setTimeout(() => {
+        setShowCelebration(false);
         setShowResults(true);
-      }, 300);
+      }, 1700); // 1.5s animation + 200ms buffer
       return () => clearTimeout(timer);
     }
   }, [state.phase, state.moveCount, state.puzzle, state.moveHistory, wasPlayingThisSession, activePuzzleNumber, activePuzzleId, isArchiveMode]);
@@ -384,6 +405,7 @@ export function Game() {
   // Handle replay - reset game state and start fresh
   const handleReplay = useCallback(() => {
     setShowResults(false);
+    setShowCelebration(false);
     setWasPlayingThisSession(true);
     setAchievedOptimal(false);
     hasTrackedCompletionRef.current = false;
@@ -490,6 +512,7 @@ export function Game() {
               onDeselect={deselectPiece}
               onMove={handleMove}
               disabled={state.isAnimating || isFinished}
+              showCelebration={showCelebration}
             />
           )}
 
@@ -564,6 +587,7 @@ export function Game() {
             puzzleId={activePuzzleId}
             moveHistory={state.moveHistory}
             isArchive={isArchiveMode}
+            solutionPath={state.puzzle.solutionPath}
           />
           <OptimalInfoModal
             isOpen={showOptimalInfo}

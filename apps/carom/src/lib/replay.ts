@@ -95,6 +95,27 @@ export function buildReplayUrl(
 }
 
 /**
+ * Build a shareable replay URL from a solution path (pre-computed optimal solution)
+ * Solution path format: { pieceId: string; direction: Direction }[]
+ */
+export function buildReplayUrlFromSolutionPath(
+  puzzleNumber: number,
+  puzzleId: string,
+  solutionPath: { pieceId: string; direction: Direction }[]
+): string {
+  const encodedMoves = solutionPath
+    .map((step) => {
+      const pieceChar = PIECE_ID_TO_CHAR[step.pieceId] ?? step.pieceId.charAt(0);
+      const dirChar = DIRECTION_TO_CHAR[step.direction];
+      return pieceChar + dirChar;
+    })
+    .join('');
+
+  const shortId = puzzleId.slice(0, 8);
+  return `https://nerdcube.games/carom/replay?p=${puzzleNumber}&id=${shortId}&m=${encodedMoves}`;
+}
+
+/**
  * Parse replay params from URL search params
  */
 export function parseReplayParams(searchParams: URLSearchParams): {

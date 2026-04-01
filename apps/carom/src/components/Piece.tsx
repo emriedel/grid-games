@@ -56,6 +56,18 @@ export function Piece({ piece, isSelected, onClick, cellSize }: PieceProps) {
       }}
       aria-label={`${piece.type} piece at row ${piece.position.row + 1}, column ${piece.position.col + 1}${isSelected ? ', selected' : ''}`}
       data-piece-id={piece.id}
-    />
+    >
+      {/* Star icon for target piece (accessibility - distinguishes from blockers without relying on color) */}
+      {isTarget && (
+        <svg
+          className="absolute inset-0 m-auto pointer-events-none"
+          style={{ width: pieceSize * 0.38, height: pieceSize * 0.38 }}
+          viewBox="0 0 24 24"
+          fill="rgba(0, 0, 0, 0.5)"
+        >
+          <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+        </svg>
+      )}
+    </button>
   );
 }

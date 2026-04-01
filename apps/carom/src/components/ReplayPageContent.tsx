@@ -73,12 +73,12 @@ export function ReplayPageContent() {
 
   const replayState = useReplayFromMoves(puzzle, moves);
 
-  // Auto-play after a short delay when replay loads
+  // Auto-play after a longer delay when replay loads (time to see initial state)
   useEffect(() => {
     if (puzzle && moves.length > 0 && !isLoading) {
       const timer = setTimeout(() => {
         replayState.play();
-      }, 500);
+      }, 1200);
       return () => clearTimeout(timer);
     }
   }, [puzzle, moves.length, isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
