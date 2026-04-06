@@ -163,8 +163,9 @@ function ToastItem({ toast, duration, onDismiss }: ToastItemProps) {
 
   return (
     <div
+      onClick={() => onDismiss(toast.id)}
       className={`
-        px-4 py-2 rounded-lg shadow-lg pointer-events-auto
+        px-4 py-2 rounded-lg shadow-lg pointer-events-auto cursor-pointer
         ${typeClasses[toast.type]}
         text-white font-medium text-sm
         transform transition-all duration-200

@@ -46,9 +46,9 @@ export function Tile({
         ${
           hasLetter
             ? isLocked
-              ? 'bg-amber-100 text-amber-900 cursor-default'
+              ? `bg-amber-100 text-amber-900 cursor-default ${bonusStyle ? `ring-2 ${bonusStyle.ring}` : ''}`
               : isPlaced
-              ? 'bg-amber-200 text-amber-900 ring-2 ring-amber-400'
+              ? `bg-amber-200 text-amber-900 ring-2 ${bonusStyle ? bonusStyle.ring : 'ring-amber-400'}`
               : 'bg-amber-100 text-amber-900'
             : bonusStyle
             ? `${bonusStyle.bg} ${bonusStyle.text}`
