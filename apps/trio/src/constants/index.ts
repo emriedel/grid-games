@@ -22,6 +22,6 @@ export const GAME_CONFIG = {
     CARD_REMOVE: 300,
     CARD_ADD: 300,
     BETWEEN_ROUNDS: 400,
-    REVEAL_CORRECT: 1500, // Time to show correct answer after miss
+    REVEAL_CORRECT: 2500, // Time to show correct answer after miss
   },
 } as const;

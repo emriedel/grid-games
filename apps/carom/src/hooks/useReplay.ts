@@ -4,7 +4,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Piece, Puzzle, Move, Direction } from '@/types';
 import { simulateSlide, applyMove } from '@/lib/gameLogic';
 
-const PAUSE_BETWEEN_MOVES = 150;
+const PAUSE_BETWEEN_MOVES = 400;
 const SLIDE_ANIMATION_DURATION = 200;
 const TOTAL_STEP_TIME = SLIDE_ANIMATION_DURATION + PAUSE_BETWEEN_MOVES;
 

@@ -5,20 +5,13 @@ import {
   parseDateString,
   loadMonthlyFile,
   getPuzzleIdsForRange as sharedGetPuzzleIdsForRange,
+  getTodayDateString,
   type PuzzleWithId,
 } from '@grid-games/shared';
 import type { Cell, BonusType, DailyPuzzle } from '@/types';
 import { PUZZLE_BASE_DATE, PUZZLE_BASE_DATE_STRING } from '@/config';
 
-// Get today's date string in YYYY-MM-DD format (Pacific time)
-export function getTodayDateString(): string {
-  const now = new Date();
-  // Format date in Pacific time
-  const pacificDate = now.toLocaleDateString('en-CA', {
-    timeZone: 'America/Los_Angeles',
-  });
-  return pacificDate; // Returns YYYY-MM-DD format
-}
+export { getTodayDateString };
 
 // Pre-generated puzzle format (from scripts/generatePuzzles.ts)
 interface AssignedPuzzle extends PuzzleWithId {
