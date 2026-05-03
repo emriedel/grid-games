@@ -80,14 +80,31 @@ export function generateEmojiBar(
 }
 
 /**
+ * Detect mobile device. Web Share API on desktop (especially Windows) opens the
+ * OS share dialog and surfaces email apps as the primary target, which is a poor
+ * UX for sharing puzzle results — desktop users expect a clipboard copy.
+ */
+function isMobileDevice(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const uaData = (navigator as Navigator & {
+    userAgentData?: { mobile?: boolean };
+  }).userAgentData;
+  if (typeof uaData?.mobile === 'boolean') return uaData.mobile;
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+}
+
+/**
  * Share via native share API or fallback to clipboard
  * Returns true if shared/copied successfully
  */
-export async function shareOrCopy(text: string): Promise<{ success: boolean; method: 'share' | 'clipboard' }> {
-  // Try native share first (works on mobile)
-  if (typeof navigator !== 'undefined' && navigator.share) {
+export async function shareOrCopy(
+  text: string,
+  url?: string,
+): Promise<{ success: boolean; method: 'share' | 'clipboard' }> {
+  // Native share only on mobile — desktop share sheets (esp. Windows) are bad UX
+  if (typeof navigator !== 'undefined' && navigator.share && isMobileDevice()) {
     try {
-      await navigator.share({ text });
+      await navigator.share(url ? { text, url } : { text });
       return { success: true, method: 'share' };
     } catch {
       // User cancelled or share failed, fall through to clipboard
