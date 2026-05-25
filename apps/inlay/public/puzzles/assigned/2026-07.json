@@ -1,0 +1,3287 @@
+{
+  "gameId": "inlay",
+  "baseDate": "2026-07-01",
+  "puzzles": {
+    "2026-07-01": {
+      "id": "0096d8a8dbef4c0c",
+      "shape": [
+        [
+          true,
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Wide Castle",
+      "pentominoIds": [
+        "I",
+        "N",
+        "P",
+        "V",
+        "W",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 151
+    },
+    "2026-07-02": {
+      "id": "365f5025f24482c2",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "F",
+        "L",
+        "P",
+        "U",
+        "X",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 4,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 1
+        }
+      ],
+      "puzzleNumber": 152
+    },
+    "2026-07-03": {
+      "id": "6db4f9c25e68eb98",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "N",
+        "P",
+        "T",
+        "U",
+        "W",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 4,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 0
+        }
+      ],
+      "puzzleNumber": 153
+    },
+    "2026-07-04": {
+      "id": "5763ef3e12020b63",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "F",
+        "I",
+        "P",
+        "V",
+        "W",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 154
+    },
+    "2026-07-05": {
+      "id": "cd2f85b9ad88bad4",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Wide Diamond",
+      "pentominoIds": [
+        "I",
+        "L",
+        "P",
+        "V",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 4,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 1
+        }
+      ],
+      "puzzleNumber": 155
+    },
+    "2026-07-06": {
+      "id": "cd358542e1d643d1",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Rectangle",
+      "pentominoIds": [
+        "F",
+        "I",
+        "P",
+        "V",
+        "W",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 3,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 156
+    },
+    "2026-07-07": {
+      "id": "72444082ce9a4b16",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cup",
+      "pentominoIds": [
+        "I",
+        "L",
+        "P",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 157
+    },
+    "2026-07-08": {
+      "id": "bdc8001c919fa0fb",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "N",
+        "P",
+        "U",
+        "V",
+        "X",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 0
+        }
+      ],
+      "puzzleNumber": 158
+    },
+    "2026-07-09": {
+      "id": "68935a54485b0c1c",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Shield",
+      "pentominoIds": [
+        "N",
+        "P",
+        "T",
+        "V",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 159
+    },
+    "2026-07-10": {
+      "id": "4e6be822d79cab25",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cup",
+      "pentominoIds": [
+        "P",
+        "V",
+        "W",
+        "X",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 160
+    },
+    "2026-07-11": {
+      "id": "159bd80af2018ec5",
+      "shape": [
+        [
+          true,
+          false,
+          true,
+          true,
+          false,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Wide Crown",
+      "pentominoIds": [
+        "F",
+        "L",
+        "P",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 161
+    },
+    "2026-07-12": {
+      "id": "d2196852448b4efb",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "F",
+        "L",
+        "P",
+        "U",
+        "V",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 0
+        }
+      ],
+      "puzzleNumber": 162
+    },
+    "2026-07-13": {
+      "id": "37d3520988fe0cbb",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "F",
+        "P",
+        "T",
+        "V",
+        "W",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 163
+    },
+    "2026-07-14": {
+      "id": "46c681f4a9448d9a",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "L",
+        "N",
+        "P",
+        "U",
+        "V",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 164
+    },
+    "2026-07-15": {
+      "id": "9ecf6e8722d96f4b",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Shield",
+      "pentominoIds": [
+        "L",
+        "P",
+        "U",
+        "X",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        }
+      ],
+      "puzzleNumber": 165
+    },
+    "2026-07-16": {
+      "id": "b31344d17ac3264a",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cross",
+      "pentominoIds": [
+        "F",
+        "T",
+        "U",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 1
+        }
+      ],
+      "puzzleNumber": 166
+    },
+    "2026-07-17": {
+      "id": "04c272704a668d56",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Spaceship",
+      "pentominoIds": [
+        "F",
+        "I",
+        "N",
+        "P",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 1,
+            "col": 4
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 167
+    },
+    "2026-07-18": {
+      "id": "451e368962ffc486",
+      "shape": [
+        [
+          true,
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Wide Castle",
+      "pentominoIds": [
+        "I",
+        "L",
+        "P",
+        "T",
+        "W",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 5
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 1
+        }
+      ],
+      "puzzleNumber": 168
+    },
+    "2026-07-19": {
+      "id": "8be216e20e0ba545",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Ghost",
+      "pentominoIds": [
+        "N",
+        "U",
+        "W",
+        "X",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 169
+    },
+    "2026-07-20": {
+      "id": "81b3a403f221347f",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cross",
+      "pentominoIds": [
+        "F",
+        "P",
+        "T",
+        "W",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 170
+    },
+    "2026-07-21": {
+      "id": "3f38aa039db090a8",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cup",
+      "pentominoIds": [
+        "I",
+        "L",
+        "N",
+        "P",
+        "V"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 171
+    },
+    "2026-07-22": {
+      "id": "22bc003dba2e3e82",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Rectangle",
+      "pentominoIds": [
+        "F",
+        "P",
+        "T",
+        "V",
+        "W",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        }
+      ],
+      "puzzleNumber": 172
+    },
+    "2026-07-23": {
+      "id": "735dcfc98d5049ef",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Moon",
+      "pentominoIds": [
+        "F",
+        "P",
+        "T",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 173
+    },
+    "2026-07-24": {
+      "id": "cda7fa38464f215e",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cup",
+      "pentominoIds": [
+        "F",
+        "N",
+        "P",
+        "T",
+        "U"
+      ],
+      "solution": [
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 174
+    },
+    "2026-07-25": {
+      "id": "3c7fbc657d17816c",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          false,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          true
+        ]
+      ],
+      "shapeName": "Rectangle Variant 11",
+      "pentominoIds": [
+        "F",
+        "N",
+        "P",
+        "U",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 175
+    },
+    "2026-07-26": {
+      "id": "715c35c5555fcd43",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "I",
+        "N",
+        "T",
+        "U",
+        "V",
+        "W"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        }
+      ],
+      "puzzleNumber": 176
+    },
+    "2026-07-27": {
+      "id": "3e9bcde9997c6732",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "F",
+        "I",
+        "N",
+        "U",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 177
+    },
+    "2026-07-28": {
+      "id": "398ea514ce2ab4cc",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Shield",
+      "pentominoIds": [
+        "L",
+        "N",
+        "T",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 0
+        }
+      ],
+      "puzzleNumber": 178
+    },
+    "2026-07-29": {
+      "id": "9f1aaf43025cbe32",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cup",
+      "pentominoIds": [
+        "F",
+        "P",
+        "U",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 179
+    },
+    "2026-07-30": {
+      "id": "daa5b51bfc7d06c3",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "I",
+        "L",
+        "N",
+        "P",
+        "V",
+        "W"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 3
+        }
+      ],
+      "puzzleNumber": 180
+    },
+    "2026-07-31": {
+      "id": "090890b347e4a010",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cross",
+      "pentominoIds": [
+        "F",
+        "L",
+        "N",
+        "T",
+        "W"
+      ],
+      "solution": [
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 2
+        }
+      ],
+      "puzzleNumber": 181
+    }
+  }
+}

@@ -1,0 +1,3526 @@
+{
+  "gameId": "jumble",
+  "baseDate": "2026-07-01",
+  "puzzles": {
+    "2026-07-01": {
+      "id": "1d5yx5ht",
+      "board": [
+        [
+          "I",
+          "I",
+          "G",
+          "A",
+          "G"
+        ],
+        [
+          "M",
+          "Y",
+          "E",
+          "C",
+          "F"
+        ],
+        [
+          "E",
+          "I",
+          "T",
+          "K",
+          "N"
+        ],
+        [
+          "D",
+          "E",
+          "H",
+          "Y",
+          "L"
+        ],
+        [
+          "T",
+          "R",
+          "E",
+          "I",
+          "A"
+        ]
+      ],
+      "maxPossibleScore": 344,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 213,
+        "wordsByLength": {
+          "3": 71,
+          "4": 83,
+          "5": 33,
+          "6": 15,
+          "7": 7,
+          "8": 3,
+          "9": 1
+        },
+        "longestWords": [
+          "FACETIMED",
+          "MITHERED",
+          "FACETIME",
+          "HEREDITY",
+          "MYTHIER",
+          "FACETED",
+          "DIETHER",
+          "DIETHYL",
+          "LAYTIME",
+          "LAYERED"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 151
+    },
+    "2026-07-02": {
+      "id": "72natu5s",
+      "board": [
+        [
+          "E",
+          "F",
+          "A",
+          "N",
+          "P"
+        ],
+        [
+          "QU",
+          "E",
+          "M",
+          "H",
+          "E"
+        ],
+        [
+          "R",
+          "N",
+          "D",
+          "T",
+          "F"
+        ],
+        [
+          "E",
+          "L",
+          "P",
+          "U",
+          "O"
+        ],
+        [
+          "A",
+          "G",
+          "D",
+          "R",
+          "I"
+        ]
+      ],
+      "maxPossibleScore": 332,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 238,
+        "wordsByLength": {
+          "3": 98,
+          "4": 75,
+          "5": 44,
+          "6": 17,
+          "7": 4
+        },
+        "longestWords": [
+          "REMANET",
+          "LAGERED",
+          "PROUDER",
+          "AGENDER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 152
+    },
+    "2026-07-03": {
+      "id": "u4k3fwej",
+      "board": [
+        [
+          "N",
+          "R",
+          "N",
+          "T",
+          "R"
+        ],
+        [
+          "U",
+          "T",
+          "D",
+          "I",
+          "M"
+        ],
+        [
+          "T",
+          "T",
+          "I",
+          "B",
+          "S"
+        ],
+        [
+          "R",
+          "E",
+          "E",
+          "L",
+          "P"
+        ],
+        [
+          "V",
+          "E",
+          "T",
+          "E",
+          "I"
+        ]
+      ],
+      "maxPossibleScore": 574,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 304,
+        "wordsByLength": {
+          "3": 76,
+          "4": 101,
+          "5": 62,
+          "6": 44,
+          "7": 15,
+          "8": 4,
+          "10": 2
+        },
+        "longestWords": [
+          "DISBELIEVE",
+          "MISBELIEVE",
+          "IMBITTER",
+          "BELIEVER",
+          "SLEETIER",
+          "SPLITTER",
+          "NURDIER",
+          "NUTTIER",
+          "RUNTIER",
+          "RUTTIER"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 153
+    },
+    "2026-07-04": {
+      "id": "j59ml174",
+      "board": [
+        [
+          "R",
+          "T",
+          "O",
+          "E",
+          "L"
+        ],
+        [
+          "W",
+          "T",
+          "M",
+          "E",
+          "QU"
+        ],
+        [
+          "O",
+          "I",
+          "S",
+          "E",
+          "F"
+        ],
+        [
+          "E",
+          "I",
+          "P",
+          "O",
+          "C"
+        ],
+        [
+          "T",
+          "L",
+          "H",
+          "S",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 524,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 341,
+        "wordsByLength": {
+          "3": 94,
+          "4": 137,
+          "5": 81,
+          "6": 16,
+          "7": 10,
+          "8": 2,
+          "9": 1
+        },
+        "longestWords": [
+          "MESOPHILE",
+          "EPITOMES",
+          "EPISTOME",
+          "ESTOILE",
+          "EPITOME",
+          "FORCEPS",
+          "PIETIST",
+          "PIETISM",
+          "COESITE",
+          "HOPLITE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 154
+    },
+    "2026-07-05": {
+      "id": "2yb0j3gl",
+      "board": [
+        [
+          "R",
+          "T",
+          "V",
+          "T",
+          "A"
+        ],
+        [
+          "C",
+          "O",
+          "S",
+          "O",
+          "M"
+        ],
+        [
+          "S",
+          "A",
+          "A",
+          "QU",
+          "A"
+        ],
+        [
+          "M",
+          "F",
+          "I",
+          "T",
+          "E"
+        ],
+        [
+          "N",
+          "F",
+          "U",
+          "R",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 406,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 247,
+        "wordsByLength": {
+          "3": 74,
+          "4": 85,
+          "5": 53,
+          "6": 23,
+          "7": 10,
+          "8": 2
+        },
+        "longestWords": [
+          "OSTOMATE",
+          "TRIACTOR",
+          "COAITAS",
+          "STROAMS",
+          "STOMATA",
+          "STOMATE",
+          "MATURER",
+          "MASCOTS",
+          "MAFFIAS",
+          "FIASCOS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      },
+      "puzzleNumber": 155
+    },
+    "2026-07-06": {
+      "id": "v5w26fyg",
+      "board": [
+        [
+          "I",
+          "G",
+          "E",
+          "A",
+          "U"
+        ],
+        [
+          "T",
+          "N",
+          "W",
+          "O",
+          "A"
+        ],
+        [
+          "E",
+          "I",
+          "N",
+          "B",
+          "I"
+        ],
+        [
+          "D",
+          "S",
+          "F",
+          "T",
+          "N"
+        ],
+        [
+          "E",
+          "C",
+          "R",
+          "L",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 536,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 318,
+        "wordsByLength": {
+          "3": 85,
+          "4": 99,
+          "5": 78,
+          "6": 42,
+          "7": 14
+        },
+        "longestWords": [
+          "IGNITED",
+          "IGNITES",
+          "GENNIES",
+          "TINEIDS",
+          "TINNIES",
+          "EDITING",
+          "BOWNING",
+          "BONNIES",
+          "IONISED",
+          "DENTINS"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 156
+    },
+    "2026-07-07": {
+      "id": "ygo634de",
+      "board": [
+        [
+          "C",
+          "E",
+          "T",
+          "U",
+          "A"
+        ],
+        [
+          "O",
+          "I",
+          "G",
+          "R",
+          "T"
+        ],
+        [
+          "A",
+          "E",
+          "N",
+          "Y",
+          "E"
+        ],
+        [
+          "R",
+          "L",
+          "A",
+          "S",
+          "N"
+        ],
+        [
+          "K",
+          "O",
+          "R",
+          "U",
+          "G"
+        ]
+      ],
+      "maxPossibleScore": 1099,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 582,
+        "wordsByLength": {
+          "3": 136,
+          "4": 197,
+          "5": 145,
+          "6": 61,
+          "7": 30,
+          "8": 10,
+          "9": 2,
+          "10": 1
+        },
+        "longestWords": [
+          "SYNERGETIC",
+          "GENITURES",
+          "ASYNERGIA",
+          "CITRATES",
+          "ARGINASE",
+          "INGRATES",
+          "GENITURE",
+          "NITRATES",
+          "REINSERT",
+          "REGRATES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 157
+    },
+    "2026-07-08": {
+      "id": "biz2t76b",
+      "board": [
+        [
+          "A",
+          "T",
+          "E",
+          "E",
+          "S"
+        ],
+        [
+          "O",
+          "S",
+          "H",
+          "R",
+          "O"
+        ],
+        [
+          "G",
+          "S",
+          "S",
+          "R",
+          "E"
+        ],
+        [
+          "J",
+          "A",
+          "L",
+          "T",
+          "N"
+        ],
+        [
+          "R",
+          "U",
+          "E",
+          "I",
+          "T"
+        ]
+      ],
+      "maxPossibleScore": 1123,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 506,
+        "wordsByLength": {
+          "3": 99,
+          "4": 144,
+          "5": 111,
+          "6": 93,
+          "7": 45,
+          "8": 10,
+          "9": 2,
+          "10": 2
+        },
+        "longestWords": [
+          "ASSAULTERS",
+          "GAULEITERS",
+          "ASSAULTER",
+          "GAULEITER",
+          "ASSAULTS",
+          "STEERERS",
+          "GAULTERS",
+          "SLASHERS",
+          "SLINTERS",
+          "SLITTERS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 158
+    },
+    "2026-07-09": {
+      "id": "iyk26lfo",
+      "board": [
+        [
+          "I",
+          "H",
+          "I",
+          "QU",
+          "U"
+        ],
+        [
+          "E",
+          "U",
+          "R",
+          "R",
+          "M"
+        ],
+        [
+          "A",
+          "A",
+          "N",
+          "O",
+          "D"
+        ],
+        [
+          "F",
+          "I",
+          "A",
+          "E",
+          "D"
+        ],
+        [
+          "S",
+          "L",
+          "T",
+          "O",
+          "C"
+        ]
+      ],
+      "maxPossibleScore": 667,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 380,
+        "wordsByLength": {
+          "3": 99,
+          "4": 131,
+          "5": 85,
+          "6": 44,
+          "7": 16,
+          "8": 3,
+          "9": 2
+        },
+        "longestWords": [
+          "MURRAINED",
+          "ANECDOTAL",
+          "MORAINAL",
+          "ANECDOTA",
+          "TOENAILS",
+          "URANITE",
+          "MURRAIN",
+          "MORAINE",
+          "MORRHUA",
+          "MONIALS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 159
+    },
+    "2026-07-10": {
+      "id": "4d2pq4c8",
+      "board": [
+        [
+          "N",
+          "A",
+          "Y",
+          "R",
+          "T"
+        ],
+        [
+          "S",
+          "O",
+          "I",
+          "E",
+          "I"
+        ],
+        [
+          "P",
+          "H",
+          "P",
+          "W",
+          "F"
+        ],
+        [
+          "R",
+          "H",
+          "T",
+          "I",
+          "E"
+        ],
+        [
+          "N",
+          "N",
+          "E",
+          "X",
+          "T"
+        ]
+      ],
+      "maxPossibleScore": 376,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 269,
+        "wordsByLength": {
+          "3": 104,
+          "4": 95,
+          "5": 51,
+          "6": 13,
+          "7": 5,
+          "8": 1
+        },
+        "longestWords": [
+          "THIOPHEN",
+          "PITHIER",
+          "WITHIER",
+          "FIREPIT",
+          "ETHIONS",
+          "ETHIOPS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      },
+      "puzzleNumber": 160
+    },
+    "2026-07-11": {
+      "id": "74zkqphu",
+      "board": [
+        [
+          "I",
+          "Y",
+          "P",
+          "W",
+          "D"
+        ],
+        [
+          "S",
+          "T",
+          "A",
+          "P",
+          "S"
+        ],
+        [
+          "M",
+          "B",
+          "S",
+          "T",
+          "U"
+        ],
+        [
+          "H",
+          "R",
+          "A",
+          "E",
+          "O"
+        ],
+        [
+          "U",
+          "C",
+          "N",
+          "N",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 1075,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 567,
+        "wordsByLength": {
+          "3": 118,
+          "4": 194,
+          "5": 148,
+          "6": 67,
+          "7": 29,
+          "8": 10,
+          "9": 1
+        },
+        "longestWords": [
+          "CURBSTONE",
+          "PASTEUPS",
+          "STANNOUS",
+          "TONEARMS",
+          "RABATOES",
+          "ARSENOUS",
+          "EARSTONE",
+          "OUTSTAYS",
+          "URBANEST",
+          "CATSPAWS"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 161
+    },
+    "2026-07-12": {
+      "id": "z9lqu5jp",
+      "board": [
+        [
+          "QU",
+          "N",
+          "P",
+          "H",
+          "D"
+        ],
+        [
+          "O",
+          "R",
+          "T",
+          "Y",
+          "U"
+        ],
+        [
+          "O",
+          "A",
+          "R",
+          "T",
+          "C"
+        ],
+        [
+          "S",
+          "E",
+          "O",
+          "A",
+          "R"
+        ],
+        [
+          "T",
+          "R",
+          "Y",
+          "O",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 712,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 376,
+        "wordsByLength": {
+          "3": 80,
+          "4": 122,
+          "5": 102,
+          "6": 48,
+          "7": 17,
+          "8": 7
+        },
+        "longestWords": [
+          "TRACTORS",
+          "ARRAYERS",
+          "AERATORS",
+          "RETROACT",
+          "CYTASTER",
+          "CREATORS",
+          "REACTORS",
+          "ROOSTER",
+          "ROARERS",
+          "ROASTER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 162
+    },
+    "2026-07-13": {
+      "id": "0xh6t1zn",
+      "board": [
+        [
+          "E",
+          "E",
+          "O",
+          "R",
+          "E"
+        ],
+        [
+          "S",
+          "I",
+          "S",
+          "R",
+          "E"
+        ],
+        [
+          "P",
+          "D",
+          "T",
+          "C",
+          "Z"
+        ],
+        [
+          "R",
+          "T",
+          "O",
+          "E",
+          "I"
+        ],
+        [
+          "R",
+          "S",
+          "I",
+          "G",
+          "S"
+        ]
+      ],
+      "maxPossibleScore": 593,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 329,
+        "wordsByLength": {
+          "3": 84,
+          "4": 113,
+          "5": 68,
+          "6": 42,
+          "7": 18,
+          "8": 3,
+          "9": 1
+        },
+        "longestWords": [
+          "SOCIETIES",
+          "SCOTTIES",
+          "COTTISES",
+          "EGOTISES",
+          "ROESTIS",
+          "ROSCOES",
+          "SORTIES",
+          "STOGIES",
+          "SCOTTIE",
+          "DISCOES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      },
+      "puzzleNumber": 163
+    },
+    "2026-07-14": {
+      "id": "qcxl5eyr",
+      "board": [
+        [
+          "A",
+          "S",
+          "L",
+          "H",
+          "T"
+        ],
+        [
+          "E",
+          "E",
+          "O",
+          "E",
+          "O"
+        ],
+        [
+          "C",
+          "S",
+          "O",
+          "E",
+          "T"
+        ],
+        [
+          "O",
+          "E",
+          "R",
+          "E",
+          "C"
+        ],
+        [
+          "K",
+          "O",
+          "S",
+          "I",
+          "P"
+        ]
+      ],
+      "maxPossibleScore": 695,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 371,
+        "wordsByLength": {
+          "3": 84,
+          "4": 115,
+          "5": 102,
+          "6": 44,
+          "7": 21,
+          "8": 2,
+          "9": 3
+        },
+        "longestWords": [
+          "HETEROSES",
+          "THEORISES",
+          "COOKERIES",
+          "THEORIES",
+          "THEORISE",
+          "LOERIES",
+          "HOOROOS",
+          "HETEROS",
+          "THEORIC",
+          "TELESES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 164
+    },
+    "2026-07-15": {
+      "id": "89oee8yo",
+      "board": [
+        [
+          "S",
+          "N",
+          "E",
+          "T",
+          "Y"
+        ],
+        [
+          "Y",
+          "H",
+          "QU",
+          "S",
+          "N"
+        ],
+        [
+          "N",
+          "U",
+          "E",
+          "O",
+          "D"
+        ],
+        [
+          "E",
+          "O",
+          "R",
+          "I",
+          "P"
+        ],
+        [
+          "C",
+          "U",
+          "T",
+          "L",
+          "M"
+        ]
+      ],
+      "maxPossibleScore": 794,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 409,
+        "wordsByLength": {
+          "3": 103,
+          "4": 145,
+          "5": 81,
+          "6": 44,
+          "7": 24,
+          "8": 9,
+          "9": 2,
+          "10": 1
+        },
+        "longestWords": [
+          "COURTLIEST",
+          "EUTROPIES",
+          "PORTLIEST",
+          "NEUROIDS",
+          "NEUROPIL",
+          "NEUTRONS",
+          "DORTIEST",
+          "REIMPOSE",
+          "PORTIEST",
+          "COENURES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      },
+      "puzzleNumber": 165
+    },
+    "2026-07-16": {
+      "id": "w7its51g",
+      "board": [
+        [
+          "E",
+          "H",
+          "F",
+          "O",
+          "W"
+        ],
+        [
+          "S",
+          "Y",
+          "G",
+          "U",
+          "B"
+        ],
+        [
+          "P",
+          "P",
+          "O",
+          "T",
+          "N"
+        ],
+        [
+          "T",
+          "O",
+          "U",
+          "R",
+          "E"
+        ],
+        [
+          "D",
+          "T",
+          "E",
+          "V",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 618,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 350,
+        "wordsByLength": {
+          "3": 102,
+          "4": 116,
+          "5": 70,
+          "6": 40,
+          "7": 17,
+          "8": 4,
+          "9": 1
+        },
+        "longestWords": [
+          "OPPORTUNE",
+          "OUTROOPS",
+          "BOUNTREE",
+          "ENROUGHS",
+          "EUROPOPS",
+          "OUTROOP",
+          "OUTROOT",
+          "SPOTTER",
+          "SPOUTER",
+          "UNREEVE"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 166
+    },
+    "2026-07-17": {
+      "id": "s03uwhi1",
+      "board": [
+        [
+          "Y",
+          "E",
+          "A",
+          "S",
+          "A"
+        ],
+        [
+          "A",
+          "G",
+          "E",
+          "H",
+          "Z"
+        ],
+        [
+          "O",
+          "Y",
+          "C",
+          "I",
+          "S"
+        ],
+        [
+          "O",
+          "T",
+          "E",
+          "O",
+          "E"
+        ],
+        [
+          "S",
+          "E",
+          "L",
+          "D",
+          "D"
+        ]
+      ],
+      "maxPossibleScore": 688,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 409,
+        "wordsByLength": {
+          "3": 119,
+          "4": 129,
+          "5": 99,
+          "6": 40,
+          "7": 20,
+          "8": 2
+        },
+        "longestWords": [
+          "SHIELDED",
+          "GOTCHIES",
+          "SECEDES",
+          "SECEDED",
+          "GEISHAS",
+          "GOTCHAS",
+          "GOTCHES",
+          "EYELETS",
+          "CODDLES",
+          "ISOETES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      },
+      "puzzleNumber": 167
+    },
+    "2026-07-18": {
+      "id": "m0d4r8mj",
+      "board": [
+        [
+          "U",
+          "A",
+          "S",
+          "I",
+          "E"
+        ],
+        [
+          "O",
+          "Y",
+          "L",
+          "C",
+          "E"
+        ],
+        [
+          "K",
+          "N",
+          "E",
+          "T",
+          "D"
+        ],
+        [
+          "Y",
+          "I",
+          "O",
+          "N",
+          "T"
+        ],
+        [
+          "D",
+          "I",
+          "E",
+          "O",
+          "O"
+        ]
+      ],
+      "maxPossibleScore": 392,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 246,
+        "wordsByLength": {
+          "3": 77,
+          "4": 85,
+          "5": 50,
+          "6": 23,
+          "7": 10,
+          "8": 1
+        },
+        "longestWords": [
+          "DECENTLY",
+          "SALICET",
+          "SCENTED",
+          "ISLETED",
+          "LICENTE",
+          "LENIENT",
+          "LENTOID",
+          "CTENOID",
+          "NONETTO",
+          "TENIOID"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 168
+    },
+    "2026-07-19": {
+      "id": "ea47pks3",
+      "board": [
+        [
+          "K",
+          "E",
+          "N",
+          "Y",
+          "E"
+        ],
+        [
+          "E",
+          "E",
+          "O",
+          "T",
+          "A"
+        ],
+        [
+          "O",
+          "N",
+          "L",
+          "E",
+          "A"
+        ],
+        [
+          "I",
+          "W",
+          "I",
+          "O",
+          "N"
+        ],
+        [
+          "I",
+          "M",
+          "I",
+          "C",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 357,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 244,
+        "wordsByLength": {
+          "3": 75,
+          "4": 94,
+          "5": 45,
+          "6": 26,
+          "7": 4
+        },
+        "longestWords": [
+          "NIMIETY",
+          "ORCINOL",
+          "CINEOLE",
+          "CORNEAE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      },
+      "puzzleNumber": 169
+    },
+    "2026-07-20": {
+      "id": "2l7ruyq9",
+      "board": [
+        [
+          "H",
+          "T",
+          "I",
+          "P",
+          "H"
+        ],
+        [
+          "X",
+          "S",
+          "O",
+          "N",
+          "S"
+        ],
+        [
+          "E",
+          "A",
+          "N",
+          "E",
+          "O"
+        ],
+        [
+          "T",
+          "A",
+          "I",
+          "O",
+          "R"
+        ],
+        [
+          "C",
+          "T",
+          "U",
+          "S",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 1727,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 642,
+        "wordsByLength": {
+          "3": 116,
+          "4": 171,
+          "5": 129,
+          "6": 106,
+          "7": 76,
+          "8": 30,
+          "9": 12,
+          "10": 2
+        },
+        "longestWords": [
+          "RESITUATES",
+          "CAUTIONERS",
+          "INSENSATE",
+          "ATTAINERS",
+          "ACTIONERS",
+          "ROSINATES",
+          "RESINATES",
+          "RESINATAS",
+          "RESITUATE",
+          "RESONATES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 170
+    },
+    "2026-07-21": {
+      "id": "ihkblpj4",
+      "board": [
+        [
+          "O",
+          "E",
+          "S",
+          "E",
+          "D"
+        ],
+        [
+          "H",
+          "I",
+          "Y",
+          "P",
+          "N"
+        ],
+        [
+          "M",
+          "I",
+          "E",
+          "L",
+          "F"
+        ],
+        [
+          "K",
+          "N",
+          "Y",
+          "U",
+          "D"
+        ],
+        [
+          "E",
+          "R",
+          "E",
+          "O",
+          "V"
+        ]
+      ],
+      "maxPossibleScore": 281,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 205,
+        "wordsByLength": {
+          "3": 81,
+          "4": 74,
+          "5": 30,
+          "6": 17,
+          "7": 3
+        },
+        "longestWords": [
+          "SPLENII",
+          "DOYLEYS",
+          "RENEYED"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 171
+    },
+    "2026-07-22": {
+      "id": "3ccsva7s",
+      "board": [
+        [
+          "L",
+          "E",
+          "I",
+          "H",
+          "O"
+        ],
+        [
+          "A",
+          "C",
+          "R",
+          "A",
+          "T"
+        ],
+        [
+          "T",
+          "L",
+          "A",
+          "Y",
+          "U"
+        ],
+        [
+          "QU",
+          "O",
+          "E",
+          "I",
+          "E"
+        ],
+        [
+          "G",
+          "R",
+          "C",
+          "N",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 541,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 358,
+        "wordsByLength": {
+          "3": 105,
+          "4": 137,
+          "5": 77,
+          "6": 28,
+          "7": 10,
+          "10": 1
+        },
+        "longestWords": [
+          "CROTALARIA",
+          "CREATOR",
+          "CLAYIER",
+          "RELATOR",
+          "REACTOR",
+          "REALTOR",
+          "TALCIER",
+          "TALARIA",
+          "OLEARIA",
+          "CROTALE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 172
+    },
+    "2026-07-23": {
+      "id": "m3q34s2i",
+      "board": [
+        [
+          "X",
+          "N",
+          "D",
+          "A",
+          "S"
+        ],
+        [
+          "C",
+          "O",
+          "N",
+          "M",
+          "O"
+        ],
+        [
+          "Y",
+          "E",
+          "S",
+          "F",
+          "N"
+        ],
+        [
+          "A",
+          "R",
+          "E",
+          "A",
+          "W"
+        ],
+        [
+          "H",
+          "R",
+          "R",
+          "A",
+          "E"
+        ]
+      ],
+      "maxPossibleScore": 814,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 455,
+        "wordsByLength": {
+          "3": 124,
+          "4": 138,
+          "5": 115,
+          "6": 55,
+          "7": 16,
+          "8": 7
+        },
+        "longestWords": [
+          "ANNOYERS",
+          "ENDOSMOS",
+          "SERRANOS",
+          "SEAFOAMS",
+          "RECONFER",
+          "ARRAYERS",
+          "REASONER",
+          "DAMNERS",
+          "DONNEES",
+          "ANNOYER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 173
+    },
+    "2026-07-24": {
+      "id": "cx23j5mv",
+      "board": [
+        [
+          "N",
+          "R",
+          "T",
+          "T",
+          "O"
+        ],
+        [
+          "E",
+          "S",
+          "E",
+          "T",
+          "R"
+        ],
+        [
+          "X",
+          "N",
+          "I",
+          "T",
+          "R"
+        ],
+        [
+          "I",
+          "I",
+          "O",
+          "R",
+          "R"
+        ],
+        [
+          "A",
+          "O",
+          "A",
+          "L",
+          "A"
+        ]
+      ],
+      "maxPossibleScore": 1012,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 409,
+        "wordsByLength": {
+          "3": 62,
+          "4": 105,
+          "5": 103,
+          "6": 79,
+          "7": 43,
+          "8": 13,
+          "9": 3,
+          "10": 1
+        },
+        "longestWords": [
+          "RETORTIONS",
+          "RETORTION",
+          "ROTTENEST",
+          "RISTRETTO",
+          "RETRAINS",
+          "TOTTIEST",
+          "TORTONIS",
+          "TORTOISE",
+          "TENORIST",
+          "TROTTERS"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 174
+    },
+    "2026-07-25": {
+      "id": "63uja0n6",
+      "board": [
+        [
+          "N",
+          "E",
+          "F",
+          "R",
+          "T"
+        ],
+        [
+          "H",
+          "R",
+          "I",
+          "E",
+          "A"
+        ],
+        [
+          "N",
+          "O",
+          "L",
+          "E",
+          "R"
+        ],
+        [
+          "S",
+          "J",
+          "U",
+          "E",
+          "R"
+        ],
+        [
+          "S",
+          "U",
+          "E",
+          "I",
+          "R"
+        ]
+      ],
+      "maxPossibleScore": 501,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 293,
+        "wordsByLength": {
+          "3": 76,
+          "4": 104,
+          "5": 66,
+          "6": 32,
+          "7": 12,
+          "8": 3
+        },
+        "longestWords": [
+          "FIREREEL",
+          "RAREFIER",
+          "REFERRER",
+          "FERLIER",
+          "FIERIER",
+          "TEARIER",
+          "TERRIER",
+          "TARRIER",
+          "REFEREE",
+          "ATELIER"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 175
+    },
+    "2026-07-26": {
+      "id": "v2aliz1f",
+      "board": [
+        [
+          "E",
+          "A",
+          "V",
+          "M",
+          "I"
+        ],
+        [
+          "T",
+          "D",
+          "T",
+          "S",
+          "H"
+        ],
+        [
+          "D",
+          "QU",
+          "S",
+          "E",
+          "D"
+        ],
+        [
+          "Y",
+          "W",
+          "I",
+          "I",
+          "O"
+        ],
+        [
+          "T",
+          "T",
+          "E",
+          "C",
+          "U"
+        ]
+      ],
+      "maxPossibleScore": 397,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 226,
+        "wordsByLength": {
+          "3": 63,
+          "4": 79,
+          "5": 47,
+          "6": 24,
+          "7": 9,
+          "8": 3,
+          "9": 1
+        },
+        "longestWords": [
+          "MISSTATED",
+          "MISSTATE",
+          "MISDIETS",
+          "DIETISTS",
+          "MISDIET",
+          "MISDOES",
+          "HESSITE",
+          "ESTATED",
+          "DIETIST",
+          "DICIEST"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 176
+    },
+    "2026-07-27": {
+      "id": "6lqmhbc2",
+      "board": [
+        [
+          "A",
+          "T",
+          "Y",
+          "N",
+          "D"
+        ],
+        [
+          "E",
+          "A",
+          "O",
+          "N",
+          "D"
+        ],
+        [
+          "E",
+          "N",
+          "E",
+          "U",
+          "I"
+        ],
+        [
+          "O",
+          "E",
+          "C",
+          "O",
+          "I"
+        ],
+        [
+          "C",
+          "F",
+          "QU",
+          "A",
+          "L"
+        ]
+      ],
+      "maxPossibleScore": 212,
+      "thresholds": {
+        "star1": 17,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 150,
+        "wordsByLength": {
+          "3": 62,
+          "4": 51,
+          "5": 24,
+          "6": 7,
+          "7": 6
+        },
+        "longestWords": [
+          "NOYANCE",
+          "NONCOLA",
+          "NEONATE",
+          "ENDNOTE",
+          "UNEATEN",
+          "CUNEATE"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 177
+    },
+    "2026-07-28": {
+      "id": "yukgy1x3",
+      "board": [
+        [
+          "E",
+          "A",
+          "G",
+          "E",
+          "I"
+        ],
+        [
+          "S",
+          "H",
+          "R",
+          "M",
+          "E"
+        ],
+        [
+          "B",
+          "T",
+          "U",
+          "E",
+          "A"
+        ],
+        [
+          "L",
+          "A",
+          "P",
+          "S",
+          "S"
+        ],
+        [
+          "T",
+          "O",
+          "O",
+          "S",
+          "I"
+        ]
+      ],
+      "maxPossibleScore": 1251,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 671,
+        "wordsByLength": {
+          "3": 134,
+          "4": 218,
+          "5": 192,
+          "6": 93,
+          "7": 23,
+          "8": 9,
+          "9": 2
+        },
+        "longestWords": [
+          "HEARTPEAS",
+          "PERTUSSIS",
+          "ESTRUSES",
+          "GASTREAS",
+          "HEARTPEA",
+          "REASSUME",
+          "MEASURES",
+          "MASSOOLA",
+          "ABSTRUSE",
+          "SESSPOOL"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "puzzleNumber": 178
+    },
+    "2026-07-29": {
+      "id": "3npa9ltj",
+      "board": [
+        [
+          "R",
+          "E",
+          "T",
+          "N",
+          "A"
+        ],
+        [
+          "T",
+          "P",
+          "I",
+          "R",
+          "I"
+        ],
+        [
+          "E",
+          "E",
+          "N",
+          "H",
+          "N"
+        ],
+        [
+          "H",
+          "S",
+          "L",
+          "E",
+          "A"
+        ],
+        [
+          "K",
+          "R",
+          "I",
+          "F",
+          "N"
+        ]
+      ],
+      "maxPossibleScore": 790,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 419,
+        "wordsByLength": {
+          "3": 93,
+          "4": 148,
+          "5": 103,
+          "6": 43,
+          "7": 23,
+          "8": 9
+        },
+        "longestWords": [
+          "TERPINES",
+          "PRETRAIN",
+          "PRETEENS",
+          "PRETENSE",
+          "SELENITE",
+          "SELENIAN",
+          "SHEEPIER",
+          "SHEENIER",
+          "SLEEPIER",
+          "RETINES"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      },
+      "puzzleNumber": 179
+    },
+    "2026-07-30": {
+      "id": "nwac986m",
+      "board": [
+        [
+          "F",
+          "H",
+          "P",
+          "O",
+          "T"
+        ],
+        [
+          "C",
+          "R",
+          "E",
+          "D",
+          "W"
+        ],
+        [
+          "T",
+          "S",
+          "G",
+          "A",
+          "S"
+        ],
+        [
+          "F",
+          "W",
+          "H",
+          "T",
+          "E"
+        ],
+        [
+          "L",
+          "A",
+          "H",
+          "I",
+          "B"
+        ]
+      ],
+      "maxPossibleScore": 861,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 502,
+        "wordsByLength": {
+          "3": 121,
+          "4": 173,
+          "5": 125,
+          "6": 61,
+          "7": 18,
+          "8": 4
+        },
+        "longestWords": [
+          "FRESHIES",
+          "PREDATES",
+          "DOWAGERS",
+          "TREATIES",
+          "FRESHIE",
+          "HEADSET",
+          "POWDERS",
+          "PREDATE",
+          "TODGERS",
+          "TOWAGES"
+        ],
+        "rareLetterCount": 0,
+        "vowelPositions": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 180
+    },
+    "2026-07-31": {
+      "id": "ji10ukxa",
+      "board": [
+        [
+          "S",
+          "F",
+          "A",
+          "U",
+          "T"
+        ],
+        [
+          "M",
+          "R",
+          "T",
+          "D",
+          "O"
+        ],
+        [
+          "I",
+          "O",
+          "C",
+          "E",
+          "I"
+        ],
+        [
+          "A",
+          "T",
+          "W",
+          "S",
+          "O"
+        ],
+        [
+          "Y",
+          "M",
+          "A",
+          "E",
+          "J"
+        ]
+      ],
+      "maxPossibleScore": 860,
+      "thresholds": {
+        "star1": 18,
+        "star2": 32,
+        "star3": 45
+      },
+      "debug": {
+        "totalValidWords": 484,
+        "wordsByLength": {
+          "3": 123,
+          "4": 171,
+          "5": 108,
+          "6": 54,
+          "7": 20,
+          "8": 7,
+          "9": 1
+        },
+        "longestWords": [
+          "OUTCROWED",
+          "OUTDATES",
+          "OUTROWED",
+          "OUTCROWS",
+          "COMRADES",
+          "SEAWORMS",
+          "ESCROWED",
+          "ESCORTED",
+          "FAUTORS",
+          "FADEOUT"
+        ],
+        "rareLetterCount": 1,
+        "vowelPositions": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      },
+      "puzzleNumber": 181
+    }
+  }
+}
