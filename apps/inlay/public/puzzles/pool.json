@@ -1,106 +1,9 @@
 {
   "gameId": "inlay",
-  "generatedAt": "2026-05-24T03:10:51.032Z",
+  "generatedAt": "2026-08-11T04:17:36.865Z",
   "puzzles": [
     {
-      "id": "4367d5f009c2b45c",
-      "shape": [
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          false,
-          true,
-          true,
-          true,
-          false
-        ],
-        [
-          false,
-          true,
-          true,
-          false,
-          false
-        ]
-      ],
-      "shapeName": "Shield",
-      "pentominoIds": [
-        "I",
-        "L",
-        "W",
-        "Y",
-        "Z"
-      ],
-      "solution": [
-        {
-          "pentominoId": "I",
-          "position": {
-            "row": 0,
-            "col": 0
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "Z",
-          "position": {
-            "row": 1,
-            "col": 2
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "Y",
-          "position": {
-            "row": 2,
-            "col": 0
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "L",
-          "position": {
-            "row": 1,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "W",
-          "position": {
-            "row": 3,
-            "col": 2
-          },
-          "rotation": 1
-        }
-      ]
-    },
-    {
-      "id": "9cf7743fd6bcbecc",
+      "id": "3e37dea68fd4bcdb",
       "shape": [
         [
           true,
@@ -135,260 +38,120 @@
           true,
           true,
           true,
-          false
-        ],
-        [
-          false,
-          false,
-          true,
-          false,
-          false
+          true
         ]
       ],
-      "shapeName": "Cup",
-      "pentominoIds": [
-        "I",
-        "L",
-        "P",
-        "W",
-        "X"
-      ],
-      "solution": [
-        {
-          "pentominoId": "I",
-          "position": {
-            "row": 0,
-            "col": 0
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "X",
-          "position": {
-            "row": 3,
-            "col": 1
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "L",
-          "position": {
-            "row": 1,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "W",
-          "position": {
-            "row": 2,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "P",
-          "position": {
-            "row": 1,
-            "col": 3
-          },
-          "rotation": 2
-        }
-      ]
-    },
-    {
-      "id": "99c5dceb157e2183",
-      "shape": [
-        [
-          false,
-          true,
-          true,
-          true,
-          true,
-          false
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          false,
-          false,
-          true,
-          true,
-          false,
-          false
-        ]
-      ],
-      "shapeName": "Rounded Rectangle",
+      "shapeName": "5x5 Rectangle",
       "pentominoIds": [
         "L",
-        "N",
         "T",
         "V",
         "W",
-        "X"
-      ],
-      "solution": [
-        {
-          "pentominoId": "X",
-          "position": {
-            "row": 2,
-            "col": 1
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "V",
-          "position": {
-            "row": 2,
-            "col": 3
-          },
-          "rotation": 2
-        },
-        {
-          "pentominoId": "T",
-          "position": {
-            "row": 0,
-            "col": 1
-          },
-          "rotation": 3
-        },
-        {
-          "pentominoId": "L",
-          "position": {
-            "row": 1,
-            "col": 0
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "N",
-          "position": {
-            "row": 0,
-            "col": 2
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "W",
-          "position": {
-            "row": 3,
-            "col": 2
-          },
-          "rotation": 3
-        }
-      ]
-    },
-    {
-      "id": "34e2d2b1b6371dbd",
-      "shape": [
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          false
-        ],
-        [
-          false,
-          false,
-          true,
-          false,
-          false
-        ]
-      ],
-      "shapeName": "Cup",
-      "pentominoIds": [
-        "F",
-        "L",
-        "N",
-        "T",
         "Y"
       ],
       "solution": [
         {
           "pentominoId": "L",
           "position": {
-            "row": 1,
+            "row": 0,
             "col": 0
           },
           "rotation": 0
         },
         {
-          "pentominoId": "N",
+          "pentominoId": "Y",
           "position": {
-            "row": 1,
-            "col": 3
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 2
           },
           "rotation": 2
         },
         {
-          "pentominoId": "Y",
+          "pentominoId": "V",
           "position": {
-            "row": 2,
-            "col": 1
+            "row": 0,
+            "col": 2
           },
-          "rotation": 0
-        },
+          "rotation": 2
+        }
+      ]
+    },
+    {
+      "id": "a32a699d2fd65db8",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Wide Diamond",
+      "pentominoIds": [
+        "F",
+        "P",
+        "T",
+        "U",
+        "Y"
+      ],
+      "solution": [
         {
-          "pentominoId": "F",
+          "pentominoId": "Y",
           "position": {
             "row": 0,
             "col": 2
@@ -396,17 +159,41 @@
           "rotation": 0
         },
         {
+          "pentominoId": "F",
+          "position": {
+            "row": 1,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
           "pentominoId": "T",
           "position": {
-            "row": 0,
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
             "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 4
           },
           "rotation": 0
         }
       ]
     },
     {
-      "id": "2aa4a8cbbfe2a9e7",
+      "id": "0a922a1205274b7b",
       "shape": [
         [
           true,
@@ -451,11 +238,215 @@
       ],
       "shapeName": "6x5 Wide Rectangle",
       "pentominoIds": [
-        "F",
+        "I",
+        "P",
+        "T",
+        "V",
+        "W",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "27f4b56850c8b26b",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Wide Diamond",
+      "pentominoIds": [
+        "T",
+        "U",
+        "V",
+        "W",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 5
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "7fa03597f348a851",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
         "I",
         "L",
         "P",
         "T",
+        "U",
         "V"
       ],
       "solution": [
@@ -463,137 +454,33 @@
           "pentominoId": "I",
           "position": {
             "row": 0,
-            "col": 0
+            "col": 1
           },
           "rotation": 0
         },
         {
           "pentominoId": "L",
           "position": {
-            "row": 3,
-            "col": 2
-          },
-          "rotation": 3
-        },
-        {
-          "pentominoId": "V",
-          "position": {
-            "row": 1,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "F",
-          "position": {
             "row": 2,
-            "col": 0
-          },
-          "rotation": 2
-        },
-        {
-          "pentominoId": "T",
-          "position": {
-            "row": 0,
-            "col": 3
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "P",
-          "position": {
-            "row": 2,
-            "col": 2
-          },
-          "rotation": 1
-        }
-      ]
-    },
-    {
-      "id": "a142dd1563d60cd9",
-      "shape": [
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ]
-      ],
-      "shapeName": "6x5 Wide Rectangle",
-      "pentominoIds": [
-        "F",
-        "L",
-        "P",
-        "T",
-        "U",
-        "V"
-      ],
-      "solution": [
-        {
-          "pentominoId": "L",
-          "position": {
-            "row": 0,
-            "col": 4
-          },
-          "rotation": 2
-        },
-        {
-          "pentominoId": "V",
-          "position": {
-            "row": 0,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "F",
-          "position": {
-            "row": 0,
-            "col": 2
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "T",
-          "position": {
-            "row": 1,
             "col": 1
           },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
           "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
         },
         {
           "pentominoId": "P",
@@ -614,116 +501,7 @@
       ]
     },
     {
-      "id": "26a6ceb5fdc6b66f",
-      "shape": [
-        [
-          true,
-          true,
-          true,
-          false,
-          true,
-          false,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          false
-        ],
-        [
-          true,
-          true,
-          false,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true,
-          false,
-          true
-        ]
-      ],
-      "shapeName": "Rectangle Variant 11",
-      "pentominoIds": [
-        "T",
-        "U",
-        "V",
-        "W",
-        "Y",
-        "Z"
-      ],
-      "solution": [
-        {
-          "pentominoId": "Z",
-          "position": {
-            "row": 0,
-            "col": 2
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "V",
-          "position": {
-            "row": 2,
-            "col": 1
-          },
-          "rotation": 3
-        },
-        {
-          "pentominoId": "T",
-          "position": {
-            "row": 0,
-            "col": 0
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "Y",
-          "position": {
-            "row": 1,
-            "col": 0
-          },
-          "rotation": 2
-        },
-        {
-          "pentominoId": "U",
-          "position": {
-            "row": 3,
-            "col": 4
-          },
-          "rotation": 2
-        },
-        {
-          "pentominoId": "W",
-          "position": {
-            "row": 0,
-            "col": 4
-          },
-          "rotation": 3
-        }
-      ]
-    },
-    {
-      "id": "bfc7f5f54ef4c73f",
+      "id": "93feec401e2fc041",
       "shape": [
         [
           true,
@@ -770,23 +548,326 @@
       ],
       "shapeName": "Shield",
       "pentominoIds": [
+        "P",
+        "U",
+        "W",
+        "X",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "0a40340c182e253c",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "F",
         "L",
         "N",
         "P",
         "U",
-        "V"
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 4,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 3,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "8f3052b473af7cf9",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          false,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Cloud",
+      "pentominoIds": [
+        "L",
+        "N",
+        "P",
+        "T",
+        "U"
       ],
       "solution": [
         {
           "pentominoId": "L",
           "position": {
             "row": 0,
-            "col": 3
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 1,
+            "col": 4
           },
           "rotation": 2
         },
         {
-          "pentominoId": "N",
+          "pentominoId": "T",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 2
+        }
+      ]
+    },
+    {
+      "id": "b4d9eab654a7fb02",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Rectangle",
+      "pentominoIds": [
+        "F",
+        "I",
+        "P",
+        "T",
+        "U",
+        "V"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
           "position": {
             "row": 0,
             "col": 0
@@ -794,25 +875,159 @@
           "rotation": 1
         },
         {
-          "pentominoId": "V",
+          "pentominoId": "F",
           "position": {
-            "row": 2,
-            "col": 1
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 3,
+            "col": 0
           },
           "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 3
         },
         {
           "pentominoId": "P",
           "position": {
-            "row": 3,
-            "col": 1
+            "row": 4,
+            "col": 2
           },
-          "rotation": 2
+          "rotation": 1
         },
         {
           "pentominoId": "U",
           "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "b83d0d5d6beaf97b",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "F",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
             "row": 1,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 4
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
             "col": 0
           },
           "rotation": 1
@@ -820,7 +1035,308 @@
       ]
     },
     {
-      "id": "9695a930a4eaeba3",
+      "id": "04c7345653c6d62f",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Wide Diamond",
+      "pentominoIds": [
+        "I",
+        "P",
+        "T",
+        "U",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 5
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "6fd637e4222a0625",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          false,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Cloud",
+      "pentominoIds": [
+        "F",
+        "N",
+        "P",
+        "T",
+        "W"
+      ],
+      "solution": [
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "807bef62b63f79c8",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Rectangle",
+      "pentominoIds": [
+        "L",
+        "T",
+        "V",
+        "W",
+        "Y",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "0a1f56b55a681f7e",
       "shape": [
         [
           false,
@@ -880,13 +1396,259 @@
       "shapeName": "Tree",
       "pentominoIds": [
         "L",
-        "P",
-        "T",
+        "U",
         "V",
         "W",
+        "X",
         "Y"
       ],
       "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 4,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "024bafffc7eb7132",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Rounded Rectangle",
+      "pentominoIds": [
+        "L",
+        "N",
+        "P",
+        "T",
+        "V",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "f914bfbf56e7581d",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "F",
+        "L",
+        "P",
+        "V",
+        "X",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 0
+        },
         {
           "pentominoId": "L",
           "position": {
@@ -901,18 +1663,204 @@
             "row": 3,
             "col": 0
           },
-          "rotation": 0
+          "rotation": 3
         },
         {
-          "pentominoId": "Y",
+          "pentominoId": "F",
           "position": {
-            "row": 3,
+            "row": 0,
             "col": 2
           },
           "rotation": 1
         },
         {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 2
+        }
+      ]
+    },
+    {
+      "id": "75eab0493e99a7b4",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Rectangle",
+      "pentominoIds": [
+        "F",
+        "I",
+        "L",
+        "N",
+        "P",
+        "V"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "f49cc75c0716c9f1",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "L",
+        "P",
+        "T",
+        "W",
+        "Y",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
           "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "W",
           "position": {
             "row": 2,
             "col": 1
@@ -920,12 +1868,12 @@
           "rotation": 3
         },
         {
-          "pentominoId": "W",
+          "pentominoId": "L",
           "position": {
-            "row": 1,
+            "row": 0,
             "col": 4
           },
-          "rotation": 0
+          "rotation": 2
         },
         {
           "pentominoId": "P",
@@ -933,19 +1881,636 @@
             "row": 0,
             "col": 2
           },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
           "rotation": 2
         }
       ]
     },
     {
-      "id": "ea0d6ba79397dec6",
+      "id": "6668c9a11fec7465",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Cup",
+      "pentominoIds": [
+        "I",
+        "P",
+        "U",
+        "X",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "bcb68e3204733a36",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          false,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Cloud",
+      "pentominoIds": [
+        "F",
+        "N",
+        "V",
+        "X",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 1,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "3164a3310fee388d",
+      "shape": [
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Rocket",
+      "pentominoIds": [
+        "F",
+        "N",
+        "P",
+        "V",
+        "W"
+      ],
+      "solution": [
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 5,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "b2cd0e5e658c5756",
+      "shape": [
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Diamond",
+      "pentominoIds": [
+        "N",
+        "P",
+        "U",
+        "V",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 5,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "d4c454d607e1da40",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Ghost",
+      "pentominoIds": [
+        "F",
+        "L",
+        "P",
+        "W",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 3,
+            "col": 2
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "3e30214f940bf8fd",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Rectangle",
+      "pentominoIds": [
+        "I",
+        "L",
+        "P",
+        "U",
+        "V",
+        "W"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 2
+        }
+      ]
+    },
+    {
+      "id": "f9447ff7b57eecc2",
       "shape": [
         [
           false,
           false,
           false,
-          true,
           false,
+          true,
           false,
           false
         ],
@@ -986,13 +2551,1076 @@
           true
         ]
       ],
-      "shapeName": "Wide Diamond",
+      "shapeName": "Ship",
+      "pentominoIds": [
+        "P",
+        "U",
+        "W",
+        "Y",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 2
+        }
+      ]
+    },
+    {
+      "id": "a0fcce7932e6883c",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "5x5 Rectangle",
+      "pentominoIds": [
+        "I",
+        "L",
+        "U",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "3838ee88690da9fe",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "I",
+        "L",
+        "P",
+        "T",
+        "U",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "ee89ca7c8ec0837a",
+      "shape": [
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Rocket",
+      "pentominoIds": [
+        "I",
+        "N",
+        "W",
+        "X",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 4,
+            "col": 2
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
+        }
+      ]
+    },
+    {
+      "id": "ed9a3c644f533959",
+      "shape": [
+        [
+          false,
+          false,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Rocket",
       "pentominoIds": [
         "F",
+        "N",
+        "P",
+        "U",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 5,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 2,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "29b45a2fa5363d64",
+      "shape": [
+        [
+          true,
+          false,
+          true,
+          true,
+          false,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Castle",
+      "pentominoIds": [
+        "F",
+        "N",
+        "T",
+        "U",
+        "X",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "b3a0895dec62334f",
+      "shape": [
+        [
+          true,
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Wide Castle",
+      "pentominoIds": [
+        "I",
+        "L",
         "P",
         "U",
         "V",
         "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "221095361b4c7d8a",
+      "shape": [
+        [
+          true,
+          false,
+          true,
+          true,
+          false,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false
+        ]
+      ],
+      "shapeName": "Castle",
+      "pentominoIds": [
+        "F",
+        "P",
+        "T",
+        "X",
+        "Y",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 3,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "939dd390556c4203",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Rounded Rectangle",
+      "pentominoIds": [
+        "L",
+        "N",
+        "P",
+        "T",
+        "V",
+        "W"
+      ],
+      "solution": [
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 0,
+            "col": 3
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 3,
+            "col": 2
+          },
+          "rotation": 3
+        }
+      ]
+    },
+    {
+      "id": "8115951a0efed304",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Shield",
+      "pentominoIds": [
+        "L",
+        "N",
+        "T",
+        "U",
+        "Z"
+      ],
+      "solution": [
+        {
+          "pentominoId": "Z",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 1,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "d893379c31450266",
+      "shape": [
+        [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "Tree",
+      "pentominoIds": [
+        "F",
+        "P",
+        "U",
+        "W",
+        "X",
+        "Y"
       ],
       "solution": [
         {
@@ -1004,7 +3632,31 @@
           "rotation": 0
         },
         {
-          "pentominoId": "V",
+          "pentominoId": "Y",
+          "position": {
+            "row": 4,
+            "col": 3
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 2,
+            "col": 4
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "F",
           "position": {
             "row": 2,
             "col": 0
@@ -1012,63 +3664,39 @@
           "rotation": 0
         },
         {
-          "pentominoId": "F",
-          "position": {
-            "row": 2,
-            "col": 3
-          },
-          "rotation": 2
-        },
-        {
           "pentominoId": "P",
           "position": {
-            "row": 2,
-            "col": 1
+            "row": 3,
+            "col": 2
           },
-          "rotation": 3
-        },
-        {
-          "pentominoId": "U",
-          "position": {
-            "row": 2,
-            "col": 5
-          },
-          "rotation": 3
+          "rotation": 1
         }
       ]
     },
     {
-      "id": "a5d22ed6952c28db",
+      "id": "30253abbec7ef42e",
       "shape": [
         [
+          false,
+          false,
+          false,
           true,
-          true,
-          true,
-          true,
-          true
+          false,
+          false,
+          false
         ],
         [
+          false,
+          false,
           true,
           true,
           true,
-          true,
-          true
+          false,
+          false
         ],
         [
+          false,
           true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
           true,
           true,
           true,
@@ -1076,48 +3704,77 @@
           false
         ],
         [
-          false,
-          false,
           true,
-          false,
-          false
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
         ]
       ],
-      "shapeName": "Cup",
+      "shapeName": "Tree",
       "pentominoIds": [
         "L",
         "N",
-        "T",
+        "P",
         "U",
-        "V"
+        "W",
+        "X"
       ],
       "solution": [
         {
-          "pentominoId": "L",
+          "pentominoId": "X",
           "position": {
-            "row": 0,
-            "col": 3
+            "row": 1,
+            "col": 1
           },
-          "rotation": 2
+          "rotation": 0
         },
         {
           "pentominoId": "N",
           "position": {
-            "row": 0,
-            "col": 0
+            "row": 4,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 3,
+            "col": 3
           },
           "rotation": 1
         },
         {
-          "pentominoId": "V",
+          "pentominoId": "P",
           "position": {
-            "row": 2,
-            "col": 1
+            "row": 4,
+            "col": 4
           },
-          "rotation": 2
+          "rotation": 1
         },
         {
-          "pentominoId": "T",
+          "pentominoId": "U",
           "position": {
             "row": 3,
             "col": 0
@@ -1125,17 +3782,17 @@
           "rotation": 1
         },
         {
-          "pentominoId": "U",
+          "pentominoId": "W",
           "position": {
-            "row": 1,
-            "col": 0
+            "row": 0,
+            "col": 3
           },
-          "rotation": 1
+          "rotation": 0
         }
       ]
     },
     {
-      "id": "60a2d0db6bde89ad",
+      "id": "041782170f01c92c",
       "shape": [
         [
           false,
@@ -1185,159 +3842,78 @@
       ],
       "shapeName": "Wide Diamond",
       "pentominoIds": [
+        "F",
         "I",
-        "L",
-        "T",
-        "W",
-        "Y"
+        "P",
+        "U",
+        "V"
       ],
       "solution": [
         {
           "pentominoId": "I",
           "position": {
-            "row": 4,
-            "col": 1
-          },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "L",
-          "position": {
-            "row": 3,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "T",
-          "position": {
-            "row": 2,
-            "col": 4
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "W",
-          "position": {
             "row": 0,
             "col": 3
           },
-          "rotation": 0
-        },
-        {
-          "pentominoId": "Y",
-          "position": {
-            "row": 1,
-            "col": 0
-          },
           "rotation": 1
-        }
-      ]
-    },
-    {
-      "id": "d39ef257416ca483",
-      "shape": [
-        [
-          false,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          true,
-          true,
-          true,
-          true,
-          true
-        ],
-        [
-          false,
-          false,
-          true,
-          false,
-          false
-        ]
-      ],
-      "shapeName": "Moon",
-      "pentominoIds": [
-        "F",
-        "L",
-        "P",
-        "U",
-        "Y"
-      ],
-      "solution": [
-        {
-          "pentominoId": "L",
-          "position": {
-            "row": 3,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "Y",
-          "position": {
-            "row": 4,
-            "col": 1
-          },
-          "rotation": 3
         },
         {
           "pentominoId": "F",
           "position": {
             "row": 1,
-            "col": 2
+            "col": 4
           },
-          "rotation": 1
+          "rotation": 3
         },
         {
-          "pentominoId": "U",
+          "pentominoId": "V",
           "position": {
-            "row": 0,
-            "col": 2
+            "row": 2,
+            "col": 0
           },
-          "rotation": 2
+          "rotation": 0
         },
         {
           "pentominoId": "P",
           "position": {
-            "row": 0,
-            "col": 0
+            "row": 1,
+            "col": 1
           },
           "rotation": 2
+        },
+        {
+          "pentominoId": "U",
+          "position": {
+            "row": 3,
+            "col": 4
+          },
+          "rotation": 0
         }
       ]
     },
     {
-      "id": "bba6437b4a6df80a",
+      "id": "96e6e611efed4385",
       "shape": [
         [
           true,
           true,
-          false,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
           true,
           true,
           true
@@ -1357,85 +3933,70 @@
           true,
           true,
           true
-        ],
-        [
-          false,
-          true,
-          true,
-          true,
-          true,
-          false
-        ],
-        [
-          false,
-          true,
-          true,
-          true,
-          false,
-          false
-        ],
-        [
-          false,
-          false,
-          true,
-          false,
-          false,
-          false
         ]
       ],
-      "shapeName": "Heart",
+      "shapeName": "6x5 Wide Rectangle",
       "pentominoIds": [
-        "F",
-        "N",
+        "L",
         "P",
         "U",
+        "V",
+        "X",
         "Z"
       ],
       "solution": [
         {
-          "pentominoId": "Z",
+          "pentominoId": "X",
           "position": {
             "row": 1,
-            "col": 1
+            "col": 0
           },
           "rotation": 0
         },
         {
-          "pentominoId": "N",
+          "pentominoId": "Z",
           "position": {
-            "row": 0,
-            "col": 4
+            "row": 1,
+            "col": 2
           },
-          "rotation": 2
-        },
-        {
-          "pentominoId": "F",
-          "position": {
-            "row": 3,
-            "col": 1
-          },
-          "rotation": 3
+          "rotation": 0
         },
         {
           "pentominoId": "P",
           "position": {
             "row": 0,
-            "col": 3
+            "col": 4
           },
           "rotation": 0
         },
         {
           "pentominoId": "U",
           "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "L",
+          "position": {
             "row": 0,
             "col": 0
           },
           "rotation": 1
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 3
         }
       ]
     },
     {
-      "id": "2c587755faa40a9f",
+      "id": "3646e0c06533bea1",
       "shape": [
         [
           true,
@@ -1482,36 +4043,132 @@
       ],
       "shapeName": "Cup",
       "pentominoIds": [
+        "F",
         "L",
         "P",
-        "T",
         "V",
-        "Z"
+        "Y"
       ],
       "solution": [
         {
-          "pentominoId": "Z",
-          "position": {
-            "row": 0,
-            "col": 2
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "T",
-          "position": {
-            "row": 3,
-            "col": 0
-          },
-          "rotation": 1
-        },
-        {
-          "pentominoId": "V",
+          "pentominoId": "L",
           "position": {
             "row": 0,
             "col": 1
           },
           "rotation": 1
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "F",
+          "position": {
+            "row": 3,
+            "col": 0
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "ec2e374a0ac5868e",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      ],
+      "shapeName": "6x5 Wide Rectangle",
+      "pentominoIds": [
+        "I",
+        "L",
+        "P",
+        "T",
+        "U",
+        "X"
+      ],
+      "solution": [
+        {
+          "pentominoId": "X",
+          "position": {
+            "row": 1,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "I",
+          "position": {
+            "row": 4,
+            "col": 0
+          },
+          "rotation": 0
         },
         {
           "pentominoId": "L",
@@ -1522,9 +4179,226 @@
           "rotation": 0
         },
         {
+          "pentominoId": "U",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 2
+        },
+        {
           "pentominoId": "P",
           "position": {
+            "row": 0,
+            "col": 4
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "8e6568a6c206512b",
+      "shape": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Shield",
+      "pentominoIds": [
+        "L",
+        "N",
+        "P",
+        "W",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "N",
+          "position": {
             "row": 2,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 0,
+            "col": 0
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "W",
+          "position": {
+            "row": 3,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 1,
+            "col": 2
+          },
+          "rotation": 1
+        }
+      ]
+    },
+    {
+      "id": "97a73b1298d4c528",
+      "shape": [
+        [
+          false,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          false,
+          true,
+          true,
+          false,
+          false
+        ]
+      ],
+      "shapeName": "Rounded Rectangle",
+      "pentominoIds": [
+        "L",
+        "N",
+        "P",
+        "T",
+        "V",
+        "Y"
+      ],
+      "solution": [
+        {
+          "pentominoId": "L",
+          "position": {
+            "row": 1,
+            "col": 0
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "N",
+          "position": {
+            "row": 0,
+            "col": 2
+          },
+          "rotation": 1
+        },
+        {
+          "pentominoId": "Y",
+          "position": {
+            "row": 2,
+            "col": 1
+          },
+          "rotation": 0
+        },
+        {
+          "pentominoId": "T",
+          "position": {
+            "row": 0,
+            "col": 1
+          },
+          "rotation": 3
+        },
+        {
+          "pentominoId": "V",
+          "position": {
+            "row": 2,
+            "col": 3
+          },
+          "rotation": 2
+        },
+        {
+          "pentominoId": "P",
+          "position": {
+            "row": 3,
             "col": 3
           },
           "rotation": 0

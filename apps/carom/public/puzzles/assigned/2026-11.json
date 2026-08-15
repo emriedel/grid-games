@@ -1,0 +1,4732 @@
+{
+  "gameId": "carom",
+  "baseDate": "2026-11-01",
+  "puzzles": {
+    "2026-11-01": {
+      "id": "72e5073ada2bb744",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          3,
+          10,
+          12,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          8,
+          3,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 4
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 4,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 274
+    },
+    "2026-11-02": {
+      "id": "269d86f0eaf54f64",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          0,
+          3,
+          8,
+          4
+        ],
+        [
+          0,
+          3,
+          10,
+          12,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          6,
+          8,
+          0,
+          3,
+          8
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 4,
+        "col": 6
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 4,
+          "col": 3
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 1,
+          "col": 7
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 0,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 275
+    },
+    "2026-11-03": {
+      "id": "22fa181ea8ca6eb0",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          4,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          1,
+          0,
+          3,
+          8,
+          0,
+          0,
+          1
+        ],
+        [
+          4,
+          0,
+          0,
+          4,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          3,
+          8,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 1,
+        "col": 4
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 7,
+          "col": 3
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 7
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 4,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 4,
+          "col": 7
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 276
+    },
+    "2026-11-04": {
+      "id": "c88969141813b970",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          9,
+          0,
+          4
+        ],
+        [
+          0,
+          6,
+          10,
+          12,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          2,
+          12,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          2,
+          12,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 1
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 3,
+          "col": 6
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 6,
+          "col": 6
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 5,
+          "col": 3
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 1,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 13,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ],
+      "puzzleNumber": 277
+    },
+    "2026-11-05": {
+      "id": "663fdf755994c892",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          8,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          4,
+          0,
+          4
+        ],
+        [
+          4,
+          0,
+          6,
+          8,
+          0,
+          3,
+          8,
+          1
+        ],
+        [
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 4,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 6
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 3,
+          "col": 6
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 278
+    },
+    "2026-11-06": {
+      "id": "ecf6bb4ebf255ec2",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          4,
+          0,
+          0,
+          6,
+          8
+        ],
+        [
+          4,
+          0,
+          2,
+          9,
+          0,
+          4,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          3,
+          8,
+          4
+        ],
+        [
+          0,
+          0,
+          2,
+          12,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 7,
+          "col": 3
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 1,
+          "col": 7
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 279
+    },
+    "2026-11-07": {
+      "id": "1f81bbd3480060c4",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          12,
+          0,
+          4
+        ],
+        [
+          0,
+          6,
+          8,
+          6,
+          8,
+          5,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          3,
+          8,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 1,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 6,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 1,
+          "col": 7
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 7,
+          "col": 6
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 280
+    },
+    "2026-11-08": {
+      "id": "a49ddd7cb66c467d",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          2,
+          12,
+          0,
+          4
+        ],
+        [
+          1,
+          0,
+          3,
+          8,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          9,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 6
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 7
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 1
+        }
+      ],
+      "optimalMoves": 11,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 281
+    },
+    "2026-11-09": {
+      "id": "3c0da34cbce1397d",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          1,
+          0,
+          0,
+          3,
+          8,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          8,
+          0,
+          1,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          2,
+          9,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 3
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 6,
+          "col": 1
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 6,
+          "col": 6
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 7,
+          "col": 1
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ],
+      "puzzleNumber": 282
+    },
+    "2026-11-10": {
+      "id": "9d5cfcf01383c31a",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          2,
+          9,
+          0,
+          6,
+          10,
+          12,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          1,
+          0,
+          4,
+          0,
+          0,
+          0,
+          3,
+          8
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 1,
+          "col": 7
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 1,
+          "col": 6
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ],
+      "puzzleNumber": 283
+    },
+    "2026-11-11": {
+      "id": "a13405130a873c13",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          9,
+          2,
+          12,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          6,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 2
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 6,
+          "col": 7
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 6
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 1,
+          "col": 5
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 11,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 284
+    },
+    "2026-11-12": {
+      "id": "a435d46ad8d0fae0",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          1,
+          0,
+          6,
+          8,
+          6,
+          8,
+          0,
+          1
+        ],
+        [
+          0,
+          4,
+          1,
+          0,
+          1,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          8,
+          0,
+          0,
+          3,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 1
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 2,
+          "col": 6
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 1,
+          "col": 6
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 0,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ],
+      "puzzleNumber": 285
+    },
+    "2026-11-13": {
+      "id": "98c322f7fd867cb9",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          2,
+          9,
+          0
+        ],
+        [
+          1,
+          0,
+          2,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          0,
+          3,
+          8,
+          4
+        ],
+        [
+          0,
+          3,
+          8,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 5,
+          "col": 1
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 0,
+          "col": 3
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 4,
+          "col": 5
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 4,
+          "col": 4
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ],
+      "puzzleNumber": 286
+    },
+    "2026-11-14": {
+      "id": "af37a5af7647a283",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          6,
+          8,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          4,
+          1,
+          2,
+          12,
+          0,
+          4
+        ],
+        [
+          4,
+          2,
+          9,
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          6,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 4,
+          "col": 7
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 0,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ],
+      "puzzleNumber": 287
+    },
+    "2026-11-15": {
+      "id": "bfdf9de8ccb84dcf",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          9,
+          2,
+          12,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          1,
+          4,
+          0,
+          1
+        ],
+        [
+          0,
+          2,
+          9,
+          0,
+          0,
+          3,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 2
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 6,
+          "col": 7
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 0,
+          "col": 6
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 3,
+          "col": 5
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 6
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 288
+    },
+    "2026-11-16": {
+      "id": "3b93b8feb8b68c23",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          4,
+          0,
+          0,
+          3,
+          8,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          4,
+          0,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 0,
+          "col": 4
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 6,
+          "col": 6
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 3,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ],
+      "puzzleNumber": 289
+    },
+    "2026-11-17": {
+      "id": "534628dc6de9ba24",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          9,
+          0,
+          2,
+          12,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          6,
+          8,
+          0,
+          6,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 2
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 7,
+          "col": 4
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 1,
+          "col": 6
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 5,
+          "col": 5
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 290
+    },
+    "2026-11-18": {
+      "id": "d1002b0c9d946b0d",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          4,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          8,
+          3,
+          8,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          0,
+          6,
+          8,
+          4
+        ],
+        [
+          4,
+          0,
+          2,
+          9,
+          0,
+          5,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 5,
+          "col": 4
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 4,
+          "col": 5
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 0,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ],
+      "puzzleNumber": 291
+    },
+    "2026-11-19": {
+      "id": "5ff63a637d20cfc3",
+      "walls": [
+        [
+          0,
+          0,
+          4,
+          0,
+          2,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          2,
+          12,
+          0,
+          3,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          8,
+          3,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 4
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 5
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 6,
+          "col": 2
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 6,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 1,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ],
+      "puzzleNumber": 292
+    },
+    "2026-11-20": {
+      "id": "41670f1049f0decb",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          3,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          12,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          4,
+          1,
+          4,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          3,
+          10,
+          9,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 2
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 3
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 4,
+          "col": 7
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 2,
+          "col": 1
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ],
+      "puzzleNumber": 293
+    },
+    "2026-11-21": {
+      "id": "054f7bb06013f0e1",
+      "walls": [
+        [
+          0,
+          0,
+          4,
+          0,
+          2,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          1,
+          0,
+          0,
+          6,
+          10,
+          12,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          4,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 7
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 5,
+          "col": 7
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 1,
+          "col": 0
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 294
+    },
+    "2026-11-22": {
+      "id": "76dcf61e472cedbc",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          8
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          4,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          4,
+          0,
+          2,
+          9,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          9,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 4
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 7
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 3,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 295
+    },
+    "2026-11-23": {
+      "id": "f65f08cce20bb9ec",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          2,
+          9,
+          0,
+          6,
+          8,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          1,
+          0,
+          6,
+          8
+        ],
+        [
+          1,
+          0,
+          3,
+          8,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 4,
+        "col": 6
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 3
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 0,
+          "col": 3
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 0,
+          "col": 4
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ],
+      "puzzleNumber": 296
+    },
+    "2026-11-24": {
+      "id": "27f368eac6eba1ad",
+      "walls": [
+        [
+          0,
+          0,
+          4,
+          0,
+          2,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0,
+          6,
+          8,
+          0
+        ],
+        [
+          4,
+          2,
+          9,
+          0,
+          0,
+          1,
+          0,
+          4
+        ],
+        [
+          1,
+          0,
+          0,
+          4,
+          0,
+          4,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          2,
+          9,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 5,
+        "col": 5
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 6,
+          "col": 4
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 1,
+          "col": 6
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 0,
+          "col": 1
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 297
+    },
+    "2026-11-25": {
+      "id": "24cc0184a9cd6409",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          8
+        ],
+        [
+          0,
+          6,
+          8,
+          4,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          3,
+          10,
+          9,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          1,
+          2,
+          9,
+          0,
+          0,
+          6,
+          8,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 2,
+        "col": 1
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 2,
+          "col": 7
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 6,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 3,
+          "col": 1
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ],
+      "puzzleNumber": 298
+    },
+    "2026-11-26": {
+      "id": "6dcff0e20d18e6b0",
+      "walls": [
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          2,
+          12,
+          2,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          8,
+          0,
+          0,
+          3,
+          8,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 7,
+          "col": 1
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 0,
+          "col": 3
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 4,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 0,
+          "col": 2
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        }
+      ],
+      "puzzleNumber": 299
+    },
+    "2026-11-27": {
+      "id": "57b23ae527062af4",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          2,
+          12,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          4,
+          2,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          9,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          9,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 6,
+        "col": 4
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 3,
+          "col": 4
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 0,
+          "col": 4
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 300
+    },
+    "2026-11-28": {
+      "id": "eb9e1a901cf573c5",
+      "walls": [
+        [
+          0,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          2,
+          9,
+          0,
+          3,
+          8,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          2,
+          12,
+          2,
+          12,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 3
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 5,
+          "col": 7
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 6,
+          "col": 6
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "down"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        }
+      ],
+      "puzzleNumber": 301
+    },
+    "2026-11-29": {
+      "id": "a73dc24e90f2521f",
+      "walls": [
+        [
+          0,
+          4,
+          0,
+          2,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          8,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          8,
+          6,
+          8,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          12,
+          0,
+          4,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          3,
+          8,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 1,
+        "col": 1
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 4
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 6,
+          "col": 7
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 6,
+          "col": 5
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 5,
+          "col": 7
+        }
+      ],
+      "optimalMoves": 9,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        }
+      ],
+      "puzzleNumber": 302
+    },
+    "2026-11-30": {
+      "id": "ff440bc91c5c8ae4",
+      "walls": [
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          0,
+          4,
+          0,
+          0,
+          4
+        ],
+        [
+          4,
+          2,
+          9,
+          0,
+          3,
+          8,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          3,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          9,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          8,
+          0,
+          0
+        ]
+      ],
+      "goal": {
+        "row": 3,
+        "col": 4
+      },
+      "pieces": [
+        {
+          "id": "target",
+          "type": "target",
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "blocker-0",
+          "type": "blocker",
+          "row": 4,
+          "col": 7
+        },
+        {
+          "id": "blocker-1",
+          "type": "blocker",
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "blocker-2",
+          "type": "blocker",
+          "row": 5,
+          "col": 6
+        }
+      ],
+      "optimalMoves": 10,
+      "solutionPath": [
+        {
+          "pieceId": "target",
+          "direction": "right"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-1",
+          "direction": "up"
+        },
+        {
+          "pieceId": "blocker-0",
+          "direction": "left"
+        },
+        {
+          "pieceId": "blocker-2",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "down"
+        },
+        {
+          "pieceId": "target",
+          "direction": "left"
+        },
+        {
+          "pieceId": "target",
+          "direction": "up"
+        },
+        {
+          "pieceId": "target",
+          "direction": "right"
+        }
+      ],
+      "puzzleNumber": 303
+    }
+  }
+}

@@ -373,6 +373,32 @@ npm run generate-puzzles -w @grid-games/[game]
 npm run assign-puzzles -w @grid-games/[game]
 ```
 
+**Generation behavior differs per game** (the `generate-puzzles` alias points at
+different scripts — see each `package.json`). Know this before running, because it
+determines whether a run tops up the pool or replaces it:
+
+| Game | Script | Pool behavior | Notes |
+|------|--------|---------------|-------|
+| Dabble | `generatePuzzles.ts` | **Appends** | Loads existing pool, pushes new puzzles |
+| Carom | `generatePuzzles.ts` | **Appends** | Loads existing pool, pushes new puzzles |
+| Inlay | `generatePuzzles.ts` | **Appends** | Loads existing pool, pushes new puzzles |
+| Jumble | `generatePool.ts` | **Overwrites** | Builds a fresh pool array; `count` = final pool size |
+| Trio | `generateSequential.ts` | **Overwrites** | "Start fresh" — has an unused `loadPool()`; `count` = final pool size |
+
+- **Append games:** `generate-puzzles -- N` adds N puzzles on top of the current pool.
+- **Overwrite games:** `generate-puzzles -- N` replaces the pool with a fresh set of ~N.
+  This is safe (pool is unassigned/regenerable and assigned months are untouched), but
+  to *grow* the pool you must pass the desired total, not a delta.
+
+> **Inlay content limit:** Inlay draws from a **finite** set of shape × pentomino-set
+> combinations, so its generator saturates. Once most combinations are used by assigned
+> months, additional runs yield steeply diminishing new puzzles (e.g. 86 → 51 → 12 unique
+> across successive passes) and log `Warning: Only generated X/Y puzzles after N attempts`.
+> There is currently only enough unique content to run through **~Dec 2026**. Extending
+> Inlay further requires adding new shape definitions in
+> `apps/inlay/scripts/generatePuzzles.ts` (`getShapeDefinitions()`). Other games have
+> effectively unbounded generation space.
+
 ---
 
 ## File Structure

@@ -295,7 +295,7 @@ Add `?debug=true` to URL:
 ### Commands
 
 ```bash
-# Generate new puzzles into pool
+# Generate new puzzles into pool (APPENDS to existing pool)
 npx tsx scripts/generatePuzzles.ts           # 50 puzzles (default)
 npx tsx scripts/generatePuzzles.ts 100       # 100 puzzles
 
@@ -303,6 +303,17 @@ npx tsx scripts/generatePuzzles.ts 100       # 100 puzzles
 npx tsx scripts/assignPuzzles.ts             # Assign up to today
 npx tsx scripts/assignPuzzles.ts 100         # Ensure puzzles 1-100 are assigned
 ```
+
+> ⚠️ **Content limit — Inlay's puzzle space is finite.** Puzzles are unique combinations
+> of a shape (`getShapeDefinitions()`) and a pentomino set. The generator excludes any
+> combination already used by the pool or an assigned month, so as coverage grows it
+> **saturates**: successive runs return steeply fewer new puzzles (observed 86 → 51 → 12
+> unique) and log `Warning: Only generated X/Y puzzles after N attempts`. With the current
+> shape definitions there is only enough unique content to run daily puzzles through
+> **~Dec 2026**. To extend further, **add new shapes** to `getShapeDefinitions()` in
+> `scripts/generatePuzzles.ts` (each new shape multiplies the available combinations).
+> Unlike the other games, requesting a large `count` will not produce it if the space is
+> exhausted — check the printed final pool total, not the requested count.
 
 ### Architecture
 
